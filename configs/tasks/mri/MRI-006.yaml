@@ -1,0 +1,61 @@
+id: MRI-006
+name: Multiple sclerosis with periventricular plaques
+modality: mri
+anatomy: head
+task_type: diagnosis
+difficulty: advanced
+image_ref: mri/omnimedvqa/MRI_0006.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Multiple sclerosis with dissemination in space"
+  differential:
+    - neuromyelitis optica spectrum disorder
+    - acute disseminated encephalomyelitis (ADEM)
+    - CNS vasculitis
+    - small vessel ischemic disease
+    - neurosarcoidosis
+  key_findings:
+    - { finding: "multiple ovoid T2/FLAIR hyperintense lesions oriented perpendicular to the ventricles (Dawson fingers)", location: "periventricular white matter bilaterally", required: true }
+    - { finding: "T2/FLAIR hyperintense lesions in juxtacortical white matter", location: "bilateral frontal and parietal lobes", required: true }
+    - { finding: "at least one lesion with incomplete ring enhancement (open-ring sign)", location: "right periventricular white matter", required: false }
+    - { finding: "T1 hypointense lesions (black holes)", location: "periventricular white matter", required: false }
+    - { finding: "lesions in the infratentorial compartment", location: "cerebellar peduncle or brainstem", required: false }
+  severity: moderate
+  laterality: bilateral
+  negatives:
+    - mass lesion or tumor
+    - acute large territory infarction
+    - hemorrhage
+    - leptomeningeal enhancement
+    - basal ganglia involvement (atypical for MS)
+pattern_checks:
+  - { name: ms_mentioned, check_type: regex, pattern: "multiple\\s+sclerosis|MS|demyelinat", required: true }
+  - { name: periventricular, check_type: regex, pattern: "periventricular|Dawson|perpendicular.*ventricle", required: true }
+  - { name: flair_lesions, check_type: regex, pattern: "FLAIR.*hyperintens|T2.*hyperintens|white\\s+matter.*lesion|plaque", required: true }
+  - { name: dissemination_in_space, check_type: regex, pattern: "juxtacortical|infratentorial|disseminat|multiple.*location|spinal", required: true }
+reference_solution: |
+  MRI of the brain with and without gadolinium demonstrates multiple ovoid
+  T2 and FLAIR hyperintense lesions in the periventricular white matter
+  bilaterally, oriented perpendicular to the lateral ventricles (Dawson
+  fingers pattern). Additional T2/FLAIR hyperintense lesions are identified
+  in the juxtacortical white matter of the bilateral frontal and parietal
+  lobes. A lesion in the right middle cerebellar peduncle provides evidence
+  of infratentorial involvement. On post-gadolinium T1-weighted images, at
+  least one periventricular lesion demonstrates incomplete ring enhancement
+  (open-ring sign), suggesting an active demyelinating plaque. Several
+  periventricular lesions appear as T1 hypointense black holes, indicating
+  chronic axonal loss. The distribution of lesions satisfies dissemination
+  in space criteria (periventricular, juxtacortical, and infratentorial).
+  No mass effect or midline shift. No hemorrhage.
+  Impression: Multiple white matter lesions in a pattern characteristic of
+  multiple sclerosis, with at least one actively enhancing lesion suggesting
+  dissemination in time.
+condition_present: true
+confusion_pair: null
+source_dataset: omnimedvqa-open
+tags:
+  - multiple-sclerosis
+  - demyelination
+  - neuro
+  - white-matter
+  - autoimmune

@@ -1,0 +1,51 @@
+id: XRAY-019
+name: Bilateral pulmonary edema
+modality: xray
+anatomy: chest
+task_type: diagnosis
+difficulty: intermediate
+image_ref: xray/omnimedvqa/CXR_0019.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Bilateral pulmonary edema"
+  differential:
+    - congestive heart failure
+    - fluid overload
+    - ARDS
+    - bilateral pneumonia
+    - diffuse alveolar hemorrhage
+  key_findings:
+    - { finding: "bilateral perihilar airspace opacities in a bat-wing distribution", location: "bilateral perihilar regions", required: true }
+    - { finding: "cephalization of pulmonary vasculature", location: "bilateral upper lobes", required: true }
+    - { finding: "Kerley B lines", location: "bilateral lung periphery", required: false }
+    - { finding: "cardiomegaly", location: "cardiac silhouette", required: false }
+  severity: severe
+  laterality: bilateral
+  negatives:
+    - focal consolidation
+    - pneumothorax
+    - pleural-based mass
+    - cavitary lesion
+pattern_checks:
+  - { name: primary_diagnosis, check_type: regex, pattern: "(?i)(pulmonary\\s+(edema|oedema)|pulmonary\\s+congestion|fluid\\s+overload)", required: true }
+  - { name: bilateral_opacities, check_type: regex, pattern: "(?i)(bilateral.{0,30}(opacit|infiltrat|airspace)|bat.?wing|butterfly)", required: true }
+  - { name: vascular_congestion, check_type: regex, pattern: "(?i)(cephalization|vascular.{0,20}(redistribution|congestion|engorge)|upper\\s+lobe.{0,20}(diversion|distension|vessel))", required: true }
+reference_solution: |
+  Frontal chest radiograph demonstrates bilateral symmetric perihilar airspace
+  opacities in a classic bat-wing distribution, consistent with pulmonary edema.
+  There is cephalization of the pulmonary vasculature indicating elevated pulmonary
+  venous pressure. Kerley B lines are seen at the lung periphery bilaterally,
+  indicating interstitial edema. The cardiac silhouette is enlarged, suggesting
+  cardiomegaly as the underlying etiology. Small bilateral pleural effusions may
+  also be present. No focal consolidation to suggest superimposed pneumonia. No
+  pneumothorax. Findings are most consistent with cardiogenic pulmonary edema.
+  Clinical correlation with BNP levels and echocardiography recommended.
+condition_present: true
+confusion_pair: null
+source_dataset: omnimedvqa-open
+tags:
+  - pulmonary-edema
+  - congestive-heart-failure
+  - bat-wing
+  - cephalization
+  - bilateral

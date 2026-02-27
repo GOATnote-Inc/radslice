@@ -1,0 +1,52 @@
+id: US-004
+name: Normal gallbladder ultrasound
+modality: ultrasound
+anatomy: abdomen
+task_type: diagnosis
+difficulty: basic
+image_ref: ultrasound/radimagenet/US_0004.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Normal gallbladder"
+  differential:
+    - early cholelithiasis with non-shadowing sludge
+    - gallbladder polyp below resolution threshold
+    - adenomyomatosis
+  key_findings:
+    - { finding: "thin-walled anechoic gallbladder", location: "gallbladder fossa", required: true }
+    - { finding: "normal wall thickness less than 3 mm", location: "gallbladder wall", required: true }
+    - { finding: "no intraluminal echogenicity", location: "gallbladder lumen", required: false }
+  severity: mild
+  laterality: ""
+  negatives:
+    - gallstones
+    - gallbladder wall thickening
+    - pericholecystic fluid
+    - common bile duct dilation
+    - intraluminal sludge
+    - gallbladder polyp
+pattern_checks:
+  - { name: normal_identified, check_type: regex, pattern: "normal|unremarkable|no\\s+(abnormal|pathol|significant)", required: true }
+  - { name: no_stones, check_type: regex, pattern: "no.*(stone|calcul|lithiasis|cholelithiasis)", required: true }
+  - { name: wall_normal, check_type: regex, pattern: "(wall|mural).*(normal|thin|within.*limit|(<|less)\\s*3\\s*mm)", required: true }
+  - { name: anechoic_bile, check_type: regex, pattern: "anechoic|echo.?free|clear\\s+bile|homogeneous\\s+bile", required: true }
+reference_solution: |
+  Right upper quadrant ultrasound demonstrates a normal-appearing gallbladder.
+  The gallbladder is well-distended and contains anechoic, echo-free bile without
+  intraluminal calculi, sludge, or polyps. The gallbladder wall is thin and
+  smooth, measuring less than 3 mm in thickness, with no mural edema or
+  hyperemia. There is no pericholecystic fluid collection. The common bile duct
+  measures within normal limits and is not dilated. The adjacent liver parenchyma
+  appears homogeneous without focal lesion. No sonographic Murphy sign was
+  elicited.
+  Impression: Normal gallbladder sonogram. No cholelithiasis, cholecystitis,
+  or biliary obstruction.
+condition_present: false
+confusion_pair: null
+source_dataset: radimagenet
+tags:
+  - normal
+  - gallbladder
+  - abdomen
+  - hepatobiliary
+  - negative-study

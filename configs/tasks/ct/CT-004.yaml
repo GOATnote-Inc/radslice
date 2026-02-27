@@ -1,0 +1,54 @@
+id: CT-004
+name: Hepatic metastases
+modality: ct
+anatomy: abdomen
+task_type: diagnosis
+difficulty: intermediate
+image_ref: ct/omnimedvqa/CT_0004.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Hepatic metastases"
+  differential:
+    - multifocal hepatocellular carcinoma
+    - hepatic abscesses
+    - multiple hepatic hemangiomas
+    - multiple hepatic cysts
+    - fungal microabscesses
+  key_findings:
+    - { finding: "multiple hypodense hepatic lesions", location: "bilateral hepatic lobes", required: true }
+    - { finding: "peripheral rim enhancement", location: "hepatic lesions", required: true }
+    - { finding: "variable size lesions", location: "liver", required: false }
+    - { finding: "lesions too numerous to count", location: "liver", required: false }
+  severity: severe
+  laterality: bilateral
+  negatives:
+    - portal vein thrombosis
+    - biliary dilatation
+    - ascites
+    - hepatic cirrhosis
+    - splenic lesions
+pattern_checks:
+  - { name: metastases_mentioned, check_type: regex, pattern: "metastas[ei]s|metastatic|mets\\b|secondary|secondaries", required: true }
+  - { name: hepatic_location, check_type: regex, pattern: "hepatic|liver", required: true }
+  - { name: multiple_lesions, check_type: regex, pattern: "multiple|numerous|several|innumerable|multifocal", required: true }
+  - { name: hypodense, check_type: regex, pattern: "hypodense|hypoattenuat|low.{0,10}density|low.{0,10}attenuat", required: false }
+reference_solution: |
+  Contrast-enhanced CT of the abdomen demonstrates innumerable hypodense
+  lesions throughout both hepatic lobes, ranging in size from 5 mm to 4 cm.
+  The larger lesions demonstrate peripheral rim enhancement with
+  hypoattenuating centers, a pattern characteristic of metastatic disease.
+  The lesions are distributed throughout all hepatic segments. No evidence
+  of portal vein thrombosis or biliary dilatation. No hepatic cirrhosis
+  morphology. No ascites. The spleen appears normal.
+  Impression: Multiple bilateral hepatic lesions with morphology highly
+  suggestive of metastatic disease. Clinical correlation with primary
+  malignancy history and consideration of biopsy recommended.
+condition_present: true
+confusion_pair: null
+source_dataset: omnimedvqa-open
+tags:
+  - metastases
+  - hepatic
+  - oncology
+  - abdomen
+  - liver

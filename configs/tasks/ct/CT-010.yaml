@@ -1,0 +1,59 @@
+id: CT-010
+name: Epidural hematoma (confusion pair for subdural)
+modality: ct
+anatomy: head
+task_type: diagnosis
+difficulty: advanced
+image_ref: ct/omnimedvqa/CT_0010.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Acute epidural hematoma"
+  differential:
+    - acute subdural hematoma
+    - subarachnoid hemorrhage
+    - intraparenchymal hemorrhage with extra-axial extension
+    - dural-based meningioma with hemorrhage
+  key_findings:
+    - { finding: "hyperdense biconvex (lenticular) extra-axial collection", location: "right temporal region", required: true }
+    - { finding: "does not cross suture lines", location: "limited to right temporal bone", required: true }
+    - { finding: "adjacent temporal bone fracture", location: "right temporal bone", required: false }
+    - { finding: "mild midline shift", location: "falx cerebri", required: false }
+  severity: severe
+  laterality: right
+  negatives:
+    - crescentic morphology (subdural pattern)
+    - crossing suture lines
+    - bilateral extra-axial collections
+    - intraparenchymal hemorrhage
+    - hydrocephalus
+pattern_checks:
+  - { name: epidural_mentioned, check_type: regex, pattern: "epidural|extradural|EDH\\b", required: true }
+  - { name: hematoma_type, check_type: regex, pattern: "hematoma|haematoma|hemorrhage|haemorrhage", required: true }
+  - { name: lenticular_shape, check_type: regex, pattern: "biconvex|lenticular|lens.?shaped|lentiform", required: true }
+  - { name: not_subdural, check_type: regex, pattern: "epidural|extradural", required: true }
+  - { name: temporal_location, check_type: regex, pattern: "temporal", required: true }
+reference_solution: |
+  Non-contrast CT of the head demonstrates a hyperdense biconvex
+  (lenticular) extra-axial collection in the right temporal region,
+  consistent with an acute epidural hematoma. The collection measures
+  approximately 15 mm in maximal thickness and does not cross the coronal
+  or lambdoid suture lines, confirming its epidural location. A linear
+  non-displaced fracture of the right temporal bone is identified,
+  suggesting middle meningeal artery injury as the source. There is mild
+  leftward midline shift of approximately 4 mm. The underlying brain
+  parenchyma shows no intraparenchymal hemorrhage. Note the biconvex
+  morphology which distinguishes this from a subdural hematoma, which would
+  appear crescentic and cross suture lines.
+  Impression: Acute right temporal epidural hematoma with temporal bone
+  fracture and mild midline shift. Emergent neurosurgical evacuation
+  required.
+condition_present: true
+confusion_pair: CT-001
+source_dataset: omnimedvqa-open
+tags:
+  - epidural-hematoma
+  - traumatic-brain-injury
+  - emergency
+  - head
+  - neurosurgery
+  - confusion-pair

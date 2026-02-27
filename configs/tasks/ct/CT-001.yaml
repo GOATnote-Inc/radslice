@@ -1,0 +1,55 @@
+id: CT-001
+name: Acute subdural hematoma
+modality: ct
+anatomy: head
+task_type: diagnosis
+difficulty: advanced
+image_ref: ct/omnimedvqa/CT_0001.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Acute subdural hematoma"
+  differential:
+    - epidural hematoma
+    - subarachnoid hemorrhage
+    - subdural hygroma
+    - chronic subdural hematoma with acute component
+  key_findings:
+    - { finding: "hyperdense crescent-shaped extra-axial collection", location: "right frontoparietal convexity", required: true }
+    - { finding: "midline shift", location: "leftward displacement of falx cerebri", required: true }
+    - { finding: "effacement of right lateral ventricle", location: "right lateral ventricle", required: false }
+    - { finding: "uncal herniation", location: "right temporal lobe", required: false }
+  severity: severe
+  laterality: right
+  negatives:
+    - skull fracture
+    - epidural hematoma lenticular morphology
+    - intraparenchymal hemorrhage
+    - pneumocephalus
+    - hydrocephalus
+pattern_checks:
+  - { name: subdural_mentioned, check_type: regex, pattern: "subdural", required: true }
+  - { name: hematoma_type, check_type: regex, pattern: "hematoma|haematoma|hemorrhage|haemorrhage", required: true }
+  - { name: acute_acuity, check_type: regex, pattern: "acute|hyperdense", required: true }
+  - { name: midline_shift, check_type: regex, pattern: "midline\\s+shift|mass\\s+effect|falx\\s+(cerebri\\s+)?deviation", required: true }
+  - { name: crescent_shape, check_type: regex, pattern: "crescent|crescentic|concavo-?convex", required: true }
+reference_solution: |
+  Non-contrast CT of the head demonstrates a hyperdense crescent-shaped
+  extra-axial collection along the right frontoparietal convexity, consistent
+  with an acute subdural hematoma. The collection measures approximately 12 mm
+  in maximal thickness. There is associated leftward midline shift of
+  approximately 8 mm with effacement of the right lateral ventricle and early
+  uncal herniation. No skull fracture is identified. No epidural component
+  (lenticular morphology absent). No intraparenchymal hemorrhage or
+  pneumocephalus.
+  Impression: Large acute right-sided subdural hematoma with significant
+  midline shift and early uncal herniation, requiring urgent neurosurgical
+  evaluation.
+condition_present: true
+confusion_pair: null
+source_dataset: omnimedvqa-open
+tags:
+  - subdural-hematoma
+  - traumatic-brain-injury
+  - emergency
+  - head
+  - neurosurgery

@@ -1,0 +1,53 @@
+id: US-003
+name: Deep vein thrombosis
+modality: ultrasound
+anatomy: extremity
+task_type: diagnosis
+difficulty: intermediate
+image_ref: ultrasound/radimagenet/US_0003.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Acute deep vein thrombosis of the left common femoral vein"
+  differential:
+    - chronic DVT with recanalization
+    - extrinsic compression by lymphadenopathy or mass
+    - superficial thrombophlebitis
+    - Baker cyst rupture mimicking DVT
+  key_findings:
+    - { finding: "non-compressible vein with intraluminal echogenic material", location: "left common femoral vein", required: true }
+    - { finding: "absent color Doppler flow", location: "left common femoral vein", required: true }
+    - { finding: "distended venous lumen", location: "left common femoral vein", required: false }
+  severity: moderate
+  laterality: left
+  negatives:
+    - superficial venous thrombosis
+    - popliteal vein thrombosis
+    - arterial occlusion
+    - lymphadenopathy
+    - soft tissue abscess
+pattern_checks:
+  - { name: dvt_mentioned, check_type: regex, pattern: "deep\\s+vein\\s+thromb|DVT|venous\\s+thromb", required: true }
+  - { name: non_compressible, check_type: regex, pattern: "non.?compress|incompress|fail.*compress|not.*compress", required: true }
+  - { name: laterality_left, check_type: regex, pattern: "left", required: true }
+  - { name: absent_flow, check_type: regex, pattern: "absent.*flow|no.*(flow|Doppler|augmentation)|loss.*flow", required: true }
+reference_solution: |
+  Compression ultrasound of the left lower extremity demonstrates a
+  non-compressible left common femoral vein with intraluminal echogenic material
+  consistent with acute thrombus. The vein is distended and fails to coapt with
+  transducer pressure. Color Doppler interrogation shows absent flow within the
+  thrombosed segment. Spectral Doppler of the left common femoral vein demonstrates
+  no respiratory phasicity or augmentation with distal compression. The left
+  superficial femoral, popliteal, and calf veins are patent and compressible. The
+  left common femoral artery demonstrates normal triphasic waveforms. No
+  inguinal lymphadenopathy or extrinsic mass is identified.
+  Impression: Acute deep vein thrombosis of the left common femoral vein.
+  Clinical correlation and anticoagulation therapy recommended.
+condition_present: true
+confusion_pair: null
+source_dataset: radimagenet
+tags:
+  - dvt
+  - thrombosis
+  - extremity
+  - vascular
+  - compression-ultrasound

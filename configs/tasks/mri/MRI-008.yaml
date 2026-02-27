@@ -1,0 +1,61 @@
+id: MRI-008
+name: Acute ischemic stroke with diffusion restriction
+modality: mri
+anatomy: head
+task_type: diagnosis
+difficulty: advanced
+image_ref: mri/omnimedvqa/MRI_0008.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Acute left middle cerebral artery territory ischemic stroke"
+  differential:
+    - seizure-related diffusion restriction (postictal)
+    - hypoglycemic injury
+    - encephalitis (especially herpes)
+    - toxic/metabolic leukoencephalopathy
+    - venous infarction from dural sinus thrombosis
+  key_findings:
+    - { finding: "high signal on DWI with corresponding low ADC values (true restricted diffusion)", location: "left MCA territory including insular cortex and frontoparietal operculum", required: true }
+    - { finding: "loss of normal cortical gray-white matter differentiation on FLAIR", location: "left insular ribbon and frontal operculum", required: true }
+    - { finding: "absent flow void in the left middle cerebral artery", location: "left MCA M1 segment", required: false }
+    - { finding: "DWI-FLAIR mismatch suggesting onset within 4.5 hours", location: "left MCA territory", required: false }
+  severity: severe
+  laterality: left
+  negatives:
+    - hemorrhagic transformation
+    - midline herniation
+    - posterior circulation involvement
+    - bilateral diffusion restriction
+    - leptomeningeal enhancement suggesting collateral flow
+pattern_checks:
+  - { name: stroke_mentioned, check_type: regex, pattern: "stroke|infarct|ischem", required: true }
+  - { name: diffusion_restriction, check_type: regex, pattern: "restrict.*diffusion|DWI.*hyperintens|diffusion.*restrict|ADC.*low|ADC.*decrease", required: true }
+  - { name: mca_territory, check_type: regex, pattern: "MCA|middle\\s+cerebral|insular|frontoparietal", required: true }
+  - { name: laterality_left, check_type: regex, pattern: "left", required: true }
+  - { name: acute_timing, check_type: regex, pattern: "acute|hyperacute|early|recent", required: true }
+reference_solution: |
+  MRI of the brain demonstrates findings of an acute left middle cerebral
+  artery territory ischemic infarction. DWI shows confluent high signal
+  involving the left insular cortex, frontal operculum, and adjacent
+  frontoparietal cortex, with corresponding low signal on the ADC map
+  confirming true restricted diffusion (cytotoxic edema). On FLAIR, there
+  is subtle loss of gray-white matter differentiation in the left insular
+  ribbon, though the FLAIR changes are less extensive than the DWI
+  abnormality, suggesting a DWI-FLAIR mismatch consistent with symptom
+  onset within approximately 4.5 hours. MR angiography, if available,
+  should be correlated for left MCA occlusion. No hemorrhagic
+  transformation on susceptibility-weighted imaging. No midline shift at
+  this stage. The posterior circulation and right hemisphere appear normal.
+  No evidence of dural venous sinus thrombosis.
+  Impression: Acute left MCA territory infarction with restricted diffusion
+  and DWI-FLAIR mismatch suggesting a potentially treatable time window.
+condition_present: true
+confusion_pair: null
+source_dataset: omnimedvqa-open
+tags:
+  - stroke
+  - ischemia
+  - neuro
+  - emergency
+  - diffusion
+  - mca

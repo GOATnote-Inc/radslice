@@ -1,0 +1,65 @@
+id: MRI-010
+name: Brain metastasis (confusion pair for glioblastoma)
+modality: mri
+anatomy: head
+task_type: diagnosis
+difficulty: advanced
+image_ref: mri/omnimedvqa/MRI_0010.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Brain metastasis with multiple ring-enhancing lesions"
+  differential:
+    - glioblastoma multiforme
+    - brain abscess
+    - primary CNS lymphoma
+    - tumefactive demyelination
+    - radiation necrosis
+  key_findings:
+    - { finding: "multiple discrete ring-enhancing lesions at the gray-white matter junction", location: "bilateral cerebral hemispheres, right frontal and left parietal lobes", required: true }
+    - { finding: "thin smooth ring enhancement with central T1 hypointensity", location: "each individual lesion", required: true }
+    - { finding: "surrounding vasogenic edema disproportionate to lesion size", location: "perilesional white matter", required: true }
+    - { finding: "lesions at the gray-white matter junction", location: "bilateral cerebral hemispheres", required: false }
+    - { finding: "relative sparing of the corpus callosum", location: "corpus callosum", required: false }
+  severity: severe
+  laterality: bilateral
+  negatives:
+    - single large heterogeneous mass (favoring GBM)
+    - corpus callosum infiltration
+    - leptomeningeal carcinomatosis
+    - hemorrhagic transformation
+    - hydrocephalus
+pattern_checks:
+  - { name: metastasis_mentioned, check_type: regex, pattern: "metastas|metastatic|secondary|mets\\b", required: true }
+  - { name: multiple_lesions, check_type: regex, pattern: "multiple|several|numerous|bilateral.*lesion", required: true }
+  - { name: ring_enhancement, check_type: regex, pattern: "ring.?enhanc|rim.*enhanc|peripheral.*enhanc", required: true }
+  - { name: gray_white_junction, check_type: regex, pattern: "gray.?white|corticomedullary|junction", required: true }
+reference_solution: |
+  MRI of the brain with and without gadolinium demonstrates multiple discrete
+  ring-enhancing lesions in the bilateral cerebral hemispheres, the largest
+  measuring 2.1 cm in the right frontal lobe and 1.8 cm in the left parietal
+  lobe. The lesions are located at the gray-white matter junction and
+  demonstrate thin, relatively smooth ring enhancement on post-gadolinium
+  T1-weighted images with central T1 hypointensity and T2 hyperintensity
+  suggesting central necrosis. Each lesion is surrounded by vasogenic edema
+  that appears disproportionately large relative to the lesion size, a
+  characteristic feature of metastatic disease. The corpus callosum is spared.
+  There is no leptomeningeal enhancement to suggest carcinomatosis. No
+  hemorrhagic components identified on SWI. Mild mass effect from the right
+  frontal lesion without significant midline shift. The multiplicity of
+  lesions at the gray-white junction, thin ring enhancement, and relative
+  edema all favor metastatic disease over a primary brain neoplasm such as
+  glioblastoma, which typically presents as a solitary heterogeneous mass with
+  thick irregular enhancement.
+  Impression: Multiple ring-enhancing lesions at the gray-white matter
+  junction, most consistent with brain metastases. Recommend correlation with
+  primary malignancy screening (chest CT, body PET/CT).
+condition_present: true
+confusion_pair: MRI-003
+source_dataset: omnimedvqa-open
+tags:
+  - metastasis
+  - brain-tumor
+  - neuro-oncology
+  - neuro
+  - ring-enhancing
+  - confusion-pair

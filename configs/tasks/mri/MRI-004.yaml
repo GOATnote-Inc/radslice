@@ -1,0 +1,55 @@
+id: MRI-004
+name: Medial meniscal tear right knee
+modality: mri
+anatomy: knee
+task_type: diagnosis
+difficulty: intermediate
+image_ref: mri/omnimedvqa/MRI_0004.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Complex tear of the right medial meniscus posterior horn"
+  differential:
+    - meniscal degeneration without discrete tear (grade 2 signal)
+    - meniscal cyst
+    - meniscal flap tear with displacement
+    - discoid medial meniscus with tear
+  key_findings:
+    - { finding: "linear T2 hyperintense signal extending to the articular surface of the medial meniscus", location: "posterior horn of the medial meniscus", required: true }
+    - { finding: "abnormal morphology with truncation of the meniscal body", location: "medial meniscus body-posterior horn junction", required: true }
+    - { finding: "small joint effusion", location: "suprapatellar recess", required: false }
+    - { finding: "adjacent bone marrow edema", location: "medial tibial plateau", required: false }
+  severity: moderate
+  laterality: right
+  negatives:
+    - lateral meniscal tear
+    - ACL tear
+    - PCL tear
+    - collateral ligament injury
+    - loose body
+pattern_checks:
+  - { name: meniscal_tear_mentioned, check_type: regex, pattern: "menisc.*tear|tear.*menisc|meniscal.*disrupt", required: true }
+  - { name: medial_specified, check_type: regex, pattern: "medial", required: true }
+  - { name: laterality_right, check_type: regex, pattern: "right", required: true }
+  - { name: posterior_horn, check_type: regex, pattern: "posterior\\s+horn|posterior.*menisc", required: true }
+reference_solution: |
+  MRI of the right knee demonstrates a complex tear of the posterior horn of
+  the medial meniscus. On proton density and T2-weighted sagittal images, a
+  linear hyperintense signal extends to both the superior and inferior articular
+  surfaces of the posterior horn, consistent with a complex tear. There is
+  abnormal morphology at the body-posterior horn junction with truncation of the
+  meniscal tissue. A small associated joint effusion is present within the
+  suprapatellar recess. Mild bone marrow edema is noted in the adjacent medial
+  tibial plateau. The lateral meniscus is intact with normal morphology and
+  signal. The ACL and PCL demonstrate normal signal and tension. The medial and
+  lateral collateral ligaments are intact. No loose bodies identified.
+  Impression: Complex tear of the right medial meniscus posterior horn with
+  small joint effusion.
+condition_present: true
+confusion_pair: null
+source_dataset: omnimedvqa-open
+tags:
+  - meniscus
+  - knee
+  - musculoskeletal
+  - sports-injury
+  - internal-derangement

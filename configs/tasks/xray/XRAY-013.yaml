@@ -1,0 +1,44 @@
+id: XRAY-013
+name: Left rib fractures
+modality: xray
+anatomy: chest
+task_type: diagnosis
+difficulty: basic
+image_ref: xray/omnimedvqa/CXR_0013.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Left rib fractures"
+  differential:
+    - pathologic fracture
+    - metastatic bone disease
+    - prior healed fractures with callus
+  key_findings:
+    - { finding: "cortical disruption of left lateral ribs", location: "left 6th and 7th ribs laterally", required: true }
+    - { finding: "displaced fracture fragments", location: "left 7th rib", required: false }
+    - { finding: "adjacent soft tissue swelling", location: "left lateral chest wall", required: false }
+  severity: moderate
+  laterality: left
+  negatives:
+    - pneumothorax
+    - hemothorax
+    - flail segment
+    - pulmonary contusion
+pattern_checks:
+  - { name: primary_diagnosis, check_type: regex, pattern: "(?i)(left.{0,20}rib\\s+fracture|fracture.{0,20}left.{0,20}rib)", required: true }
+  - { name: cortical_disruption, check_type: regex, pattern: "(?i)(cortical\\s+(disruption|break|discontinuity)|fracture\\s+line)", required: true }
+  - { name: rib_number, check_type: regex, pattern: "(?i)(6th|7th|sixth|seventh)\\s*rib", required: false }
+reference_solution: |
+  Frontal chest radiograph demonstrates cortical disruption involving the left 6th and
+  7th ribs in the lateral aspect, consistent with acute fractures. The left 7th rib
+  fracture shows mild displacement of the fracture fragments. There is subtle adjacent
+  soft tissue swelling along the left lateral chest wall. No associated pneumothorax
+  or pleural effusion is identified. Lungs are clear bilaterally. No flail segment.
+  Clinical correlation for pain management and follow-up recommended.
+condition_present: true
+confusion_pair: null
+source_dataset: omnimedvqa-open
+tags:
+  - rib-fracture
+  - trauma
+  - left-chest
+  - bone-injury

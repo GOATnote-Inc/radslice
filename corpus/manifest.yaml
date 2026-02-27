@@ -1,0 +1,54 @@
+version: "1.0"
+description: RadSlice corpus manifest — curated radiology tasks across 4 modalities
+
+sources:
+  omnimedvqa-open:
+    name: OmniMedVQA (open-access subsets)
+    url: https://huggingface.co/datasets/foreverbeliever/OmniMedVQA
+    license: CC-BY (varies by source dataset)
+    modalities: [xray, ct, mri, ultrasound]
+    notes: Curated VQA tasks from open-access medical imaging datasets
+
+  mediconfusion:
+    name: MediConfusion
+    url: https://github.com/MShahabSepehri/MediConfusion
+    license: MIT
+    modalities: [xray, ct, mri]
+    notes: Confusion-pair tasks — same question, two images, different correct answers
+
+  eurorad:
+    name: Eurorad
+    url: https://eurorad.org
+    license: CC BY-NC-SA 4.0
+    modalities: [ct, mri]
+    notes: Peer-reviewed case reports with structured findings
+
+  radimagenet:
+    name: RadImageNet
+    url: https://radimagenet.com
+    license: CC BY 4.0
+    modalities: [ultrasound, ct, mri]
+    notes: 1.35M labeled images across 11 anatomies
+
+  vindr-cxr:
+    name: VinDr-CXR
+    url: https://physionet.org/content/vindr-cxr/
+    license: PhysioNet License 1.0
+    modalities: [xray]
+    notes: 18K CXRs with bounding boxes from 17 radiologists
+
+target_counts:
+  xray: 80
+  ct: 60
+  mri: 40
+  ultrasound: 20
+  total: 200
+
+balance:
+  xray: { positive: 50, normal: 15, confusion_pair: 15 }
+  ct: { positive: 36, normal: 12, confusion_pair: 12 }
+  mri: { positive: 24, normal: 8, confusion_pair: 8 }
+  ultrasound: { positive: 12, normal: 4, confusion_pair: 4 }
+
+images_dir: images/
+annotations_dir: annotations/

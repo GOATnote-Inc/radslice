@@ -1,0 +1,6 @@
+name: sonnet-4-6
+provider: anthropic
+model_id: claude-sonnet-4-6
+description: Anthropic Claude Sonnet 4.6 multimodal
+max_tokens: 4096
+temperature: 0.0

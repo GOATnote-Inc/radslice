@@ -1,0 +1,57 @@
+id: XRAY-008
+name: Solitary pulmonary nodule right upper lobe
+modality: xray
+anatomy: chest
+task_type: diagnosis
+difficulty: intermediate
+image_ref: xray/omnimedvqa/CXR_0008.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Solitary pulmonary nodule in the right upper lobe"
+  differential:
+    - primary lung malignancy
+    - granuloma
+    - metastatic deposit
+    - hamartoma
+    - arteriovenous malformation
+    - round pneumonia
+  key_findings:
+    - { finding: "well-circumscribed round opacity", location: "right upper lobe", required: true }
+    - { finding: "nodule measuring approximately 2 cm", location: "right upper lobe", required: false }
+    - { finding: "no calcification visible", location: "within the nodule", required: false }
+    - { finding: "no associated lymphadenopathy", location: "mediastinum and hila", required: false }
+  severity: moderate
+  laterality: right
+  negatives:
+    - pleural effusion
+    - rib destruction
+    - cavitation
+    - multiple nodules
+    - consolidation
+    - pneumothorax
+pattern_checks:
+  - { name: nodule_mentioned, check_type: regex, pattern: "nodule|mass|lesion|opacity", required: true }
+  - { name: laterality_right, check_type: regex, pattern: "right", required: true }
+  - { name: upper_lobe, check_type: regex, pattern: "upper\\s+lobe|RUL|upper\\s+zone", required: true }
+  - { name: solitary, check_type: regex, pattern: "solitary|single|isolated", required: true }
+  - { name: further_workup, check_type: regex, pattern: "CT|further.*imaging|follow.?up|biopsy|workup|PET", required: true }
+reference_solution: |
+  PA chest radiograph demonstrates a solitary, well-circumscribed round opacity
+  in the right upper lobe measuring approximately 2 cm in diameter. The nodule
+  has smooth margins without visible calcification or cavitation. No additional
+  pulmonary nodules are identified. The hila and mediastinal contours appear
+  normal without lymphadenopathy. The remaining lung fields are clear. No pleural
+  effusion or pneumothorax. The cardiac silhouette is normal. No osseous
+  abnormality. Given the indeterminate nature of this solitary pulmonary nodule,
+  CT of the chest with contrast is recommended for further characterization and
+  to assess for calcification pattern, morphology, and mediastinal staging.
+  Impression: Solitary pulmonary nodule in the right upper lobe — CT chest
+  recommended for further evaluation.
+condition_present: true
+confusion_pair: null
+source_dataset: omnimedvqa-open
+tags:
+  - pulmonary-nodule
+  - chest
+  - oncology
+  - follow-up-needed

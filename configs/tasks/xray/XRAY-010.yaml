@@ -1,0 +1,59 @@
+id: XRAY-010
+name: Widened mediastinum
+modality: xray
+anatomy: chest
+task_type: diagnosis
+difficulty: advanced
+image_ref: xray/omnimedvqa/CXR_0010.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Widened mediastinum"
+  differential:
+    - aortic dissection
+    - aortic aneurysm
+    - mediastinal hematoma
+    - mediastinal mass or lymphadenopathy
+    - thymic mass
+    - tortuous aorta in elderly
+    - AP projection artifact
+  key_findings:
+    - { finding: "mediastinal width exceeding 8 cm", location: "superior mediastinum", required: true }
+    - { finding: "loss of aortic knob contour", location: "aortic arch", required: true }
+    - { finding: "rightward tracheal deviation", location: "trachea", required: false }
+    - { finding: "left apical pleural cap", location: "left apex", required: false }
+    - { finding: "depression of left mainstem bronchus", location: "left mainstem bronchus", required: false }
+  severity: severe
+  laterality: ""
+  negatives:
+    - pneumothorax
+    - focal parenchymal consolidation
+    - rib fractures
+    - cardiomegaly
+pattern_checks:
+  - { name: widened_mediastinum, check_type: regex, pattern: "widen.*mediastin|mediastin.*widen|mediastinal.*enlarg", required: true }
+  - { name: aortic_pathology, check_type: regex, pattern: "aort|dissect|aneurysm|hematoma", required: true }
+  - { name: measurement_or_abnormal, check_type: regex, pattern: "8\\s*cm|greater.*normal|exceed|abnormal.*width", required: true }
+  - { name: urgent_workup, check_type: regex, pattern: "CT[A]?|CTA|angiograph|urgent|emergent|immediate", required: true }
+reference_solution: |
+  PA chest radiograph demonstrates a significantly widened superior mediastinum
+  measuring greater than 8 cm at the level of the aortic arch. There is loss of
+  the normal sharp aortic knob contour. The trachea is deviated slightly to the
+  right. A left apical pleural cap is noted, raising concern for mediastinal
+  hemorrhage tracking into the pleural apex. The left mainstem bronchus appears
+  depressed. The lung parenchyma is otherwise clear. No pneumothorax or rib
+  fractures. In the appropriate clinical context (acute chest pain, trauma, or
+  hypertension), these findings are concerning for acute aortic pathology
+  including dissection or traumatic aortic injury. Emergent CT angiography of the
+  chest is strongly recommended.
+  Impression: Widened mediastinum with loss of aortic knob contour — emergent CTA
+  recommended to exclude aortic dissection or traumatic aortic injury.
+condition_present: true
+confusion_pair: null
+source_dataset: omnimedvqa-open
+tags:
+  - mediastinum
+  - aortic
+  - emergency
+  - chest
+  - vascular
+  - critical

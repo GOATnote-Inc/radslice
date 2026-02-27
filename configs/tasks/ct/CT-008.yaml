@@ -1,0 +1,57 @@
+id: CT-008
+name: Acute ischemic stroke with dense MCA sign
+modality: ct
+anatomy: head
+task_type: diagnosis
+difficulty: advanced
+image_ref: ct/omnimedvqa/CT_0008.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Acute ischemic stroke in left MCA territory"
+  differential:
+    - hemorrhagic stroke
+    - cerebral venous thrombosis with infarction
+    - encephalitis
+    - brain tumor with vasogenic edema
+    - Todd paralysis postictal changes
+  key_findings:
+    - { finding: "loss of gray-white matter differentiation", location: "left insular cortex and left frontal operculum", required: true }
+    - { finding: "hyperdense left MCA sign", location: "left middle cerebral artery M1 segment", required: true }
+    - { finding: "sulcal effacement", location: "left frontotemporal convexity", required: false }
+    - { finding: "early lentiform nucleus obscuration", location: "left basal ganglia", required: false }
+  severity: severe
+  laterality: left
+  negatives:
+    - intracranial hemorrhage
+    - midline shift
+    - hydrocephalus
+    - established hypodensity indicating completed infarction
+    - right hemisphere abnormality
+pattern_checks:
+  - { name: stroke_mentioned, check_type: regex, pattern: "ischemic\\s+stroke|infarct|isch[ae]mi[ac]|CVA|cerebrovascular\\s+accident", required: true }
+  - { name: mca_territory, check_type: regex, pattern: "MCA|middle\\s+cerebral\\s+arter", required: true }
+  - { name: laterality_left, check_type: regex, pattern: "left", required: true }
+  - { name: dense_mca_or_gwm_loss, check_type: regex, pattern: "dense\\s+MCA|hyperdense.{0,20}(MCA|middle\\s+cerebral)|gray.?white.{0,15}(loss|differenti|obscur)|insular\\s+ribbon", required: true }
+  - { name: early_changes, check_type: regex, pattern: "early|acute|hyperacute|subtle", required: false }
+reference_solution: |
+  Non-contrast CT of the head demonstrates a hyperdense left middle cerebral
+  artery sign at the M1 segment, indicating acute thrombus. There is subtle
+  loss of gray-white matter differentiation involving the left insular
+  cortex (insular ribbon sign) and left frontal operculum. Early obscuration
+  of the left lentiform nucleus is noted. Mild sulcal effacement is present
+  along the left frontotemporal convexity compared to the right. No
+  established hypodensity to suggest completed territorial infarction. No
+  intracranial hemorrhage. No midline shift. The right hemisphere appears
+  normal. ASPECTS score estimated at 7.
+  Impression: Acute left MCA territory ischemic stroke with hyperdense MCA
+  sign and early ischemic changes. Immediate neurology consultation for
+  thrombolytic and/or endovascular therapy evaluation.
+condition_present: true
+confusion_pair: null
+source_dataset: omnimedvqa-open
+tags:
+  - ischemic-stroke
+  - emergency
+  - head
+  - neurovascular
+  - time-critical

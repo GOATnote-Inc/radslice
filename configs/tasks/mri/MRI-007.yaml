@@ -1,0 +1,58 @@
+id: MRI-007
+name: Right rotator cuff tear
+modality: mri
+anatomy: shoulder
+task_type: diagnosis
+difficulty: intermediate
+image_ref: mri/omnimedvqa/MRI_0007.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Full-thickness tear of the right supraspinatus tendon"
+  differential:
+    - partial-thickness articular-sided rotator cuff tear
+    - partial-thickness bursal-sided rotator cuff tear
+    - rotator cuff tendinopathy without tear
+    - calcific tendinitis
+    - subacromial bursitis mimicking tear
+  key_findings:
+    - { finding: "complete discontinuity of the supraspinatus tendon with fluid-signal gap on T2-weighted images", location: "supraspinatus tendon insertion on the greater tuberosity", required: true }
+    - { finding: "tendon retraction with wavy morphology of the proximal stump", location: "supraspinatus muscle-tendon junction", required: true }
+    - { finding: "fluid in the subacromial-subdeltoid bursa", location: "subacromial space", required: false }
+    - { finding: "superior migration of the humeral head", location: "glenohumeral joint", required: false }
+  severity: moderate
+  laterality: right
+  negatives:
+    - infraspinatus tendon tear
+    - subscapularis tendon tear
+    - labral tear
+    - glenohumeral dislocation
+    - fatty infiltration of the supraspinatus muscle (Goutallier grade 3-4)
+pattern_checks:
+  - { name: rotator_cuff_tear, check_type: regex, pattern: "rotator\\s+cuff.*tear|supraspinatus.*tear|tear.*supraspinatus|cuff.*rupture", required: true }
+  - { name: full_thickness, check_type: regex, pattern: "full.?thickness|complete.*tear|complete.*disrupt", required: true }
+  - { name: laterality_right, check_type: regex, pattern: "right", required: true }
+  - { name: tendon_gap, check_type: regex, pattern: "discontinu|gap|retract|fluid.*signal.*defect", required: true }
+reference_solution: |
+  MRI of the right shoulder demonstrates a full-thickness tear of the
+  supraspinatus tendon. On T2-weighted fat-saturated coronal and sagittal
+  images, there is complete discontinuity of the supraspinatus tendon at its
+  insertion on the greater tuberosity with a fluid-signal gap. The proximal
+  tendon stump is retracted medially approximately 1.5 cm with wavy
+  morphology. Fluid is present in the subacromial-subdeltoid bursa,
+  communicating with the glenohumeral joint through the tendon defect. The
+  supraspinatus muscle belly shows mild fatty infiltration (Goutallier
+  grade 1-2). The infraspinatus and subscapularis tendons are intact. The
+  long head of the biceps tendon is in normal position within the bicipital
+  groove. The glenoid labrum is intact. No glenohumeral dislocation. Mild
+  acromioclavicular joint arthrosis is noted.
+  Impression: Full-thickness right supraspinatus tendon tear with 1.5 cm
+  retraction and mild muscle atrophy.
+condition_present: true
+confusion_pair: null
+source_dataset: omnimedvqa-open
+tags:
+  - rotator-cuff
+  - shoulder
+  - musculoskeletal
+  - tendon
+  - orthopedic

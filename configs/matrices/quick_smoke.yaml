@@ -1,0 +1,15 @@
+tasks_dir: configs/tasks
+n_trials: 1
+max_concurrency: 2
+
+task_ids:
+  - XRAY-001
+  - XRAY-010
+  - CT-001
+  - MRI-001
+  - US-001
+
+models:
+  - name: gpt-5.2
+    provider: openai
+    model_id: gpt-5.2

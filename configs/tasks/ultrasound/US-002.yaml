@@ -1,0 +1,53 @@
+id: US-002
+name: Abdominal aortic aneurysm
+modality: ultrasound
+anatomy: abdomen
+task_type: diagnosis
+difficulty: advanced
+image_ref: ultrasound/radimagenet/US_0002.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Abdominal aortic aneurysm"
+  differential:
+    - aortic pseudoaneurysm
+    - retroperitoneal mass displacing aorta
+    - aortic dissection
+    - tortuous aorta mimicking dilation
+  key_findings:
+    - { finding: "fusiform dilation of the abdominal aorta exceeding 3 cm", location: "infrarenal abdominal aorta", required: true }
+    - { finding: "intraluminal mural thrombus", location: "anterior and lateral aortic wall", required: false }
+    - { finding: "anechoic lumen with laminar flow on color Doppler", location: "aortic lumen", required: false }
+  severity: severe
+  laterality: ""
+  negatives:
+    - dissection flap
+    - free intraperitoneal fluid
+    - aortic rupture
+    - iliac artery aneurysm
+    - renal artery involvement
+pattern_checks:
+  - { name: aaa_mentioned, check_type: regex, pattern: "aortic\\s+aneurysm|AAA|aneurysm.*(aort|abdominal)", required: true }
+  - { name: diameter_measured, check_type: regex, pattern: "\\d+(\\.\\d+)?\\s*(cm|mm)|exceed.*3\\s*cm|greater.*3\\s*cm|dila", required: true }
+  - { name: infrarenal, check_type: regex, pattern: "infrarenal|below.*renal|distal.*renal", required: true }
+  - { name: no_rupture, check_type: regex, pattern: "no.*(rupture|leak|extravasa|free\\s+fluid)", required: true }
+reference_solution: |
+  Transverse and longitudinal ultrasound of the abdominal aorta demonstrates
+  fusiform dilation of the infrarenal segment measuring approximately 5.2 cm in
+  maximal anteroposterior diameter, consistent with an abdominal aortic aneurysm
+  (AAA). Eccentric mural thrombus is identified along the anterior and lateral
+  walls, with a patent residual lumen demonstrating laminar flow on color Doppler
+  interrogation. The aortic walls are calcified but intact with no evidence of
+  dissection flap or contained rupture. No free intraperitoneal fluid is seen to
+  suggest rupture. The iliac arteries, to the extent visualized, appear normal in
+  caliber. The suprarenal aorta is not dilated.
+  Impression: Large infrarenal abdominal aortic aneurysm (5.2 cm) with mural
+  thrombus. No evidence of rupture. Recommend CTA for surgical planning.
+condition_present: true
+confusion_pair: null
+source_dataset: radimagenet
+tags:
+  - aneurysm
+  - aorta
+  - abdomen
+  - vascular
+  - emergency

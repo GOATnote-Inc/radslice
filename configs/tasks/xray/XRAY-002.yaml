@@ -1,0 +1,48 @@
+id: XRAY-002
+name: Right lower lobe pneumonia
+modality: xray
+anatomy: chest
+task_type: diagnosis
+difficulty: basic
+image_ref: xray/omnimedvqa/CXR_0002.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Right lower lobe pneumonia"
+  differential:
+    - atelectasis
+    - pulmonary infarct
+    - aspiration pneumonitis
+    - lung mass with post-obstructive pneumonia
+  key_findings:
+    - { finding: "airspace opacity", location: "right lower lobe", required: true }
+    - { finding: "air bronchograms", location: "right lower lobe", required: false }
+    - { finding: "obscuration of right hemidiaphragm", location: "right costophrenic angle", required: true }
+  severity: moderate
+  laterality: right
+  negatives:
+    - pleural effusion
+    - pneumothorax
+    - left lung opacity
+    - cavitation
+    - lymphadenopathy
+pattern_checks:
+  - { name: pneumonia_mentioned, check_type: regex, pattern: "pneumonia|consolidation|airspace\\s+(disease|opacity)", required: true }
+  - { name: laterality_right, check_type: regex, pattern: "right", required: true }
+  - { name: lower_lobe, check_type: regex, pattern: "lower\\s+lobe|basilar|base", required: true }
+  - { name: opacity_described, check_type: regex, pattern: "opaci(ty|fication)|consolidat", required: true }
+reference_solution: |
+  PA chest radiograph demonstrates a dense airspace opacity in the right lower
+  lobe with obscuration of the right hemidiaphragm (silhouette sign positive),
+  consistent with lobar consolidation. Air bronchograms are visible within the
+  opacity, supporting the diagnosis of pneumonia rather than effusion. The right
+  costophrenic angle is blunted by the consolidation. The left lung is clear.
+  Heart size is normal. No pneumothorax.
+  Impression: Right lower lobe pneumonia.
+condition_present: true
+confusion_pair: null
+source_dataset: omnimedvqa-open
+tags:
+  - pneumonia
+  - infection
+  - chest
+  - consolidation

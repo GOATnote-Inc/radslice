@@ -1,0 +1,57 @@
+id: CT-009
+name: Lung adenocarcinoma right upper lobe
+modality: ct
+anatomy: chest
+task_type: diagnosis
+difficulty: intermediate
+image_ref: ct/omnimedvqa/CT_0009.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Right upper lobe pulmonary mass suspicious for lung adenocarcinoma"
+  differential:
+    - squamous cell carcinoma
+    - pulmonary metastasis
+    - lung abscess
+    - organizing pneumonia
+    - granulomatosis with polyangiitis
+  key_findings:
+    - { finding: "spiculated soft tissue mass", location: "right upper lobe", required: true }
+    - { finding: "irregular margins with pleural retraction", location: "right upper lobe periphery", required: true }
+    - { finding: "mediastinal lymphadenopathy", location: "right paratracheal station 4R", required: false }
+    - { finding: "air bronchograms within mass", location: "right upper lobe mass", required: false }
+  severity: severe
+  laterality: right
+  negatives:
+    - cavitation
+    - chest wall invasion
+    - pericardial effusion
+    - pleural effusion
+    - contralateral lung nodules
+    - osseous metastases
+pattern_checks:
+  - { name: malignancy_mentioned, check_type: regex, pattern: "adenocarcinoma|malign|carcinoma|neoplasm|cancer|primary\\s+lung", required: true }
+  - { name: mass_identified, check_type: regex, pattern: "mass|lesion|nodule|tumor|tumour", required: true }
+  - { name: right_upper_lobe, check_type: regex, pattern: "right\\s+upper\\s+lobe|RUL", required: true }
+  - { name: spiculated, check_type: regex, pattern: "spiculat|irregular.{0,15}margin|stellate|corona\\s+radiata", required: true }
+reference_solution: |
+  Contrast-enhanced CT of the chest demonstrates a 3.2 cm spiculated soft
+  tissue mass in the right upper lobe with irregular margins and associated
+  pleural retraction. Internal air bronchograms are present within the mass,
+  a feature commonly associated with adenocarcinoma subtype. A 1.2 cm right
+  paratracheal lymph node (station 4R) is noted, suspicious for nodal
+  involvement. No cavitation within the mass. No chest wall invasion. No
+  pleural or pericardial effusion. No contralateral lung nodules. Visualized
+  osseous structures show no lytic or blastic lesions.
+  Impression: Spiculated right upper lobe mass highly suspicious for primary
+  lung malignancy, likely adenocarcinoma given morphology and air
+  bronchograms. Suspicious right paratracheal lymphadenopathy. Tissue
+  sampling and PET/CT staging recommended.
+condition_present: true
+confusion_pair: null
+source_dataset: omnimedvqa-open
+tags:
+  - lung-cancer
+  - adenocarcinoma
+  - oncology
+  - chest
+  - pulmonary-mass

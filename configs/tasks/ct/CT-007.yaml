@@ -1,0 +1,54 @@
+id: CT-007
+name: Renal calculus with hydronephrosis
+modality: ct
+anatomy: abdomen
+task_type: diagnosis
+difficulty: intermediate
+image_ref: ct/omnimedvqa/CT_0007.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Obstructing left ureteral calculus with hydronephrosis"
+  differential:
+    - ureteropelvic junction obstruction
+    - ureteral stricture
+    - extrinsic ureteral compression by mass
+    - renal pelvis blood clot
+    - phlebolith misidentified as calculus
+  key_findings:
+    - { finding: "hyperdense calculus in left proximal ureter", location: "left ureteropelvic junction", required: true }
+    - { finding: "moderate left hydronephrosis", location: "left renal collecting system", required: true }
+    - { finding: "perinephric fat stranding", location: "left kidney", required: false }
+    - { finding: "proximal ureteral dilatation", location: "left proximal ureter", required: false }
+  severity: moderate
+  laterality: left
+  negatives:
+    - right renal calculus
+    - right hydronephrosis
+    - renal mass
+    - bladder calculus
+    - renal vein thrombosis
+pattern_checks:
+  - { name: calculus_mentioned, check_type: regex, pattern: "calcul|stone|urolithiasis|nephrolithiasis", required: true }
+  - { name: hydronephrosis_mentioned, check_type: regex, pattern: "hydronephrosis|hydroureter|collecting\\s+system\\s+dilat|pelvicalyceal\\s+dilat", required: true }
+  - { name: laterality_left, check_type: regex, pattern: "left", required: true }
+  - { name: obstruction, check_type: regex, pattern: "obstruct|block|impacted", required: true }
+reference_solution: |
+  Non-contrast CT of the abdomen and pelvis demonstrates a 7 mm hyperdense
+  calculus at the left ureteropelvic junction. There is associated moderate
+  left hydronephrosis with dilatation of the renal pelvis and calyces. The
+  left proximal ureter is dilated to the level of the stone. Mild
+  perinephric fat stranding is noted surrounding the left kidney, indicating
+  acute obstruction. The right kidney is normal without hydronephrosis or
+  calculi. The bladder is normally distended without calculi.
+  Impression: Obstructing 7 mm left ureteropelvic junction calculus with
+  moderate hydronephrosis and perinephric stranding, consistent with acute
+  left ureteral obstruction. Urology consultation recommended.
+condition_present: true
+confusion_pair: null
+source_dataset: omnimedvqa-open
+tags:
+  - renal-calculus
+  - hydronephrosis
+  - abdomen
+  - urological
+  - obstruction

@@ -1,0 +1,53 @@
+id: MRI-005
+name: Normal brain MRI
+modality: mri
+anatomy: head
+task_type: diagnosis
+difficulty: basic
+image_ref: mri/omnimedvqa/MRI_0005.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Normal brain MRI"
+  differential:
+    - early small vessel ischemic disease
+    - incidental arachnoid cyst
+    - incidental pineal cyst
+    - normal variant perivascular spaces
+  key_findings:
+    - { finding: "normal brain parenchymal signal on all sequences", location: "bilateral cerebral hemispheres", required: true }
+    - { finding: "no abnormal enhancement", location: "brain parenchyma and meninges", required: true }
+    - { finding: "normal ventricular size and morphology", location: "lateral, third, and fourth ventricles", required: false }
+  severity: mild
+  laterality: ""
+  negatives:
+    - mass or space-occupying lesion
+    - acute infarction
+    - hemorrhage
+    - abnormal enhancement
+    - hydrocephalus
+    - white matter disease
+    - midline shift
+pattern_checks:
+  - { name: normal_mentioned, check_type: regex, pattern: "normal|unremarkable|no.*abnormal|negative|no.*acute", required: true }
+  - { name: no_mass, check_type: regex, pattern: "no.*mass|no.*lesion|no.*enhancing|without.*mass", required: true }
+  - { name: no_infarct, check_type: regex, pattern: "no.*infarc|no.*restrict|no.*ischem|no.*stroke|no.*diffusion", required: true }
+reference_solution: |
+  MRI of the brain performed with and without intravenous gadolinium
+  demonstrates normal findings. The brain parenchyma shows normal signal
+  intensity on T1-weighted, T2-weighted, FLAIR, and diffusion-weighted
+  sequences bilaterally. No abnormal parenchymal or meningeal enhancement
+  is identified on post-contrast images. The ventricular system is normal
+  in size and configuration including the lateral, third, and fourth
+  ventricles. No midline shift. The basal cisterns are patent. The major
+  intracranial vascular flow voids are preserved. The orbits, paranasal
+  sinuses, and mastoid air cells are unremarkable. No restricted diffusion
+  to suggest acute infarction. No intracranial hemorrhage. No mass lesion.
+  Impression: Normal brain MRI.
+condition_present: false
+confusion_pair: null
+source_dataset: omnimedvqa-open
+tags:
+  - normal
+  - brain
+  - neuro
+  - negative-case

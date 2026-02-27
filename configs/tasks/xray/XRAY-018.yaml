@@ -1,0 +1,51 @@
+id: XRAY-018
+name: Left bullous emphysema
+modality: xray
+anatomy: chest
+task_type: diagnosis
+difficulty: intermediate
+image_ref: xray/omnimedvqa/CXR_0018.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Left bullous emphysema"
+  differential:
+    - left pneumothorax
+    - giant bulla mimicking pneumothorax
+    - congenital lobar emphysema
+    - pneumatocele
+  key_findings:
+    - { finding: "large lucent area in the left hemithorax with absent lung markings", location: "left upper and mid zones", required: true }
+    - { finding: "thin-walled bulla with visible curvilinear margin", location: "left hemithorax", required: true }
+    - { finding: "compressed adjacent lung parenchyma", location: "left lower zone", required: false }
+    - { finding: "hyperinflation with flattened diaphragms", location: "bilateral diaphragms", required: false }
+  severity: moderate
+  laterality: left
+  negatives:
+    - pleural effusion
+    - mediastinal shift
+    - tension physiology
+    - right lung bulla
+pattern_checks:
+  - { name: primary_diagnosis, check_type: regex, pattern: "(?i)(bull(a|ae|ous)\\s+(emphysema|disease)|emphysema.{0,30}bull(a|ae|ous)|giant\\s+bull(a|ae))", required: true }
+  - { name: lucent_area, check_type: regex, pattern: "(?i)(lucen(t|cy)|hyperlucen|avascular.{0,30}(area|zone|region)|absent.{0,30}(lung\\s+)?marking)", required: true }
+  - { name: pneumothorax_distinction, check_type: regex, pattern: "(?i)(bull(a|ae|ous).{0,50}(rather|not|distinguish|versus|vs)|not.{0,30}pneumothorax|thin.{0,20}wall)", required: false }
+reference_solution: |
+  Frontal chest radiograph demonstrates a large lucent area in the left hemithorax
+  occupying the upper and mid zones with absent lung markings. A thin curvilinear
+  wall is visible along the margin of the lucency, distinguishing this as a giant
+  bulla rather than pneumothorax. In pneumothorax, the visceral pleural line would
+  parallel the chest wall, whereas here the curvilinear margin represents the bulla
+  wall. There is compressed lung parenchyma in the left lower zone. Signs of
+  hyperinflation are present with flattened hemidiaphragms bilaterally. No mediastinal
+  shift or tension physiology. Findings are consistent with left bullous emphysema.
+  CT chest is recommended for further characterization and surgical planning if
+  symptomatic.
+condition_present: true
+confusion_pair: XRAY-001
+source_dataset: omnimedvqa-open
+tags:
+  - bullous-emphysema
+  - bulla
+  - emphysema
+  - pneumothorax-mimic
+  - confusion-pair

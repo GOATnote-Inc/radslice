@@ -1,0 +1,55 @@
+id: XRAY-006
+name: Right tension pneumothorax
+modality: xray
+anatomy: chest
+task_type: diagnosis
+difficulty: advanced
+image_ref: xray/omnimedvqa/CXR_0006.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Right tension pneumothorax"
+  differential:
+    - simple pneumothorax without tension
+    - large emphysematous bulla
+    - congenital diaphragmatic hernia
+    - artifact
+  key_findings:
+    - { finding: "complete right lung collapse", location: "right hemithorax", required: true }
+    - { finding: "contralateral mediastinal shift", location: "mediastinum shifted to left", required: true }
+    - { finding: "absent lung markings", location: "right hemithorax", required: true }
+    - { finding: "depression of right hemidiaphragm", location: "right hemidiaphragm", required: true }
+    - { finding: "widening of right intercostal spaces", location: "right rib cage", required: false }
+    - { finding: "tracheal deviation", location: "trachea deviated to left", required: false }
+  severity: severe
+  laterality: right
+  negatives:
+    - left-sided pneumothorax
+    - pleural effusion
+    - rib fractures
+    - subcutaneous emphysema
+pattern_checks:
+  - { name: tension_mentioned, check_type: regex, pattern: "tension", required: true }
+  - { name: pneumothorax_mentioned, check_type: regex, pattern: "pneumothorax", required: true }
+  - { name: laterality_right, check_type: regex, pattern: "right", required: true }
+  - { name: mediastinal_shift, check_type: regex, pattern: "mediastinal\\s+shift|tracheal\\s+devia|midline\\s+shift|contralateral\\s+shift", required: true }
+  - { name: lung_collapse, check_type: regex, pattern: "collaps|complete.*loss|total.*collaps", required: true }
+reference_solution: |
+  PA chest radiograph demonstrates a right-sided tension pneumothorax. There is
+  complete absence of lung markings throughout the right hemithorax with total
+  collapse of the right lung toward the hilum. Critical findings of tension
+  physiology include contralateral (leftward) mediastinal shift, depression and
+  flattening of the right hemidiaphragm, and widening of the right intercostal
+  spaces. The trachea is deviated to the left. The left lung appears compressed
+  but aerated. No rib fractures or subcutaneous emphysema identified. This is a
+  medical emergency requiring immediate needle decompression followed by chest
+  tube placement.
+  Impression: Right tension pneumothorax — emergent intervention required.
+condition_present: true
+confusion_pair: null
+source_dataset: omnimedvqa-open
+tags:
+  - pneumothorax
+  - tension
+  - emergency
+  - chest
+  - critical

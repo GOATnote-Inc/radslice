@@ -1,0 +1,51 @@
+id: XRAY-003
+name: Bilateral pleural effusions
+modality: xray
+anatomy: chest
+task_type: diagnosis
+difficulty: intermediate
+image_ref: xray/omnimedvqa/CXR_0003.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Bilateral pleural effusions"
+  differential:
+    - bilateral lower lobe consolidation
+    - bilateral atelectasis
+    - empyema
+    - hemothorax
+  key_findings:
+    - { finding: "meniscus sign", location: "bilateral costophrenic angles", required: true }
+    - { finding: "blunting of costophrenic angles", location: "bilateral", required: true }
+    - { finding: "homogeneous opacification", location: "bilateral lower zones", required: true }
+    - { finding: "preserved upper lobe vascularity", location: "bilateral upper zones", required: false }
+  severity: moderate
+  laterality: bilateral
+  negatives:
+    - pneumothorax
+    - consolidation in upper lobes
+    - mediastinal mass
+    - cardiomegaly
+    - loculated effusion
+pattern_checks:
+  - { name: effusion_mentioned, check_type: regex, pattern: "effusion", required: true }
+  - { name: bilateral, check_type: regex, pattern: "bilateral|both", required: true }
+  - { name: costophrenic, check_type: regex, pattern: "costophrenic|meniscus", required: true }
+  - { name: pleural, check_type: regex, pattern: "pleural", required: true }
+reference_solution: |
+  PA chest radiograph demonstrates bilateral pleural effusions. There is
+  homogeneous opacification in both lower zones with characteristic meniscus
+  signs at the bilateral costophrenic angles, which are blunted. The effusions
+  appear moderate in size, tracking up the lateral chest walls bilaterally. The
+  upper lung zones remain clear with preserved vascular markings. The cardiac
+  silhouette is partially obscured by the effusions but does not appear overtly
+  enlarged on the visible portion. No pneumothorax is identified. No focal
+  consolidation is seen in the visible lung parenchyma.
+  Impression: Moderate bilateral pleural effusions.
+condition_present: true
+confusion_pair: null
+source_dataset: omnimedvqa-open
+tags:
+  - pleural-effusion
+  - chest
+  - bilateral
+  - fluid

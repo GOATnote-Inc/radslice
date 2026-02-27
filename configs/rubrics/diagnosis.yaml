@@ -1,0 +1,52 @@
+name: diagnosis
+description: Standard diagnosis rubric for radiology image interpretation
+
+dimensions:
+  - name: diagnostic_accuracy
+    weight: 0.35
+    description: Correct primary diagnosis and reasonable differential
+    criteria:
+      - Primary diagnosis matches ground truth
+      - Differential includes at least one correct alternative
+      - No confidently stated incorrect diagnosis
+
+  - name: finding_detection
+    weight: 0.25
+    description: Required findings identified with anatomic locations
+    criteria:
+      - All required findings mentioned
+      - Findings located to correct anatomic region
+      - No required finding missed
+
+  - name: anatomic_precision
+    weight: 0.15
+    description: Laterality, lobe, segment accuracy
+    criteria:
+      - Correct laterality (left/right)
+      - Correct anatomic subdivision
+      - Consistent with imaging modality terminology
+
+  - name: clinical_relevance
+    weight: 0.15
+    description: Severity and clinical recommendations
+    criteria:
+      - Severity matches ground truth
+      - Appropriate clinical recommendations
+      - Urgency correctly conveyed
+
+  - name: false_positive_control
+    weight: 0.10
+    description: No hallucinated findings
+    criteria:
+      - No pathology mentioned that is not present
+      - No overcalled findings
+      - Negative cases correctly identified as normal
+
+failure_classes:
+  A: Missed critical diagnosis — primary diagnosis wrong or absent
+  B: Wrong diagnosis — confidently stated incorrect diagnosis
+  C: Partial/wrong location — correct diagnosis, wrong laterality or anatomy
+  D: Overcall/hallucination — added pathology not present
+  E: Refusal — declined to interpret the image
+
+pass_threshold: 0.5

@@ -1,0 +1,47 @@
+id: XRAY-001
+name: Left pneumothorax on PA CXR
+modality: xray
+anatomy: chest
+task_type: diagnosis
+difficulty: intermediate
+image_ref: xray/omnimedvqa/CXR_0001.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Left-sided pneumothorax"
+  differential:
+    - large bulla mimicking pneumothorax
+    - skin fold artifact
+    - pneumomediastinum
+  key_findings:
+    - { finding: "visceral pleural line", location: "left hemithorax", required: true }
+    - { finding: "absent lung markings peripherally", location: "left apex and lateral chest wall", required: true }
+    - { finding: "lung retraction toward hilum", location: "left lung", required: false }
+  severity: moderate
+  laterality: left
+  negatives:
+    - tension physiology
+    - mediastinal shift
+    - right-sided pneumothorax
+    - rib fracture
+    - pleural effusion
+pattern_checks:
+  - { name: pneumothorax_mentioned, check_type: regex, pattern: "pneumothorax", required: true }
+  - { name: laterality_left, check_type: regex, pattern: "left", required: true }
+  - { name: pleural_line, check_type: regex, pattern: "pleural\\s+line|visceral\\s+line", required: true }
+  - { name: absent_markings, check_type: regex, pattern: "absent.*marking|no.*lung.*marking|loss.*marking", required: true }
+reference_solution: |
+  PA chest radiograph demonstrates a left-sided pneumothorax. A visible visceral
+  pleural line is identified along the left hemithorax with absence of lung
+  markings peripheral to this line, most conspicuous at the left apex and lateral
+  chest wall. The left lung shows partial volume loss with mild retraction toward
+  the hilum. There is no mediastinal shift to suggest tension physiology. The
+  right lung is clear. No rib fractures or pleural effusion identified.
+  Impression: Left pneumothorax, moderate in size, without tension features.
+condition_present: true
+confusion_pair: null
+source_dataset: omnimedvqa-open
+tags:
+  - pneumothorax
+  - emergency
+  - chest
+  - pleural

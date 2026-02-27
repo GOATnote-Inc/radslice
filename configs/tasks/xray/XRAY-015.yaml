@@ -1,0 +1,43 @@
+id: XRAY-015
+name: Normal lateral CXR
+modality: xray
+anatomy: chest
+task_type: diagnosis
+difficulty: basic
+image_ref: xray/omnimedvqa/CXR_0015.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Normal lateral chest radiograph"
+  differential: []
+  key_findings:
+    - { finding: "clear retrosternal and retrocardiac spaces", location: "lateral projection", required: true }
+    - { finding: "normal thoracic vertebral body height and alignment", location: "thoracic spine", required: false }
+    - { finding: "normal hemidiaphragm contours", location: "bilateral diaphragms", required: false }
+  severity: mild
+  laterality: ""
+  negatives:
+    - retrosternal opacity
+    - retrocardiac opacity
+    - vertebral compression fracture
+    - pleural effusion
+    - hilar enlargement
+    - posterior gutter fluid
+pattern_checks:
+  - { name: normal_finding, check_type: regex, pattern: "(?i)(normal|no\\s+(acute|significant|definite)\\s+(abnormality|finding|pathology)|unremarkable)", required: true }
+  - { name: retrosternal_clear, check_type: regex, pattern: "(?i)(retrosternal.{0,30}(clear|normal|lucen)|clear.{0,30}retrosternal)", required: false }
+  - { name: no_effusion, check_type: regex, pattern: "(?i)no.{0,40}(pleural\\s+)?effusion", required: false }
+reference_solution: |
+  Lateral chest radiograph demonstrates no acute cardiopulmonary abnormality. The
+  retrosternal space is clear without anterior mediastinal mass. The retrocardiac
+  space is clear without posterior mediastinal abnormality. Both hemidiaphragms are
+  well-visualized with normal contour and no blunting of the posterior costophrenic
+  angles to suggest effusion. The thoracic vertebral bodies demonstrate normal
+  height and alignment without compression fracture. The visualized airways are
+  patent. No focal bone lesion identified. Normal lateral chest radiograph.
+condition_present: false
+confusion_pair: null
+source_dataset: omnimedvqa-open
+tags:
+  - normal
+  - lateral-projection
+  - negative-study

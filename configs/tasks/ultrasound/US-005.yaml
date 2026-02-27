@@ -1,0 +1,55 @@
+id: US-005
+name: Pleural effusion on thoracic ultrasound
+modality: ultrasound
+anatomy: chest
+task_type: diagnosis
+difficulty: intermediate
+image_ref: ultrasound/radimagenet/US_0005.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Right-sided pleural effusion"
+  differential:
+    - hemothorax
+    - empyema
+    - subpulmonic effusion
+    - ascites above the diaphragm (subdiaphragmatic collection)
+  key_findings:
+    - { finding: "anechoic fluid collection in the dependent pleural space", location: "right costophrenic recess", required: true }
+    - { finding: "spine sign positive", location: "posterior thorax above the diaphragm", required: true }
+    - { finding: "diaphragm visualized with supradiaphragmatic fluid", location: "right hemidiaphragm", required: false }
+  severity: moderate
+  laterality: right
+  negatives:
+    - left-sided pleural effusion
+    - internal septations or loculations
+    - pleural thickening or nodularity
+    - lung consolidation
+    - pericardial effusion
+pattern_checks:
+  - { name: effusion_mentioned, check_type: regex, pattern: "pleural\\s+effusion|fluid.*pleural|pleural.*fluid|effusion", required: true }
+  - { name: laterality_right, check_type: regex, pattern: "right", required: true }
+  - { name: anechoic_or_simple, check_type: regex, pattern: "anechoic|simple|echo.?free|homogeneous.*fluid", required: true }
+  - { name: spine_sign_or_diaphragm, check_type: regex, pattern: "spine\\s+sign|above.*diaphragm|supra.?diaphragm|costophrenic", required: true }
+reference_solution: |
+  Thoracic ultrasound of the right hemithorax demonstrates an anechoic fluid
+  collection in the dependent right costophrenic recess, consistent with a
+  simple pleural effusion. The spine sign is positive, with vertebral bodies
+  visible above the diaphragm through the effusion, confirming the presence of
+  supradiaphragmatic fluid. The right hemidiaphragm is clearly delineated with
+  fluid layering above it. The effusion appears simple and anechoic without
+  internal septations, loculations, or echogenic debris to suggest empyema or
+  complicated effusion. No associated pleural thickening or nodularity is seen.
+  The underlying lung, where visualized, shows a normal sliding sign without
+  consolidation. The left hemithorax was not evaluated.
+  Impression: Moderate right-sided simple pleural effusion. No features of
+  complicated collection. Thoracentesis may be performed under ultrasound
+  guidance if clinically indicated.
+condition_present: true
+confusion_pair: null
+source_dataset: radimagenet
+tags:
+  - pleural-effusion
+  - chest
+  - thoracic
+  - point-of-care
+  - spine-sign

@@ -1,0 +1,49 @@
+id: XRAY-016
+name: Pneumoperitoneum - free air under diaphragm
+modality: xray
+anatomy: abdomen
+task_type: diagnosis
+difficulty: advanced
+image_ref: xray/omnimedvqa/CXR_0016.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Pneumoperitoneum"
+  differential:
+    - perforated hollow viscus
+    - post-surgical free air
+    - perforated peptic ulcer
+    - perforated diverticulitis
+    - Chilaiditi syndrome (colonic interposition)
+  key_findings:
+    - { finding: "curvilinear lucency beneath the right hemidiaphragm", location: "right subdiaphragmatic region", required: true }
+    - { finding: "visualization of both sides of the diaphragm (Rigler sign)", location: "diaphragm", required: false }
+    - { finding: "free intraperitoneal air", location: "subdiaphragmatic", required: true }
+  severity: severe
+  laterality: right
+  negatives:
+    - Chilaiditi sign
+    - subpulmonic effusion
+    - pneumothorax
+    - bowel obstruction
+pattern_checks:
+  - { name: primary_diagnosis, check_type: regex, pattern: "(?i)(pneumoperitoneum|free\\s+(intraperitoneal\\s+)?air)", required: true }
+  - { name: subdiaphragmatic, check_type: regex, pattern: "(?i)(sub(diaphragmatic|phrenic)|under.{0,15}diaphragm|beneath.{0,15}diaphragm)", required: true }
+  - { name: perforation_concern, check_type: regex, pattern: "(?i)(perforat|hollow\\s+viscus|surgical\\s+(emergency|consultation)|urgent)", required: false }
+reference_solution: |
+  Upright chest/abdominal radiograph demonstrates a curvilinear lucency beneath the
+  right hemidiaphragm consistent with free intraperitoneal air (pneumoperitoneum).
+  Both sides of the right hemidiaphragm are visible, representing the Rigler sign.
+  This finding does not have the haustral markings that would suggest Chilaiditi
+  syndrome (colonic interposition). In the appropriate clinical context, this is
+  highly suspicious for perforated hollow viscus and constitutes a surgical emergency.
+  Recommend urgent surgical consultation and consideration of CT abdomen/pelvis
+  with contrast for further evaluation.
+condition_present: true
+confusion_pair: null
+source_dataset: omnimedvqa-open
+tags:
+  - pneumoperitoneum
+  - free-air
+  - surgical-emergency
+  - perforation
+  - abdomen

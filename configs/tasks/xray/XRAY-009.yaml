@@ -1,0 +1,54 @@
+id: XRAY-009
+name: Left hemidiaphragm elevation
+modality: xray
+anatomy: chest
+task_type: diagnosis
+difficulty: basic
+image_ref: xray/omnimedvqa/CXR_0009.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Elevated left hemidiaphragm"
+  differential:
+    - phrenic nerve palsy
+    - left lower lobe atelectasis
+    - eventration of diaphragm
+    - subpulmonic effusion mimicking elevation
+    - splenic enlargement
+    - subdiaphragmatic abscess
+  key_findings:
+    - { finding: "elevated left hemidiaphragm", location: "left hemidiaphragm", required: true }
+    - { finding: "asymmetry of diaphragm height", location: "bilateral hemidiaphragms", required: true }
+    - { finding: "left hemidiaphragm above expected level", location: "left base", required: false }
+  severity: mild
+  laterality: left
+  negatives:
+    - consolidation
+    - pleural effusion
+    - pneumothorax
+    - rib fracture
+    - mediastinal shift
+    - free air under diaphragm
+pattern_checks:
+  - { name: diaphragm_mentioned, check_type: regex, pattern: "diaphragm|hemidiaphragm", required: true }
+  - { name: elevation_mentioned, check_type: regex, pattern: "elevat|raised|high.?riding", required: true }
+  - { name: laterality_left, check_type: regex, pattern: "left", required: true }
+  - { name: differential_offered, check_type: regex, pattern: "phrenic|eventration|atelectasis|palsy|paralysis", required: true }
+reference_solution: |
+  PA chest radiograph demonstrates elevation of the left hemidiaphragm. The left
+  hemidiaphragm is positioned significantly higher than the right, exceeding the
+  normal 1-2 cm difference. The lung fields are otherwise clear without focal
+  consolidation or pleural effusion. No subdiaphragmatic free air is identified.
+  The cardiac silhouette is normal. The mediastinum is midline. Differential
+  considerations include phrenic nerve palsy, diaphragmatic eventration, left
+  lower lobe atelectasis, and subpulmonic effusion. Clinical correlation is
+  recommended; if phrenic nerve palsy is suspected, fluoroscopic sniff test may
+  be performed.
+  Impression: Elevated left hemidiaphragm — correlate for phrenic nerve
+  dysfunction versus eventration.
+condition_present: true
+confusion_pair: null
+source_dataset: omnimedvqa-open
+tags:
+  - diaphragm
+  - chest
+  - phrenic-nerve

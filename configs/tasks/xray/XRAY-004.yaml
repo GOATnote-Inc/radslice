@@ -1,0 +1,52 @@
+id: XRAY-004
+name: Cardiomegaly with pulmonary edema
+modality: xray
+anatomy: chest
+task_type: diagnosis
+difficulty: intermediate
+image_ref: xray/omnimedvqa/CXR_0004.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Cardiomegaly with pulmonary edema"
+  differential:
+    - pericardial effusion causing apparent cardiomegaly
+    - bilateral pneumonia
+    - ARDS
+    - fluid overload without cardiac etiology
+  key_findings:
+    - { finding: "enlarged cardiac silhouette", location: "cardiomediastinal", required: true }
+    - { finding: "cardiothoracic ratio greater than 0.5", location: "cardiomediastinal", required: true }
+    - { finding: "cephalization of pulmonary vessels", location: "bilateral upper lobes", required: true }
+    - { finding: "bilateral perihilar haziness", location: "bilateral perihilar regions", required: true }
+    - { finding: "Kerley B lines", location: "bilateral lung periphery", required: false }
+    - { finding: "bilateral pleural effusions", location: "bilateral costophrenic angles", required: false }
+  severity: moderate
+  laterality: bilateral
+  negatives:
+    - focal consolidation
+    - pneumothorax
+    - mediastinal mass
+    - rib fractures
+pattern_checks:
+  - { name: cardiomegaly_mentioned, check_type: regex, pattern: "cardiomegaly|enlarged.*heart|cardiac.*enlarg", required: true }
+  - { name: edema_mentioned, check_type: regex, pattern: "edema|oedema|congestion|fluid\\s+overload", required: true }
+  - { name: ctr_or_silhouette, check_type: regex, pattern: "cardiothoracic|cardiac\\s+silhouette|CTR", required: true }
+  - { name: vascular_redistribution, check_type: regex, pattern: "cephali[zs]ation|vascular.*redistribu|upper\\s+lobe.*diversion", required: true }
+reference_solution: |
+  PA chest radiograph demonstrates an enlarged cardiac silhouette with a
+  cardiothoracic ratio exceeding 0.5, consistent with cardiomegaly. There is
+  cephalization of the pulmonary vasculature indicating elevated pulmonary venous
+  pressure. Bilateral perihilar haziness in a butterfly distribution is present,
+  compatible with pulmonary edema. Small bilateral pleural effusions are noted
+  with blunting of the costophrenic angles. Kerley B lines are seen in the lung
+  periphery. No focal consolidation or pneumothorax.
+  Impression: Cardiomegaly with findings of congestive heart failure and
+  pulmonary edema.
+condition_present: true
+confusion_pair: null
+source_dataset: omnimedvqa-open
+tags:
+  - cardiomegaly
+  - pulmonary-edema
+  - congestive-heart-failure
+  - chest

@@ -1,0 +1,50 @@
+id: XRAY-014
+name: Right hilar lymphadenopathy
+modality: xray
+anatomy: chest
+task_type: diagnosis
+difficulty: advanced
+image_ref: xray/omnimedvqa/CXR_0014.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Right hilar lymphadenopathy"
+  differential:
+    - lung carcinoma with hilar involvement
+    - lymphoma
+    - sarcoidosis
+    - tuberculosis with hilar adenopathy
+    - metastatic disease
+  key_findings:
+    - { finding: "enlarged right hilum with lobulated contour", location: "right hilum", required: true }
+    - { finding: "increased density of the right hilum compared to the left", location: "right hilum", required: true }
+    - { finding: "preserved hilar overlay sign suggesting lymphadenopathy over vascular enlargement", location: "right hilum", required: false }
+  severity: moderate
+  laterality: right
+  negatives:
+    - left hilar enlargement
+    - mediastinal widening
+    - pleural effusion
+    - parenchymal mass
+    - calcified granulomas
+pattern_checks:
+  - { name: primary_diagnosis, check_type: regex, pattern: "(?i)right\\s+hilar\\s+(lymphadenopathy|adenopathy|enlargement)", required: true }
+  - { name: hilum_description, check_type: regex, pattern: "(?i)(enlarg(ed|ement).{0,30}(right\\s+)?hil(um|ar)|hil(um|ar).{0,30}enlarg(ed|ement)|prominent.{0,30}hil(um|ar))", required: true }
+  - { name: differential_mention, check_type: regex, pattern: "(?i)(sarcoidosis|lymphoma|carcinom|malignan|tuberculosis)", required: false }
+reference_solution: |
+  Frontal chest radiograph demonstrates asymmetric enlargement of the right hilum
+  with a lobulated contour, significantly denser than the contralateral left hilum.
+  The hilar overlay sign suggests true lymphadenopathy rather than pulmonary artery
+  enlargement. No definite associated parenchymal mass or consolidation. The left
+  hilum appears normal. No mediastinal widening or pleural effusion. Lung fields
+  are otherwise clear. These findings are concerning for right hilar lymphadenopathy
+  and warrant further evaluation with contrast-enhanced CT chest. Differential
+  includes primary lung malignancy, lymphoma, sarcoidosis, and granulomatous disease.
+condition_present: true
+confusion_pair: null
+source_dataset: omnimedvqa-open
+tags:
+  - hilar-lymphadenopathy
+  - right-hilum
+  - mediastinal
+  - oncology
+  - sarcoidosis

@@ -1,0 +1,50 @@
+id: US-001
+name: Gallstones with acoustic shadowing
+modality: ultrasound
+anatomy: abdomen
+task_type: diagnosis
+difficulty: basic
+image_ref: ultrasound/radimagenet/US_0001.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Cholelithiasis"
+  differential:
+    - gallbladder polyp
+    - gallbladder sludge
+    - porcelain gallbladder
+    - bowel gas artifact
+  key_findings:
+    - { finding: "hyperechoic intraluminal focus", location: "gallbladder lumen", required: true }
+    - { finding: "posterior acoustic shadowing", location: "deep to calculus", required: true }
+    - { finding: "gravity-dependent mobility", location: "gallbladder fundus", required: false }
+  severity: mild
+  laterality: ""
+  negatives:
+    - gallbladder wall thickening
+    - pericholecystic fluid
+    - common bile duct dilation
+    - sonographic Murphy sign
+    - intrahepatic biliary dilation
+pattern_checks:
+  - { name: gallstone_mentioned, check_type: regex, pattern: "gallstone|cholelithiasis|calcul(us|i)", required: true }
+  - { name: hyperechoic, check_type: regex, pattern: "hyperechoic|echogenic", required: true }
+  - { name: acoustic_shadow, check_type: regex, pattern: "acoustic\\s+shadow|posterior\\s+shadow|clean\\s+shadow", required: true }
+  - { name: no_cholecystitis, check_type: regex, pattern: "no.*(wall\\s+thicken|cholecystitis|pericholecystic)", required: true }
+reference_solution: |
+  Right upper quadrant ultrasound demonstrates a hyperechoic intraluminal focus
+  within the gallbladder lumen, consistent with a gallstone. The calculus produces
+  clean posterior acoustic shadowing, confirming its calcified composition. The
+  stone is gravity-dependent, lying in the gallbladder fundus. The gallbladder
+  wall measures within normal limits with no thickening or edema. There is no
+  pericholecystic fluid collection. The common bile duct is not dilated. No
+  sonographic Murphy sign was elicited.
+  Impression: Cholelithiasis without evidence of acute cholecystitis.
+condition_present: true
+confusion_pair: null
+source_dataset: radimagenet
+tags:
+  - cholelithiasis
+  - gallstone
+  - abdomen
+  - hepatobiliary
+  - acoustic-shadowing

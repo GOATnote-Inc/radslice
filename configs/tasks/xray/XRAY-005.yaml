@@ -1,0 +1,49 @@
+id: XRAY-005
+name: Left clavicle fracture
+modality: xray
+anatomy: shoulder
+task_type: diagnosis
+difficulty: basic
+image_ref: xray/omnimedvqa/CXR_0005.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Left clavicle fracture"
+  differential:
+    - pathologic fracture
+    - os acromiale variant
+    - acromioclavicular separation
+    - old healed fracture with pseudoarthrosis
+  key_findings:
+    - { finding: "cortical disruption with fracture line", location: "left clavicle mid-shaft", required: true }
+    - { finding: "displacement of fracture fragments", location: "left clavicle", required: false }
+    - { finding: "overlying soft tissue swelling", location: "left supraclavicular region", required: false }
+  severity: moderate
+  laterality: left
+  negatives:
+    - rib fractures
+    - pneumothorax
+    - glenohumeral dislocation
+    - acromioclavicular widening
+    - scapula fracture
+pattern_checks:
+  - { name: fracture_mentioned, check_type: regex, pattern: "fracture|break|disruption", required: true }
+  - { name: clavicle_mentioned, check_type: regex, pattern: "clavicle|clavicular", required: true }
+  - { name: laterality_left, check_type: regex, pattern: "left", required: true }
+  - { name: location_described, check_type: regex, pattern: "mid.?shaft|middle\\s+third|diaphys", required: true }
+reference_solution: |
+  Radiograph of the left shoulder/clavicle demonstrates an acute fracture of
+  the left clavicle at the mid-shaft. There is a transverse fracture line with
+  cortical disruption and mild inferior displacement of the distal fragment.
+  Overlying soft tissue swelling is noted in the left supraclavicular region.
+  No associated pneumothorax is seen on the included lung apex. The
+  acromioclavicular and glenohumeral joints are intact. No additional rib
+  fractures or scapular fracture identified.
+  Impression: Acute left mid-shaft clavicle fracture with mild displacement.
+condition_present: true
+confusion_pair: null
+source_dataset: omnimedvqa-open
+tags:
+  - fracture
+  - clavicle
+  - trauma
+  - musculoskeletal

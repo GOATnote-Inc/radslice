@@ -1,0 +1,61 @@
+id: MRI-009
+name: Hepatocellular carcinoma on liver MRI
+modality: mri
+anatomy: abdomen
+task_type: diagnosis
+difficulty: advanced
+image_ref: mri/omnimedvqa/MRI_0009.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Hepatocellular carcinoma (HCC) with arterial enhancement and washout"
+  differential:
+    - hepatic adenoma
+    - focal nodular hyperplasia
+    - hypervascular metastasis (e.g., renal cell, neuroendocrine)
+    - intrahepatic cholangiocarcinoma
+    - dysplastic nodule in cirrhosis
+  key_findings:
+    - { finding: "arterial phase hyperenhancement of a hepatic mass on dynamic post-gadolinium imaging", location: "right hepatic lobe segment VI/VII", required: true }
+    - { finding: "washout appearance on portal venous and/or delayed phases", location: "right hepatic lobe mass", required: true }
+    - { finding: "enhancing capsule on delayed phase", location: "peripheral rim of the mass", required: false }
+    - { finding: "T2 hyperintense signal relative to liver parenchyma", location: "right hepatic lobe mass", required: false }
+    - { finding: "background cirrhotic morphology with nodular liver contour", location: "hepatic parenchyma", required: false }
+  severity: severe
+  laterality: right
+  negatives:
+    - portal vein thrombosis
+    - extrahepatic metastatic disease
+    - biliary dilatation
+    - hepatic vein invasion
+    - diffuse infiltrative HCC
+pattern_checks:
+  - { name: hcc_mentioned, check_type: regex, pattern: "hepatocellular\\s+carcinoma|HCC|hepatoma", required: true }
+  - { name: arterial_enhancement, check_type: regex, pattern: "arterial.*enhanc|hyperenhanc|arterial.*hypervascu|APHE", required: true }
+  - { name: washout_mentioned, check_type: regex, pattern: "washout|wash.?out|hypo.*portal|hypo.*venous|hypo.*delayed", required: true }
+  - { name: lirads_or_diagnostic_criteria, check_type: regex, pattern: "LI.?RADS|capsule|threshold.*growth|washout.*capsule|diagnostic.*criteria", required: false }
+reference_solution: |
+  MRI of the abdomen with liver protocol (dynamic multi-phase post-gadolinium)
+  demonstrates a 3.8 cm mass in the right hepatic lobe at the junction of
+  segments VI and VII. The mass shows non-rim arterial phase hyperenhancement
+  (APHE), followed by non-peripheral washout on the portal venous phase.
+  An enhancing capsule is identified on the delayed phase. The lesion is mildly
+  T2 hyperintense relative to the background liver and shows mildly restricted
+  diffusion. On hepatobiliary phase (if gadoxetate was used), the lesion is
+  expected to show hypointensity relative to the enhancing liver parenchyma.
+  The background liver demonstrates cirrhotic morphology with nodular contour,
+  widened fissures, and caudate lobe hypertrophy. The portal vein is patent.
+  No definite additional suspicious lesions. No biliary dilatation. Per
+  LI-RADS criteria, this lesion qualifies as LR-5 (definitely HCC) based on
+  APHE, washout, and enhancing capsule in a lesion >20 mm.
+  Impression: LR-5 lesion in the right hepatic lobe, diagnostic of
+  hepatocellular carcinoma, in the setting of cirrhosis.
+condition_present: true
+confusion_pair: null
+source_dataset: omnimedvqa-open
+tags:
+  - hcc
+  - liver
+  - oncology
+  - cirrhosis
+  - lirads
+  - abdominal

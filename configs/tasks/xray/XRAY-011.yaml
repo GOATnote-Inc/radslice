@@ -1,0 +1,46 @@
+id: XRAY-011
+name: Right middle lobe atelectasis
+modality: xray
+anatomy: chest
+task_type: diagnosis
+difficulty: intermediate
+image_ref: xray/omnimedvqa/CXR_0011.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Right middle lobe atelectasis"
+  differential:
+    - right middle lobe pneumonia
+    - mucous plugging
+    - endobronchial lesion
+    - post-obstructive atelectasis
+  key_findings:
+    - { finding: "obscuration of the right heart border", location: "right middle lobe", required: true }
+    - { finding: "wedge-shaped opacity at the right hilum", location: "right hilum", required: true }
+    - { finding: "volume loss with inferior displacement of the minor fissure", location: "right hemithorax", required: false }
+  severity: moderate
+  laterality: right
+  negatives:
+    - pleural effusion
+    - pneumothorax
+    - left lung opacity
+    - cardiomegaly
+pattern_checks:
+  - { name: primary_diagnosis, check_type: regex, pattern: "(?i)right\\s+middle\\s+lobe\\s+(atelectasis|collapse)", required: true }
+  - { name: silhouette_sign, check_type: regex, pattern: "(?i)(silhouette\\s+sign|obscur(ed|ation)\\s+.{0,30}right\\s+heart\\s+border)", required: true }
+  - { name: volume_loss, check_type: regex, pattern: "(?i)(volume\\s+loss|fissure\\s+(displacement|shift))", required: false }
+reference_solution: |
+  Frontal chest radiograph demonstrates a wedge-shaped opacity projecting over the right
+  lower zone with obscuration of the right heart border, consistent with the silhouette
+  sign. There is subtle inferior displacement of the minor fissure indicating volume loss.
+  These findings are characteristic of right middle lobe atelectasis. The left lung is
+  clear. No pleural effusion or pneumothorax. Heart size is within normal limits.
+  Recommend correlation with clinical history and consideration of CT chest if an
+  endobronchial lesion is suspected.
+condition_present: true
+confusion_pair: null
+source_dataset: omnimedvqa-open
+tags:
+  - atelectasis
+  - silhouette-sign
+  - right-middle-lobe
+  - volume-loss

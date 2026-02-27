@@ -1,0 +1,46 @@
+id: XRAY-012
+name: Subcutaneous emphysema
+modality: xray
+anatomy: chest
+task_type: diagnosis
+difficulty: intermediate
+image_ref: xray/omnimedvqa/CXR_0012.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Subcutaneous emphysema"
+  differential:
+    - pneumomediastinum
+    - pneumothorax with chest wall tracking
+    - post-procedural air
+    - esophageal rupture with mediastinal air
+  key_findings:
+    - { finding: "linear lucencies within the soft tissues of the chest wall", location: "bilateral chest wall soft tissues", required: true }
+    - { finding: "air tracking along fascial planes", location: "lateral chest wall and neck base", required: true }
+    - { finding: "streaky gas outlining the pectoralis muscles", location: "bilateral pectoralis region", required: false }
+  severity: moderate
+  laterality: bilateral
+  negatives:
+    - rib fracture
+    - large pneumothorax
+    - pleural effusion
+    - pulmonary consolidation
+pattern_checks:
+  - { name: primary_diagnosis, check_type: regex, pattern: "(?i)subcutaneous\\s+emphysema", required: true }
+  - { name: soft_tissue_air, check_type: regex, pattern: "(?i)(soft\\s+tissue.{0,30}(air|gas|lucen)|air.{0,30}(soft\\s+tissue|fascial|subcutaneous))", required: true }
+  - { name: pneumomediastinum_mention, check_type: regex, pattern: "(?i)pneumomediastinum", required: false }
+reference_solution: |
+  Frontal chest radiograph demonstrates extensive linear gas lucencies tracking through
+  the soft tissues of the bilateral chest wall, consistent with subcutaneous emphysema.
+  Air is seen dissecting along fascial planes of the lateral chest wall and extending
+  toward the base of the neck. The pectoralis muscles are outlined by gas bilaterally.
+  No definite large pneumothorax identified, though a small component cannot be excluded
+  given the extent of subcutaneous air. Lungs are otherwise clear. Clinical correlation
+  is recommended to determine etiology (trauma, recent procedure, or spontaneous).
+condition_present: true
+confusion_pair: null
+source_dataset: omnimedvqa-open
+tags:
+  - subcutaneous-emphysema
+  - soft-tissue-air
+  - chest-wall
+  - trauma
