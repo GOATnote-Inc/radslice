@@ -1,0 +1,54 @@
+id: US-007
+name: Normal liver ultrasound
+modality: ultrasound
+anatomy: abdomen
+task_type: diagnosis
+difficulty: basic
+image_ref: ultrasound/radimagenet/US_0007.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Normal liver"
+  differential:
+    - early hepatic steatosis
+    - diffuse hepatic disease below sonographic threshold
+    - compensatory hepatic hypertrophy
+  key_findings:
+    - { finding: "homogeneous hepatic parenchymal echogenicity isoechoic to renal cortex", location: "hepatic parenchyma", required: true }
+    - { finding: "normal hepatic vasculature and portal vein patency", location: "portal vein and hepatic veins", required: true }
+    - { finding: "smooth hepatic contour", location: "liver surface", required: false }
+  severity: mild
+  laterality: ""
+  negatives:
+    - hepatic steatosis
+    - focal hepatic lesion
+    - biliary dilation
+    - ascites
+    - portal vein thrombosis
+    - splenomegaly
+    - cirrhotic morphology
+pattern_checks:
+  - { name: normal_identified, check_type: regex, pattern: "normal|unremarkable|no\\s+(abnormal|pathol|significant)", required: true }
+  - { name: no_steatosis, check_type: regex, pattern: "no.*(steatosis|fatty|fat\\s+infiltrat|increased.*echogenic)", required: true }
+  - { name: no_focal_lesion, check_type: regex, pattern: "no.*(focal|mass|lesion|nodule|hemangioma)", required: true }
+  - { name: homogeneous, check_type: regex, pattern: "homogeneous|uniform|normal.*echogenicity|echo.?texture", required: false }
+reference_solution: |
+  Ultrasound of the right upper quadrant demonstrates a normal-appearing liver
+  with homogeneous parenchymal echogenicity. The hepatic echogenicity is
+  isoechoic to the adjacent right renal cortex without increased brightness
+  to suggest steatosis. The liver contour is smooth and regular. The hepatic
+  vasculature is well-visualized with patent hepatic veins draining normally
+  into the inferior vena cava. The portal vein is patent with hepatopetal
+  flow and measures within normal limits. No focal hepatic lesion, mass, or
+  cystic structure is identified. The intrahepatic and extrahepatic bile ducts
+  are not dilated. No ascites or splenomegaly is present.
+  Impression: Normal hepatic ultrasound. No steatosis, focal lesion, or
+  biliary abnormality.
+condition_present: false
+confusion_pair: null
+source_dataset: radimagenet
+tags:
+  - normal
+  - liver
+  - abdomen
+  - hepatic
+  - negative-study

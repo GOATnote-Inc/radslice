@@ -1,0 +1,58 @@
+id: MRI-031
+name: Endometrioma confusion pair for dermoid cyst
+modality: mri
+anatomy: pelvis
+task_type: vqa
+difficulty: intermediate
+image_ref: mri/omnimedvqa/MRI_0031.png
+prompt_template: vqa
+ground_truth:
+  primary_diagnosis: "Left ovarian endometrioma (chocolate cyst)"
+  differential:
+    - hemorrhagic ovarian cyst
+    - mature cystic teratoma (dermoid cyst)
+    - mucinous cystadenoma
+    - tubo-ovarian abscess
+  key_findings:
+    - { finding: "T1 hyperintense cystic adnexal mass that does NOT lose signal on fat-suppressed images (shading sign)", location: "left adnexa / left ovary", required: true }
+    - { finding: "homogeneous T2 hypointense signal (T2 shading/dark spot) from chronic blood products", location: "left adnexal mass", required: true }
+    - { finding: "no solid enhancing components", location: "within the cystic mass", required: false }
+    - { finding: "no signal drop on fat-suppressed sequences (distinguishing from dermoid)", location: "left adnexal mass on fat-suppressed T1 images", required: false }
+  severity: moderate
+  laterality: left
+  negatives:
+    - macroscopic fat content (signal drops on fat-sat — would indicate dermoid)
+    - solid enhancing mural nodule (would raise concern for endometrioid carcinoma)
+    - ascites
+    - peritoneal implants
+pattern_checks:
+  - { name: endometrioma_mentioned, check_type: regex, pattern: "endometrioma|endometrio|chocolate\\s+cyst", required: true }
+  - { name: t1_bright_no_fat_sat_drop, check_type: regex, pattern: "T1.*hyperintens|T1.*bright|blood.*product|hemorrhag|methemoglobin", required: true }
+  - { name: t2_shading, check_type: regex, pattern: "T2.*shad|T2.*dark|T2.*hypointens|T2.*low", required: true }
+  - { name: ovarian, check_type: regex, pattern: "ovar|adnex", required: true }
+reference_solution: |
+  MRI of the pelvis demonstrates a well-circumscribed cystic mass in the left
+  adnexa measuring 4.5 x 3.8 cm, arising from the left ovary. The mass is
+  T1 hyperintense on non-fat-suppressed sequences; however, critically, it
+  retains its high T1 signal on fat-suppressed images, confirming that the T1
+  hyperintensity is due to blood products (methemoglobin) rather than fat.
+  This is the key distinguishing feature from a dermoid cyst, which loses
+  signal on fat suppression. On T2-weighted images, the mass demonstrates
+  homogeneous low signal (T2 shading), characteristic of concentrated chronic
+  hemorrhagic fluid. No solid enhancing mural nodule is identified on
+  post-gadolinium images. The right ovary is normal. No free fluid or
+  peritoneal implants are identified. There may be associated deep
+  endometriotic implants in the cul-de-sac or uterosacral ligaments.
+  Impression: Left ovarian endometrioma with characteristic T1 hyperintensity
+  retained on fat suppression and T2 shading. No features of malignant
+  transformation.
+condition_present: true
+confusion_pair: MRI-030
+source_dataset: omnimedvqa-open
+tags:
+  - endometrioma
+  - ovary
+  - pelvic
+  - gynecologic
+  - endometriosis
+  - confusion-pair

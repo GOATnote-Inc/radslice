@@ -1,0 +1,60 @@
+id: CT-046
+name: Lung nodule indeterminate
+modality: ct
+anatomy: chest
+task_type: report_generation
+difficulty: intermediate
+image_ref: ct/omnimedvqa/CT_0046.png
+prompt_template: report_generation
+ground_truth:
+  primary_diagnosis: "Solitary pulmonary nodule, indeterminate"
+  differential:
+    - primary lung malignancy
+    - solitary metastasis
+    - granuloma (infectious or sarcoid)
+    - hamartoma
+    - intrapulmonary lymph node
+    - organizing pneumonia
+  key_findings:
+    - { finding: "solid pulmonary nodule with irregular margins", location: "left upper lobe", required: true }
+    - { finding: "nodule size between 8 and 15 mm", location: "left upper lobe", required: true }
+    - { finding: "no definite calcification", location: "within the nodule", required: false }
+    - { finding: "no satellite nodules", location: "surrounding lung", required: false }
+  severity: moderate
+  laterality: left
+  negatives:
+    - mediastinal lymphadenopathy
+    - pleural effusion
+    - additional pulmonary nodules suggesting metastatic disease
+    - central cavitation
+    - chest wall invasion
+    - benign calcification pattern
+pattern_checks:
+  - { name: nodule_mentioned, check_type: regex, pattern: "nodule|SPN\\b|pulmonary\\s+nodule", required: true }
+  - { name: left_upper_lobe, check_type: regex, pattern: "left\\s+upper\\s+lobe|LUL", required: true }
+  - { name: size_range, check_type: regex, pattern: "\\d+\\s*mm|\\d+\\s*cm|sub.?centimeter|supra.?centimeter", required: true }
+  - { name: follow_up, check_type: regex, pattern: "follow.?up|PET|biopsy|Fleischner|Lung-?RADS|surveillance|recommend", required: true }
+reference_solution: |
+  Non-contrast low-dose CT of the chest demonstrates a solitary solid
+  pulmonary nodule in the left upper lobe measuring 11 mm in maximal
+  diameter. The nodule has mildly irregular margins without definite
+  spiculation. No internal calcification is identified (no benign
+  calcification pattern such as popcorn, central, or diffuse). No satellite
+  nodules surrounding the lesion. No additional pulmonary nodules elsewhere.
+  The mediastinum is unremarkable without lymphadenopathy. No pleural
+  effusion. The remainder of the lung parenchyma is clear. According to
+  Lung-RADS 4A criteria (solid nodule 8-15 mm), this is suspicious and
+  warrants further evaluation.
+  Impression: Solitary 11 mm solid left upper lobe pulmonary nodule,
+  Lung-RADS category 4A (suspicious). PET/CT or tissue sampling
+  recommended for further characterization. Three-month follow-up CT if
+  biopsy is deferred.
+condition_present: true
+confusion_pair: null
+source_dataset: omnimedvqa-open
+tags:
+  - pulmonary-nodule
+  - chest
+  - lung-rads
+  - screening
+  - report-generation

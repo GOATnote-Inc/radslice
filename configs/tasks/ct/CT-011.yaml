@@ -1,0 +1,56 @@
+id: CT-011
+name: Subarachnoid hemorrhage
+modality: ct
+anatomy: head
+task_type: diagnosis
+difficulty: advanced
+image_ref: ct/omnimedvqa/CT_0011.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Acute subarachnoid hemorrhage"
+  differential:
+    - traumatic subarachnoid hemorrhage
+    - pseudo-subarachnoid hemorrhage from cerebral edema
+    - meningitis with leptomeningeal enhancement
+    - artifact mimicking sulcal hyperdensity
+  key_findings:
+    - { finding: "hyperdensity within basal cisterns", location: "suprasellar and ambient cisterns", required: true }
+    - { finding: "hyperdensity within sylvian fissures", location: "bilateral sylvian fissures", required: true }
+    - { finding: "intraventricular hemorrhage", location: "occipital horns of lateral ventricles", required: false }
+    - { finding: "early hydrocephalus", location: "lateral ventricles", required: false }
+  severity: severe
+  laterality: bilateral
+  negatives:
+    - intraparenchymal hemorrhage
+    - subdural hematoma
+    - epidural hematoma
+    - skull fracture
+    - cerebral infarction
+pattern_checks:
+  - { name: sah_mentioned, check_type: regex, pattern: "subarachnoid\\s+h[ae]morrhage|SAH\\b", required: true }
+  - { name: cisterns_involved, check_type: regex, pattern: "cistern|suprasellar|basal\\s+cistern|interpeduncular|ambient", required: true }
+  - { name: hyperdense_blood, check_type: regex, pattern: "hyperdense|high.{0,10}density|blood|h[ae]morrhage", required: true }
+  - { name: aneurysm_consideration, check_type: regex, pattern: "aneurysm|vascular|CTA|angiograph", required: false }
+reference_solution: |
+  Non-contrast CT of the head demonstrates diffuse hyperdensity within the
+  basal cisterns including the suprasellar, interpeduncular, and ambient
+  cisterns, consistent with acute subarachnoid hemorrhage. Blood is also
+  noted within bilateral sylvian fissures and extending into the
+  interhemispheric fissure. A small amount of layering hyperdense blood is
+  present within the occipital horns of the lateral ventricles, indicating
+  intraventricular extension. The lateral ventricles are mildly prominent,
+  raising concern for early obstructive hydrocephalus. No intraparenchymal
+  hemorrhage, subdural, or epidural hematoma is identified. Modified Fisher
+  Grade 4. CTA is recommended to evaluate for underlying aneurysm.
+  Impression: Acute diffuse subarachnoid hemorrhage with intraventricular
+  extension and early hydrocephalus. CTA urgently recommended. Neurosurgical
+  consultation required.
+condition_present: true
+confusion_pair: null
+source_dataset: omnimedvqa-open
+tags:
+  - subarachnoid-hemorrhage
+  - emergency
+  - head
+  - neurovascular
+  - life-threatening

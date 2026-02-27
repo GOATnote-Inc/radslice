@@ -1,0 +1,58 @@
+id: CT-047
+name: Granuloma (confusion pair for lung nodule)
+modality: ct
+anatomy: chest
+task_type: diagnosis
+difficulty: intermediate
+image_ref: ct/omnimedvqa/CT_0047.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Calcified pulmonary granuloma"
+  differential:
+    - primary lung malignancy
+    - hamartoma
+    - carcinoid tumor with calcification
+    - amyloidoma
+    - calcified metastasis
+  key_findings:
+    - { finding: "densely calcified pulmonary nodule", location: "right middle lobe", required: true }
+    - { finding: "smooth well-defined margins", location: "nodule border", required: true }
+    - { finding: "benign calcification pattern (central or complete)", location: "within nodule", required: false }
+    - { finding: "no associated lymphadenopathy", location: "mediastinum and hilum", required: false }
+  severity: mild
+  laterality: right
+  negatives:
+    - irregular or spiculated margins
+    - soft tissue component
+    - mediastinal lymphadenopathy
+    - pleural effusion
+    - additional suspicious nodules
+    - growth on prior comparison
+pattern_checks:
+  - { name: granuloma_mentioned, check_type: regex, pattern: "granuloma|calcified\\s+nodule|benign.*nodule", required: true }
+  - { name: calcified, check_type: regex, pattern: "calcif|dense|high\\s+attenuation", required: true }
+  - { name: benign, check_type: regex, pattern: "benign|granuloma|stable|no.*malignant|not.*suspicious", required: true }
+  - { name: well_defined, check_type: regex, pattern: "well.?defined|smooth|well.?circumscribed|round", required: false }
+reference_solution: |
+  Low-dose CT of the chest demonstrates a well-defined 9 mm nodule in the
+  right middle lobe with dense central calcification, consistent with a
+  benign calcified granuloma. The margins are smooth and well-circumscribed
+  without spiculation. The calcification pattern is diffuse/central,
+  characteristic of a granulomatous etiology (most commonly histoplasmosis
+  or tuberculosis in the appropriate geographic setting). There is no soft
+  tissue component surrounding the calcification. No mediastinal or hilar
+  lymphadenopathy. No additional suspicious pulmonary nodules. No pleural
+  effusion. The airways are patent.
+  Impression: Calcified right middle lobe pulmonary granuloma with benign
+  features. Lung-RADS category 1 (negative). No further imaging follow-up
+  required for this finding. This represents a benign process and should
+  not be confused with a malignant pulmonary nodule.
+condition_present: true
+confusion_pair: CT-046
+source_dataset: omnimedvqa-open
+tags:
+  - granuloma
+  - pulmonary-nodule
+  - chest
+  - benign
+  - confusion-pair

@@ -1,0 +1,58 @@
+id: US-012
+name: Ectopic pregnancy with adnexal mass and free fluid
+modality: ultrasound
+anatomy: pelvis
+task_type: diagnosis
+difficulty: expert
+image_ref: ultrasound/radimagenet/US_0012.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Ectopic pregnancy"
+  differential:
+    - ruptured ovarian cyst
+    - tubo-ovarian abscess
+    - hemorrhagic corpus luteum cyst
+    - ovarian torsion
+    - heterotopic pregnancy
+  key_findings:
+    - { finding: "extrauterine adnexal mass with echogenic ring (tubal ring sign)", location: "right adnexa", required: true }
+    - { finding: "empty uterus with thickened endometrium (pseudogestational sac)", location: "uterine cavity", required: true }
+    - { finding: "free fluid in the cul-de-sac", location: "posterior cul-de-sac (pouch of Douglas)", required: true }
+    - { finding: "peripheral vascularity on color Doppler (ring of fire)", location: "adnexal mass", required: false }
+  severity: severe
+  laterality: right
+  negatives:
+    - intrauterine pregnancy
+    - ovarian torsion
+    - uterine fibroid
+    - intrauterine device
+    - normal ovarian follicle
+pattern_checks:
+  - { name: ectopic_mentioned, check_type: regex, pattern: "ectopic|extrauterine|tubal\\s+pregnancy", required: true }
+  - { name: adnexal_mass, check_type: regex, pattern: "adnexal.*mass|tubal.*ring|ring.*sign|adnexal.*ring", required: true }
+  - { name: empty_uterus, check_type: regex, pattern: "empty.*uter|no.*(intrauterine|IUP)|absent.*gestational\\s+sac", required: true }
+  - { name: free_fluid, check_type: regex, pattern: "free\\s+fluid|fluid.*cul.?de.?sac|fluid.*pelvi|hemoperitoneum", required: true }
+reference_solution: |
+  Transvaginal pelvic ultrasound demonstrates an empty uterine cavity with
+  thickened decidualized endometrium but no intrauterine gestational sac or
+  fetal pole. A pseudogestational sac of fluid is noted centrally within the
+  endometrial cavity. In the right adnexa, there is an extraovarian mass
+  measuring 2.3 x 1.8 cm demonstrating a hyperechoic ring (tubal ring sign)
+  surrounding an anechoic center. Color Doppler shows prominent peripheral
+  vascularity around this adnexal mass, consistent with a ring-of-fire pattern.
+  A moderate amount of complex free fluid with low-level echoes is present in
+  the posterior cul-de-sac, concerning for hemoperitoneum. The right ovary is
+  identified separately from the adnexal mass. The left ovary is unremarkable.
+  Impression: Right ectopic pregnancy with adnexal mass, empty uterus, and
+  cul-de-sac free fluid suggesting rupture. Emergent gynecologic consultation
+  is indicated.
+condition_present: true
+confusion_pair: null
+source_dataset: radimagenet
+tags:
+  - ectopic-pregnancy
+  - pelvis
+  - ob-gyn
+  - adnexal-mass
+  - emergency
+  - doppler

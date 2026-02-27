@@ -1,0 +1,61 @@
+id: CT-034
+name: Esophageal perforation with pneumomediastinum
+modality: ct
+anatomy: chest
+task_type: diagnosis
+difficulty: expert
+image_ref: ct/omnimedvqa/CT_0034.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Esophageal perforation (Boerhaave syndrome) with pneumomediastinum"
+  differential:
+    - tracheobronchial rupture
+    - mediastinitis from other etiology
+    - post-procedural esophageal injury
+    - perforated esophageal carcinoma
+    - descending necrotizing mediastinitis
+  key_findings:
+    - { finding: "pneumomediastinum with gas tracking along mediastinal planes", location: "posterior mediastinum", required: true }
+    - { finding: "esophageal wall defect or discontinuity", location: "distal esophagus above GE junction", required: true }
+    - { finding: "left-sided pleural effusion with debris", location: "left pleural space", required: false }
+    - { finding: "periesophageal fluid and fat stranding", location: "posterior mediastinum", required: false }
+  severity: severe
+  laterality: left
+  negatives:
+    - tracheal or bronchial injury
+    - aortic dissection
+    - esophageal mass
+    - pneumothorax
+    - subcutaneous emphysema extending to neck
+pattern_checks:
+  - { name: esophageal_perforation, check_type: regex, pattern: "esophageal\\s+(perforation|rupture|tear)|Boerhaave", required: true }
+  - { name: pneumomediastinum, check_type: regex, pattern: "pneumomediastinum|mediastinal.*(air|gas|emphysema)", required: true }
+  - { name: distal_esophagus, check_type: regex, pattern: "distal\\s+esophag|lower\\s+esophag|GE\\s+junction|gastroesophageal", required: true }
+  - { name: effusion_or_fluid, check_type: regex, pattern: "effusion|pleural.*fluid|mediastinal.*fluid|periesophageal", required: false }
+reference_solution: |
+  Contrast-enhanced CT of the chest with oral contrast demonstrates
+  pneumomediastinum with gas tracking along the posterior mediastinal planes
+  surrounding the esophagus. There is a focal defect in the left
+  posterolateral wall of the distal esophagus approximately 3 cm above the
+  gastroesophageal junction with extraluminal leak of oral contrast. A
+  moderate left-sided pleural effusion with internal debris is present,
+  suspicious for early empyema. Periesophageal fat stranding and fluid are
+  noted in the posterior mediastinum. No pneumoperitoneum. The trachea and
+  main bronchi appear intact. No esophageal mass to suggest underlying
+  malignancy. The clinical history of forceful vomiting is consistent with
+  Boerhaave syndrome.
+  Impression: Esophageal perforation involving the left posterolateral
+  distal esophagus with pneumomediastinum and left pleural effusion,
+  consistent with Boerhaave syndrome. This is a surgical emergency requiring
+  immediate thoracic surgery consultation for operative repair or endoscopic
+  intervention.
+condition_present: true
+confusion_pair: null
+source_dataset: omnimedvqa-open
+tags:
+  - esophageal-perforation
+  - boerhaave
+  - emergency
+  - chest
+  - surgical
+  - life-threatening

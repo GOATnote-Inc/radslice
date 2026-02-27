@@ -1,0 +1,57 @@
+id: US-019
+name: Appendicitis with non-compressible appendix
+modality: ultrasound
+anatomy: abdomen
+task_type: diagnosis
+difficulty: advanced
+image_ref: ultrasound/omnimedvqa/US_0019.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Acute appendicitis"
+  differential:
+    - mesenteric lymphadenitis
+    - Crohn disease (terminal ileitis)
+    - right ovarian pathology (in females)
+    - cecal diverticulitis
+    - epiploic appendagitis
+  key_findings:
+    - { finding: "non-compressible blind-ending tubular structure with diameter exceeding 6 mm", location: "right lower quadrant", required: true }
+    - { finding: "periappendiceal fat stranding appearing as hyperechoic inflamed mesenteric fat", location: "surrounding the appendix", required: true }
+    - { finding: "appendicolith with posterior acoustic shadowing", location: "appendiceal lumen", required: false }
+    - { finding: "increased vascularity on color Doppler", location: "appendiceal wall", required: false }
+  severity: moderate
+  laterality: right
+  negatives:
+    - appendiceal perforation
+    - periappendiceal abscess
+    - free intraperitoneal fluid
+    - small bowel obstruction
+    - right ovarian abnormality
+pattern_checks:
+  - { name: appendicitis_mentioned, check_type: regex, pattern: "appendicitis|inflam.*appendix|appendic", required: true }
+  - { name: non_compressible, check_type: regex, pattern: "non.?compress|incompress|fail.*compress|not.*compress", required: true }
+  - { name: diameter_threshold, check_type: regex, pattern: "(>|exceed|greater).*6\\s*mm|dilat.*append|enlarg.*append|\\d+\\s*mm", required: true }
+  - { name: no_perforation, check_type: regex, pattern: "no.*(perforat|abscess|rupture|free\\s+fluid)", required: false }
+reference_solution: |
+  Graded compression ultrasound of the right lower quadrant demonstrates a
+  non-compressible, blind-ending tubular structure in the expected location of
+  the appendix, measuring 9 mm in maximal outer diameter, exceeding the normal
+  threshold of 6 mm. The appendiceal wall is hyperemic with increased vascularity
+  on color Doppler interrogation. The surrounding mesenteric fat appears
+  hyperechoic and inflamed, consistent with periappendiceal fat stranding. A
+  small echogenic focus with posterior acoustic shadowing is identified within
+  the appendiceal lumen, compatible with an appendicolith. No periappendiceal
+  fluid collection or abscess is seen. The terminal ileum and cecum appear
+  unremarkable. No free intraperitoneal fluid is identified.
+  Impression: Acute appendicitis with dilated non-compressible appendix
+  measuring 9 mm and appendicolith. No evidence of perforation or abscess.
+  Surgical consultation recommended.
+condition_present: true
+confusion_pair: null
+source_dataset: omnimedvqa-open
+tags:
+  - appendicitis
+  - abdomen
+  - emergency
+  - graded-compression
+  - appendicolith

@@ -1,0 +1,55 @@
+id: XRAY-026
+name: Right lung mass with rib destruction
+modality: xray
+anatomy: chest
+task_type: diagnosis
+difficulty: advanced
+image_ref: xray/omnimedvqa/CXR_0026.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Right lung mass with adjacent rib destruction"
+  differential:
+    - primary bronchogenic carcinoma (Pancoast tumor)
+    - metastatic disease with bony involvement
+    - mesothelioma
+    - chest wall sarcoma
+    - actinomycosis
+  key_findings:
+    - { finding: "large lobulated mass in the right upper zone", location: "right upper lobe/apex", required: true }
+    - { finding: "cortical destruction of adjacent posterior ribs", location: "right 2nd and 3rd ribs posteriorly", required: true }
+    - { finding: "soft tissue mass extending to the chest wall", location: "right apical region", required: false }
+  severity: severe
+  laterality: right
+  negatives:
+    - left lung mass
+    - pleural effusion
+    - pneumothorax
+    - mediastinal shift
+    - cavitation
+pattern_checks:
+  - { name: mass_mentioned, check_type: regex, pattern: "(?i)(mass|tumor|neoplasm|malignant|carcinoma)", required: true }
+  - { name: rib_destruction, check_type: regex, pattern: "(?i)(rib\\s+(destruction|erosion|lysis)|bone\\s+(destruction|erosion)|lytic)", required: true }
+  - { name: laterality_right, check_type: regex, pattern: "(?i)right", required: true }
+  - { name: further_workup, check_type: regex, pattern: "(?i)(biopsy|CT|staging|PET|tissue\\s+sampl)", required: false }
+reference_solution: |
+  PA chest radiograph demonstrates a large lobulated mass in the right apical
+  region measuring approximately 6 cm. There is associated cortical destruction of
+  the right 2nd and 3rd posterior ribs, indicating direct chest wall invasion. The
+  mass has irregular margins and appears to extend into the soft tissues of the
+  chest wall. No cavitation is identified within the mass. The remaining lung
+  fields are clear. No pleural effusion or contralateral abnormality. The cardiac
+  silhouette is normal. These findings are highly concerning for a primary
+  bronchogenic carcinoma, potentially a Pancoast (superior sulcus) tumor given the
+  apical location and rib destruction. Contrast-enhanced CT of the chest with
+  biopsy and staging workup including PET-CT are urgently recommended.
+  Impression: Right apical lung mass with rib destruction — biopsy and staging
+  recommended.
+condition_present: true
+confusion_pair: null
+source_dataset: omnimedvqa-open
+tags:
+  - lung-mass
+  - rib-destruction
+  - oncology
+  - Pancoast
+  - chest-wall-invasion

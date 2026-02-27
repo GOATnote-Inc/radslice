@@ -1,0 +1,52 @@
+id: MRI-021
+name: Normal right knee MRI
+modality: mri
+anatomy: knee
+task_type: diagnosis
+difficulty: basic
+image_ref: mri/omnimedvqa/MRI_0021.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Normal right knee MRI"
+  differential:
+    - incidental Baker cyst
+    - normal meniscal variant (discoid meniscus)
+    - grade 1 intrasubstance meniscal signal (non-tear)
+  key_findings:
+    - { finding: "intact ACL and PCL with normal low T2 signal and normal tension", location: "intercondylar notch", required: true }
+    - { finding: "intact medial and lateral menisci with normal morphology and signal", location: "bilateral menisci", required: true }
+    - { finding: "normal articular cartilage thickness and signal", location: "femoral condyles, tibial plateaus, patellofemoral compartment", required: false }
+    - { finding: "no joint effusion", location: "suprapatellar recess", required: false }
+  severity: mild
+  laterality: right
+  negatives:
+    - meniscal tear
+    - ligamentous injury
+    - cartilage defect or chondromalacia
+    - bone marrow edema
+    - fracture
+    - loose body
+pattern_checks:
+  - { name: normal_mentioned, check_type: regex, pattern: "normal|unremarkable|no.*abnormal|negative|intact", required: true }
+  - { name: no_tear, check_type: regex, pattern: "no.*tear|intact.*menisc|intact.*ligament|without.*tear", required: true }
+  - { name: laterality_right, check_type: regex, pattern: "right", required: true }
+reference_solution: |
+  MRI of the right knee demonstrates normal findings. The anterior cruciate
+  ligament and posterior cruciate ligament are intact with normal low T2
+  signal and appropriate tension on sagittal images. The medial and lateral
+  menisci are normal in morphology and signal without evidence of tear; any
+  intrasubstance signal does not extend to an articular surface. The medial
+  and lateral collateral ligaments are intact. The articular cartilage is
+  preserved in thickness and signal throughout the femoral condyles, tibial
+  plateaus, and patellofemoral compartment. The extensor mechanism including
+  the quadriceps tendon and patellar tendon is intact. No joint effusion.
+  No bone marrow edema. No fracture or loose body.
+  Impression: Normal right knee MRI.
+condition_present: false
+confusion_pair: null
+source_dataset: omnimedvqa-open
+tags:
+  - normal
+  - knee
+  - musculoskeletal
+  - negative-case

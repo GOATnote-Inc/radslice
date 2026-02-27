@@ -1,0 +1,55 @@
+id: CT-017
+name: Pneumothorax with tension physiology
+modality: ct
+anatomy: chest
+task_type: finding_detection
+difficulty: advanced
+image_ref: ct/omnimedvqa/CT_0017.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Left tension pneumothorax"
+  differential:
+    - simple pneumothorax
+    - large bullae mimicking pneumothorax
+    - skin fold artifact
+    - pneumomediastinum
+  key_findings:
+    - { finding: "large left pneumothorax with complete lung collapse", location: "left hemithorax", required: true }
+    - { finding: "contralateral mediastinal shift", location: "mediastinum shifted to right", required: true }
+    - { finding: "flattening of left hemidiaphragm", location: "left hemidiaphragm", required: false }
+    - { finding: "compressed right lung", location: "right lung", required: false }
+  severity: severe
+  laterality: left
+  negatives:
+    - rib fractures
+    - pleural effusion
+    - pulmonary contusion
+    - subcutaneous emphysema
+    - hemothorax
+pattern_checks:
+  - { name: pneumothorax_mentioned, check_type: regex, pattern: "pneumothorax|PTX\\b", required: true }
+  - { name: tension_physiology, check_type: regex, pattern: "tension|mediastinal\\s+shift|contralateral.*shift|shift.*contralateral", required: true }
+  - { name: laterality_left, check_type: regex, pattern: "left", required: true }
+  - { name: lung_collapse, check_type: regex, pattern: "collaps|complete.*collaps|total.*collaps", required: false }
+reference_solution: |
+  CT of the chest demonstrates a large left pneumothorax with near-complete
+  collapse of the left lung. There is significant rightward mediastinal
+  shift with deviation of the trachea and heart to the right, consistent
+  with tension physiology. The left hemidiaphragm is flattened and inverted.
+  The right lung is partially compressed secondary to the mediastinal shift.
+  No rib fractures identified. No pleural effusion or hemothorax component.
+  No subcutaneous emphysema. No pneumomediastinum. The collapsed left lung
+  shows no underlying mass or consolidation.
+  Impression: Large left tension pneumothorax with mediastinal shift and
+  complete left lung collapse. This is a medical emergency requiring
+  immediate needle decompression followed by chest tube placement.
+condition_present: true
+confusion_pair: null
+source_dataset: omnimedvqa-open
+tags:
+  - pneumothorax
+  - tension
+  - emergency
+  - chest
+  - life-threatening
+  - finding-detection

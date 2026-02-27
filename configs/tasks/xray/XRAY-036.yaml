@@ -1,0 +1,58 @@
+id: XRAY-036
+name: Right upper lobe cavitary lesion
+modality: xray
+anatomy: chest
+task_type: diagnosis
+difficulty: expert
+image_ref: xray/omnimedvqa/CXR_0036.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Right upper lobe cavitary lesion"
+  differential:
+    - cavitary tuberculosis
+    - lung abscess
+    - cavitary squamous cell carcinoma
+    - granulomatosis with polyangiitis (Wegener)
+    - septic emboli
+    - fungal infection (aspergilloma)
+  key_findings:
+    - { finding: "thick-walled cavitary lesion", location: "right upper lobe", required: true }
+    - { finding: "air-fluid level within the cavity", location: "right upper lobe", required: false }
+    - { finding: "surrounding consolidation or ground-glass opacity", location: "right upper lobe", required: true }
+    - { finding: "cavity wall thickness irregular", location: "right upper lobe", required: false }
+  severity: severe
+  laterality: right
+  negatives:
+    - left lung cavitation
+    - pneumothorax
+    - pleural effusion
+    - mediastinal lymphadenopathy
+    - calcified granulomas
+pattern_checks:
+  - { name: cavitary_mentioned, check_type: regex, pattern: "(?i)(cavit(y|ary)|cavitat)", required: true }
+  - { name: right_upper_lobe, check_type: regex, pattern: "(?i)right\\s+upper\\s+(lobe|zone)", required: true }
+  - { name: wall_described, check_type: regex, pattern: "(?i)(thick.{0,15}wall|irregular.{0,15}wall|wall.{0,15}(thick|irregular))", required: true }
+  - { name: differential, check_type: regex, pattern: "(?i)(tubercul|TB|abscess|carcinoma|malignan|fungal|Wegener|granulomatos)", required: false }
+reference_solution: |
+  PA chest radiograph demonstrates a thick-walled cavitary lesion in the right
+  upper lobe measuring approximately 4 cm in diameter. The cavity walls are
+  irregular in thickness, with the thickest portion measuring over 1 cm. An
+  air-fluid level is present within the cavity. There is surrounding parenchymal
+  consolidation/opacification adjacent to the cavity. No additional cavitary
+  lesions or satellite nodules are identified. The left lung is clear. No pleural
+  effusion or pneumothorax. The mediastinum appears normal. The differential
+  diagnosis includes cavitary tuberculosis, lung abscess, cavitary squamous cell
+  carcinoma, and granulomatosis with polyangiitis. Sputum for AFB and cultures,
+  CT chest, and consideration of bronchoscopy with biopsy are recommended.
+  Impression: Thick-walled cavitary lesion in the right upper lobe — infectious
+  versus neoplastic etiology. Further workup required.
+condition_present: true
+confusion_pair: null
+source_dataset: omnimedvqa-open
+tags:
+  - cavitary-lesion
+  - right-upper-lobe
+  - tuberculosis
+  - lung-abscess
+  - oncology
+  - infection

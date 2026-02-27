@@ -1,0 +1,59 @@
+id: CT-035
+name: Anterior mediastinal mass (thymoma)
+modality: ct
+anatomy: chest
+task_type: report_generation
+difficulty: intermediate
+image_ref: ct/eurorad/EUR_0035.png
+prompt_template: report_generation
+ground_truth:
+  primary_diagnosis: "Anterior mediastinal mass consistent with thymoma"
+  differential:
+    - thymic carcinoma
+    - lymphoma
+    - teratoma or germ cell tumor
+    - thymic hyperplasia
+    - substernal thyroid goiter
+  key_findings:
+    - { finding: "well-circumscribed solid mass in anterior mediastinum", location: "anterior mediastinum/prevascular space", required: true }
+    - { finding: "homogeneous enhancement", location: "within the mass", required: true }
+    - { finding: "no invasion of great vessels", location: "SVC, aorta, and branches", required: false }
+    - { finding: "no associated pleural nodules", location: "bilateral pleura", required: false }
+  severity: moderate
+  laterality: ""
+  negatives:
+    - great vessel invasion
+    - pericardial invasion
+    - pleural dissemination (drop metastases)
+    - pulmonary metastases
+    - calcification (suggesting teratoma)
+    - necrosis or hemorrhage
+pattern_checks:
+  - { name: thymoma_mentioned, check_type: regex, pattern: "thymoma|thymic\\s+(mass|neoplasm|tumor|tumour)", required: true }
+  - { name: anterior_mediastinal, check_type: regex, pattern: "anterior\\s+mediast|prevascular", required: true }
+  - { name: mass_identified, check_type: regex, pattern: "mass|lesion|tumor|tumour", required: true }
+  - { name: well_circumscribed, check_type: regex, pattern: "well.?circumscribed|well.?defined|encapsulat|homogeneous", required: false }
+reference_solution: |
+  Contrast-enhanced CT of the chest demonstrates a well-circumscribed,
+  homogeneously enhancing solid mass in the anterior mediastinum
+  (prevascular space), measuring 5.2 x 4.0 x 3.8 cm. The mass is located
+  in the expected region of the thymus and displaces the great vessels
+  posteriorly without evidence of invasion. The superior vena cava, aortic
+  arch, and brachiocephalic vessels are patent and smoothly displaced. No
+  pericardial invasion or effusion. The bilateral pleural surfaces are
+  smooth without nodular implants (drop metastases). The lungs are clear
+  without metastatic nodules. No calcification or fat within the mass
+  (arguing against teratoma). No mediastinal lymphadenopathy.
+  Impression: Well-circumscribed anterior mediastinal mass in the thymic
+  region, most consistent with thymoma (Masaoka stage I based on imaging
+  appearance). Tissue sampling and staging evaluation recommended.
+  Assessment for myasthenia gravis clinically advised.
+condition_present: true
+confusion_pair: null
+source_dataset: eurorad
+tags:
+  - thymoma
+  - mediastinal-mass
+  - chest
+  - oncology
+  - report-generation

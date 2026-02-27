@@ -1,0 +1,56 @@
+id: XRAY-032
+name: Anterior mediastinal mass
+modality: xray
+anatomy: chest
+task_type: diagnosis
+difficulty: advanced
+image_ref: xray/omnimedvqa/CXR_0032.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Anterior mediastinal mass"
+  differential:
+    - thymoma
+    - lymphoma
+    - teratoma/germ cell tumor
+    - thyroid goiter (retrosternal)
+    - thymic cyst
+  key_findings:
+    - { finding: "well-defined mass with smooth margins projecting over the anterior mediastinum", location: "anterior mediastinum", required: true }
+    - { finding: "hilum overlay sign positive", location: "mediastinum", required: false }
+    - { finding: "loss of retrosternal clear space on lateral view", location: "anterior mediastinum", required: false }
+    - { finding: "mass silhouetting the ascending aorta", location: "anterior mediastinum", required: true }
+  severity: moderate
+  laterality: ""
+  negatives:
+    - posterior mediastinal mass
+    - hilar lymphadenopathy
+    - pleural effusion
+    - pulmonary nodule
+    - cardiomegaly
+pattern_checks:
+  - { name: mediastinal_mass, check_type: regex, pattern: "(?i)(mediastinal\\s+mass|anterior\\s+mediastin)", required: true }
+  - { name: mass_mentioned, check_type: regex, pattern: "(?i)(mass|tumor|neoplasm|lesion)", required: true }
+  - { name: differential_offered, check_type: regex, pattern: "(?i)(thymoma|lymphoma|teratoma|germ\\s+cell|goiter|thyroid|4\\s*T)", required: true }
+  - { name: further_workup, check_type: regex, pattern: "(?i)(CT|MRI|biopsy|staging)", required: false }
+reference_solution: |
+  PA chest radiograph demonstrates a well-defined, lobulated opacity projecting
+  over the anterior mediastinum, causing widening of the superior mediastinal
+  silhouette. The hilum overlay sign is positive, confirming the mass is anterior
+  to the hilum rather than hilar in origin. The mass silhouettes the ascending
+  aortic contour. The lung fields are otherwise clear without associated pleural
+  effusion or pulmonary nodules. The cardiac silhouette is normal. The differential
+  diagnosis for an anterior mediastinal mass includes the classic 4 T's: thymoma,
+  teratoma (germ cell tumor), thyroid goiter, and terrible lymphoma. Contrast-
+  enhanced CT of the chest is recommended for further characterization, and biopsy
+  should be considered if imaging is indeterminate.
+  Impression: Anterior mediastinal mass — CT chest recommended. Differential
+  includes thymoma, lymphoma, germ cell tumor, and retrosternal thyroid.
+condition_present: true
+confusion_pair: null
+source_dataset: omnimedvqa-open
+tags:
+  - mediastinal-mass
+  - anterior-mediastinum
+  - thymoma
+  - lymphoma
+  - oncology

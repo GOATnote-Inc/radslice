@@ -1,0 +1,58 @@
+id: CT-042
+name: Spinal epidural hematoma (confusion pair for epidural abscess)
+modality: ct
+anatomy: spine
+task_type: diagnosis
+difficulty: advanced
+image_ref: ct/eurorad/EUR_0042.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Acute spinal epidural hematoma"
+  differential:
+    - spinal epidural abscess
+    - epidural metastatic disease
+    - disc herniation
+    - epidural lipomatosis
+    - subdural hematoma of spine
+  key_findings:
+    - { finding: "hyperdense biconvex epidural collection", location: "posterior epidural space T10-T12", required: true }
+    - { finding: "spinal cord compression", location: "thoracic spinal cord at T11", required: true }
+    - { finding: "no disc space abnormality or endplate erosion", location: "T10-T12 disc spaces", required: true }
+    - { finding: "no paraspinal soft tissue abnormality", location: "paraspinal muscles", required: false }
+  severity: severe
+  laterality: ""
+  negatives:
+    - endplate erosion or discitis
+    - rim enhancement (abscess pattern)
+    - lytic bone lesion
+    - vertebral fracture
+    - paraspinal phlegmon
+pattern_checks:
+  - { name: epidural_hematoma, check_type: regex, pattern: "epidural.*h[ae]matoma|h[ae]matoma.*epidural|epidural.*h[ae]morrhage|epidural.*blood", required: true }
+  - { name: hyperdense, check_type: regex, pattern: "hyperdense|high.{0,10}density|acute.*blood|hemorrhag", required: true }
+  - { name: cord_compression, check_type: regex, pattern: "cord.{0,15}compress|compress.*cord|spinal\\s+canal.*narrow|thecal.*compress", required: true }
+  - { name: no_infection, check_type: not_contains, pattern: "discitis", required: false }
+reference_solution: |
+  Non-contrast CT of the thoracic spine demonstrates a hyperdense biconvex
+  epidural collection in the posterior epidural space extending from T10 to
+  T12, measuring up to 8 mm in thickness. The collection has homogeneous
+  high density (approximately 55-65 HU) consistent with acute hemorrhage.
+  There is significant compression of the thoracic spinal cord at the T11
+  level. The disc spaces at T10-T11 and T11-T12 are preserved without
+  endplate erosion, distinguishing this from discitis-osteomyelitis with
+  epidural abscess. The vertebral bodies are intact without fracture. No
+  paraspinal soft tissue abnormality. The history of anticoagulation therapy
+  provides clinical context for spontaneous epidural hemorrhage.
+  Impression: Acute thoracic spinal epidural hematoma (T10-T12) with spinal
+  cord compression at T11. No findings of infection or neoplasm.
+  Emergent neurosurgical consultation for decompressive laminectomy and
+  hematoma evacuation. Reversal of anticoagulation should be considered.
+condition_present: true
+confusion_pair: CT-041
+source_dataset: eurorad
+tags:
+  - epidural-hematoma
+  - spine
+  - emergency
+  - spinal-cord-compression
+  - confusion-pair

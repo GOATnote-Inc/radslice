@@ -1,0 +1,58 @@
+id: CT-039
+name: Pulmonary contusion with rib fractures
+modality: ct
+anatomy: chest
+task_type: finding_detection
+difficulty: intermediate
+image_ref: ct/omnimedvqa/CT_0039.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Right-sided pulmonary contusion with multiple rib fractures"
+  differential:
+    - aspiration pneumonia
+    - pulmonary hemorrhage from coagulopathy
+    - fat embolism
+    - pneumonia
+    - atelectasis
+  key_findings:
+    - { finding: "non-segmental ground-glass opacity and consolidation", location: "right lower lobe and right middle lobe", required: true }
+    - { finding: "multiple displaced rib fractures", location: "right 5th through 8th ribs", required: true }
+    - { finding: "small right pneumothorax", location: "right anterior pleural space", required: false }
+    - { finding: "subcutaneous emphysema", location: "right chest wall", required: false }
+  severity: moderate
+  laterality: right
+  negatives:
+    - left-sided pulmonary contusion
+    - flail chest
+    - aortic injury
+    - diaphragmatic rupture
+    - cardiac contusion
+pattern_checks:
+  - { name: contusion_mentioned, check_type: regex, pattern: "contusion|traumatic.*consolidat|post.?traumatic.*opacit", required: true }
+  - { name: rib_fractures, check_type: regex, pattern: "rib\\s+fracture|fracture.*rib|fractured\\s+rib", required: true }
+  - { name: right_sided, check_type: regex, pattern: "right", required: true }
+  - { name: ground_glass, check_type: regex, pattern: "ground.?glass|GGO|consolidat|opacit", required: false }
+reference_solution: |
+  CT of the chest performed in the trauma setting demonstrates non-segmental
+  areas of ground-glass opacity and patchy consolidation in the right lower
+  lobe and right middle lobe, consistent with pulmonary contusion in the
+  appropriate clinical context. Multiple acute displaced fractures are
+  identified involving the right 5th through 8th ribs along the posterior
+  and lateral arcs. A small anterior right pneumothorax is present. Mild
+  right-sided subcutaneous emphysema is noted in the chest wall. No flail
+  segment (each fractured rib has a single fracture line). The left lung is
+  clear. The aorta and great vessels appear intact. No hemothorax. No
+  diaphragmatic injury.
+  Impression: Right-sided pulmonary contusion with multiple right rib
+  fractures (5th through 8th), small right pneumothorax, and subcutaneous
+  emphysema. Recommend serial imaging and pain management with incentive
+  spirometry to prevent secondary complications.
+condition_present: true
+confusion_pair: null
+source_dataset: omnimedvqa-open
+tags:
+  - pulmonary-contusion
+  - rib-fractures
+  - trauma
+  - chest
+  - finding-detection

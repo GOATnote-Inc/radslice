@@ -1,0 +1,57 @@
+id: CT-014
+name: Acute pancreatitis with necrosis
+modality: ct
+anatomy: abdomen
+task_type: diagnosis
+difficulty: advanced
+image_ref: ct/eurorad/EUR_0014.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Acute necrotizing pancreatitis"
+  differential:
+    - acute interstitial edematous pancreatitis
+    - pancreatic pseudocyst
+    - pancreatic ductal adenocarcinoma with obstruction
+    - pancreatic abscess
+    - walled-off necrosis
+  key_findings:
+    - { finding: "diffusely enlarged pancreas with heterogeneous enhancement", location: "pancreatic body and tail", required: true }
+    - { finding: "non-enhancing areas of pancreatic parenchyma", location: "pancreatic body", required: true }
+    - { finding: "peripancreatic fat stranding and fluid", location: "anterior pararenal space", required: true }
+    - { finding: "peripancreatic fluid collection", location: "lesser sac", required: false }
+  severity: severe
+  laterality: ""
+  negatives:
+    - pancreatic mass with upstream ductal dilatation
+    - portal vein thrombosis
+    - pseudoaneurysm
+    - biliary obstruction
+    - free intraperitoneal air
+pattern_checks:
+  - { name: pancreatitis_mentioned, check_type: regex, pattern: "pancreatitis", required: true }
+  - { name: necrosis_identified, check_type: regex, pattern: "necro[st]|non.?enhanc|devasculariz|necrotic", required: true }
+  - { name: pancreas_enlarged, check_type: regex, pattern: "enlarg|edematous|swollen|bulky|inflam", required: true }
+  - { name: peripancreatic, check_type: regex, pattern: "peripancreatic|surrounding.*fluid|fat\\s+strand|inflammatory\\s+change", required: false }
+reference_solution: |
+  Contrast-enhanced CT of the abdomen demonstrates a diffusely enlarged
+  pancreas with heterogeneous enhancement. A large area of non-enhancement
+  involving approximately 50% of the pancreatic body is identified,
+  consistent with pancreatic parenchymal necrosis. There is extensive
+  peripancreatic fat stranding and fluid tracking into the anterior pararenal
+  space bilaterally. An acute peripancreatic fluid collection is present in
+  the lesser sac measuring approximately 6 x 4 cm. No evidence of
+  pseudoaneurysm or active hemorrhage. The portal and splenic veins remain
+  patent. No biliary obstruction. CT severity index (Balthazar) is estimated
+  at 8, indicating severe disease.
+  Impression: Acute necrotizing pancreatitis with approximately 50%
+  parenchymal necrosis and peripancreatic fluid collections. ICU admission
+  and close monitoring recommended.
+condition_present: true
+confusion_pair: null
+source_dataset: eurorad
+tags:
+  - pancreatitis
+  - necrotizing
+  - emergency
+  - abdomen
+  - gastrointestinal

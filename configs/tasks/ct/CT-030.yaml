@@ -1,0 +1,58 @@
+id: CT-030
+name: Empyema with split pleura sign
+modality: ct
+anatomy: chest
+task_type: diagnosis
+difficulty: advanced
+image_ref: ct/omnimedvqa/CT_0030.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Right-sided empyema"
+  differential:
+    - complicated parapneumonic effusion
+    - pleural metastatic disease
+    - hemothorax
+    - chylothorax
+    - loculated simple effusion
+  key_findings:
+    - { finding: "loculated pleural collection with split pleura sign", location: "right pleural space", required: true }
+    - { finding: "enhancing thickened visceral and parietal pleura", location: "right hemithorax", required: true }
+    - { finding: "internal septations", location: "right pleural collection", required: false }
+    - { finding: "adjacent compressive atelectasis", location: "right lower lobe", required: false }
+  severity: moderate
+  laterality: right
+  negatives:
+    - pneumothorax
+    - pleural mass or nodularity
+    - bronchopleural fistula
+    - chest wall invasion
+    - contralateral effusion
+pattern_checks:
+  - { name: empyema_mentioned, check_type: regex, pattern: "empyema|infected.*effusion|purulent.*effusion", required: true }
+  - { name: split_pleura, check_type: regex, pattern: "split\\s+pleura|pleural.*enhanc.*thicken|thicken.*enhanc.*pleur", required: true }
+  - { name: loculated, check_type: regex, pattern: "loculated|septated|organized|complex\\s+collection", required: true }
+  - { name: right_sided, check_type: regex, pattern: "right", required: true }
+reference_solution: |
+  Contrast-enhanced CT of the chest demonstrates a large loculated
+  right-sided pleural collection with enhancing, thickened visceral and
+  parietal pleural layers separated by the collection — the classic split
+  pleura sign — highly suggestive of empyema. The collection measures
+  approximately 12 x 6 cm and contains internal septations. The enhanced
+  pleural surfaces measure up to 3 mm in thickness. There is adjacent
+  compressive atelectasis of the right lower lobe. The collection has
+  higher attenuation (approximately 20 HU) than simple transudative
+  effusion. No pleural nodularity or mass to suggest malignancy. No
+  bronchopleural fistula or pneumothorax. The left hemithorax is clear.
+  Impression: Right-sided empyema with split pleura sign and internal
+  septations. Chest tube drainage or video-assisted thoracoscopic surgery
+  (VATS) debridement recommended. Infectious disease consultation for
+  targeted antibiotic therapy.
+condition_present: true
+confusion_pair: null
+source_dataset: omnimedvqa-open
+tags:
+  - empyema
+  - pleural
+  - chest
+  - infectious
+  - surgical

@@ -1,0 +1,60 @@
+id: MRI-037
+name: ARVC on cardiac MRI
+modality: mri
+anatomy: heart
+task_type: report_generation
+difficulty: expert
+image_ref: mri/eurorad/EUR_0037.png
+prompt_template: report_generation
+ground_truth:
+  primary_diagnosis: "Arrhythmogenic right ventricular cardiomyopathy (ARVC)"
+  differential:
+    - right ventricular dilated cardiomyopathy
+    - athlete's heart (physiologic RV dilatation)
+    - cardiac sarcoidosis with RV involvement
+    - Uhl anomaly (parchment heart)
+    - right ventricular infarction
+  key_findings:
+    - { finding: "right ventricular free wall fatty/fibrofatty infiltration with intramyocardial fat signal", location: "right ventricular free wall, subtricuspid region and RV outflow tract", required: true }
+    - { finding: "regional RV wall motion abnormality (akinesis or dyskinesis with microaneurysms)", location: "RV free wall basal and mid segments", required: true }
+    - { finding: "right ventricular dilatation with RV/LV ratio >1", location: "right ventricle on short-axis cine images", required: false }
+    - { finding: "delayed gadolinium enhancement in the RV free wall", location: "right ventricular free wall", required: false }
+  severity: severe
+  laterality: ""
+  negatives:
+    - left ventricular involvement (can occur in advanced disease but not primary finding)
+    - pericardial effusion
+    - valvular heart disease
+    - intracardiac thrombus
+    - congenital heart disease
+pattern_checks:
+  - { name: arvc_mentioned, check_type: regex, pattern: "ARVC|arrhythmogenic\\s+right\\s+ventricular|ARVD|arrhythmogenic.*cardiomyopathy", required: true }
+  - { name: rv_fatty, check_type: regex, pattern: "fat.*infiltrat|fibrofatty|fatty.*replac|intramyocardial.*fat|fat.*rv|fat.*right\\s+ventricle", required: true }
+  - { name: rv_wall_motion, check_type: regex, pattern: "wall.*motion.*abnormal|akinesi|dyskinesi|microaneurysm|RV.*dilat|right.*ventricl.*dilat", required: true }
+  - { name: rv_involvement, check_type: regex, pattern: "right\\s+ventricl|RV\\s|free\\s+wall", required: true }
+reference_solution: |
+  Cardiac MRI demonstrates findings consistent with arrhythmogenic right
+  ventricular cardiomyopathy (ARVC). The right ventricular free wall shows
+  fibrofatty infiltration with intramyocardial T1 hyperintense fat signal,
+  particularly in the subtricuspid region and RV outflow tract (the "triangle
+  of dysplasia"). Cine SSFP images demonstrate regional wall motion
+  abnormalities with akinesis and small microaneurysms along the RV free wall
+  basal and mid segments. The right ventricle is dilated with a RV/LV
+  end-diastolic volume ratio exceeding 1.0. Late gadolinium enhancement is
+  present in the RV free wall, indicating myocardial fibrosis. The left
+  ventricle demonstrates normal wall motion and morphology. No pericardial
+  effusion. No intracardiac thrombus. These findings satisfy the 2010 revised
+  Task Force Criteria for ARVC with a major criterion for RV regional wall
+  motion abnormality and structural alteration.
+  Impression: Arrhythmogenic right ventricular cardiomyopathy (ARVC) with
+  fibrofatty infiltration, RV wall motion abnormalities, and RV dilatation
+  satisfying Task Force Criteria.
+condition_present: true
+confusion_pair: null
+source_dataset: eurorad
+tags:
+  - arvc
+  - cardiac
+  - cardiomyopathy
+  - right-ventricle
+  - arrhythmia

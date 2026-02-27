@@ -1,0 +1,47 @@
+id: XRAY-052
+name: Normal CXR with azygos fissure
+modality: xray
+anatomy: chest
+task_type: diagnosis
+difficulty: basic
+image_ref: xray/vindrcxr/VDR_0052.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Normal chest radiograph with azygos fissure"
+  differential: []
+  key_findings:
+    - { finding: "curvilinear line (azygos fissure) in the right upper lobe", location: "right upper lobe medially", required: true }
+    - { finding: "teardrop-shaped azygos vein at the inferior aspect of the fissure", location: "right paratracheal region", required: true }
+    - { finding: "clear lung fields", location: "bilateral lungs", required: true }
+  severity: mild
+  laterality: right
+  negatives:
+    - pneumothorax
+    - pleural effusion
+    - right upper lobe mass
+    - right paratracheal lymphadenopathy
+pattern_checks:
+  - { name: azygos_fissure, check_type: regex, pattern: "(?i)(azygos\\s+(fissure|lobe)|azygos\\s+vein.{0,20}(fissure|variant))", required: true }
+  - { name: normal_or_variant, check_type: regex, pattern: "(?i)(normal|variant|incidental|anatomic|no\\s+acute)", required: true }
+  - { name: lungs_clear, check_type: regex, pattern: "(?i)(clear|no.*opaci|no.*consolidat)", required: true }
+reference_solution: |
+  PA chest radiograph demonstrates a curvilinear line in the medial aspect of the
+  right upper lobe representing an azygos fissure, with a teardrop-shaped opacity
+  at its inferior extent corresponding to the azygos vein. This is a normal
+  anatomic variant caused by failure of the azygos vein to migrate to its normal
+  position during embryologic development, resulting in an accessory fissure
+  containing two layers each of visceral and parietal pleura. The lungs are clear
+  bilaterally without focal consolidation, pleural effusion, or pneumothorax.
+  The cardiac silhouette is normal. This finding should not be confused with a
+  right paratracheal mass or pneumothorax.
+  Impression: Azygos fissure — normal anatomic variant. No acute cardiopulmonary
+  disease.
+condition_present: false
+confusion_pair: null
+source_dataset: vindrcxr
+tags:
+  - normal
+  - azygos-fissure
+  - anatomic-variant
+  - chest
+  - baseline

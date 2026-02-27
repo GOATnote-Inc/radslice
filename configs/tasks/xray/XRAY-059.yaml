@@ -1,0 +1,51 @@
+id: XRAY-059
+name: Nipple shadow mimicking pulmonary nodule
+modality: xray
+anatomy: chest
+task_type: diagnosis
+difficulty: intermediate
+image_ref: xray/mediconfusion/MCF_0059.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Bilateral nipple shadows"
+  differential:
+    - bilateral pulmonary nodules
+    - metastatic deposits
+    - granulomas
+    - skin lesions
+  key_findings:
+    - { finding: "bilateral well-defined round opacities projecting over the lower lung zones", location: "bilateral lower zones", required: true }
+    - { finding: "symmetric bilateral position consistent with nipple shadows", location: "bilateral", required: true }
+    - { finding: "loss of opacity on repeat imaging with nipple markers", location: "bilateral", required: false }
+  severity: mild
+  laterality: bilateral
+  negatives:
+    - true pulmonary nodules
+    - metastatic disease
+    - focal consolidation
+    - lymphadenopathy
+pattern_checks:
+  - { name: nipple_shadow, check_type: regex, pattern: "(?i)(nipple\\s+shadow|nipple\\s+marker|nipple\\s+artifact)", required: true }
+  - { name: not_nodule, check_type: regex, pattern: "(?i)(not.{0,20}(true\\s+)?nodule|rather\\s+than.{0,20}nodule|pseudo.?nodule|artifact)", required: true }
+  - { name: bilateral_symmetric, check_type: regex, pattern: "(?i)(bilateral|symmetric)", required: true }
+  - { name: repeat_or_marker, check_type: regex, pattern: "(?i)(repeat|marker|confirm|nipple\\s+marker)", required: false }
+reference_solution: |
+  PA chest radiograph demonstrates bilateral well-defined round opacities
+  projecting over the lower lung zones in a symmetric distribution. The location,
+  size, symmetry, and smooth margins are characteristic of nipple shadows rather
+  than true pulmonary nodules. Nipple shadows are a well-known mimic of pulmonary
+  nodules on frontal chest radiographs. A repeat radiograph with radiopaque nipple
+  markers can confirm this if clinical doubt persists. The lung fields are
+  otherwise clear without focal consolidation or pleural effusion. No
+  pneumothorax. The cardiac silhouette and mediastinal contours are normal.
+  Impression: Bilateral nipple shadows — not true pulmonary nodules. Nipple
+  markers recommended if clinical concern persists.
+condition_present: true
+confusion_pair: XRAY-008
+source_dataset: mediconfusion
+tags:
+  - nipple-shadow
+  - nodule-mimic
+  - artifact
+  - confusion-pair
+  - chest

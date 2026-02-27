@@ -1,0 +1,58 @@
+id: CT-012
+name: Intraparenchymal hemorrhage (confusion pair for SAH)
+modality: ct
+anatomy: head
+task_type: diagnosis
+difficulty: advanced
+image_ref: ct/omnimedvqa/CT_0012.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Hypertensive intraparenchymal hemorrhage"
+  differential:
+    - hemorrhagic transformation of ischemic stroke
+    - amyloid angiopathy-related hemorrhage
+    - hemorrhagic neoplasm
+    - cavernous malformation hemorrhage
+    - arteriovenous malformation rupture
+  key_findings:
+    - { finding: "hyperdense intraparenchymal hematoma", location: "left basal ganglia and thalamus", required: true }
+    - { finding: "surrounding vasogenic edema", location: "left periventricular white matter", required: true }
+    - { finding: "intraventricular extension", location: "left lateral ventricle", required: false }
+    - { finding: "mild midline shift", location: "rightward displacement of falx", required: false }
+  severity: severe
+  laterality: left
+  negatives:
+    - subarachnoid hemorrhage pattern
+    - extra-axial collection
+    - skull fracture
+    - underlying mass with enhancement
+    - arteriovenous malformation nidus
+pattern_checks:
+  - { name: iph_mentioned, check_type: regex, pattern: "intraparenchymal|intracerebral|ICH\\b|parenchymal\\s+h[ae]morrhage", required: true }
+  - { name: hematoma_blood, check_type: regex, pattern: "hematoma|haematoma|hemorrhage|haemorrhage|bleed", required: true }
+  - { name: basal_ganglia, check_type: regex, pattern: "basal\\s+gangli|thalami?c?\\b|putamen|caudate|lentiform", required: true }
+  - { name: hypertensive, check_type: regex, pattern: "hypertens|deep\\s+location|typical\\s+location", required: false }
+  - { name: not_sah_pattern, check_type: not_contains, pattern: "subarachnoid hemorrhage as primary", required: false }
+reference_solution: |
+  Non-contrast CT of the head demonstrates a hyperdense intraparenchymal
+  hematoma centered in the left basal ganglia and thalamus, measuring
+  approximately 4 x 3 cm. Surrounding hypodensity is present consistent with
+  vasogenic edema. There is intraventricular extension of hemorrhage into the
+  left lateral ventricle with a small blood-fluid level. Mild rightward
+  midline shift of approximately 5 mm is noted. The deep location involving
+  the basal ganglia/thalamic region is characteristic of hypertensive
+  hemorrhage. No subarachnoid hemorrhage pattern in the cisterns. No
+  extra-axial collection. No obvious underlying mass or vascular malformation,
+  though follow-up imaging after hematoma resolution is recommended.
+  Impression: Large left basal ganglia/thalamic hypertensive intraparenchymal
+  hemorrhage with intraventricular extension and mild midline shift.
+  Neurosurgical consultation recommended.
+condition_present: true
+confusion_pair: CT-011
+source_dataset: omnimedvqa-open
+tags:
+  - intraparenchymal-hemorrhage
+  - emergency
+  - head
+  - hypertensive
+  - confusion-pair

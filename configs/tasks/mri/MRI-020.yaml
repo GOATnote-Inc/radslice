@@ -1,0 +1,56 @@
+id: MRI-020
+name: Labral tear of the hip
+modality: mri
+anatomy: hip
+task_type: diagnosis
+difficulty: intermediate
+image_ref: mri/omnimedvqa/MRI_0020.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Anterior-superior acetabular labral tear of the right hip"
+  differential:
+    - labral degeneration without discrete tear
+    - paralabral cyst without definite tear
+    - sublabral sulcus (normal variant)
+    - acetabular cartilage delamination
+  key_findings:
+    - { finding: "linear T2 hyperintense signal within the acetabular labrum extending to the articular surface", location: "anterior-superior labrum of the right hip at 1 o'clock position", required: true }
+    - { finding: "detachment of the labrum from the acetabular rim", location: "anterior-superior acetabulum", required: true }
+    - { finding: "adjacent paralabral cyst", location: "anterosuperior to the acetabulum", required: false }
+    - { finding: "cam-type morphology of the femoral head-neck junction", location: "anterolateral femoral head-neck junction", required: false }
+  severity: moderate
+  laterality: right
+  negatives:
+    - chondral loss or full-thickness cartilage defect
+    - femoral head avascular necrosis
+    - joint effusion with synovitis
+    - stress fracture of femoral neck
+    - loose body
+pattern_checks:
+  - { name: labral_tear, check_type: regex, pattern: "labr.*tear|tear.*labr|labral.*disrupt|labral.*detach", required: true }
+  - { name: anterior_location, check_type: regex, pattern: "anterior|anterosuperior|1\\s*o.?clock|antero.?superior", required: true }
+  - { name: laterality_right, check_type: regex, pattern: "right", required: true }
+  - { name: hip_joint, check_type: regex, pattern: "hip|acetabul|femoral", required: true }
+reference_solution: |
+  MRI of the right hip demonstrates a tear of the anterior-superior acetabular
+  labrum. On T2-weighted fat-saturated coronal and sagittal oblique images,
+  there is linear hyperintense signal within the labrum at approximately the
+  1 o'clock position, extending to the articular surface with detachment of
+  the labral base from the acetabular rim. A small paralabral cyst is
+  identified anterosuperior to the acetabulum, providing indirect evidence
+  of the labral pathology. There is cam-type morphology at the anterolateral
+  femoral head-neck junction with an elevated alpha angle, suggesting
+  femoroacetabular impingement as the underlying etiology. The articular
+  cartilage appears preserved. No avascular necrosis of the femoral head.
+  No stress fracture. Small joint effusion is present.
+  Impression: Right anterior-superior acetabular labral tear with small
+  paralabral cyst, likely related to cam-type femoroacetabular impingement.
+condition_present: true
+confusion_pair: null
+source_dataset: omnimedvqa-open
+tags:
+  - labrum
+  - hip
+  - musculoskeletal
+  - sports-injury
+  - femoroacetabular-impingement

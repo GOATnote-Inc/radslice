@@ -1,0 +1,56 @@
+id: XRAY-060
+name: ARDS mimicking cardiogenic pulmonary edema
+modality: xray
+anatomy: chest
+task_type: diagnosis
+difficulty: expert
+image_ref: xray/mediconfusion/MCF_0060.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Acute respiratory distress syndrome (ARDS)"
+  differential:
+    - cardiogenic pulmonary edema
+    - diffuse alveolar hemorrhage
+    - bilateral pneumonia
+    - diffuse alveolar damage
+  key_findings:
+    - { finding: "bilateral diffuse airspace opacities", location: "bilateral lung fields", required: true }
+    - { finding: "normal cardiac silhouette without enlargement", location: "cardiomediastinal", required: true }
+    - { finding: "absence of cephalization or Kerley B lines", location: "bilateral lungs", required: true }
+    - { finding: "peripheral distribution of opacities", location: "bilateral peripheral zones", required: false }
+  severity: severe
+  laterality: bilateral
+  negatives:
+    - cardiomegaly
+    - cephalization
+    - Kerley B lines
+    - pleural effusion (initially)
+    - upper lobe vascular distension
+pattern_checks:
+  - { name: ards_mentioned, check_type: regex, pattern: "(?i)(ARDS|acute\\s+respiratory\\s+distress|non.?cardiogenic\\s+edema)", required: true }
+  - { name: bilateral_opacities, check_type: regex, pattern: "(?i)(bilateral.{0,30}(opacit|infiltrat|airspace)|diffuse.{0,30}(opacit|infiltrat))", required: true }
+  - { name: normal_heart, check_type: regex, pattern: "(?i)(normal.{0,20}(heart|cardiac)|heart.{0,20}normal|no.{0,20}cardiomegaly)", required: true }
+  - { name: no_cephalization, check_type: regex, pattern: "(?i)(no.{0,20}cephali|absence.{0,20}cephali|without.{0,20}cephali|no.{0,20}Kerley)", required: false }
+reference_solution: |
+  Portable AP chest radiograph demonstrates bilateral diffuse airspace opacities
+  involving all lung zones with a peripheral predominance. Critically, the cardiac
+  silhouette is normal in size without cardiomegaly, and there is no cephalization
+  of pulmonary vasculature or Kerley B lines, which distinguishes this from
+  cardiogenic pulmonary edema. No significant pleural effusions are present. The
+  combination of bilateral diffuse opacities with normal cardiac size and absence
+  of signs of elevated pulmonary venous pressure is consistent with ARDS
+  (non-cardiogenic pulmonary edema). Clinical correlation with the Berlin criteria
+  (acute onset, bilateral opacities not fully explained by effusions/atelectasis,
+  PaO2/FiO2 ratio, and non-cardiogenic origin) is essential.
+  Impression: ARDS — bilateral diffuse opacities with normal cardiac size. Not
+  cardiogenic pulmonary edema.
+condition_present: true
+confusion_pair: XRAY-019
+source_dataset: mediconfusion
+tags:
+  - ARDS
+  - edema-mimic
+  - non-cardiogenic
+  - confusion-pair
+  - chest
+  - critical

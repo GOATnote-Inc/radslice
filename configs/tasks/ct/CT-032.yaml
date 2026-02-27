@@ -1,0 +1,60 @@
+id: CT-032
+name: Focal nodular hyperplasia (confusion pair for HCC)
+modality: ct
+anatomy: abdomen
+task_type: diagnosis
+difficulty: advanced
+image_ref: ct/eurorad/EUR_0032.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Focal nodular hyperplasia"
+  differential:
+    - hepatocellular carcinoma
+    - hepatic adenoma
+    - fibrolamellar carcinoma
+    - hypervascular metastasis
+    - hemangioma
+  key_findings:
+    - { finding: "homogeneously hyperenhancing mass in arterial phase", location: "left hepatic lobe segment 3", required: true }
+    - { finding: "central hypodense scar with delayed enhancement", location: "center of lesion", required: true }
+    - { finding: "isodense to liver on portal venous and delayed phases", location: "left hepatic lobe", required: false }
+    - { finding: "no washout appearance", location: "lesion on portal venous phase", required: false }
+  severity: mild
+  laterality: left
+  negatives:
+    - portal venous washout
+    - pseudocapsule
+    - background cirrhosis
+    - portal vein thrombus
+    - biliary dilatation
+    - hemorrhage or necrosis
+pattern_checks:
+  - { name: fnh_mentioned, check_type: regex, pattern: "focal\\s+nodular\\s+hyperplasia|FNH\\b", required: true }
+  - { name: central_scar, check_type: regex, pattern: "central\\s+scar|central.*hypodense|stellate.*scar", required: true }
+  - { name: arterial_enhancement, check_type: regex, pattern: "arterial.*enhanc|hyperenhanc|hypervascular", required: true }
+  - { name: no_washout, check_type: regex, pattern: "no.*washout|isodense|isoattenuat|without.*washout|homogeneous.*portal", required: false }
+reference_solution: |
+  Multiphase contrast-enhanced CT of the abdomen demonstrates a 3.2 cm
+  well-circumscribed mass in segment 3 of the left hepatic lobe. The lesion
+  shows homogeneous arterial phase hyperenhancement and becomes isodense to
+  the surrounding liver parenchyma on portal venous and delayed phases
+  without washout. A central hypodense scar is present on arterial and
+  portal phases with progressive delayed enhancement of the scar, a
+  characteristic finding of focal nodular hyperplasia. The background liver
+  is normal in morphology without cirrhosis. No pseudocapsule is identified.
+  No portal vein thrombosis. The remaining liver parenchyma is homogeneous
+  without additional lesions. No biliary dilatation.
+  Impression: Left hepatic lobe lesion with imaging characteristics
+  diagnostic of focal nodular hyperplasia (central scar with delayed
+  enhancement, arterial hyperenhancement without washout, non-cirrhotic
+  liver). No further workup necessary if diagnosis is confident on
+  multiphase imaging.
+condition_present: true
+confusion_pair: CT-031
+source_dataset: eurorad
+tags:
+  - focal-nodular-hyperplasia
+  - hepatic
+  - abdomen
+  - benign
+  - confusion-pair

@@ -1,0 +1,39 @@
+id: XRAY-072
+name: VQA - Is there free air under the diaphragm?
+modality: xray
+anatomy: abdomen
+task_type: vqa
+difficulty: intermediate
+image_ref: xray/vindrcxr/VDR_0072.png
+prompt_template: vqa
+ground_truth:
+  primary_diagnosis: "No free air under the diaphragm (normal)"
+  differential: []
+  key_findings:
+    - { finding: "no subdiaphragmatic free air identified", location: "bilateral subdiaphragmatic regions", required: true }
+    - { finding: "normal gastric air bubble only", location: "left subdiaphragmatic", required: true }
+  severity: mild
+  laterality: ""
+  negatives:
+    - pneumoperitoneum
+    - perforated viscus
+pattern_checks:
+  - { name: no_free_air, check_type: regex, pattern: "(?i)(no.{0,20}(free\\s+air|pneumoperitoneum)|absent|not\\s+(present|identified|seen))", required: true }
+  - { name: diaphragm, check_type: regex, pattern: "(?i)(diaphragm|sub(diaphragmatic|phrenic))", required: true }
+  - { name: no_perforation, check_type: regex, pattern: "(?i)(no.{0,20}(perforat|free\\s+air)|normal)", required: true }
+reference_solution: |
+  No, there is no free air under the diaphragm on this upright radiograph. The
+  bilateral subdiaphragmatic regions are clear without evidence of
+  pneumoperitoneum. A normal gastric air bubble is seen in the expected position
+  in the left upper quadrant, which should not be confused with free
+  intraperitoneal air. The bilateral hemidiaphragms are smooth and well-defined
+  without curvilinear lucency beneath them. There is no evidence of perforated
+  hollow viscus. The visualized lung bases are clear.
+condition_present: false
+confusion_pair: null
+source_dataset: vindrcxr
+tags:
+  - vqa
+  - pneumoperitoneum
+  - abdomen
+  - negative-study

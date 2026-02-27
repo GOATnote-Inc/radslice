@@ -1,0 +1,53 @@
+id: MRI-034
+name: Normal liver MRI
+modality: mri
+anatomy: abdomen
+task_type: diagnosis
+difficulty: basic
+image_ref: mri/omnimedvqa/MRI_0034.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Normal liver MRI"
+  differential:
+    - incidental hepatic cyst
+    - incidental hemangioma (too small to characterize)
+    - focal fat deposition or sparing
+  key_findings:
+    - { finding: "normal hepatic parenchymal signal on all sequences without focal lesion", location: "liver parenchyma", required: true }
+    - { finding: "no abnormal enhancement on dynamic post-gadolinium phases", location: "liver", required: true }
+    - { finding: "normal hepatic contour without nodularity", location: "liver surface", required: false }
+    - { finding: "patent portal vein, hepatic veins, and IVC", location: "hepatic vasculature", required: false }
+  severity: mild
+  laterality: ""
+  negatives:
+    - focal hepatic lesion
+    - cirrhotic morphology
+    - steatosis (hepatic fat)
+    - portal vein thrombosis
+    - biliary dilatation
+    - ascites
+pattern_checks:
+  - { name: normal_mentioned, check_type: regex, pattern: "normal|unremarkable|no.*abnormal|negative|no.*lesion", required: true }
+  - { name: no_focal_lesion, check_type: regex, pattern: "no.*focal|no.*mass|no.*lesion|without.*mass|without.*lesion", required: true }
+  - { name: no_cirrhosis, check_type: regex, pattern: "no.*cirrho|normal.*contour|smooth.*contour|no.*nodular", required: true }
+reference_solution: |
+  MRI of the abdomen with liver protocol demonstrates normal hepatic findings.
+  The liver is normal in size and morphology with smooth contour without
+  nodularity. The hepatic parenchyma demonstrates homogeneous signal on
+  T1-weighted, T2-weighted, and diffusion-weighted sequences without focal
+  lesion. On in-phase and opposed-phase chemical shift imaging, there is no
+  signal loss to suggest hepatic steatosis. Dynamic post-gadolinium imaging
+  shows normal hepatic perfusion without focal enhancement abnormality. The
+  portal vein, hepatic veins, and IVC are patent with normal flow. No biliary
+  dilatation. The gallbladder is unremarkable. No ascites. The spleen is
+  normal in size.
+  Impression: Normal liver MRI without focal hepatic lesion, steatosis, or
+  cirrhotic morphology.
+condition_present: false
+confusion_pair: null
+source_dataset: omnimedvqa-open
+tags:
+  - normal
+  - liver
+  - abdominal
+  - negative-case

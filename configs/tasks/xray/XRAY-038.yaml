@@ -1,0 +1,54 @@
+id: XRAY-038
+name: Left-sided pleural calcification (asbestos-related)
+modality: xray
+anatomy: chest
+task_type: finding_detection
+difficulty: intermediate
+image_ref: xray/omnimedvqa/CXR_0038.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Bilateral pleural plaques with calcification (asbestos-related)"
+  differential:
+    - prior empyema with pleural thickening
+    - prior hemothorax
+    - talc pleurodesis
+    - mesothelioma
+  key_findings:
+    - { finding: "bilateral pleural calcifications en face and in profile", location: "bilateral diaphragmatic and lateral pleura", required: true }
+    - { finding: "holly-leaf pattern of calcified plaques", location: "bilateral hemidiaphragms", required: true }
+    - { finding: "no associated pleural effusion", location: "bilateral", required: false }
+  severity: mild
+  laterality: bilateral
+  negatives:
+    - pleural effusion
+    - lung mass
+    - pulmonary fibrosis
+    - mesothelioma
+    - pneumothorax
+pattern_checks:
+  - { name: pleural_plaque, check_type: regex, pattern: "(?i)(pleural\\s+(plaque|calcification|thicken)|calcified\\s+plaque)", required: true }
+  - { name: asbestos_mentioned, check_type: regex, pattern: "(?i)(asbestos|asbestosis|occupational|exposure)", required: true }
+  - { name: bilateral, check_type: regex, pattern: "(?i)(bilateral|both)", required: true }
+  - { name: diaphragm, check_type: regex, pattern: "(?i)(diaphragm|diaphragmatic)", required: false }
+reference_solution: |
+  PA chest radiograph demonstrates bilateral calcified pleural plaques along the
+  lateral chest walls and on the hemidiaphragms bilaterally, seen both en face
+  and in profile. The plaques have a characteristic holly-leaf morphology. There
+  is no associated pleural effusion or pleural mass to suggest mesothelioma. The
+  lung parenchyma appears clear without interstitial fibrosis or asbestosis. The
+  cardiac silhouette is normal. No pneumothorax. These calcified pleural plaques
+  are pathognomonic for prior asbestos exposure. While plaques themselves are
+  benign, they serve as a marker for asbestos exposure and should prompt
+  surveillance for mesothelioma and asbestos-related lung disease. Low-dose
+  CT screening may be considered depending on clinical risk factors.
+  Impression: Bilateral calcified pleural plaques — asbestos exposure marker.
+condition_present: true
+confusion_pair: null
+source_dataset: omnimedvqa-open
+tags:
+  - pleural-plaque
+  - asbestos
+  - calcification
+  - occupational
+  - bilateral
+  - chest

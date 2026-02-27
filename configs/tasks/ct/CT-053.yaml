@@ -1,0 +1,53 @@
+id: CT-053
+name: Normal chest CT low-dose screening
+modality: ct
+anatomy: chest
+task_type: diagnosis
+difficulty: basic
+image_ref: ct/omnimedvqa/CT_0053.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Normal low-dose chest CT screening"
+  differential:
+    - subcentimeter granuloma below reporting threshold
+    - mild emphysematous changes
+    - dependent atelectasis
+  key_findings:
+    - { finding: "clear lung fields without nodule or mass", location: "bilateral lungs", required: true }
+    - { finding: "normal mediastinum and hila", location: "mediastinum", required: true }
+    - { finding: "no lymphadenopathy", location: "mediastinal stations", required: true }
+    - { finding: "intact thoracic skeleton", location: "ribs, thoracic spine, sternum", required: false }
+  severity: mild
+  laterality: ""
+  negatives:
+    - pulmonary nodule
+    - lung mass
+    - lymphadenopathy
+    - pleural effusion
+    - emphysema
+    - interstitial lung disease
+    - coronary calcification
+pattern_checks:
+  - { name: normal_identified, check_type: regex, pattern: "normal|unremarkable|no\\s+acute|negative|Lung-?RADS.*1|category\\s+1", required: true }
+  - { name: no_nodule, check_type: regex, pattern: "no.{0,30}(nodule|mass|lesion)", required: true }
+  - { name: clear_lungs, check_type: regex, pattern: "clear|no.*consolidat|no.*opacity", required: true }
+reference_solution: |
+  Low-dose non-contrast CT of the chest performed for lung cancer screening
+  demonstrates clear bilateral lung fields without pulmonary nodule, mass,
+  or consolidation. The airways are patent without endobronchial lesion.
+  The mediastinum is unremarkable. No mediastinal or hilar lymphadenopathy.
+  The heart is normal in size. No pleural effusion or pericardial effusion.
+  No evidence of emphysema or interstitial lung disease. The visualized
+  thoracic skeleton is intact without suspicious osseous lesion. Coronary
+  artery calcification is minimal.
+  Impression: Normal low-dose screening chest CT. Lung-RADS category 1
+  (negative). Recommend continued annual screening per guidelines.
+condition_present: false
+confusion_pair: null
+source_dataset: omnimedvqa-open
+tags:
+  - normal
+  - chest
+  - screening
+  - lung-rads
+  - negative-study

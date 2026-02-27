@@ -1,0 +1,54 @@
+id: XRAY-040
+name: Flail chest with multiple bilateral rib fractures
+modality: xray
+anatomy: chest
+task_type: finding_detection
+difficulty: advanced
+image_ref: xray/omnimedvqa/CXR_0040.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Flail chest with multiple bilateral rib fractures"
+  differential:
+    - simple rib fractures without flail
+    - pathologic fractures from metastatic disease
+    - sternal fracture
+  key_findings:
+    - { finding: "multiple rib fractures with two or more fracture sites per rib", location: "left 4th through 7th ribs with segmental fractures", required: true }
+    - { finding: "flail segment involving left lateral chest wall", location: "left lateral ribs", required: true }
+    - { finding: "pulmonary contusion adjacent to fractures", location: "left lower zone", required: false }
+    - { finding: "subcutaneous emphysema", location: "left chest wall", required: false }
+  severity: severe
+  laterality: left
+  negatives:
+    - pneumothorax
+    - hemothorax
+    - aortic injury
+    - sternal fracture
+pattern_checks:
+  - { name: rib_fractures, check_type: regex, pattern: "(?i)(multiple.{0,20}rib\\s+fracture|rib\\s+fracture.{0,20}multiple)", required: true }
+  - { name: flail_mentioned, check_type: regex, pattern: "(?i)flail", required: true }
+  - { name: segmental, check_type: regex, pattern: "(?i)(segmental|two.{0,20}fracture.{0,20}(per|same)\\s+rib|double.{0,20}fracture)", required: true }
+  - { name: contusion_mentioned, check_type: regex, pattern: "(?i)(contusion|opaci.{0,20}adjacent.{0,20}fracture)", required: false }
+reference_solution: |
+  PA chest radiograph demonstrates multiple rib fractures involving the left 4th
+  through 7th ribs, with segmental (two fracture sites per rib) fractures of the
+  5th and 6th ribs, creating a flail segment along the left lateral chest wall.
+  There is associated hazy opacification in the left lower zone adjacent to the
+  fracture sites, consistent with pulmonary contusion. Subtle subcutaneous
+  emphysema is noted along the left lateral chest wall soft tissues. No definite
+  pneumothorax or large hemothorax is identified, though a small component
+  cannot be excluded. The right lung is clear. The mediastinum is midline.
+  Clinical management should include pain control and monitoring for
+  respiratory compromise related to the flail physiology.
+  Impression: Flail chest with multiple left-sided rib fractures and associated
+  pulmonary contusion.
+condition_present: true
+confusion_pair: null
+source_dataset: omnimedvqa-open
+tags:
+  - flail-chest
+  - rib-fracture
+  - trauma
+  - pulmonary-contusion
+  - emergency
+  - chest

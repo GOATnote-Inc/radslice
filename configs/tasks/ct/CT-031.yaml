@@ -1,0 +1,60 @@
+id: CT-031
+name: Hepatocellular carcinoma
+modality: ct
+anatomy: abdomen
+task_type: report_generation
+difficulty: advanced
+image_ref: ct/eurorad/EUR_0031.png
+prompt_template: report_generation
+ground_truth:
+  primary_diagnosis: "Hepatocellular carcinoma with arterial hyperenhancement and washout"
+  differential:
+    - hepatic adenoma
+    - focal nodular hyperplasia
+    - hypervascular metastasis
+    - hemangioma (flash-filling variant)
+    - cholangiocarcinoma
+  key_findings:
+    - { finding: "arterial phase hyperenhancing mass with portal venous washout", location: "right hepatic lobe segment 8", required: true }
+    - { finding: "enhancing pseudocapsule", location: "surrounding the mass", required: true }
+    - { finding: "background cirrhotic liver morphology", location: "liver", required: false }
+    - { finding: "portal vein thrombus enhancement suggesting tumor thrombus", location: "right portal vein", required: false }
+  severity: severe
+  laterality: right
+  negatives:
+    - cavernous hemangioma enhancement pattern
+    - central scar (FNH pattern)
+    - diffuse infiltrative pattern
+    - extrahepatic metastases
+    - ascites
+pattern_checks:
+  - { name: hcc_mentioned, check_type: regex, pattern: "hepatocellular\\s+carcinoma|HCC\\b", required: true }
+  - { name: arterial_enhancement, check_type: regex, pattern: "arterial.*enhanc|hyperenhanc|hypervascular|APHE", required: true }
+  - { name: washout, check_type: regex, pattern: "washout|wash.?out|portal.*hypo|venous.*hypo", required: true }
+  - { name: capsule, check_type: regex, pattern: "capsule|pseudocapsule|LI-?RADS", required: false }
+reference_solution: |
+  Multiphase contrast-enhanced CT of the abdomen performed with arterial,
+  portal venous, and delayed phases demonstrates a 4.5 cm mass in segment 8
+  of the right hepatic lobe. The mass shows avid arterial phase
+  hyperenhancement (APHE) with portal venous phase washout and delayed
+  enhancing pseudocapsule, meeting LI-RADS 5 criteria for definitive
+  hepatocellular carcinoma. The background liver demonstrates nodular
+  contour, widened fissures, and caudate hypertrophy consistent with
+  cirrhosis. There is thrombosis of the right portal vein branch with
+  expansion and arterial enhancement of the thrombus, suggestive of tumor
+  thrombus rather than bland thrombus. No definite extrahepatic disease. No
+  ascites. The spleen is mildly enlarged at 14 cm.
+  Impression: LI-RADS 5 lesion in segment 8 consistent with hepatocellular
+  carcinoma with suspected right portal vein tumor thrombus. Hepatology and
+  surgical oncology consultation recommended for staging and treatment
+  planning.
+condition_present: true
+confusion_pair: null
+source_dataset: eurorad
+tags:
+  - hepatocellular-carcinoma
+  - oncology
+  - abdomen
+  - hepatic
+  - cirrhosis
+  - report-generation

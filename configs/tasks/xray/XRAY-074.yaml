@@ -1,0 +1,59 @@
+id: XRAY-074
+name: Multiple bilateral pulmonary metastases
+modality: xray
+anatomy: chest
+task_type: report_generation
+difficulty: advanced
+image_ref: xray/vindrcxr/VDR_0074.png
+prompt_template: report_generation
+ground_truth:
+  primary_diagnosis: "Multiple bilateral pulmonary metastases (cannonball metastases)"
+  differential:
+    - multifocal pneumonia
+    - granulomatous disease with multiple granulomas
+    - septic emboli
+    - granulomatosis with polyangiitis
+    - lymphoma
+  key_findings:
+    - { finding: "multiple well-defined round opacities of varying sizes", location: "bilateral lung fields", required: true }
+    - { finding: "bilateral and diffuse distribution", location: "bilateral lungs", required: true }
+    - { finding: "nodules range from 1 to 5 cm", location: "bilateral", required: false }
+    - { finding: "no cavitation", location: "within nodules", required: false }
+  severity: severe
+  laterality: bilateral
+  negatives:
+    - solitary nodule
+    - pleural effusion (initially)
+    - calcification
+    - cavitation
+    - lymphadenopathy
+pattern_checks:
+  - { name: metastases, check_type: regex, pattern: "(?i)(metastas|metastatic|cannonball|secondary)", required: true }
+  - { name: multiple_nodules, check_type: regex, pattern: "(?i)(multiple.{0,20}(nodule|mass|opacit)|bilateral.{0,20}(nodule|mass))", required: true }
+  - { name: impression_section, check_type: regex, pattern: "(?i)impression", required: true }
+  - { name: workup_staging, check_type: regex, pattern: "(?i)(CT|staging|primary|biopsy|PET|further)", required: false }
+reference_solution: |
+  FINDINGS: PA chest radiograph demonstrates multiple well-defined round
+  opacities of varying sizes (ranging from approximately 1 to 5 cm) scattered
+  throughout both lung fields. The nodules are bilateral with a predominantly
+  peripheral distribution. No cavitation is identified within the nodules. No
+  calcification is present. No associated pleural effusion or pneumothorax. The
+  cardiac silhouette is normal in size. The mediastinal contours are within
+  normal limits. The visualized osseous structures are intact without lytic
+  lesions.
+  IMPRESSION: Multiple bilateral pulmonary nodules in a pattern highly consistent
+  with pulmonary metastatic disease (cannonball metastases). If no known primary
+  malignancy, CT-guided biopsy of a peripheral nodule is recommended for tissue
+  diagnosis. CT chest, abdomen, and pelvis with contrast is recommended for
+  staging and identification of the primary tumor. PET-CT may be considered.
+condition_present: true
+confusion_pair: null
+source_dataset: vindrcxr
+tags:
+  - metastases
+  - pulmonary-nodules
+  - cannonball
+  - oncology
+  - report-generation
+  - bilateral
+  - chest

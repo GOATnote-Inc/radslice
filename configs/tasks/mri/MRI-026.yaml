@@ -1,0 +1,58 @@
+id: MRI-026
+name: Hippocampal sclerosis (mesial temporal sclerosis)
+modality: mri
+anatomy: head
+task_type: finding_detection
+difficulty: advanced
+image_ref: mri/omnimedvqa/MRI_0026.png
+prompt_template: finding_detection
+ground_truth:
+  primary_diagnosis: "Left mesial temporal sclerosis (hippocampal sclerosis)"
+  differential:
+    - hippocampal glioma (low-grade)
+    - herpes simplex encephalitis (acute)
+    - limbic encephalitis (autoimmune)
+    - hippocampal malformation of cortical development
+  key_findings:
+    - { finding: "volume loss of the left hippocampus compared to the contralateral side", location: "left hippocampus", required: true }
+    - { finding: "increased T2/FLAIR signal in the left hippocampus (gliosis)", location: "left hippocampal body and head", required: true }
+    - { finding: "loss of normal internal architecture of the hippocampus", location: "left hippocampus", required: false }
+    - { finding: "ipsilateral temporal horn dilatation", location: "left temporal horn of the lateral ventricle", required: false }
+  severity: moderate
+  laterality: left
+  negatives:
+    - mass or space-occupying lesion in the temporal lobe
+    - bilateral hippocampal abnormality
+    - restricted diffusion (would suggest acute process)
+    - abnormal enhancement (would suggest tumor or encephalitis)
+    - cortical dysplasia
+pattern_checks:
+  - { name: hippocampal_sclerosis, check_type: regex, pattern: "hippocampal\\s+sclerosis|mesial\\s+temporal\\s+sclerosis|MTS|temporal\\s+lobe\\s+epilepsy", required: true }
+  - { name: volume_loss, check_type: regex, pattern: "volume\\s+loss|atrophy|atrophic|small.*hippocampus|asymmetr", required: true }
+  - { name: signal_change, check_type: regex, pattern: "T2.*hyperintens|FLAIR.*hyperintens|signal.*abnormal|gliosis", required: true }
+  - { name: laterality_left, check_type: regex, pattern: "left", required: true }
+reference_solution: |
+  MRI of the brain with dedicated temporal lobe protocol demonstrates
+  asymmetric hippocampal volumes with the left hippocampus significantly
+  smaller than the right. The left hippocampus shows increased T2 and FLAIR
+  signal intensity representing gliosis, with loss of the normal internal
+  architecture. The left temporal horn of the lateral ventricle is mildly
+  dilated (ex vacuo) secondary to the hippocampal volume loss. No mass
+  lesion or abnormal enhancement is identified in the temporal lobe. No
+  restricted diffusion to suggest an acute process. The right hippocampus
+  is normal in size, morphology, and signal. No evidence of cortical
+  dysplasia or other dual pathology. Quantitative volumetric analysis, if
+  available, would confirm the asymmetry.
+  Impression: Left mesial temporal sclerosis (hippocampal sclerosis) with
+  hippocampal volume loss and T2/FLAIR hyperintense gliosis. Clinical
+  correlation with seizure semiology and EEG findings is recommended for
+  surgical candidacy evaluation.
+condition_present: true
+confusion_pair: null
+source_dataset: omnimedvqa-open
+tags:
+  - hippocampal-sclerosis
+  - epilepsy
+  - neuro
+  - temporal-lobe
+  - atrophy

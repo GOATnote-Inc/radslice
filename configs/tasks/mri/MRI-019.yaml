@@ -1,0 +1,56 @@
+id: MRI-019
+name: Liver hemangioma on MRI
+modality: mri
+anatomy: abdomen
+task_type: diagnosis
+difficulty: intermediate
+image_ref: mri/omnimedvqa/MRI_0019.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Hepatic hemangioma with characteristic peripheral nodular enhancement"
+  differential:
+    - hepatic metastasis (especially hypervascular)
+    - hepatocellular carcinoma
+    - focal nodular hyperplasia
+    - hepatic adenoma
+    - hepatic angiosarcoma
+  key_findings:
+    - { finding: "well-defined homogeneously T2 hyperintense lesion (light bulb sign)", location: "right hepatic lobe segment VII", required: true }
+    - { finding: "peripheral nodular discontinuous enhancement on arterial phase with progressive centripetal fill-in", location: "hepatic mass", required: true }
+    - { finding: "T1 hypointense signal relative to hepatic parenchyma", location: "right hepatic lobe mass", required: false }
+    - { finding: "near-complete or complete fill-in on delayed phase images", location: "hepatic mass", required: false }
+  severity: mild
+  laterality: right
+  negatives:
+    - washout on portal venous or delayed phases
+    - restricted diffusion
+    - central scar
+    - arterial phase hyperenhancement (flash-filling pattern)
+    - capsular retraction
+pattern_checks:
+  - { name: hemangioma_mentioned, check_type: regex, pattern: "hemangioma|haemangioma|cavernous\\s+hemangioma", required: true }
+  - { name: t2_bright, check_type: regex, pattern: "T2.*hyperintens|T2.*bright|light\\s+bulb|markedly.*T2", required: true }
+  - { name: enhancement_pattern, check_type: regex, pattern: "peripheral.*nodular|nodular.*enhanc|centripetal|progressive.*fill|discontinuous.*enhanc", required: true }
+reference_solution: |
+  MRI of the abdomen demonstrates a well-circumscribed lesion in the right
+  hepatic lobe segment VII measuring 3.5 x 3.0 cm. The lesion is markedly T2
+  hyperintense, approaching CSF signal intensity (light bulb sign), and T1
+  hypointense relative to hepatic parenchyma. Dynamic post-gadolinium imaging
+  shows characteristic peripheral nodular discontinuous enhancement on the
+  arterial phase, with progressive centripetal fill-in on the portal venous
+  and delayed phases. On 5-minute delayed images, the lesion demonstrates
+  near-complete fill-in with enhancement isointense to the blood pool. There
+  is no washout appearance. No restricted diffusion on DWI/ADC. These imaging
+  features are diagnostic for a hepatic hemangioma and no further workup is
+  necessary. The remaining hepatic parenchyma is unremarkable.
+  Impression: Hepatic hemangioma in segment VII with classic peripheral nodular
+  enhancement and progressive fill-in pattern. Benign, no follow-up required.
+condition_present: true
+confusion_pair: null
+source_dataset: omnimedvqa-open
+tags:
+  - hemangioma
+  - liver
+  - abdominal
+  - benign
+  - vascular

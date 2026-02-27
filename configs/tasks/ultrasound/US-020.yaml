@@ -1,0 +1,59 @@
+id: US-020
+name: Rotator cuff full-thickness tear
+modality: ultrasound
+anatomy: extremity
+task_type: vqa
+difficulty: expert
+image_ref: ultrasound/omnimedvqa/US_0020.png
+prompt_template: vqa
+ground_truth:
+  primary_diagnosis: "Full-thickness supraspinatus tendon tear"
+  differential:
+    - partial-thickness rotator cuff tear (bursal or articular side)
+    - rotator cuff tendinopathy without tear
+    - calcific tendinitis
+    - subacromial-subdeltoid bursitis
+    - biceps tendon subluxation
+  key_findings:
+    - { finding: "focal hypoechoic defect extending from bursal to articular surface of the supraspinatus tendon", location: "supraspinatus tendon", required: true }
+    - { finding: "non-visualization of the tendon with cartilage interface sign", location: "supraspinatus footprint at the greater tuberosity", required: true }
+    - { finding: "fluid in the subacromial-subdeltoid bursa", location: "subacromial-subdeltoid bursa", required: false }
+    - { finding: "tendon retraction", location: "supraspinatus musculotendinous junction", required: false }
+  severity: moderate
+  laterality: right
+  negatives:
+    - infraspinatus tear
+    - subscapularis tear
+    - biceps tendon tear
+    - glenohumeral joint effusion
+    - Hill-Sachs deformity
+pattern_checks:
+  - { name: tear_identified, check_type: regex, pattern: "tear|rupture|discontinuit|defect", required: true }
+  - { name: supraspinatus, check_type: regex, pattern: "supraspinatus|rotator\\s+cuff", required: true }
+  - { name: full_thickness, check_type: regex, pattern: "full.?thickness|complete|bursal.*articular|articular.*bursal", required: true }
+  - { name: hypoechoic_defect, check_type: regex, pattern: "hypoechoic|anechoic.*defect|fluid.?filled|non.?visuali", required: true }
+reference_solution: |
+  Musculoskeletal ultrasound of the right shoulder demonstrates a
+  full-thickness tear of the supraspinatus tendon. A focal hypoechoic defect
+  is identified extending from the bursal surface to the articular surface
+  of the tendon at its insertion on the greater tuberosity. The cartilage
+  interface sign is present, with the deltoid muscle directly contacting the
+  humeral head cartilage through the torn tendon gap. The tear measures
+  approximately 1.5 cm in the anteroposterior dimension. A small amount of
+  anechoic fluid is seen in the subacromial-subdeltoid bursa. Dynamic
+  examination confirms the defect does not fill with tendon during abduction.
+  The biceps long head tendon is located within the bicipital groove and
+  appears intact. The infraspinatus and subscapularis tendons are intact.
+  Impression: Full-thickness supraspinatus tendon tear measuring 1.5 cm
+  with associated subacromial-subdeltoid bursal fluid. Orthopedic referral
+  or MRI for surgical planning is recommended.
+condition_present: true
+confusion_pair: null
+source_dataset: omnimedvqa-open
+tags:
+  - rotator-cuff
+  - supraspinatus
+  - extremity
+  - msk
+  - tendon-tear
+  - shoulder

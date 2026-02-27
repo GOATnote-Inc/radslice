@@ -1,0 +1,55 @@
+id: CT-037
+name: Normal CT angiogram of circle of Willis
+modality: ct
+anatomy: head
+task_type: vqa
+difficulty: basic
+image_ref: ct/omnimedvqa/CT_0037.png
+prompt_template: vqa
+ground_truth:
+  primary_diagnosis: "Normal CT angiography of the head and neck"
+  differential:
+    - small aneurysm below resolution threshold
+    - mild atherosclerotic irregularity
+    - variant anatomy (fetal PCA, hypoplastic A1)
+  key_findings:
+    - { finding: "patent circle of Willis", location: "circle of Willis", required: true }
+    - { finding: "no aneurysm or vascular malformation", location: "intracranial vasculature", required: true }
+    - { finding: "normal caliber bilateral internal carotid arteries", location: "bilateral ICAs", required: true }
+    - { finding: "patent vertebrobasilar system", location: "vertebral and basilar arteries", required: false }
+  severity: mild
+  laterality: ""
+  negatives:
+    - intracranial aneurysm
+    - arteriovenous malformation
+    - vascular stenosis
+    - dissection
+    - vasospasm
+    - moyamoya pattern
+pattern_checks:
+  - { name: normal_identified, check_type: regex, pattern: "normal|unremarkable|no\\s+acute|patent|negative", required: true }
+  - { name: no_aneurysm, check_type: regex, pattern: "no.{0,30}aneurysm", required: true }
+  - { name: no_stenosis, check_type: regex, pattern: "no.{0,30}(stenosis|occlusion|dissection)", required: true }
+reference_solution: |
+  CT angiography of the head and neck demonstrates a patent circle of Willis
+  with normal caliber and configuration. The bilateral internal carotid
+  arteries are patent without stenosis or dissection. The bilateral middle
+  cerebral arteries, anterior cerebral arteries, and posterior cerebral
+  arteries are patent and of normal caliber. The anterior communicating and
+  posterior communicating arteries are visualized. The vertebral arteries
+  are patent bilaterally with codominant flow. The basilar artery is normal
+  in caliber. No intracranial aneurysm, arteriovenous malformation, or
+  vascular malformation is identified. No significant atherosclerotic
+  stenosis. No vasospasm.
+  Impression: Normal CT angiography of the intracranial vasculature. No
+  aneurysm, stenosis, or vascular malformation.
+condition_present: false
+confusion_pair: null
+source_dataset: omnimedvqa-open
+tags:
+  - normal
+  - head
+  - vascular
+  - cta
+  - negative-study
+  - vqa

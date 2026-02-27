@@ -1,0 +1,51 @@
+id: XRAY-039
+name: Right middle lobe pneumonia
+modality: xray
+anatomy: chest
+task_type: report_generation
+difficulty: basic
+image_ref: xray/vindrcxr/VDR_0039.png
+prompt_template: report_generation
+ground_truth:
+  primary_diagnosis: "Right middle lobe pneumonia"
+  differential:
+    - right middle lobe atelectasis
+    - pulmonary infarct
+    - organizing pneumonia
+  key_findings:
+    - { finding: "airspace opacity with loss of right heart border clarity", location: "right middle lobe", required: true }
+    - { finding: "air bronchograms within the opacity", location: "right middle lobe", required: false }
+    - { finding: "preserved right hemidiaphragm (positive silhouette sign for right heart border, not diaphragm)", location: "right hemidiaphragm", required: true }
+  severity: moderate
+  laterality: right
+  negatives:
+    - pleural effusion
+    - pneumothorax
+    - left lung opacity
+    - cavitation
+    - cardiomegaly
+pattern_checks:
+  - { name: rml_pneumonia, check_type: regex, pattern: "(?i)right\\s+middle\\s+lobe.{0,40}(pneumonia|consolidat|opaci)", required: true }
+  - { name: silhouette_sign, check_type: regex, pattern: "(?i)(silhouette.{0,30}(right\\s+heart|cardiac)|obscur.{0,30}right\\s+heart)", required: true }
+  - { name: impression_section, check_type: regex, pattern: "(?i)impression", required: true }
+  - { name: findings_section, check_type: regex, pattern: "(?i)(findings|technique|comparison|indication)", required: false }
+reference_solution: |
+  FINDINGS: PA chest radiograph demonstrates an airspace opacity projecting over
+  the right lower zone with obscuration of the right heart border, representing a
+  positive silhouette sign localizing the pathology to the right middle lobe. Air
+  bronchograms are seen within the consolidation. The right hemidiaphragm remains
+  sharply defined, confirming the opacity is not in the right lower lobe. The left
+  lung is clear. No pleural effusion or pneumothorax. The cardiac silhouette is
+  normal in size. The mediastinum is unremarkable.
+  IMPRESSION: Right middle lobe consolidation, most likely community-acquired
+  pneumonia. Clinical correlation and follow-up radiograph after treatment
+  recommended to ensure resolution and exclude underlying endobronchial lesion.
+condition_present: true
+confusion_pair: null
+source_dataset: vindrcxr
+tags:
+  - pneumonia
+  - right-middle-lobe
+  - silhouette-sign
+  - report-generation
+  - chest

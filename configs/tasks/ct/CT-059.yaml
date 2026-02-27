@@ -1,0 +1,54 @@
+id: CT-059
+name: Normal renal CT (no stone)
+modality: ct
+anatomy: abdomen
+task_type: diagnosis
+difficulty: basic
+image_ref: ct/eurorad/EUR_0059.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Normal non-contrast CT of the abdomen and pelvis, no urolithiasis"
+  differential:
+    - recently passed stone with residual mild hydronephrosis
+    - phlebolith mimicking distal ureteral stone
+    - small non-obstructing stone below resolution
+  key_findings:
+    - { finding: "no renal or ureteral calculus", location: "bilateral kidneys and ureters", required: true }
+    - { finding: "no hydronephrosis", location: "bilateral renal collecting systems", required: true }
+    - { finding: "normal kidney size and parenchyma", location: "bilateral kidneys", required: true }
+    - { finding: "no perinephric stranding", location: "bilateral perinephric spaces", required: false }
+  severity: mild
+  laterality: ""
+  negatives:
+    - renal calculus
+    - ureteral calculus
+    - hydronephrosis
+    - perinephric stranding
+    - renal mass
+    - bladder calculus
+    - appendicitis
+pattern_checks:
+  - { name: no_stone, check_type: regex, pattern: "no.{0,30}(stone|calcul|lithiasis|urolithiasis)", required: true }
+  - { name: no_hydronephrosis, check_type: regex, pattern: "no.{0,30}(hydronephrosis|obstruction|dilat)", required: true }
+  - { name: normal_kidneys, check_type: regex, pattern: "normal.*kidney|kidney.*normal|unremarkable.*kidney|kidney.*unremarkable", required: true }
+reference_solution: |
+  Non-contrast CT of the abdomen and pelvis performed for evaluation of
+  suspected renal colic demonstrates no renal, ureteral, or bladder
+  calculus. The bilateral kidneys are normal in size (right 11 cm, left
+  11.5 cm) with normal parenchymal attenuation. No hydronephrosis or
+  hydroureter bilaterally. The bilateral ureters are not dilated and can be
+  followed to the bladder without obstructing calculus. No perinephric
+  stranding. The bladder is normally distended without intraluminal
+  calculus. The appendix appears normal. No other acute abdominal pathology
+  identified.
+  Impression: Negative CT for urolithiasis. No stone, hydronephrosis, or
+  perinephric stranding. Consider alternative etiology for flank pain.
+condition_present: false
+confusion_pair: null
+source_dataset: eurorad
+tags:
+  - normal
+  - abdomen
+  - renal
+  - negative-study
+  - stone-protocol

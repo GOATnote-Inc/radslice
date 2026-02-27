@@ -1,0 +1,54 @@
+id: XRAY-027
+name: Pericardial effusion
+modality: xray
+anatomy: chest
+task_type: diagnosis
+difficulty: intermediate
+image_ref: xray/omnimedvqa/CXR_0027.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Pericardial effusion"
+  differential:
+    - cardiomegaly (dilated cardiomyopathy)
+    - globular cardiac shape from valvular disease
+    - pericardial fat pad
+    - constrictive pericarditis
+  key_findings:
+    - { finding: "globular (water-bottle) cardiac silhouette", location: "cardiac silhouette", required: true }
+    - { finding: "markedly enlarged cardiac silhouette with smooth margins", location: "cardiomediastinal", required: true }
+    - { finding: "clear lung fields despite cardiac enlargement", location: "bilateral lungs", required: false }
+    - { finding: "epicardial fat pad sign", location: "cardiac border", required: false }
+  severity: moderate
+  laterality: ""
+  negatives:
+    - pulmonary edema
+    - pleural effusion
+    - pneumothorax
+    - focal consolidation
+    - vascular congestion
+pattern_checks:
+  - { name: pericardial_effusion, check_type: regex, pattern: "(?i)pericardial\\s+effusion", required: true }
+  - { name: cardiac_silhouette, check_type: regex, pattern: "(?i)(water.?bottle|globular|flask|enlarg.{0,30}cardiac|cardiac.{0,30}enlarg)", required: true }
+  - { name: smooth_margins, check_type: regex, pattern: "(?i)(smooth.{0,20}(margin|contour|border)|featureless)", required: false }
+  - { name: echocardiogram, check_type: regex, pattern: "(?i)(echocardiogra|echo|ultrasound)", required: true }
+reference_solution: |
+  PA chest radiograph demonstrates a markedly enlarged cardiac silhouette with a
+  globular, water-bottle configuration and smooth featureless margins. The
+  cardiothoracic ratio is significantly increased, exceeding 0.6. Notably, the
+  lung fields are clear without pulmonary vascular congestion or cephalization,
+  which is atypical for cardiomegaly from heart failure and raises strong
+  suspicion for pericardial effusion rather than true cardiac chamber enlargement.
+  No pleural effusion is identified. The mediastinal contours are otherwise normal.
+  No pneumothorax. The differential epicardial fat pad sign may be present.
+  Urgent echocardiogram is recommended to confirm pericardial effusion and assess
+  for tamponade physiology.
+  Impression: Globular cardiac silhouette — pericardial effusion suspected.
+  Echocardiogram recommended.
+condition_present: true
+confusion_pair: null
+source_dataset: omnimedvqa-open
+tags:
+  - pericardial-effusion
+  - water-bottle-heart
+  - cardiac
+  - chest

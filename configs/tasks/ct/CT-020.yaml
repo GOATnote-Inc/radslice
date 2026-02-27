@@ -1,0 +1,58 @@
+id: CT-020
+name: Splenic laceration from blunt trauma
+modality: ct
+anatomy: abdomen
+task_type: finding_detection
+difficulty: advanced
+image_ref: ct/omnimedvqa/CT_0020.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Grade III splenic laceration with hemoperitoneum"
+  differential:
+    - splenic infarction
+    - splenic vein thrombosis
+    - accessory spleen mimicking clot
+    - hepatic laceration with referred perisplenic fluid
+  key_findings:
+    - { finding: "linear hypoattenuating laceration through splenic parenchyma", location: "spleen mid-body", required: true }
+    - { finding: "perisplenic hematoma", location: "perisplenic space", required: true }
+    - { finding: "hemoperitoneum", location: "perihepatic and pelvic free fluid", required: true }
+    - { finding: "active contrast extravasation", location: "within splenic parenchyma", required: false }
+  severity: severe
+  laterality: left
+  negatives:
+    - hepatic laceration
+    - renal injury
+    - pancreatic injury
+    - mesenteric injury
+    - retroperitoneal hemorrhage
+pattern_checks:
+  - { name: splenic_injury, check_type: regex, pattern: "splenic\\s+(lacerat|injur|ruptur|trauma)|spleen.{0,20}(lacerat|injur)", required: true }
+  - { name: hemoperitoneum, check_type: regex, pattern: "hemoperitoneum|h[ae]moperitoneum|free\\s+fluid|intraperitoneal.*blood", required: true }
+  - { name: grade_mentioned, check_type: regex, pattern: "grade|AAST|III|3", required: false }
+  - { name: laceration, check_type: regex, pattern: "lacerat|tear|fracture.{0,10}spleen", required: true }
+reference_solution: |
+  Contrast-enhanced trauma CT of the abdomen demonstrates a linear
+  hypoattenuating laceration extending through the mid-body of the spleen
+  measuring approximately 5 cm in length, involving greater than 50% of the
+  splenic parenchyma, consistent with AAST Grade III injury. A large
+  perisplenic hematoma is present measuring approximately 8 x 4 cm. Free
+  fluid consistent with hemoperitoneum is seen in the perihepatic space,
+  paracolic gutters, and pelvis. The sentinel clot sign (highest density
+  fluid) is adjacent to the spleen, confirming splenic origin. No active
+  contrast extravasation on this phase. No hepatic, renal, or pancreatic
+  injury identified. The adrenal glands are normal.
+  Impression: AAST Grade III splenic laceration with significant
+  hemoperitoneum. Trauma surgery consultation for consideration of
+  observation with serial imaging versus embolization or operative
+  management.
+condition_present: true
+confusion_pair: null
+source_dataset: omnimedvqa-open
+tags:
+  - splenic-laceration
+  - trauma
+  - emergency
+  - abdomen
+  - hemoperitoneum
+  - finding-detection

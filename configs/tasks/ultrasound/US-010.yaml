@@ -1,0 +1,57 @@
+id: US-010
+name: Thyroid nodule with suspicious features
+modality: ultrasound
+anatomy: neck
+task_type: finding_detection
+difficulty: intermediate
+image_ref: ultrasound/omnimedvqa/US_0010.png
+prompt_template: finding_detection
+ground_truth:
+  primary_diagnosis: "Suspicious thyroid nodule (TI-RADS 4)"
+  differential:
+    - thyroid carcinoma (papillary, follicular, medullary)
+    - follicular adenoma
+    - thyroid cyst with inspissated colloid
+    - hyperplastic nodule
+    - parathyroid adenoma
+  key_findings:
+    - { finding: "hypoechoic solid nodule with irregular margins", location: "right thyroid lobe", required: true }
+    - { finding: "microcalcifications", location: "within the thyroid nodule", required: true }
+    - { finding: "taller-than-wide orientation", location: "right thyroid lobe", required: false }
+    - { finding: "internal vascularity on color Doppler", location: "within the thyroid nodule", required: false }
+  severity: moderate
+  laterality: right
+  negatives:
+    - cervical lymphadenopathy
+    - extrathyroidal extension
+    - contralateral thyroid nodule
+    - tracheal deviation
+    - macrocalcification with comet-tail artifact
+pattern_checks:
+  - { name: nodule_mentioned, check_type: regex, pattern: "nodule|thyroid.*mass|thyroid.*lesion", required: true }
+  - { name: hypoechoic, check_type: regex, pattern: "hypoechoic|low.*echogenic|decreased.*echogenicity", required: true }
+  - { name: microcalcifications, check_type: regex, pattern: "microcalcif|punctate.*calcif|small.*calcif|echogenic.*foci", required: true }
+  - { name: tirads_or_suspicious, check_type: regex, pattern: "TI-?RADS|suspicious|biopsy|FNA|malignan", required: false }
+reference_solution: |
+  Ultrasound of the thyroid gland demonstrates a solid hypoechoic nodule in the
+  right thyroid lobe measuring 1.8 x 1.5 x 1.2 cm. The nodule has irregular
+  margins with scattered microcalcifications appearing as punctate hyperechoic
+  foci without posterior acoustic shadowing. The nodule demonstrates a
+  taller-than-wide orientation on transverse imaging. Color Doppler shows
+  increased internal vascularity. No extrathyroidal extension is identified.
+  The left thyroid lobe is homogeneous without focal nodule. No suspicious
+  cervical lymphadenopathy is seen in the lateral neck compartments. The
+  isthmus is normal in thickness.
+  Impression: Suspicious right thyroid nodule (ACR TI-RADS 4) with hypoechoic
+  composition, irregular margins, and microcalcifications. Fine-needle
+  aspiration biopsy is recommended.
+condition_present: true
+confusion_pair: null
+source_dataset: omnimedvqa-open
+tags:
+  - thyroid
+  - nodule
+  - neck
+  - microcalcification
+  - ti-rads
+  - biopsy

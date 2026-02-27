@@ -54,13 +54,23 @@ class TestCorpusTasks:
     def test_modality_distribution(self):
         tasks = load_tasks_from_dir(TASKS_DIR)
         modalities = {t.modality for t in tasks}
-        # Should have at least X-ray tasks
-        assert "xray" in modalities
+        for m in ("xray", "ct", "mri", "ultrasound"):
+            assert m in modalities, f"Missing modality: {m}"
+
+    def test_modality_counts(self):
+        tasks = load_tasks_from_dir(TASKS_DIR)
+        from collections import Counter
+
+        counts = Counter(t.modality for t in tasks)
+        assert counts["xray"] >= 20
+        assert counts["ct"] >= 10
+        assert counts["mri"] >= 10
+        assert counts["ultrasound"] >= 5
 
     def test_difficulty_distribution(self):
         tasks = load_tasks_from_dir(TASKS_DIR)
         difficulties = {t.difficulty for t in tasks}
-        assert len(difficulties) >= 2, "Expected at least 2 difficulty levels"
+        assert len(difficulties) >= 3, "Expected at least 3 difficulty levels"
 
     def test_confusion_pairs_valid(self):
         tasks = load_tasks_from_dir(TASKS_DIR)
@@ -71,7 +81,23 @@ class TestCorpusTasks:
                     f"{task.id} references unknown confusion_pair {task.confusion_pair}"
                 )
 
+    def test_task_type_distribution(self):
+        tasks = load_tasks_from_dir(TASKS_DIR)
+        task_types = {t.task_type for t in tasks}
+        assert "diagnosis" in task_types
+        assert len(task_types) >= 2, "Expected at least 2 task types"
+
     def test_normal_cases_exist(self):
         tasks = load_tasks_from_dir(TASKS_DIR)
         normal = [t for t in tasks if not t.condition_present]
         assert len(normal) > 0, "Expected at least one normal/negative case"
+
+    def test_confusion_pairs_exist(self):
+        tasks = load_tasks_from_dir(TASKS_DIR)
+        pairs = [t for t in tasks if t.confusion_pair]
+        assert len(pairs) > 0, "Expected at least one confusion pair"
+
+    def test_reference_solutions_present(self):
+        tasks = load_tasks_from_dir(TASKS_DIR)
+        for task in tasks:
+            assert task.reference_solution, f"{task.id} missing reference_solution"

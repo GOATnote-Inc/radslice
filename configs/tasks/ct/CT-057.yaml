@@ -1,0 +1,54 @@
+id: CT-057
+name: Appendicitis negative (normal appendix)
+modality: ct
+anatomy: abdomen
+task_type: diagnosis
+difficulty: basic
+image_ref: ct/eurorad/EUR_0057.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Normal appendix, no evidence of appendicitis"
+  differential:
+    - early appendicitis below imaging threshold
+    - mesenteric lymphadenitis
+    - epiploic appendagitis
+    - right ovarian pathology
+  key_findings:
+    - { finding: "normal-caliber appendix without wall thickening", location: "right lower quadrant", required: true }
+    - { finding: "no periappendiceal fat stranding", location: "surrounding appendix", required: true }
+    - { finding: "appendix measures less than 6 mm", location: "appendix", required: false }
+    - { finding: "no free fluid in right lower quadrant", location: "right lower quadrant", required: false }
+  severity: mild
+  laterality: right
+  negatives:
+    - appendiceal dilatation
+    - appendiceal wall thickening
+    - periappendiceal inflammation
+    - appendicolith
+    - abscess
+    - free fluid
+pattern_checks:
+  - { name: normal_appendix, check_type: regex, pattern: "normal.*appendix|appendix.*normal|no.*appendicitis|unremarkable.*appendix", required: true }
+  - { name: no_inflammation, check_type: regex, pattern: "no.{0,30}(inflam|strand|appendicitis|thicken)", required: true }
+  - { name: no_dilatation, check_type: regex, pattern: "no.{0,30}(dilat|distend|enlarg)|normal.{0,10}(caliber|size|diameter)", required: true }
+reference_solution: |
+  Contrast-enhanced CT of the abdomen and pelvis demonstrates a
+  normal-caliber appendix in the right lower quadrant measuring 5 mm in
+  maximal diameter, well below the 6 mm threshold for concern. The
+  appendiceal wall is thin and enhances normally without thickening. There
+  is no periappendiceal fat stranding or inflammatory change. No
+  appendicolith. No periappendiceal fluid collection or abscess. The cecum
+  and terminal ileum are unremarkable. No mesenteric lymphadenopathy. The
+  right lower quadrant is otherwise unremarkable without free fluid. The
+  remaining visualized bowel appears normal.
+  Impression: Normal appendix without evidence of appendicitis. Alternative
+  etiology for the patient's right lower quadrant pain should be
+  considered.
+condition_present: false
+confusion_pair: null
+source_dataset: eurorad
+tags:
+  - normal
+  - appendix
+  - abdomen
+  - negative-study

@@ -1,0 +1,58 @@
+id: MRI-015
+name: Cavernous malformation with hemosiderin rim
+modality: mri
+anatomy: head
+task_type: finding_detection
+difficulty: intermediate
+image_ref: mri/eurorad/EUR_0015.png
+prompt_template: finding_detection
+ground_truth:
+  primary_diagnosis: "Cerebral cavernous malformation (cavernoma)"
+  differential:
+    - hemorrhagic metastasis
+    - thrombosed AVM
+    - calcified granuloma
+    - developmental venous anomaly with hemorrhage
+    - amyloid angiopathy-related microhemorrhage
+  key_findings:
+    - { finding: "popcorn-like lesion with mixed T1 and T2 signal (blood products of varying ages)", location: "right frontal lobe subcortical", required: true }
+    - { finding: "complete hemosiderin rim appearing as T2/SWI hypointense ring", location: "periphery of the lesion", required: true }
+    - { finding: "no surrounding edema or mass effect", location: "adjacent brain parenchyma", required: false }
+    - { finding: "no enhancement or minimal faint enhancement", location: "within and around the lesion", required: false }
+  severity: moderate
+  laterality: right
+  negatives:
+    - surrounding vasogenic edema (favors tumor)
+    - associated feeding arteries or draining veins (favors AVM)
+    - significant contrast enhancement
+    - mass effect
+    - multiple lesions (if solitary)
+pattern_checks:
+  - { name: cavernoma_mentioned, check_type: regex, pattern: "cavernous\\s+malformat|cavernoma|cavernous\\s+angioma|cavernous\\s+heman", required: true }
+  - { name: hemosiderin_rim, check_type: regex, pattern: "hemosiderin|T2.*hypointens.*rim|dark.*rim|blooming|SWI.*hypointens|iron", required: true }
+  - { name: mixed_signal, check_type: regex, pattern: "mixed.*signal|popcorn|heterogen.*signal|blood.*product|hemorrhag", required: true }
+  - { name: laterality_right, check_type: regex, pattern: "right", required: false }
+reference_solution: |
+  MRI of the brain demonstrates a well-circumscribed lesion in the right
+  frontal lobe subcortical white matter measuring approximately 1.8 x 1.5 cm.
+  The lesion has a characteristic popcorn-like appearance with mixed T1 and T2
+  signal intensities reflecting blood products of varying ages (methemoglobin,
+  hemosiderin, deoxyhemoglobin). A complete rim of T2 hypointense hemosiderin
+  surrounds the lesion, which blooms prominently on SWI sequences. There is no
+  significant surrounding vasogenic edema or mass effect, distinguishing this
+  from a hemorrhagic neoplasm. Minimal to no contrast enhancement is seen. No
+  associated feeding arteries or enlarged draining veins are identified to
+  suggest an arteriovenous malformation. An associated developmental venous
+  anomaly may be present in the adjacent white matter.
+  Impression: Right frontal lobe lesion with imaging characteristics typical
+  of a cerebral cavernous malformation (cavernoma), including popcorn
+  morphology, mixed-age blood products, and complete hemosiderin rim.
+condition_present: true
+confusion_pair: null
+source_dataset: eurorad
+tags:
+  - cavernoma
+  - vascular-malformation
+  - neuro
+  - hemorrhage
+  - congenital

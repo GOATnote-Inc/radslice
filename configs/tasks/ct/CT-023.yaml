@@ -1,0 +1,59 @@
+id: CT-023
+name: Lobar pneumonia with parapneumonic effusion
+modality: ct
+anatomy: chest
+task_type: diagnosis
+difficulty: intermediate
+image_ref: ct/eurorad/EUR_0023.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Right lower lobe lobar pneumonia with parapneumonic effusion"
+  differential:
+    - lung abscess
+    - obstructive pneumonitis from endobronchial lesion
+    - pulmonary infarction
+    - organizing pneumonia
+    - empyema
+  key_findings:
+    - { finding: "dense consolidation with air bronchograms", location: "right lower lobe", required: true }
+    - { finding: "moderate right pleural effusion", location: "right pleural space", required: true }
+    - { finding: "enhancing visceral and parietal pleura", location: "right pleural surfaces", required: false }
+    - { finding: "reactive mediastinal lymph nodes", location: "subcarinal station 7", required: false }
+  severity: moderate
+  laterality: right
+  negatives:
+    - cavitation or abscess formation
+    - endobronchial mass
+    - left lung consolidation
+    - pericardial effusion
+    - empyema with split pleura sign
+pattern_checks:
+  - { name: pneumonia_mentioned, check_type: regex, pattern: "pneumonia|consolidat|infect", required: true }
+  - { name: right_lower_lobe, check_type: regex, pattern: "right\\s+lower\\s+lobe|RLL", required: true }
+  - { name: effusion, check_type: regex, pattern: "pleural\\s+effusion|parapneumonic|effusion", required: true }
+  - { name: air_bronchograms, check_type: regex, pattern: "air\\s+bronchogram", required: false }
+reference_solution: |
+  Contrast-enhanced CT of the chest demonstrates dense lobar consolidation
+  involving the entirety of the right lower lobe with patent air
+  bronchograms, consistent with lobar pneumonia. A moderate right-sided
+  pleural effusion is present, layering dependently in the posterior costophrenic
+  recess. The effusion measures approximately 3 cm in maximal depth. The
+  visceral and parietal pleura show smooth enhancement without the split
+  pleura sign, suggesting simple parapneumonic effusion rather than empyema.
+  Small reactive lymph nodes are present in the subcarinal station. No
+  cavitation or abscess formation within the consolidated lung. The
+  remaining lung parenchyma is clear. No endobronchial lesion identified.
+  No pericardial effusion. The left lung is clear.
+  Impression: Right lower lobe lobar pneumonia with moderate parapneumonic
+  pleural effusion. Clinical correlation with inflammatory markers and
+  consideration of thoracentesis if effusion does not respond to antibiotic
+  therapy.
+condition_present: true
+confusion_pair: null
+source_dataset: eurorad
+tags:
+  - pneumonia
+  - pleural-effusion
+  - chest
+  - pulmonary
+  - infectious

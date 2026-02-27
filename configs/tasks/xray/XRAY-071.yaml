@@ -1,0 +1,43 @@
+id: XRAY-071
+name: VQA - Are there any rib fractures visible?
+modality: xray
+anatomy: chest
+task_type: vqa
+difficulty: intermediate
+image_ref: xray/vindrcxr/VDR_0071.png
+prompt_template: vqa
+ground_truth:
+  primary_diagnosis: "Right posterior rib fractures (8th and 9th ribs)"
+  differential: []
+  key_findings:
+    - { finding: "fracture lines involving right 8th and 9th posterior ribs", location: "right posterior ribs", required: true }
+    - { finding: "cortical disruption", location: "right 8th and 9th ribs", required: true }
+  severity: moderate
+  laterality: right
+  negatives:
+    - left rib fractures
+    - flail segment
+    - pneumothorax
+    - hemothorax
+pattern_checks:
+  - { name: yes_fractures, check_type: regex, pattern: "(?i)(yes|present|identified|there\\s+(is|are)|fracture)", required: true }
+  - { name: rib_fracture, check_type: regex, pattern: "(?i)rib\\s+fracture", required: true }
+  - { name: right_sided, check_type: regex, pattern: "(?i)right", required: true }
+  - { name: rib_numbers, check_type: regex, pattern: "(?i)(8th|9th|eighth|ninth|posterior)", required: false }
+reference_solution: |
+  Yes, there are rib fractures visible on this chest radiograph. Fracture lines
+  are identified involving the right 8th and 9th posterior ribs with cortical
+  disruption and minimal displacement. No flail segment is present as these are
+  single fracture sites. There is no associated pneumothorax or pleural effusion
+  to suggest hemothorax. The lungs are otherwise clear. No pulmonary contusion
+  adjacent to the fracture sites. Clinical management should focus on adequate
+  pain control and incentive spirometry to prevent atelectasis and pneumonia.
+condition_present: true
+confusion_pair: null
+source_dataset: vindrcxr
+tags:
+  - vqa
+  - rib-fracture
+  - trauma
+  - right
+  - chest

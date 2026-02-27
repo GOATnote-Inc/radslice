@@ -1,0 +1,59 @@
+id: MRI-036
+name: Epidural abscess vs disc herniation confusion pair
+modality: mri
+anatomy: spine
+task_type: diagnosis
+difficulty: advanced
+image_ref: mri/eurorad/EUR_0036.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Large L4-L5 disc extrusion mimicking epidural abscess"
+  differential:
+    - epidural abscess
+    - epidural hematoma
+    - sequestered disc fragment
+    - synovial cyst
+    - epidural tumor
+  key_findings:
+    - { finding: "large disc extrusion with epidural component and peripheral enhancement (reactive granulation tissue)", location: "L4-L5 posterior epidural space", required: true }
+    - { finding: "contiguity with the parent disc demonstrating disc desiccation", location: "L4-L5 disc space", required: true }
+    - { finding: "no restricted diffusion within the epidural component on DWI", location: "epidural collection at L4-L5", required: true }
+    - { finding: "normal endplate morphology without erosion", location: "L4 and L5 endplates", required: false }
+  severity: moderate
+  laterality: ""
+  negatives:
+    - restricted diffusion within the epidural collection (would favor abscess)
+    - endplate erosion or destruction (would favor discitis-osteomyelitis)
+    - disc space enhancement (would favor discitis)
+    - paraspinal phlegmon
+    - fever or elevated inflammatory markers (clinical, not imaging)
+pattern_checks:
+  - { name: disc_herniation, check_type: regex, pattern: "disc.*extru|disc.*herniat|herniat.*disc|sequester|disc.*prolapse", required: true }
+  - { name: not_abscess, check_type: regex, pattern: "not.*abscess|rather\\s+than.*abscess|favor.*disc|no.*restrict.*diffusion|against.*infect", required: true }
+  - { name: peripheral_enhancement, check_type: regex, pattern: "peripheral.*enhanc|rim.*enhanc|granulation|reactive", required: true }
+  - { name: level_mentioned, check_type: regex, pattern: "L4.?L5|L4.?5", required: true }
+reference_solution: |
+  MRI of the lumbar spine demonstrates a large disc extrusion at L4-L5 with a
+  prominent epidural component extending posteriorly. The extruded disc
+  material is contiguous with the desiccated L4-L5 parent disc. On post-
+  gadolinium images, there is peripheral enhancement around the disc
+  extrusion representing reactive granulation tissue, which can mimic the rim
+  enhancement seen with an epidural abscess. However, the critical
+  distinguishing feature is the absence of restricted diffusion within the
+  epidural component on DWI/ADC, effectively excluding a pyogenic abscess.
+  Furthermore, the L4 and L5 endplates demonstrate normal morphology without
+  erosion or enhancement, arguing against discitis-osteomyelitis. The disc
+  extrusion compresses the traversing L5 nerve roots and causes moderate
+  spinal canal stenosis. The remaining lumbar levels are unremarkable.
+  Impression: Large L4-L5 disc extrusion with peripheral enhancement
+  (reactive granulation tissue), not epidural abscess. Absence of restricted
+  diffusion and normal endplates are key distinguishing features.
+condition_present: true
+confusion_pair: MRI-035
+source_dataset: eurorad
+tags:
+  - disc-herniation
+  - spine
+  - lumbar
+  - confusion-pair
+  - epidural

@@ -1,0 +1,53 @@
+id: CT-018
+name: Normal abdomen CT
+modality: ct
+anatomy: abdomen
+task_type: diagnosis
+difficulty: basic
+image_ref: ct/omnimedvqa/CT_0018.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Normal abdomen and pelvis CT"
+  differential:
+    - hepatic steatosis below diagnostic threshold
+    - simple renal cysts too small to characterize
+    - physiologic free fluid
+  key_findings:
+    - { finding: "normal solid abdominal organs", location: "liver, spleen, pancreas, kidneys, adrenals", required: true }
+    - { finding: "no bowel obstruction or wall thickening", location: "small and large bowel", required: true }
+    - { finding: "no free fluid or free air", location: "peritoneal cavity", required: true }
+    - { finding: "no lymphadenopathy", location: "mesenteric and retroperitoneal spaces", required: false }
+  severity: mild
+  laterality: ""
+  negatives:
+    - appendicitis
+    - bowel obstruction
+    - free air
+    - solid organ injury
+    - aortic aneurysm
+    - kidney stone
+    - mass lesion
+pattern_checks:
+  - { name: normal_identified, check_type: regex, pattern: "normal|unremarkable|no\\s+acute|negative|no\\s+significant", required: true }
+  - { name: no_obstruction, check_type: regex, pattern: "no.{0,30}(obstruction|dilat|free\\s+air|pneumoperitoneum)", required: true }
+  - { name: no_mass, check_type: regex, pattern: "no.{0,30}(mass|lesion|collection|abscess)", required: true }
+reference_solution: |
+  Contrast-enhanced CT of the abdomen and pelvis demonstrates normal solid
+  abdominal organs. The liver, spleen, pancreas, and bilateral kidneys are
+  normal in size and attenuation with homogeneous enhancement. The adrenal
+  glands are normal. The gallbladder is unremarkable without calculi. No
+  biliary dilatation. The abdominal aorta is normal in caliber. The small
+  and large bowel are normal in caliber without obstruction or wall
+  thickening. The appendix is normal. No free intraperitoneal air or fluid.
+  No mesenteric or retroperitoneal lymphadenopathy. The bladder and
+  visualized pelvic structures are unremarkable.
+  Impression: Normal contrast-enhanced CT of the abdomen and pelvis. No
+  acute abdominal pathology.
+condition_present: false
+confusion_pair: null
+source_dataset: omnimedvqa-open
+tags:
+  - normal
+  - abdomen
+  - baseline
+  - negative-study

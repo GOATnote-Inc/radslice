@@ -1,0 +1,49 @@
+id: XRAY-046
+name: Normal PA CXR - obese body habitus
+modality: xray
+anatomy: chest
+task_type: diagnosis
+difficulty: basic
+image_ref: xray/vindrcxr/VDR_0046.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Normal chest radiograph with obese body habitus"
+  differential: []
+  key_findings:
+    - { finding: "clear lung fields bilaterally", location: "bilateral lungs", required: true }
+    - { finding: "normal cardiac silhouette (may appear prominent due to habitus)", location: "cardiomediastinal", required: true }
+    - { finding: "increased soft tissue opacity from body habitus", location: "bilateral chest wall", required: false }
+  severity: mild
+  laterality: ""
+  negatives:
+    - cardiomegaly
+    - pleural effusion
+    - consolidation
+    - pneumothorax
+    - atelectasis
+    - mass
+pattern_checks:
+  - { name: normal_mentioned, check_type: regex, pattern: "(?i)(normal|no\\s+acute|unremarkable|no.{0,20}significant)", required: true }
+  - { name: lungs_clear, check_type: regex, pattern: "(?i)(clear|no.*opaci|no.*consolidat)", required: true }
+  - { name: habitus_noted, check_type: regex, pattern: "(?i)(obes|body\\s+habitus|large\\s+body|soft\\s+tissue)", required: true }
+  - { name: heart_comment, check_type: regex, pattern: "(?i)(cardiac|heart|cardiothoracic)", required: true }
+reference_solution: |
+  PA chest radiograph in a patient with obese body habitus demonstrates no acute
+  cardiopulmonary abnormality. The lungs are clear bilaterally without focal
+  consolidation, pleural effusion, or pneumothorax. The cardiac silhouette may
+  appear slightly prominent on the frontal projection due to the patient's body
+  habitus with elevated hemidiaphragms, but the cardiothoracic ratio remains
+  within normal limits. The mediastinal contours are normal. The costophrenic
+  angles are sharp. Increased soft tissue density is noted along the chest walls
+  consistent with the body habitus. The visualized bones are intact.
+  Impression: Normal chest radiograph. No acute cardiopulmonary disease. Body
+  habitus may limit sensitivity for small lesions.
+condition_present: false
+confusion_pair: null
+source_dataset: vindrcxr
+tags:
+  - normal
+  - obese
+  - body-habitus
+  - chest
+  - baseline

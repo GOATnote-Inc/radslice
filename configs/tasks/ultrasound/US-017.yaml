@@ -1,0 +1,57 @@
+id: US-017
+name: Normal liver and biliary ultrasound report
+modality: ultrasound
+anatomy: abdomen
+task_type: report_generation
+difficulty: basic
+image_ref: ultrasound/radimagenet/US_0017.png
+prompt_template: report_generation
+ground_truth:
+  primary_diagnosis: "Normal liver and biliary system"
+  differential:
+    - early hepatic steatosis below detection threshold
+    - small hepatic hemangioma below resolution
+    - functional gallbladder dysmotility
+  key_findings:
+    - { finding: "homogeneous liver parenchyma without focal lesion", location: "hepatic parenchyma", required: true }
+    - { finding: "normal gallbladder with thin wall and no calculi", location: "gallbladder", required: true }
+    - { finding: "non-dilated common bile duct", location: "common bile duct", required: false }
+  severity: mild
+  laterality: ""
+  negatives:
+    - hepatic mass or cyst
+    - hepatic steatosis
+    - gallstones
+    - gallbladder wall thickening
+    - biliary dilation
+    - ascites
+    - portal vein thrombosis
+    - splenomegaly
+pattern_checks:
+  - { name: normal_identified, check_type: regex, pattern: "normal|unremarkable|no\\s+(abnormal|pathol|significant)", required: true }
+  - { name: no_hepatic_lesion, check_type: regex, pattern: "no.*(mass|lesion|focal|hemangioma|metastas)", required: true }
+  - { name: no_gallstones, check_type: regex, pattern: "no.*(stone|calcul|lithiasis|cholelithiasis)", required: true }
+  - { name: no_biliary_dilation, check_type: regex, pattern: "no.*(dilat|obstruct|biliary.*dilat)|non.?dilat|normal.*duct", required: true }
+reference_solution: |
+  Complete right upper quadrant ultrasound demonstrates a normal-appearing
+  liver with homogeneous parenchymal echogenicity and smooth hepatic contour.
+  No focal hepatic lesion, mass, or cystic structure is identified. The portal
+  vein is patent with hepatopetal flow. The hepatic veins are normal in caliber.
+  The gallbladder is well-distended with anechoic bile, thin wall measuring
+  less than 3 mm, and no intraluminal calculi, sludge, or polyps. The common
+  bile duct measures 4 mm and is not dilated. No intrahepatic biliary dilation
+  is present. The right kidney is visualized and appears normal. No ascites or
+  splenomegaly is detected.
+  Impression: Normal right upper quadrant ultrasound. No hepatic, biliary,
+  or gallbladder abnormality.
+condition_present: false
+confusion_pair: null
+source_dataset: radimagenet
+tags:
+  - normal
+  - liver
+  - gallbladder
+  - abdomen
+  - hepatobiliary
+  - negative-study
+  - report-generation

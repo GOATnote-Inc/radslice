@@ -1,0 +1,53 @@
+id: XRAY-061
+name: Aortic calcification mimicking mediastinal widening
+modality: xray
+anatomy: chest
+task_type: diagnosis
+difficulty: intermediate
+image_ref: xray/mediconfusion/MCF_0061.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Tortuous calcified aorta without true mediastinal widening"
+  differential:
+    - aortic dissection
+    - aortic aneurysm
+    - mediastinal mass
+    - mediastinal hemorrhage
+  key_findings:
+    - { finding: "prominent aortic contour with wall calcification tracing the aortic margin", location: "aortic arch and descending aorta", required: true }
+    - { finding: "aortic tortuosity without focal aneurysmal dilatation", location: "thoracic aorta", required: true }
+    - { finding: "mediastinal width within normal limits when accounting for tortuosity", location: "mediastinum", required: false }
+  severity: mild
+  laterality: ""
+  negatives:
+    - true aneurysm
+    - aortic dissection
+    - mediastinal mass
+    - pleural cap
+    - tracheal compression
+pattern_checks:
+  - { name: tortuous_aorta, check_type: regex, pattern: "(?i)(tortuou|ectatic|unfolded).{0,20}aort", required: true }
+  - { name: not_aneurysm, check_type: regex, pattern: "(?i)(no.{0,20}(true\\s+)?aneurysm|not.{0,20}aneurysm|without.{0,20}focal.{0,20}dilat|atheroscler)", required: true }
+  - { name: calcification, check_type: regex, pattern: "(?i)(calcif|atheroscler).{0,30}aort", required: true }
+  - { name: no_acute, check_type: regex, pattern: "(?i)(no\\s+acute|no.{0,20}dissect|stable|degenerative)", required: false }
+reference_solution: |
+  PA chest radiograph demonstrates a prominent tortuous thoracic aorta with
+  extensive atherosclerotic wall calcification, which could initially mimic
+  mediastinal widening or aortic aneurysm. However, the aortic wall calcification
+  traces the true outer margin of the aorta, and when the tortuosity is accounted
+  for, there is no focal aneurysmal dilatation. The mediastinal width is within
+  normal limits for the degree of aortic ectasia. No pleural cap or tracheal
+  compression. The lung fields are clear. No pleural effusion. The cardiac
+  silhouette is within normal limits. This represents age-related atherosclerotic
+  change and is not concerning for acute aortic pathology.
+  Impression: Tortuous calcified aorta — atherosclerotic change, no true
+  mediastinal widening or aneurysm.
+condition_present: true
+confusion_pair: XRAY-010
+source_dataset: mediconfusion
+tags:
+  - aortic-tortuosity
+  - mediastinal-widening-mimic
+  - atherosclerosis
+  - confusion-pair
+  - chest

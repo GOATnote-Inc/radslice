@@ -1,0 +1,59 @@
+id: MRI-013
+name: Chiari I malformation with syringomyelia
+modality: mri
+anatomy: head
+task_type: finding_detection
+difficulty: intermediate
+image_ref: mri/omnimedvqa/MRI_0013.png
+prompt_template: finding_detection
+ground_truth:
+  primary_diagnosis: "Chiari I malformation with associated cervical syringomyelia"
+  differential:
+    - Chiari I malformation without syrinx
+    - acquired tonsillar ectopia (from intracranial hypotension)
+    - Chiari 1.5 malformation (tonsils plus brainstem descent)
+    - posterior fossa arachnoid cyst
+  key_findings:
+    - { finding: "cerebellar tonsillar descent greater than 5 mm below the foramen magnum", location: "craniocervical junction", required: true }
+    - { finding: "peg-like morphology of the cerebellar tonsils", location: "inferior cerebellar tonsils", required: true }
+    - { finding: "intramedullary T2 hyperintense cavity consistent with syringomyelia", location: "cervical spinal cord C3-C6", required: true }
+    - { finding: "crowding of the posterior fossa with effacement of the retrocerebellar CSF spaces", location: "posterior fossa", required: false }
+  severity: moderate
+  laterality: ""
+  negatives:
+    - brainstem descent below the foramen magnum
+    - myelomalacia
+    - hydrocephalus
+    - spinal cord tumor causing secondary syrinx
+    - tethered cord
+pattern_checks:
+  - { name: chiari_mentioned, check_type: regex, pattern: "Chiari|tonsillar.*ectop|tonsillar.*hernia|tonsillar.*descent", required: true }
+  - { name: syrinx_mentioned, check_type: regex, pattern: "syrinx|syringomyelia|intramedullary.*cav|cord.*cav", required: true }
+  - { name: foramen_magnum, check_type: regex, pattern: "foramen\\s+magnum|craniocervical|5\\s*mm", required: true }
+  - { name: cervical_location, check_type: regex, pattern: "cervical|C[3-6]", required: false }
+reference_solution: |
+  Sagittal T1 and T2-weighted MRI of the craniocervical junction demonstrates
+  peg-like cerebellar tonsils extending approximately 12 mm below the foramen
+  magnum, consistent with a Chiari I malformation. The posterior fossa is
+  crowded with effacement of the retrocerebellar CSF spaces and narrowing of
+  the foramen magnum. There is an associated intramedullary T2 hyperintense
+  cavity within the cervical spinal cord extending from C3 through C6,
+  measuring up to 8 mm in anteroposterior diameter, consistent with
+  syringomyelia. The spinal cord is expanded at the level of the syrinx. No
+  abnormal enhancement is seen to suggest an underlying spinal cord neoplasm.
+  The brainstem is normally positioned without descent. No hydrocephalus.
+  CSF flow study, if performed, would be expected to show diminished flow at
+  the craniocervical junction.
+  Impression: Chiari I malformation with tonsillar descent of 12 mm and
+  associated cervical syringomyelia (C3-C6). Neurosurgical consultation
+  recommended for consideration of posterior fossa decompression.
+condition_present: true
+confusion_pair: null
+source_dataset: omnimedvqa-open
+tags:
+  - chiari
+  - syringomyelia
+  - neuro
+  - congenital
+  - craniocervical
+  - posterior-fossa

@@ -1,0 +1,59 @@
+id: CT-052
+name: Chronic pancreatitis (confusion pair for PDAC)
+modality: ct
+anatomy: abdomen
+task_type: diagnosis
+difficulty: advanced
+image_ref: ct/eurorad/EUR_0052.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Chronic pancreatitis with calcifications and duct dilatation"
+  differential:
+    - pancreatic ductal adenocarcinoma
+    - autoimmune pancreatitis
+    - main duct IPMN
+    - pancreatic neuroendocrine tumor
+  key_findings:
+    - { finding: "pancreatic parenchymal calcifications", location: "throughout pancreatic body and tail", required: true }
+    - { finding: "dilated main pancreatic duct (chain of lakes)", location: "main pancreatic duct", required: true }
+    - { finding: "pancreatic parenchymal atrophy", location: "pancreatic body and tail", required: false }
+    - { finding: "no discrete hypodense mass", location: "pancreas", required: true }
+  severity: moderate
+  laterality: ""
+  negatives:
+    - discrete pancreatic mass
+    - biliary obstruction with abrupt cutoff
+    - double duct sign with mass
+    - vascular encasement
+    - peripancreatic lymphadenopathy
+    - hepatic metastases
+pattern_checks:
+  - { name: chronic_pancreatitis, check_type: regex, pattern: "chronic\\s+pancreatitis", required: true }
+  - { name: calcifications, check_type: regex, pattern: "calcif|lithiasis|stone|intraductal.*calcul", required: true }
+  - { name: duct_dilatation, check_type: regex, pattern: "duct.*dilat|dilat.*duct|chain\\s+of\\s+lakes|beaded", required: true }
+  - { name: no_mass, check_type: regex, pattern: "no.{0,20}(mass|neoplasm|tumor|tumour)|without.*mass", required: false }
+reference_solution: |
+  Non-contrast CT of the abdomen demonstrates diffuse pancreatic parenchymal
+  and intraductal calcifications throughout the body and tail of the
+  pancreas, consistent with chronic calcific pancreatitis. The main
+  pancreatic duct is irregularly dilated with alternating segments of
+  dilatation and stricture creating a chain of lakes appearance. The
+  pancreatic parenchyma is atrophic, particularly in the body and tail.
+  Importantly, no discrete hypodense mass is identified to suggest
+  superimposed malignancy, though CT sensitivity for mass detection in the
+  setting of chronic pancreatitis is limited. The common bile duct is normal
+  in caliber without biliary obstruction. No peripancreatic
+  lymphadenopathy. No vascular encasement. No ascites.
+  Impression: Chronic calcific pancreatitis with ductal dilatation and
+  parenchymal atrophy. No discrete mass identified, though MRI/MRCP and
+  clinical follow-up recommended given increased malignancy risk in chronic
+  pancreatitis. EUS may be considered if clinical suspicion persists.
+condition_present: true
+confusion_pair: CT-051
+source_dataset: eurorad
+tags:
+  - chronic-pancreatitis
+  - calcification
+  - abdomen
+  - gastrointestinal
+  - confusion-pair

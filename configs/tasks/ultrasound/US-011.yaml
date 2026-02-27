@@ -1,0 +1,57 @@
+id: US-011
+name: Pericardial effusion on point-of-care cardiac ultrasound
+modality: ultrasound
+anatomy: chest
+task_type: diagnosis
+difficulty: advanced
+image_ref: ultrasound/omnimedvqa/US_0011.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Large pericardial effusion"
+  differential:
+    - cardiac tamponade
+    - pleural effusion mimicking pericardial collection
+    - epicardial fat pad
+    - pericardial cyst
+    - loculated pericardial effusion
+  key_findings:
+    - { finding: "circumferential anechoic pericardial fluid collection", location: "pericardial space", required: true }
+    - { finding: "right ventricular diastolic collapse", location: "right ventricle free wall", required: false }
+    - { finding: "swinging heart motion within the effusion", location: "cardiac silhouette", required: false }
+  severity: severe
+  laterality: ""
+  negatives:
+    - left ventricular systolic dysfunction
+    - valvular regurgitation
+    - pleural effusion
+    - aortic dissection flap
+    - pericardial thickening or calcification
+pattern_checks:
+  - { name: pericardial_effusion, check_type: regex, pattern: "pericardial\\s+effusion|pericardial.*fluid|fluid.*pericardi", required: true }
+  - { name: anechoic_or_echo_free, check_type: regex, pattern: "anechoic|echo.?free|dark.*fluid|simple.*fluid", required: true }
+  - { name: circumferential, check_type: regex, pattern: "circumferential|surrounding|diffuse|large", required: true }
+  - { name: tamponade_assessment, check_type: regex, pattern: "tamponade|RV.*collaps|diastolic.*collaps|no.*tamponade", required: false }
+reference_solution: |
+  Point-of-care cardiac ultrasound in the subxiphoid view demonstrates a large
+  circumferential anechoic fluid collection surrounding the heart within the
+  pericardial space, consistent with a pericardial effusion. The effusion
+  measures approximately 2.5 cm in the largest pocket posterior to the left
+  ventricle. There is early diastolic collapse of the right ventricular free
+  wall, suggesting elevated intrapericardial pressure and impending tamponade
+  physiology. The heart demonstrates a swinging motion within the fluid. Left
+  ventricular systolic function appears grossly preserved. No significant
+  pleural effusion is identified. The descending aorta is normal in caliber
+  without evidence of dissection flap. The IVC appears plethoric with
+  diminished respiratory variation, corroborating elevated right-sided pressures.
+  Impression: Large pericardial effusion with early echocardiographic signs of
+  tamponade. Emergent pericardiocentesis should be considered.
+condition_present: true
+confusion_pair: null
+source_dataset: omnimedvqa-open
+tags:
+  - pericardial-effusion
+  - cardiac
+  - chest
+  - point-of-care
+  - tamponade
+  - emergency

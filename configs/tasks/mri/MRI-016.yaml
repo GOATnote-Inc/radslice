@@ -1,0 +1,55 @@
+id: MRI-016
+name: Normal pressure hydrocephalus
+modality: mri
+anatomy: head
+task_type: diagnosis
+difficulty: advanced
+image_ref: mri/omnimedvqa/MRI_0016.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Normal pressure hydrocephalus (NPH)"
+  differential:
+    - cerebral atrophy (ex vacuo ventriculomegaly)
+    - obstructive hydrocephalus
+    - Alzheimer disease with secondary ventriculomegaly
+    - aqueductal stenosis
+  key_findings:
+    - { finding: "ventriculomegaly out of proportion to sulcal enlargement (Evans index >0.3)", location: "lateral ventricles bilaterally", required: true }
+    - { finding: "tight high-convexity sulci with disproportionately enlarged sylvian fissures (DESH pattern)", location: "cerebral convexity and sylvian fissures", required: true }
+    - { finding: "callosal angle less than 90 degrees on coronal images", location: "corpus callosum at the level of the posterior commissure", required: false }
+    - { finding: "aqueductal flow void on T2-weighted images", location: "cerebral aqueduct", required: false }
+  severity: moderate
+  laterality: ""
+  negatives:
+    - periventricular signal abnormality suggesting transependymal CSF flow
+    - obstructing mass at the aqueduct
+    - generalized cerebral atrophy with proportionate sulcal enlargement
+    - focal parenchymal lesion
+pattern_checks:
+  - { name: nph_mentioned, check_type: regex, pattern: "normal\\s+pressure\\s+hydrocephalus|NPH|communicating\\s+hydrocephalus", required: true }
+  - { name: ventriculomegaly, check_type: regex, pattern: "ventriculomegal|dilat.*ventricle|ventricle.*enlarg|Evans.*index", required: true }
+  - { name: desh_or_disproportion, check_type: regex, pattern: "DESH|disproportion|tight.*sulc|high.?convexity|sylvian.*fissure.*enlarg", required: true }
+reference_solution: |
+  MRI of the brain demonstrates disproportionate ventriculomegaly affecting all
+  four ventricles. The Evans index exceeds 0.3, confirming ventriculomegaly.
+  Notably, there is a disproportionately enlarged subarachnoid space
+  hydrocephalus (DESH) pattern with widened sylvian fissures and tight
+  high-convexity sulci, distinguishing this from generalized cerebral atrophy.
+  The callosal angle measures approximately 70 degrees on coronal images at the
+  level of the posterior commissure. The cerebral aqueduct is patent with a
+  prominent flow void on T2-weighted images, suggesting increased CSF pulsatile
+  flow. No obstructing lesion is identified. Mild periventricular T2/FLAIR
+  signal may represent transependymal CSF migration. The clinical triad of gait
+  disturbance, cognitive decline, and urinary incontinence should be correlated.
+  Impression: Imaging findings consistent with normal pressure hydrocephalus
+  (NPH) with DESH pattern. CSF tap test and neurosurgical shunt evaluation
+  recommended.
+condition_present: true
+confusion_pair: null
+source_dataset: omnimedvqa-open
+tags:
+  - hydrocephalus
+  - nph
+  - neuro
+  - dementia
+  - csf-dynamics

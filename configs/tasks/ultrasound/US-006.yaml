@@ -1,0 +1,57 @@
+id: US-006
+name: Acute cholecystitis with gallbladder wall thickening
+modality: ultrasound
+anatomy: abdomen
+task_type: diagnosis
+difficulty: intermediate
+image_ref: ultrasound/radimagenet/US_0006.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Acute cholecystitis"
+  differential:
+    - gangrenous cholecystitis
+    - gallbladder hydrops
+    - adenomyomatosis
+    - hepatitis with reactive wall edema
+    - congestive heart failure with wall edema
+  key_findings:
+    - { finding: "gallbladder wall thickening greater than 3 mm", location: "gallbladder wall", required: true }
+    - { finding: "pericholecystic fluid", location: "gallbladder fossa", required: true }
+    - { finding: "sonographic Murphy sign positive", location: "gallbladder fundus", required: true }
+    - { finding: "hyperechoic intraluminal calculus with posterior acoustic shadowing", location: "gallbladder neck", required: false }
+  severity: moderate
+  laterality: ""
+  negatives:
+    - common bile duct dilation
+    - intrahepatic biliary dilation
+    - gallbladder perforation
+    - emphysematous change
+    - hepatic abscess
+pattern_checks:
+  - { name: cholecystitis_mentioned, check_type: regex, pattern: "cholecystitis|inflam.*(gallbladder|GB)", required: true }
+  - { name: wall_thickening, check_type: regex, pattern: "wall.*(thicken|edema|>\\s*3\\s*mm)|thicken.*wall", required: true }
+  - { name: pericholecystic_fluid, check_type: regex, pattern: "pericholecystic.*fluid|fluid.*(around|surround|adjacent).*gallbladder", required: true }
+  - { name: murphy_sign, check_type: regex, pattern: "Murphy|sonographic.*Murphy|Murphy.*positive", required: false }
+reference_solution: |
+  Right upper quadrant ultrasound demonstrates a distended gallbladder with
+  diffuse wall thickening measuring approximately 6 mm, exceeding the normal
+  threshold of 3 mm. A small amount of pericholecystic fluid is noted
+  surrounding the gallbladder fundus and body. A hyperechoic focus with
+  posterior acoustic shadowing is identified at the gallbladder neck, consistent
+  with an impacted calculus. The sonographic Murphy sign is positive, with focal
+  tenderness elicited upon transducer pressure over the gallbladder. The common
+  bile duct measures 4 mm and is not dilated. No intrahepatic biliary dilation
+  is present. The adjacent hepatic parenchyma is unremarkable.
+  Impression: Acute calculous cholecystitis with gallbladder wall thickening,
+  pericholecystic fluid, and positive sonographic Murphy sign. Surgical
+  consultation recommended.
+condition_present: true
+confusion_pair: US-001
+source_dataset: radimagenet
+tags:
+  - cholecystitis
+  - gallbladder
+  - abdomen
+  - hepatobiliary
+  - wall-thickening
+  - emergency

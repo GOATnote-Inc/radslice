@@ -1,0 +1,52 @@
+id: XRAY-063
+name: Subpulmonic effusion mimicking elevated hemidiaphragm
+modality: xray
+anatomy: chest
+task_type: diagnosis
+difficulty: advanced
+image_ref: xray/mediconfusion/MCF_0063.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Left subpulmonic pleural effusion"
+  differential:
+    - elevated left hemidiaphragm (phrenic nerve palsy)
+    - diaphragmatic eventration
+    - left lower lobe atelectasis
+  key_findings:
+    - { finding: "apparent elevation of the left hemidiaphragm with laterally peaked contour", location: "left hemidiaphragm", required: true }
+    - { finding: "lateral peaking of the diaphragmatic contour (not at the midpoint)", location: "left hemidiaphragm", required: true }
+    - { finding: "increased distance between gastric air bubble and apparent diaphragm", location: "left subdiaphragmatic region", required: false }
+  severity: moderate
+  laterality: left
+  negatives:
+    - true hemidiaphragm elevation
+    - phrenic nerve palsy
+    - diaphragmatic eventration
+    - pneumothorax
+pattern_checks:
+  - { name: subpulmonic_effusion, check_type: regex, pattern: "(?i)(subpulmonic\\s+effusion|sub.?pulmonic)", required: true }
+  - { name: lateral_peak, check_type: regex, pattern: "(?i)(lateral.{0,20}peak|peak.{0,20}lateral|contour.{0,20}lateral)", required: true }
+  - { name: not_elevation, check_type: regex, pattern: "(?i)(not.{0,20}(true\\s+)?elevat|rather\\s+than.{0,20}elevat|effusion.{0,20}not.{0,20}diaphragm)", required: true }
+  - { name: decubitus, check_type: regex, pattern: "(?i)(decubitus|lateral.{0,20}decubitus|ultrasound|confirm)", required: false }
+reference_solution: |
+  PA chest radiograph demonstrates what appears to be an elevated left
+  hemidiaphragm. However, the diaphragmatic contour peaks laterally rather than
+  at its midpoint, which is characteristic of a subpulmonic pleural effusion
+  rather than true hemidiaphragm elevation. Additionally, the distance between
+  the gastric air bubble and the apparent left hemidiaphragm is increased,
+  suggesting interposed fluid. A left lateral decubitus view would demonstrate
+  layering of the fluid along the dependent chest wall, confirming a pleural
+  effusion. The right lung is clear. No pneumothorax. The cardiac silhouette is
+  normal. This diagnosis is important as it changes management from observation
+  (for simple diaphragm elevation) to evaluation for effusion etiology.
+  Impression: Left subpulmonic pleural effusion — not true hemidiaphragm
+  elevation. Decubitus view or ultrasound recommended for confirmation.
+condition_present: true
+confusion_pair: XRAY-009
+source_dataset: mediconfusion
+tags:
+  - subpulmonic-effusion
+  - diaphragm-mimic
+  - confusion-pair
+  - chest
+  - pleural

@@ -1,0 +1,61 @@
+id: CT-048
+name: Renal cell carcinoma
+modality: ct
+anatomy: abdomen
+task_type: report_generation
+difficulty: advanced
+image_ref: ct/eurorad/EUR_0048.png
+prompt_template: report_generation
+ground_truth:
+  primary_diagnosis: "Left renal cell carcinoma with renal vein extension"
+  differential:
+    - renal oncocytoma
+    - angiomyolipoma (fat-poor variant)
+    - urothelial carcinoma of renal pelvis
+    - renal abscess
+    - complex cystic nephroma
+  key_findings:
+    - { finding: "heterogeneously enhancing solid renal mass", location: "left kidney upper pole", required: true }
+    - { finding: "tumor thrombus in left renal vein", location: "left renal vein extending toward IVC", required: true }
+    - { finding: "necrotic areas within mass", location: "central portion of mass", required: false }
+    - { finding: "no macroscopic fat within mass", location: "mass interior", required: false }
+  severity: severe
+  laterality: left
+  negatives:
+    - bilateral renal masses
+    - macroscopic fat (angiomyolipoma)
+    - IVC thrombus extension
+    - adrenal metastasis
+    - lung metastases on visualized lung bases
+    - renal pelvis invasion pattern
+pattern_checks:
+  - { name: rcc_mentioned, check_type: regex, pattern: "renal\\s+cell\\s+carcinoma|RCC\\b|renal.*malignan|renal.*carcinoma", required: true }
+  - { name: renal_mass, check_type: regex, pattern: "renal\\s+mass|kidney.*mass|mass.*kidney", required: true }
+  - { name: tumor_thrombus, check_type: regex, pattern: "tumor\\s+thrombus|venous.*thrombus|renal\\s+vein.{0,20}(thrombus|extension|involve)", required: true }
+  - { name: left_kidney, check_type: regex, pattern: "left.*kidney|left.*renal", required: true }
+reference_solution: |
+  Multiphase contrast-enhanced CT of the abdomen demonstrates a large
+  heterogeneously enhancing solid mass arising from the upper pole of the
+  left kidney, measuring 7.2 x 6.5 x 6.0 cm. The mass shows avid
+  corticomedullary phase enhancement with central areas of necrosis. No
+  macroscopic fat is identified within the mass, arguing against
+  angiomyolipoma. Tumor thrombus is present extending from the mass into
+  the left renal vein, with expansion of the vein to 2.2 cm in diameter.
+  The thrombus approaches but does not extend into the inferior vena cava.
+  The right kidney is normal. No retroperitoneal or para-aortic
+  lymphadenopathy exceeding 1 cm. The bilateral adrenal glands are normal.
+  Visualized lung bases are clear without metastatic nodules.
+  Impression: Large left upper pole renal mass consistent with renal cell
+  carcinoma (T3a) with left renal vein tumor thrombus. No IVC extension.
+  No distant metastases on this study. Urologic oncology referral for
+  surgical planning. Complete staging with chest CT recommended.
+condition_present: true
+confusion_pair: null
+source_dataset: eurorad
+tags:
+  - renal-cell-carcinoma
+  - oncology
+  - abdomen
+  - renal
+  - tumor-thrombus
+  - report-generation

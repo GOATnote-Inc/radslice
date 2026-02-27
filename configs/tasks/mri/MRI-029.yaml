@@ -1,0 +1,51 @@
+id: MRI-029
+name: Normal shoulder MRI
+modality: mri
+anatomy: shoulder
+task_type: diagnosis
+difficulty: basic
+image_ref: mri/omnimedvqa/MRI_0029.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Normal left shoulder MRI"
+  differential:
+    - mild supraspinatus tendinopathy (age-related)
+    - incidental acromioclavicular joint arthrosis
+    - incidental subacromial spur
+  key_findings:
+    - { finding: "intact rotator cuff tendons with normal signal and morphology", location: "supraspinatus, infraspinatus, subscapularis, teres minor", required: true }
+    - { finding: "intact glenoid labrum without tear or detachment", location: "glenoid labrum circumferentially", required: true }
+    - { finding: "normal glenohumeral joint alignment", location: "glenohumeral joint", required: false }
+  severity: mild
+  laterality: left
+  negatives:
+    - rotator cuff tear
+    - labral tear or detachment
+    - glenohumeral dislocation or subluxation
+    - biceps tendon pathology
+    - bone marrow edema
+    - fracture
+pattern_checks:
+  - { name: normal_mentioned, check_type: regex, pattern: "normal|unremarkable|no.*abnormal|negative|intact", required: true }
+  - { name: no_tear, check_type: regex, pattern: "no.*tear|intact.*cuff|intact.*tendon|without.*tear|intact.*rotator", required: true }
+  - { name: laterality_left, check_type: regex, pattern: "left", required: true }
+reference_solution: |
+  MRI of the left shoulder demonstrates normal findings. The supraspinatus,
+  infraspinatus, subscapularis, and teres minor tendons are intact with normal
+  low signal and morphology on all sequences. No rotator cuff tendinopathy or
+  tear. The long head of the biceps tendon is in normal position within the
+  bicipital groove. The glenoid labrum is intact circumferentially without
+  tear, detachment, or paralabral cyst. The glenohumeral joint is normally
+  aligned without subluxation or dislocation. No joint effusion. The
+  acromioclavicular joint is normal. Normal acromion morphology without
+  significant subacromial spurring. No bone marrow edema or fracture.
+  Impression: Normal left shoulder MRI without evidence of rotator cuff
+  pathology, labral tear, or other abnormality.
+condition_present: false
+confusion_pair: null
+source_dataset: omnimedvqa-open
+tags:
+  - normal
+  - shoulder
+  - musculoskeletal
+  - negative-case

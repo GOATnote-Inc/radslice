@@ -1,0 +1,48 @@
+id: XRAY-066
+name: Hair braid artifact mimicking lung mass
+modality: xray
+anatomy: chest
+task_type: diagnosis
+difficulty: basic
+image_ref: xray/mediconfusion/MCF_0066.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Hair braid artifact mimicking lung opacity"
+  differential:
+    - lung mass or nodule
+    - pleural-based mass
+    - rib lesion
+  key_findings:
+    - { finding: "braided linear opacity overlying the lung field", location: "right upper zone", required: true }
+    - { finding: "opacity extends beyond the thoracic cage", location: "right chest wall", required: true }
+    - { finding: "characteristic woven/braided pattern", location: "right upper zone", required: false }
+  severity: mild
+  laterality: right
+  negatives:
+    - true lung mass
+    - pneumothorax
+    - pleural effusion
+    - rib lesion
+pattern_checks:
+  - { name: artifact_mentioned, check_type: regex, pattern: "(?i)(artifact|hair\\s+braid|external|extrinsic|overlay)", required: true }
+  - { name: not_lung_lesion, check_type: regex, pattern: "(?i)(not.{0,20}(lung|pulmonary).{0,20}(mass|lesion|nodule)|artifact.{0,20}not)", required: true }
+  - { name: extends_beyond, check_type: regex, pattern: "(?i)(extend.{0,20}beyond|outside.{0,20}(thorax|chest)|extrinsic|external)", required: true }
+reference_solution: |
+  PA chest radiograph demonstrates a linear opacity with a woven or braided
+  pattern overlying the right upper lung zone. This opacity extends beyond the
+  thoracic cage margins, confirming it is external to the patient and represents
+  a hair braid artifact. No true pulmonary parenchymal abnormality is identified
+  once the artifact is recognized. The lungs are clear bilaterally. No pleural
+  effusion, pneumothorax, or true mass. The cardiac silhouette is normal. A
+  repeat radiograph with the hair repositioned away from the chest can be obtained
+  if there is clinical concern, though the artifact pattern is characteristic.
+  Impression: Hair braid artifact — no true pulmonary abnormality.
+condition_present: true
+confusion_pair: XRAY-008
+source_dataset: mediconfusion
+tags:
+  - hair-braid-artifact
+  - mass-mimic
+  - artifact
+  - confusion-pair
+  - chest

@@ -1,0 +1,57 @@
+id: CT-043
+name: Cholecystitis with gallstones
+modality: ct
+anatomy: abdomen
+task_type: vqa
+difficulty: intermediate
+image_ref: ct/omnimedvqa/CT_0043.png
+prompt_template: vqa
+ground_truth:
+  primary_diagnosis: "Acute calculous cholecystitis"
+  differential:
+    - acalculous cholecystitis
+    - gallbladder carcinoma
+    - gallbladder polyp
+    - pericholecystic hepatitis
+    - Mirizzi syndrome
+  key_findings:
+    - { finding: "gallbladder distension with wall thickening greater than 3 mm", location: "gallbladder", required: true }
+    - { finding: "hyperdense gallstones", location: "gallbladder neck", required: true }
+    - { finding: "pericholecystic fat stranding and fluid", location: "gallbladder fossa", required: true }
+    - { finding: "gallbladder wall hyperenhancement", location: "gallbladder wall", required: false }
+  severity: moderate
+  laterality: right
+  negatives:
+    - common bile duct dilatation
+    - gallbladder perforation
+    - emphysematous cholecystitis (no gas)
+    - porcelain gallbladder
+    - hepatic abscess
+pattern_checks:
+  - { name: cholecystitis_mentioned, check_type: regex, pattern: "cholecystitis", required: true }
+  - { name: gallstones, check_type: regex, pattern: "gallstone|cholelithiasis|calcul.*gallbladder|stone.*gallbladder", required: true }
+  - { name: wall_thickening, check_type: regex, pattern: "wall\\s+thicken|thicken.*wall|distend|inflam.*gallbladder", required: true }
+  - { name: pericholecystic, check_type: regex, pattern: "pericholecystic|fat\\s+strand|surrounding.*inflam|gallbladder.*fossa.*fluid", required: false }
+reference_solution: |
+  Contrast-enhanced CT of the abdomen demonstrates a distended gallbladder
+  with diffuse wall thickening measuring up to 5 mm with mural
+  hyperenhancement. Multiple hyperdense gallstones are present, with the
+  largest impacted at the gallbladder neck measuring 12 mm. There is
+  pericholecystic fat stranding and a thin rim of pericholecystic fluid in
+  the gallbladder fossa. The common bile duct measures 5 mm without
+  dilatation and no intraductal stones are identified. The intrahepatic bile
+  ducts are not dilated. No gallbladder perforation or emphysematous change
+  (no intramural gas). No hepatic abscess. A positive sonographic Murphy
+  sign equivalent is suspected given the degree of local inflammation.
+  Impression: Acute calculous cholecystitis with impacted gallstone at the
+  gallbladder neck, gallbladder wall thickening, and pericholecystic
+  inflammation. Surgical consultation for cholecystectomy recommended.
+condition_present: true
+confusion_pair: null
+source_dataset: omnimedvqa-open
+tags:
+  - cholecystitis
+  - gallstones
+  - abdomen
+  - surgical
+  - vqa

@@ -1,0 +1,59 @@
+id: CT-036
+name: Hemorrhagic stroke
+modality: ct
+anatomy: head
+task_type: vqa
+difficulty: advanced
+image_ref: ct/omnimedvqa/CT_0036.png
+prompt_template: vqa
+ground_truth:
+  primary_diagnosis: "Acute cerebellar hemorrhage"
+  differential:
+    - hemorrhagic transformation of cerebellar infarct
+    - cerebellar arteriovenous malformation rupture
+    - hemorrhagic cerebellar metastasis
+    - cerebellar cavernous malformation bleed
+  key_findings:
+    - { finding: "hyperdense hematoma in cerebellar hemisphere", location: "right cerebellar hemisphere", required: true }
+    - { finding: "obstructive hydrocephalus from fourth ventricle compression", location: "fourth ventricle", required: true }
+    - { finding: "effacement of fourth ventricle", location: "fourth ventricle", required: false }
+    - { finding: "dilatation of lateral and third ventricles", location: "supratentorial ventricles", required: false }
+  severity: severe
+  laterality: right
+  negatives:
+    - supratentorial hemorrhage
+    - subarachnoid hemorrhage
+    - subdural hematoma
+    - tonsillar herniation visible on CT
+    - underlying mass with enhancement
+pattern_checks:
+  - { name: cerebellar_hemorrhage, check_type: regex, pattern: "cerebell.{0,20}(hemorrhage|haemorrhage|hematoma|haematoma|bleed)", required: true }
+  - { name: acute, check_type: regex, pattern: "acute|hyperdense", required: true }
+  - { name: hydrocephalus, check_type: regex, pattern: "hydrocephalus|ventricul.*dilat|fourth.*ventricle.*(compress|efface|obliter)", required: true }
+  - { name: right_sided, check_type: regex, pattern: "right", required: false }
+reference_solution: |
+  Non-contrast CT of the head demonstrates a hyperdense hematoma in the
+  right cerebellar hemisphere measuring approximately 3.5 x 3.0 cm,
+  consistent with acute cerebellar hemorrhage. The hematoma exerts mass
+  effect on the fourth ventricle with near-complete effacement. Resultant
+  obstructive hydrocephalus is present with dilatation of the lateral and
+  third ventricles. Transependymal CSF flow is seen as periventricular
+  hypodensity. No definite tonsillar herniation at this time, though the
+  posterior fossa structures are crowded. No supratentorial hemorrhage or
+  subarachnoid blood. No obvious underlying mass, though follow-up imaging
+  after hematoma resolution is recommended to evaluate for underlying
+  lesion.
+  Impression: Acute right cerebellar hemorrhage with fourth ventricle
+  compression and obstructive hydrocephalus. This is a neurosurgical
+  emergency requiring immediate evaluation for external ventricular drain
+  placement and potential posterior fossa decompression.
+condition_present: true
+confusion_pair: null
+source_dataset: omnimedvqa-open
+tags:
+  - cerebellar-hemorrhage
+  - emergency
+  - head
+  - hydrocephalus
+  - neurosurgery
+  - vqa

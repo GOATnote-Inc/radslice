@@ -1,0 +1,51 @@
+id: XRAY-035
+name: Central venous catheter tip in right atrium
+modality: xray
+anatomy: chest
+task_type: finding_detection
+difficulty: intermediate
+image_ref: xray/omnimedvqa/CXR_0035.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Central venous catheter tip malpositioned in the right atrium"
+  differential:
+    - appropriate catheter positioning at cavoatrial junction
+    - catheter in internal jugular vein
+    - catheter tip in right ventricle
+  key_findings:
+    - { finding: "central venous catheter tip projecting over the right atrium", location: "right atrium", required: true }
+    - { finding: "catheter tip well below the cavoatrial junction", location: "below SVC-RA junction", required: true }
+    - { finding: "catheter course from left subclavian approach", location: "left subclavian vein", required: false }
+  severity: moderate
+  laterality: ""
+  negatives:
+    - pneumothorax
+    - arterial placement
+    - catheter kinking
+    - pleural effusion
+pattern_checks:
+  - { name: catheter_mentioned, check_type: regex, pattern: "(?i)(central\\s+(venous\\s+)?catheter|CVC|central\\s+line)", required: true }
+  - { name: malposition, check_type: regex, pattern: "(?i)(malposition|too\\s+(far|deep|low)|right\\s+atrium|beyond.{0,20}junction|below.{0,20}(SVC|cavo))", required: true }
+  - { name: reposition, check_type: regex, pattern: "(?i)(reposition|withdraw|pull\\s+back|adjust)", required: true }
+  - { name: no_pneumothorax, check_type: not_contains, pattern: "pneumothorax is identified", required: false }
+reference_solution: |
+  Portable AP chest radiograph demonstrates a left subclavian central venous
+  catheter with the tip projecting over the right atrium, well below the expected
+  cavoatrial junction. The ideal position for the catheter tip is at the SVC-right
+  atrial junction. The current deep positioning risks arrhythmia, cardiac
+  perforation, and tamponade. No pneumothorax related to catheter placement. The
+  lungs are otherwise clear. No pleural effusion. Heart size is within normal
+  limits. An additional nasogastric tube is present with tip below the diaphragm
+  in satisfactory position. Withdrawal of the central venous catheter by
+  approximately 3-4 cm is recommended.
+  Impression: Malpositioned central venous catheter with tip in the right atrium —
+  repositioning recommended.
+condition_present: true
+confusion_pair: null
+source_dataset: omnimedvqa-open
+tags:
+  - line-malposition
+  - central-venous-catheter
+  - ICU
+  - lines-and-tubes
+  - chest

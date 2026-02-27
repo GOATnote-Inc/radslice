@@ -1,0 +1,54 @@
+id: XRAY-024
+name: Bilateral hilar lymphadenopathy - sarcoidosis
+modality: xray
+anatomy: chest
+task_type: diagnosis
+difficulty: advanced
+image_ref: xray/omnimedvqa/CXR_0024.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Bilateral hilar lymphadenopathy consistent with sarcoidosis"
+  differential:
+    - lymphoma
+    - bilateral hilar metastases
+    - berylliosis
+    - fungal infection (coccidioidomycosis, histoplasmosis)
+  key_findings:
+    - { finding: "bilateral symmetric hilar enlargement", location: "bilateral hila", required: true }
+    - { finding: "lobulated hilar contours", location: "bilateral hila", required: true }
+    - { finding: "right paratracheal lymphadenopathy (lambda sign)", location: "right paratracheal region", required: false }
+    - { finding: "clear lung parenchyma", location: "bilateral lung fields", required: false }
+  severity: moderate
+  laterality: bilateral
+  negatives:
+    - pleural effusion
+    - focal consolidation
+    - cavitation
+    - cardiomegaly
+    - mediastinal mass
+pattern_checks:
+  - { name: bilateral_hilar, check_type: regex, pattern: "(?i)bilateral\\s+hilar\\s+(lymphadenopathy|adenopathy|enlargement)", required: true }
+  - { name: sarcoidosis_mentioned, check_type: regex, pattern: "(?i)sarcoidosis", required: true }
+  - { name: symmetric, check_type: regex, pattern: "(?i)(symmetric|bilateral|both\\s+hil)", required: true }
+  - { name: paratracheal, check_type: regex, pattern: "(?i)(paratracheal|1-2-3\\s+sign|lambda|Garland)", required: false }
+reference_solution: |
+  PA chest radiograph demonstrates bilateral symmetric hilar lymphadenopathy with
+  lobulated, prominent hilar shadows bilaterally. There is also subtle widening of
+  the right paratracheal stripe suggesting right paratracheal lymphadenopathy,
+  producing the classic 1-2-3 sign (Garland triad) of bilateral hilar and right
+  paratracheal adenopathy. The lung parenchyma is clear without focal consolidation,
+  nodules, or fibrotic change. No pleural effusion or pneumothorax. The cardiac
+  silhouette is normal in size. In a young patient, these findings are highly
+  suggestive of sarcoidosis (Scadding stage I). Serum ACE level, calcium, and CT
+  chest are recommended for further evaluation.
+  Impression: Bilateral hilar lymphadenopathy with right paratracheal adenopathy —
+  findings consistent with sarcoidosis (Scadding stage I).
+condition_present: true
+confusion_pair: null
+source_dataset: omnimedvqa-open
+tags:
+  - sarcoidosis
+  - hilar-lymphadenopathy
+  - bilateral
+  - chest
+  - granulomatous

@@ -1,0 +1,59 @@
+id: MRI-033
+name: Achilles tendon rupture
+modality: mri
+anatomy: ankle
+task_type: finding_detection
+difficulty: intermediate
+image_ref: mri/omnimedvqa/MRI_0033.png
+prompt_template: finding_detection
+ground_truth:
+  primary_diagnosis: "Complete rupture of the left Achilles tendon"
+  differential:
+    - partial Achilles tendon tear
+    - Achilles tendinopathy with interstitial tearing
+    - retrocalcaneal bursitis
+    - plantaris tendon rupture
+    - posterior tibialis tendon tear
+  key_findings:
+    - { finding: "complete discontinuity of the Achilles tendon with fluid-filled gap", location: "Achilles tendon approximately 4-6 cm proximal to calcaneal insertion (watershed zone)", required: true }
+    - { finding: "retraction of the proximal tendon stump with wavy morphology", location: "proximal Achilles tendon", required: true }
+    - { finding: "surrounding soft tissue edema and hemorrhage", location: "pre-Achilles fat pad and Kager fat pad", required: false }
+    - { finding: "thickening of the tendon stumps with heterogeneous T2 signal", location: "proximal and distal Achilles tendon stumps", required: false }
+  severity: moderate
+  laterality: left
+  negatives:
+    - calcaneal fracture
+    - posterior tibialis tendon pathology
+    - peroneal tendon subluxation
+    - ankle joint effusion with loose body
+    - stress fracture
+pattern_checks:
+  - { name: achilles_tear, check_type: regex, pattern: "Achilles.*tear|Achilles.*rupture|rupture.*Achilles|tear.*Achilles|Achilles.*disrupt", required: true }
+  - { name: complete_tear, check_type: regex, pattern: "complete|full.?thickness|total.*disrupt|discontinu", required: true }
+  - { name: gap_or_retraction, check_type: regex, pattern: "gap|retract|discontinu|fluid.*defect|diastasis", required: true }
+  - { name: laterality_left, check_type: regex, pattern: "left", required: true }
+reference_solution: |
+  MRI of the left ankle demonstrates a complete rupture of the Achilles
+  tendon. On sagittal T2-weighted fat-saturated and proton density images,
+  there is complete discontinuity of the Achilles tendon approximately 5 cm
+  proximal to its calcaneal insertion, within the classic watershed zone of
+  relative hypovascularity. A fluid-filled gap of approximately 2.5 cm is
+  present between the retracted proximal stump and the distal stump. The
+  proximal stump demonstrates a wavy, retracted morphology with surrounding
+  hemorrhage and edema in the Kager fat pad. The pre-Achilles fat pad shows
+  increased signal consistent with edema. Both tendon stumps are thickened
+  and heterogeneous, suggesting pre-existing tendinopathy. The plantaris
+  tendon is intact. No calcaneal fracture. The remaining ankle tendons are
+  normal.
+  Impression: Complete left Achilles tendon rupture with 2.5 cm gap and
+  proximal stump retraction. Orthopedic consultation for surgical vs
+  conservative management.
+condition_present: true
+confusion_pair: null
+source_dataset: omnimedvqa-open
+tags:
+  - achilles
+  - ankle
+  - musculoskeletal
+  - tendon
+  - sports-injury

@@ -1,0 +1,40 @@
+id: XRAY-069
+name: VQA - What is the cardiac silhouette size on this CXR?
+modality: xray
+anatomy: chest
+task_type: vqa
+difficulty: basic
+image_ref: xray/vindrcxr/VDR_0069.png
+prompt_template: vqa
+ground_truth:
+  primary_diagnosis: "Cardiomegaly"
+  differential: []
+  key_findings:
+    - { finding: "enlarged cardiac silhouette", location: "cardiomediastinal", required: true }
+    - { finding: "cardiothoracic ratio greater than 0.5", location: "cardiomediastinal", required: true }
+  severity: moderate
+  laterality: ""
+  negatives:
+    - normal heart size
+    - pericardial effusion
+pattern_checks:
+  - { name: enlarged, check_type: regex, pattern: "(?i)(enlarg|cardiomegaly|increased.{0,20}cardiac)", required: true }
+  - { name: ctr, check_type: regex, pattern: "(?i)(cardiothoracic|CTR|ratio|greater\\s+than\\s+0\\.5|exceed)", required: true }
+  - { name: cardiac_mentioned, check_type: regex, pattern: "(?i)(cardiac|heart)", required: true }
+reference_solution: |
+  The cardiac silhouette is enlarged. The cardiothoracic ratio (CTR) exceeds 0.5
+  on this PA chest radiograph, consistent with cardiomegaly. The heart is
+  predominantly enlarged to the left, suggesting left-sided chamber enlargement.
+  There is no definite pulmonary vascular congestion to suggest acute heart
+  failure at this time, though clinical correlation with symptoms and
+  echocardiography is recommended to determine the etiology of cardiomegaly
+  (valvular disease, dilated cardiomyopathy, hypertensive heart disease, etc.).
+  The lungs are otherwise clear. No pleural effusion.
+condition_present: true
+confusion_pair: null
+source_dataset: vindrcxr
+tags:
+  - vqa
+  - cardiomegaly
+  - cardiac
+  - chest

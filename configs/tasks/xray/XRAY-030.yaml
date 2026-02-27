@@ -1,0 +1,53 @@
+id: XRAY-030
+name: Left diaphragmatic hernia (Bochdalek)
+modality: xray
+anatomy: chest
+task_type: diagnosis
+difficulty: advanced
+image_ref: xray/omnimedvqa/CXR_0030.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Left diaphragmatic hernia (Bochdalek hernia)"
+  differential:
+    - diaphragmatic eventration
+    - left lower lobe consolidation
+    - pleural effusion with loculation
+    - congenital cystic adenomatoid malformation
+  key_findings:
+    - { finding: "bowel gas pattern in the left hemithorax", location: "left hemithorax", required: true }
+    - { finding: "absent or disrupted left hemidiaphragm contour", location: "left hemidiaphragm", required: true }
+    - { finding: "displacement of cardiac silhouette to the right", location: "mediastinum", required: false }
+    - { finding: "air-filled visceral structures above the diaphragm", location: "left lower chest", required: true }
+  severity: severe
+  laterality: left
+  negatives:
+    - right-sided hernia
+    - pneumothorax
+    - pleural effusion
+    - normal diaphragm
+pattern_checks:
+  - { name: hernia_mentioned, check_type: regex, pattern: "(?i)(diaphragmatic\\s+hernia|Bochdalek|hernia.{0,30}diaphragm)", required: true }
+  - { name: bowel_in_chest, check_type: regex, pattern: "(?i)(bowel|intestin|stomach|viscera).{0,30}(thorax|chest|hemithorax|above.{0,15}diaphragm)", required: true }
+  - { name: laterality_left, check_type: regex, pattern: "(?i)left", required: true }
+  - { name: diaphragm_defect, check_type: regex, pattern: "(?i)(diaphragm.{0,20}(defect|absent|disrupted|discontinu)|absent.{0,20}diaphragm)", required: false }
+reference_solution: |
+  PA chest radiograph demonstrates air-filled visceral structures, including loops
+  of bowel and possibly stomach, within the left hemithorax. The left
+  hemidiaphragm contour is absent or markedly disrupted. There is mass effect with
+  displacement of the cardiac silhouette and mediastinal structures to the right.
+  The left lung is partially compressed by the herniated abdominal contents. The
+  right lung is clear and expanded. These findings are consistent with a left-sided
+  diaphragmatic hernia, most likely congenital (Bochdalek type) given the
+  posterolateral location. CT of the chest and abdomen is recommended for surgical
+  planning. In the acute setting, consideration should be given to
+  decompression and surgical repair.
+  Impression: Left diaphragmatic hernia with bowel herniation into the thorax.
+condition_present: true
+confusion_pair: null
+source_dataset: omnimedvqa-open
+tags:
+  - diaphragmatic-hernia
+  - Bochdalek
+  - congenital
+  - chest
+  - surgical

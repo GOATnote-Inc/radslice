@@ -1,0 +1,53 @@
+id: XRAY-023
+name: Left upper lobe collapse
+modality: xray
+anatomy: chest
+task_type: diagnosis
+difficulty: advanced
+image_ref: xray/omnimedvqa/CXR_0023.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Left upper lobe collapse"
+  differential:
+    - left upper lobe pneumonia
+    - endobronchial lesion with post-obstructive collapse
+    - mucous plugging
+    - post-surgical change
+  key_findings:
+    - { finding: "veil-like opacity over the left hemithorax", location: "left upper zone", required: true }
+    - { finding: "elevated left hilum", location: "left hilum", required: true }
+    - { finding: "Luftsichel sign", location: "left aortic arch", required: false }
+    - { finding: "leftward tracheal shift", location: "trachea", required: false }
+  severity: moderate
+  laterality: left
+  negatives:
+    - right lung opacity
+    - pleural effusion
+    - pneumothorax
+    - cardiomegaly
+pattern_checks:
+  - { name: primary_diagnosis, check_type: regex, pattern: "(?i)left\\s+upper\\s+lobe\\s+(collapse|atelectasis)", required: true }
+  - { name: veil_or_opacity, check_type: regex, pattern: "(?i)(veil|haze|opaci(ty|fication).{0,30}left\\s+upper)", required: true }
+  - { name: volume_loss, check_type: regex, pattern: "(?i)(volume\\s+loss|hilum.{0,20}(elevat|shift)|tracheal.{0,20}(shift|devia))", required: true }
+  - { name: endobronchial_concern, check_type: regex, pattern: "(?i)(endobronchial|bronchoscopy|CT|obstructi)", required: false }
+reference_solution: |
+  Frontal chest radiograph demonstrates a diffuse veil-like opacity over the left
+  hemithorax with loss of the normal left heart border silhouette, consistent with
+  left upper lobe collapse. The left hilum is elevated compared to the right. A
+  crescent of hyperlucency is seen along the left aortic arch (Luftsichel sign),
+  representing hyperexpanded apicoposterior segment of the left lower lobe
+  interposed between the collapsed upper lobe and the aortic arch. There is subtle
+  leftward tracheal deviation indicating volume loss. The right lung is clear. No
+  pleural effusion. CT chest is recommended to evaluate for an endobronchial lesion
+  as the etiology of the lobar collapse.
+  Impression: Left upper lobe collapse — bronchoscopy recommended to exclude
+  endobronchial obstruction.
+condition_present: true
+confusion_pair: null
+source_dataset: omnimedvqa-open
+tags:
+  - atelectasis
+  - lobar-collapse
+  - left-upper-lobe
+  - volume-loss
+  - luftsichel

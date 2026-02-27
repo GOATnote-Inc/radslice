@@ -1,0 +1,54 @@
+id: MRI-014
+name: Normal lumbar spine MRI
+modality: mri
+anatomy: spine
+task_type: diagnosis
+difficulty: basic
+image_ref: mri/omnimedvqa/MRI_0014.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Normal lumbar spine MRI"
+  differential:
+    - mild disc desiccation (age-related, non-pathologic)
+    - incidental Tarlov cyst
+    - incidental vertebral hemangioma
+  key_findings:
+    - { finding: "normal intervertebral disc height and T2 signal at all lumbar levels", location: "L1-L2 through L5-S1", required: true }
+    - { finding: "no disc herniation, bulge, or protrusion", location: "all lumbar disc levels", required: true }
+    - { finding: "normal caliber of the thecal sac and neural foramina", location: "lumbar spinal canal", required: false }
+    - { finding: "conus medullaris terminates at a normal level", location: "L1-L2 level", required: false }
+  severity: mild
+  laterality: ""
+  negatives:
+    - disc herniation or protrusion
+    - spinal canal stenosis
+    - neural foraminal narrowing
+    - spondylolisthesis
+    - vertebral compression fracture
+    - spinal cord signal abnormality
+    - epidural abscess or mass
+pattern_checks:
+  - { name: normal_mentioned, check_type: regex, pattern: "normal|unremarkable|no.*abnormal|negative|no.*significant", required: true }
+  - { name: no_herniation, check_type: regex, pattern: "no.*herniat|no.*protru|no.*extru|without.*herniat|intact.*disc", required: true }
+  - { name: no_stenosis, check_type: regex, pattern: "no.*steno|no.*narrow|patent|no.*compress", required: true }
+reference_solution: |
+  MRI of the lumbar spine demonstrates normal findings. The vertebral body
+  heights and alignment are maintained throughout the lumbar spine. The
+  intervertebral discs at all levels from L1-L2 through L5-S1 demonstrate
+  normal height and preserved T2 signal intensity without evidence of
+  significant desiccation. No disc herniation, protrusion, or extrusion is
+  identified at any level. The thecal sac is of normal caliber. The neural
+  foramina are patent bilaterally at all lumbar levels. No spinal canal
+  stenosis. The conus medullaris terminates at the L1-L2 level with normal
+  signal. The cauda equina nerve roots are normal. No paravertebral soft
+  tissue abnormality. No vertebral compression fracture or spondylolisthesis.
+  Impression: Normal lumbar spine MRI without evidence of disc disease,
+  stenosis, or other pathology.
+condition_present: false
+confusion_pair: null
+source_dataset: omnimedvqa-open
+tags:
+  - normal
+  - spine
+  - lumbar
+  - negative-case

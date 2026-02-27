@@ -1,0 +1,52 @@
+id: US-009
+name: Normal right kidney ultrasound
+modality: ultrasound
+anatomy: abdomen
+task_type: diagnosis
+difficulty: basic
+image_ref: ultrasound/radimagenet/US_0009.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Normal right kidney"
+  differential:
+    - mild extrarenal pelvis (normal variant)
+    - early renal parenchymal disease
+    - compensatory hypertrophy
+  key_findings:
+    - { finding: "normal renal parenchymal echogenicity", location: "right kidney", required: true }
+    - { finding: "normal corticomedullary differentiation", location: "right renal parenchyma", required: true }
+    - { finding: "normal renal size within 9-12 cm", location: "right kidney", required: false }
+  severity: mild
+  laterality: right
+  negatives:
+    - hydronephrosis
+    - renal calculus
+    - renal mass or cyst
+    - cortical thinning
+    - perinephric fluid
+    - increased renal echogenicity
+pattern_checks:
+  - { name: normal_identified, check_type: regex, pattern: "normal|unremarkable|no\\s+(abnormal|pathol|significant)", required: true }
+  - { name: no_hydronephrosis, check_type: regex, pattern: "no.*(hydronephrosis|dilat|obstruct|collect.*system)", required: true }
+  - { name: no_stone_or_mass, check_type: regex, pattern: "no.*(stone|calcul|mass|lesion|cyst)", required: true }
+  - { name: corticomedullary, check_type: regex, pattern: "corticomedullary|cortex|parenchym.*(normal|preserv|intact)", required: false }
+reference_solution: |
+  Ultrasound of the right kidney demonstrates normal renal parenchymal
+  echogenicity with preserved corticomedullary differentiation. The kidney
+  measures 11.2 cm in length, within normal limits. The renal cortex is of
+  normal thickness without focal thinning. The central renal sinus echoes
+  are normal without evidence of hydronephrosis or collecting system
+  dilation. No renal calculi, masses, or cystic lesions are identified.
+  There is no perinephric fluid collection. Doppler evaluation shows normal
+  renal arterial waveforms with a resistive index of 0.62.
+  Impression: Normal right kidney sonogram. No hydronephrosis, calculi,
+  or focal renal lesion.
+condition_present: false
+confusion_pair: US-008
+source_dataset: radimagenet
+tags:
+  - normal
+  - kidney
+  - abdomen
+  - urinary
+  - negative-study

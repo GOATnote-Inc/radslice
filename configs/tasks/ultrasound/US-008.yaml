@@ -1,0 +1,57 @@
+id: US-008
+name: Renal hydronephrosis with ureteral obstruction
+modality: ultrasound
+anatomy: abdomen
+task_type: finding_detection
+difficulty: intermediate
+image_ref: ultrasound/radimagenet/US_0008.png
+prompt_template: finding_detection
+ground_truth:
+  primary_diagnosis: "Moderate right-sided hydronephrosis"
+  differential:
+    - extrarenal pelvis (normal variant)
+    - parapelvic cyst
+    - renal sinus lipomatosis
+    - congenital ureteropelvic junction obstruction
+    - vesicoureteral reflux
+  key_findings:
+    - { finding: "dilated renal pelvis and calyces with anechoic fluid", location: "right renal collecting system", required: true }
+    - { finding: "cortical thinning", location: "right renal cortex", required: false }
+    - { finding: "elevated resistive index on Doppler", location: "right renal artery", required: false }
+  severity: moderate
+  laterality: right
+  negatives:
+    - renal calculus
+    - perinephric fluid
+    - renal mass
+    - left-sided hydronephrosis
+    - bladder distension
+pattern_checks:
+  - { name: hydronephrosis_mentioned, check_type: regex, pattern: "hydronephrosis|hydroureter|collecting.*system.*dilat|dilat.*pelvi", required: true }
+  - { name: laterality_right, check_type: regex, pattern: "right", required: true }
+  - { name: anechoic_calyceal, check_type: regex, pattern: "anechoic|fluid.?(filled|distend)|dilat.*(calyx|calyces|pelvis)", required: true }
+  - { name: severity_graded, check_type: regex, pattern: "moderate|grade\\s+(II|2|III|3)|significant", required: false }
+reference_solution: |
+  Ultrasound of the right kidney demonstrates moderate dilation of the renal
+  pelvis and calyces, consistent with hydronephrosis. The collecting system
+  is fluid-filled and anechoic, with separation of the central renal sinus
+  echoes. The calyces appear blunted and rounded. The renal cortex shows
+  mild thinning compared to the contralateral kidney. Doppler interrogation
+  reveals an elevated resistive index of 0.78 in the right renal artery,
+  suggesting obstructive physiology. No obstructing calculus is identified
+  at the ureteropelvic junction or distal ureter, though visualization is
+  limited. No perinephric fluid collection is present. The left kidney
+  appears normal without hydronephrosis.
+  Impression: Moderate right-sided hydronephrosis without visible obstructing
+  calculus. Elevated resistive index suggests acute obstruction. CT urogram
+  recommended for further evaluation.
+condition_present: true
+confusion_pair: null
+source_dataset: radimagenet
+tags:
+  - hydronephrosis
+  - kidney
+  - abdomen
+  - urinary
+  - obstruction
+  - doppler

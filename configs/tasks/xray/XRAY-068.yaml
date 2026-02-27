@@ -1,0 +1,41 @@
+id: XRAY-068
+name: VQA - Is there a pleural effusion on this CXR?
+modality: xray
+anatomy: chest
+task_type: vqa
+difficulty: basic
+image_ref: xray/vindrcxr/VDR_0068.png
+prompt_template: vqa
+ground_truth:
+  primary_diagnosis: "Large left pleural effusion"
+  differential: []
+  key_findings:
+    - { finding: "large left-sided pleural effusion with meniscus sign", location: "left hemithorax", required: true }
+    - { finding: "blunting of the left costophrenic angle", location: "left costophrenic angle", required: true }
+  severity: moderate
+  laterality: left
+  negatives:
+    - right-sided effusion
+    - pneumothorax
+pattern_checks:
+  - { name: yes_effusion, check_type: regex, pattern: "(?i)(yes|present|identified|there\\s+is|confirmed|large.{0,20}effusion)", required: true }
+  - { name: left_sided, check_type: regex, pattern: "(?i)left", required: true }
+  - { name: pleural_effusion, check_type: regex, pattern: "(?i)pleural\\s+effusion", required: true }
+  - { name: meniscus_or_blunting, check_type: regex, pattern: "(?i)(meniscus|blunt|costophrenic)", required: false }
+reference_solution: |
+  Yes, there is a pleural effusion on this chest radiograph. A large left-sided
+  pleural effusion is present, evidenced by homogeneous opacification of the left
+  lower hemithorax with a characteristic meniscus sign and complete blunting of
+  the left costophrenic angle. The effusion layers along the lateral chest wall.
+  The right lung is clear without effusion. The visible cardiac silhouette is
+  partially obscured by the effusion. No pneumothorax. Further evaluation with
+  ultrasound-guided thoracentesis may be indicated for diagnostic and therapeutic
+  purposes.
+condition_present: true
+confusion_pair: null
+source_dataset: vindrcxr
+tags:
+  - vqa
+  - pleural-effusion
+  - left
+  - chest

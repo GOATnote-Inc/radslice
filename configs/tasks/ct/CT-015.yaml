@@ -1,0 +1,56 @@
+id: CT-015
+name: Small bowel obstruction
+modality: ct
+anatomy: abdomen
+task_type: finding_detection
+difficulty: intermediate
+image_ref: ct/omnimedvqa/CT_0015.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Small bowel obstruction with transition point"
+  differential:
+    - paralytic ileus
+    - large bowel obstruction with decompression
+    - mesenteric ischemia with dilated loops
+    - small bowel enteritis with reactive ileus
+  key_findings:
+    - { finding: "dilated small bowel loops greater than 3 cm", location: "jejunum and proximal ileum", required: true }
+    - { finding: "decompressed distal small bowel", location: "distal ileum", required: true }
+    - { finding: "transition point with adhesive band", location: "mid-ileum right lower quadrant", required: true }
+    - { finding: "small bowel feces sign", location: "proximal to transition point", required: false }
+  severity: moderate
+  laterality: ""
+  negatives:
+    - large bowel dilatation
+    - free intraperitoneal air
+    - closed loop obstruction
+    - strangulation with wall ischemia
+    - hernia
+pattern_checks:
+  - { name: sbo_mentioned, check_type: regex, pattern: "small\\s+bowel\\s+obstruction|SBO\\b|intestinal\\s+obstruction", required: true }
+  - { name: dilated_bowel, check_type: regex, pattern: "dilat|distend|fluid.?filled\\s+loop", required: true }
+  - { name: transition_point, check_type: regex, pattern: "transition\\s+point|change\\s+in\\s+caliber|decompressed\\s+distal", required: true }
+  - { name: no_perforation, check_type: regex, pattern: "no.{0,20}(free\\s+air|perforation|pneumoperitoneum)", required: false }
+reference_solution: |
+  Contrast-enhanced CT of the abdomen and pelvis demonstrates multiple
+  dilated fluid-filled small bowel loops measuring up to 4.2 cm in
+  diameter, predominantly involving the jejunum and proximal ileum. A
+  discrete transition point is identified in the mid-ileum at the right
+  lower quadrant, where an adhesive band is suspected as the cause of
+  obstruction. Distal to this point, the small bowel is decompressed. A
+  small bowel feces sign is present proximal to the transition point. The
+  colon is decompressed and normal in caliber. No free intraperitoneal air
+  to suggest perforation. The small bowel wall enhances normally without
+  evidence of ischemia or strangulation. No hernia identified.
+  Impression: High-grade small bowel obstruction with transition point in
+  the mid-ileum, likely adhesive in etiology. No evidence of strangulation
+  or closed-loop obstruction. Surgical consultation recommended.
+condition_present: true
+confusion_pair: null
+source_dataset: omnimedvqa-open
+tags:
+  - small-bowel-obstruction
+  - surgical
+  - abdomen
+  - gastrointestinal
+  - finding-detection

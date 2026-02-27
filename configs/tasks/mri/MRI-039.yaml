@@ -1,0 +1,59 @@
+id: MRI-039
+name: Stress fracture of the femoral neck
+modality: mri
+anatomy: hip
+task_type: vqa
+difficulty: intermediate
+image_ref: mri/omnimedvqa/MRI_0039.png
+prompt_template: vqa
+ground_truth:
+  primary_diagnosis: "Stress fracture of the left femoral neck"
+  differential:
+    - avascular necrosis of the femoral head
+    - transient osteoporosis of the hip
+    - bone marrow edema syndrome
+    - occult fracture (insufficiency type)
+    - osteoid osteoma
+  key_findings:
+    - { finding: "linear T1 hypointense fracture line in the femoral neck", location: "medial compression side of the left femoral neck", required: true }
+    - { finding: "surrounding bone marrow edema on STIR/T2 fat-saturated sequences", location: "left femoral neck and intertrochanteric region", required: true }
+    - { finding: "no cortical step-off or displacement", location: "left femoral neck cortex", required: false }
+    - { finding: "periosteal and endosteal edema surrounding the fracture", location: "left femoral neck", required: false }
+  severity: moderate
+  laterality: left
+  negatives:
+    - complete fracture with displacement
+    - avascular necrosis (no serpiginous line or double-line sign)
+    - pathologic fracture from lytic lesion
+    - cortical disruption
+    - femoral head articular surface involvement
+pattern_checks:
+  - { name: stress_fracture, check_type: regex, pattern: "stress\\s+fracture|fatigue\\s+fracture|insufficiency\\s+fracture|occult.*fracture", required: true }
+  - { name: femoral_neck, check_type: regex, pattern: "femoral\\s+neck|femur\\s+neck|neck.*femur", required: true }
+  - { name: bone_marrow_edema, check_type: regex, pattern: "marrow\\s+edema|bone.*edema|STIR.*hyperintens|T2.*hyperintens.*marrow", required: true }
+  - { name: fracture_line, check_type: regex, pattern: "fracture\\s+line|linear.*hypointens|T1.*hypointens.*line|low.*signal.*line", required: true }
+reference_solution: |
+  MRI of the left hip demonstrates a stress fracture of the left femoral neck.
+  On T1-weighted coronal images, a linear hypointense fracture line is
+  identified in the medial compression side of the femoral neck, oriented
+  perpendicular to the femoral neck axis. Surrounding bone marrow edema is
+  present on STIR and T2-weighted fat-saturated sequences, manifesting as
+  hyperintense signal in the femoral neck and extending into the
+  intertrochanteric region. The fracture line is non-displaced with no
+  cortical step-off on any sequence. The medial compression-side location is
+  favorable for conservative management. No features of avascular necrosis
+  (no serpiginous demarcation line or double-line sign). No lytic or
+  destructive lesion to suggest pathologic fracture. The articular cartilage
+  and femoral head are normal.
+  Impression: Non-displaced stress fracture of the left femoral neck
+  (compression side). Protected weight-bearing and orthopedic follow-up
+  recommended.
+condition_present: true
+confusion_pair: null
+source_dataset: omnimedvqa-open
+tags:
+  - stress-fracture
+  - hip
+  - musculoskeletal
+  - femoral-neck
+  - sports-injury

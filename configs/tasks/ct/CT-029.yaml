@@ -1,0 +1,58 @@
+id: CT-029
+name: Liver abscess
+modality: ct
+anatomy: abdomen
+task_type: diagnosis
+difficulty: intermediate
+image_ref: ct/eurorad/EUR_0029.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Pyogenic liver abscess"
+  differential:
+    - hepatic metastasis with necrosis
+    - hepatocellular carcinoma
+    - amebic liver abscess
+    - hepatic cyst with superinfection
+    - biliary cystadenoma
+  key_findings:
+    - { finding: "rim-enhancing hypodense collection with double target sign", location: "right hepatic lobe segment 6/7", required: true }
+    - { finding: "cluster sign with multiple coalescing small abscesses", location: "right hepatic lobe", required: false }
+    - { finding: "perilesional edema", location: "surrounding hepatic parenchyma", required: true }
+    - { finding: "internal gas foci", location: "within abscess cavity", required: false }
+  severity: moderate
+  laterality: right
+  negatives:
+    - hepatic metastases (no multiple lesions)
+    - biliary obstruction
+    - portal vein thrombosis
+    - hepatic artery aneurysm
+    - peritoneal free fluid
+pattern_checks:
+  - { name: abscess_mentioned, check_type: regex, pattern: "abscess", required: true }
+  - { name: hepatic_location, check_type: regex, pattern: "hepatic|liver", required: true }
+  - { name: rim_enhancing, check_type: regex, pattern: "rim.?enhanc|wall.?enhanc|peripheral.*enhanc|double\\s+target", required: true }
+  - { name: collection, check_type: regex, pattern: "collection|cavity|hypodense.*lesion|fluid.*collection", required: false }
+reference_solution: |
+  Contrast-enhanced CT of the abdomen demonstrates a 5.8 cm rim-enhancing
+  hypodense lesion in the right hepatic lobe (segments 6/7) with a double
+  target sign — an inner enhancing rim and an outer zone of perilesional
+  edema — characteristic of a pyogenic liver abscess. The lesion contains
+  internal low-attenuation fluid and scattered foci of gas. Several smaller
+  satellite lesions coalesce around the dominant collection, forming a
+  cluster sign. There is no biliary dilatation to suggest ascending
+  cholangitis as the etiology. The portal vein and hepatic veins are patent.
+  No additional hepatic lesions to suggest metastatic disease. No free
+  peritoneal fluid.
+  Impression: Right hepatic lobe pyogenic abscess with cluster sign and
+  internal gas, measuring 5.8 cm. Percutaneous drainage and targeted
+  antibiotic therapy recommended. Blood cultures and evaluation for
+  underlying etiology (biliary, portal, or cryptogenic) advised.
+condition_present: true
+confusion_pair: null
+source_dataset: eurorad
+tags:
+  - liver-abscess
+  - infectious
+  - abdomen
+  - hepatic
+  - interventional

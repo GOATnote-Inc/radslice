@@ -1,0 +1,41 @@
+id: XRAY-070
+name: VQA - Is the ETT appropriately positioned?
+modality: xray
+anatomy: chest
+task_type: vqa
+difficulty: intermediate
+image_ref: xray/vindrcxr/VDR_0070.png
+prompt_template: vqa
+ground_truth:
+  primary_diagnosis: "Appropriately positioned endotracheal tube"
+  differential: []
+  key_findings:
+    - { finding: "ETT tip 3-5 cm above the carina", location: "mid-trachea", required: true }
+    - { finding: "ETT in the trachea, not the esophagus", location: "trachea", required: true }
+  severity: mild
+  laterality: ""
+  negatives:
+    - right mainstem intubation
+    - esophageal intubation
+    - ETT above vocal cords
+pattern_checks:
+  - { name: appropriate_position, check_type: regex, pattern: "(?i)(appropriat|satisfactor|good\\s+position|well.?positioned|correct)", required: true }
+  - { name: distance_above_carina, check_type: regex, pattern: "(?i)(above.{0,15}carina|cm.{0,15}above|3.{0,5}(cm|centimeter)|4.{0,5}(cm|centimeter)|5.{0,5}(cm|centimeter)|mid.?trachea)", required: true }
+  - { name: ett_mentioned, check_type: regex, pattern: "(?i)(endotracheal|ETT|tube)", required: true }
+reference_solution: |
+  Yes, the endotracheal tube (ETT) is appropriately positioned. The tip of the
+  ETT projects approximately 4 cm above the carina, within the ideal range of
+  3-5 cm in the mid-trachea. The tube is in the trachea and not in the esophagus,
+  as confirmed by its midline position and the absence of gastric distension.
+  The ETT does not extend into either mainstem bronchus. The cuff appears
+  appropriately inflated without overdistension. The lungs are symmetrically
+  aerated. No pneumothorax related to intubation. No other acute abnormality.
+condition_present: true
+confusion_pair: null
+source_dataset: vindrcxr
+tags:
+  - vqa
+  - endotracheal-tube
+  - lines-and-tubes
+  - ICU
+  - chest

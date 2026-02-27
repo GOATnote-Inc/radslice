@@ -1,0 +1,59 @@
+id: MRI-011
+name: Brain abscess on MRI
+modality: mri
+anatomy: head
+task_type: diagnosis
+difficulty: advanced
+image_ref: mri/eurorad/EUR_0011.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Pyogenic brain abscess with restricted diffusion"
+  differential:
+    - glioblastoma with central necrosis
+    - brain metastasis with necrosis
+    - tumefactive demyelination
+    - toxoplasmosis (immunocompromised)
+    - neurocysticercosis (colloidal vesicular stage)
+  key_findings:
+    - { finding: "ring-enhancing lesion with thin smooth wall on post-gadolinium T1-weighted images", location: "left frontal lobe subcortical white matter", required: true }
+    - { finding: "central restricted diffusion on DWI with low ADC values (bright DWI, dark ADC)", location: "core of the lesion", required: true }
+    - { finding: "T2/FLAIR hyperintense surrounding vasogenic edema", location: "left frontal white matter", required: true }
+    - { finding: "dual rim sign on SWI (T2 hypointense outer rim, T2 hyperintense inner rim)", location: "abscess wall", required: false }
+  severity: severe
+  laterality: left
+  negatives:
+    - satellite lesions
+    - leptomeningeal enhancement
+    - ventriculitis
+    - dural venous sinus thrombosis
+    - hydrocephalus
+pattern_checks:
+  - { name: abscess_mentioned, check_type: regex, pattern: "abscess|pyogenic|infect.*collect|empyema", required: true }
+  - { name: restricted_diffusion, check_type: regex, pattern: "restrict.*diffusion|DWI.*bright|DWI.*hyperintens|diffusion.*restrict|ADC.*low", required: true }
+  - { name: ring_enhancement, check_type: regex, pattern: "ring.?enhanc|rim.*enhanc|peripheral.*enhanc", required: true }
+  - { name: laterality_left, check_type: regex, pattern: "left", required: true }
+reference_solution: |
+  MRI of the brain demonstrates a ring-enhancing lesion in the left frontal
+  lobe subcortical white matter measuring approximately 3.2 x 2.8 cm. The
+  lesion shows a thin, smooth enhancing rim on post-gadolinium T1-weighted
+  images, distinct from the thick irregular enhancement typically seen with
+  neoplasms. Critically, the core of the lesion demonstrates markedly
+  restricted diffusion on DWI with corresponding low ADC values, a hallmark
+  of pyogenic abscess reflecting viscous purulent material. Surrounding T2/FLAIR
+  hyperintense vasogenic edema extends into the adjacent frontal white matter.
+  SWI demonstrates a dual rim sign at the abscess wall. No satellite daughter
+  abscesses are identified. No ventriculitis or leptomeningeal enhancement.
+  The dural venous sinuses are patent.
+  Impression: Left frontal ring-enhancing lesion with central restricted
+  diffusion, most consistent with pyogenic brain abscess. Neurosurgical
+  consultation recommended for aspiration and culture.
+condition_present: true
+confusion_pair: null
+source_dataset: eurorad
+tags:
+  - abscess
+  - brain
+  - neuro
+  - infection
+  - ring-enhancing
+  - diffusion

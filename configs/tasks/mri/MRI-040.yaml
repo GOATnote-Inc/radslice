@@ -1,0 +1,59 @@
+id: MRI-040
+name: Transient osteoporosis confusion pair for stress fracture
+modality: mri
+anatomy: hip
+task_type: vqa
+difficulty: intermediate
+image_ref: mri/omnimedvqa/MRI_0040.png
+prompt_template: vqa
+ground_truth:
+  primary_diagnosis: "Transient osteoporosis of the left hip (bone marrow edema syndrome)"
+  differential:
+    - stress fracture of the femoral neck
+    - avascular necrosis of the femoral head
+    - septic arthritis with osteomyelitis
+    - occult fracture
+    - metastatic bone disease
+  key_findings:
+    - { finding: "diffuse bone marrow edema on STIR/T2 fat-sat without a discrete fracture line", location: "left femoral head and neck", required: true }
+    - { finding: "T1 hypointense marrow signal in the femoral head without focal geographic lesion", location: "left femoral head", required: true }
+    - { finding: "absence of a linear fracture line on all sequences", location: "left femoral neck and head", required: true }
+    - { finding: "small joint effusion", location: "left hip joint", required: false }
+  severity: moderate
+  laterality: left
+  negatives:
+    - discrete fracture line (would indicate stress fracture)
+    - serpiginous demarcation line (would indicate AVN)
+    - destructive lesion or soft tissue mass
+    - subchondral collapse
+    - contralateral hip involvement
+pattern_checks:
+  - { name: transient_osteoporosis, check_type: regex, pattern: "transient\\s+osteoporosis|bone\\s+marrow\\s+edema\\s+syndrome|BMES|transient.*marrow", required: true }
+  - { name: no_fracture_line, check_type: regex, pattern: "no.*fracture\\s+line|without.*fracture|no.*discrete.*line|absence.*fracture", required: true }
+  - { name: diffuse_edema, check_type: regex, pattern: "diffuse.*edema|marrow\\s+edema|extensive.*edema|bone.*edema", required: true }
+  - { name: femoral_head, check_type: regex, pattern: "femoral\\s+head|femur\\s+head", required: true }
+reference_solution: |
+  MRI of the left hip demonstrates diffuse bone marrow edema involving the
+  left femoral head and extending into the femoral neck. On STIR and T2
+  fat-saturated sequences, there is extensive hyperintense signal throughout
+  the femoral head and proximal neck. T1-weighted images show corresponding
+  diffuse hypointense marrow signal. Critically, no discrete linear fracture
+  line is identified on any sequence, which distinguishes this from a stress
+  fracture. Similarly, no serpiginous demarcation line or geographic zone
+  of necrosis is present to suggest avascular necrosis. A small joint
+  effusion is present. No subchondral collapse or cortical irregularity. The
+  pattern of diffuse marrow edema centered on the femoral head without a
+  fracture line or AVN morphology is characteristic of transient osteoporosis
+  of the hip (bone marrow edema syndrome), a self-limiting condition.
+  Impression: Transient osteoporosis of the left hip with diffuse femoral
+  head marrow edema and no fracture line or AVN morphology. Self-limiting;
+  follow-up MRI in 6-8 weeks recommended to confirm resolution.
+condition_present: true
+confusion_pair: MRI-039
+source_dataset: omnimedvqa-open
+tags:
+  - transient-osteoporosis
+  - hip
+  - musculoskeletal
+  - bone-marrow-edema
+  - confusion-pair

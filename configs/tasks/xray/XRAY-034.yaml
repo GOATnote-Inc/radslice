@@ -1,0 +1,55 @@
+id: XRAY-034
+name: COPD with hyperinflation
+modality: xray
+anatomy: chest
+task_type: diagnosis
+difficulty: intermediate
+image_ref: xray/omnimedvqa/CXR_0034.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Chronic obstructive pulmonary disease with hyperinflation"
+  differential:
+    - asthma with air trapping
+    - emphysema
+    - chronic bronchitis
+    - bilateral bullous disease
+  key_findings:
+    - { finding: "flattened hemidiaphragms bilaterally", location: "bilateral diaphragms", required: true }
+    - { finding: "increased AP diameter and barrel chest configuration", location: "thorax", required: false }
+    - { finding: "increased retrosternal clear space", location: "retrosternal", required: false }
+    - { finding: "hyperlucent lung fields with attenuated vascular markings", location: "bilateral lungs", required: true }
+    - { finding: "vertical cardiac silhouette", location: "cardiac silhouette", required: false }
+  severity: moderate
+  laterality: bilateral
+  negatives:
+    - focal consolidation
+    - pleural effusion
+    - pneumothorax
+    - cardiomegaly
+    - mediastinal mass
+pattern_checks:
+  - { name: copd_mentioned, check_type: regex, pattern: "(?i)(COPD|chronic\\s+obstructive|emphysema)", required: true }
+  - { name: hyperinflation, check_type: regex, pattern: "(?i)(hyperinflat|over.?inflat|air\\s+trapping)", required: true }
+  - { name: flat_diaphragm, check_type: regex, pattern: "(?i)(flat(ten)?.*diaphragm|diaphragm.*flat|low.*diaphragm)", required: true }
+  - { name: hyperlucent, check_type: regex, pattern: "(?i)(hyperlucen|increased\\s+(lucen|transpar)|attenuated.{0,20}vascul)", required: false }
+reference_solution: |
+  PA chest radiograph demonstrates findings consistent with chronic obstructive
+  pulmonary disease and hyperinflation. The hemidiaphragms are markedly flattened
+  bilaterally with more than 10 posterior ribs visible above the diaphragm. The
+  lung fields are hyperlucent with attenuation of the peripheral vascular
+  markings, consistent with emphysematous changes. The cardiac silhouette appears
+  elongated and vertically oriented. The retrosternal clear space is increased.
+  No focal consolidation, pleural effusion, or pneumothorax is identified. No
+  acute superimposed process. These findings are consistent with moderate to
+  severe COPD with hyperinflation. Pulmonary function testing is recommended for
+  disease severity quantification.
+  Impression: COPD with bilateral hyperinflation and emphysematous changes.
+condition_present: true
+confusion_pair: null
+source_dataset: omnimedvqa-open
+tags:
+  - COPD
+  - emphysema
+  - hyperinflation
+  - chest
+  - airway-disease

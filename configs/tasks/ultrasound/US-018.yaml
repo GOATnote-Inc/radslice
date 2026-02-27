@@ -1,0 +1,55 @@
+id: US-018
+name: Normal lower extremity venous compression ultrasound
+modality: ultrasound
+anatomy: extremity
+task_type: diagnosis
+difficulty: basic
+image_ref: ultrasound/radimagenet/US_0018.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Normal lower extremity venous study"
+  differential:
+    - early non-occlusive DVT
+    - chronic post-thrombotic changes
+    - extrinsic compression not visualized
+  key_findings:
+    - { finding: "complete venous compressibility at all interrogated segments", location: "left lower extremity deep veins", required: true }
+    - { finding: "normal spontaneous and phasic Doppler waveforms", location: "left common femoral vein", required: true }
+    - { finding: "normal augmentation with distal compression", location: "left popliteal vein", required: false }
+  severity: mild
+  laterality: left
+  negatives:
+    - deep vein thrombosis
+    - superficial thrombophlebitis
+    - venous insufficiency
+    - Baker cyst
+    - lymphadenopathy
+    - arterial occlusive disease
+pattern_checks:
+  - { name: normal_identified, check_type: regex, pattern: "normal|negative|unremarkable|no\\s+(DVT|thrombus|thromb)", required: true }
+  - { name: compressible, check_type: regex, pattern: "compress|complet.*coapt|fully.*compress|patent", required: true }
+  - { name: no_dvt, check_type: regex, pattern: "no.*(DVT|thrombus|thromb|clot)", required: true }
+  - { name: phasic_flow, check_type: regex, pattern: "phasic|respiratory.*variat|spontaneous.*flow|augment", required: false }
+reference_solution: |
+  Compression ultrasound of the left lower extremity demonstrates complete
+  compressibility of all interrogated deep venous segments, including the
+  common femoral vein, femoral vein (superficial femoral vein), popliteal
+  vein, and posterior tibial veins. The veins fully coapt with transducer
+  pressure. Spectral Doppler of the common femoral vein shows normal
+  spontaneous phasic flow with respiratory variation. Augmentation is
+  present in the popliteal and femoral veins with distal calf compression.
+  No intraluminal echogenic material is identified to suggest thrombus. No
+  Baker cyst or other popliteal fossa abnormality is seen. The superficial
+  venous system appears unremarkable.
+  Impression: Negative compression ultrasound of the left lower extremity.
+  No evidence of deep vein thrombosis.
+condition_present: false
+confusion_pair: US-003
+source_dataset: radimagenet
+tags:
+  - normal
+  - extremity
+  - vascular
+  - compression-ultrasound
+  - negative-study
+  - dvt-screening

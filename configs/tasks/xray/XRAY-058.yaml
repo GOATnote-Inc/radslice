@@ -1,0 +1,54 @@
+id: XRAY-058
+name: Round atelectasis mimicking lung mass
+modality: xray
+anatomy: chest
+task_type: diagnosis
+difficulty: advanced
+image_ref: xray/mediconfusion/MCF_0058.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Round atelectasis (Blesovsky syndrome)"
+  differential:
+    - primary lung malignancy
+    - metastatic deposit
+    - organizing pneumonia
+    - granuloma
+  key_findings:
+    - { finding: "round or oval peripheral opacity abutting the pleura", location: "right lower lobe posteriorly", required: true }
+    - { finding: "comet tail sign (curving vessels and bronchi toward the opacity)", location: "right lower lobe", required: true }
+    - { finding: "adjacent pleural thickening", location: "right posterior pleura", required: false }
+    - { finding: "volume loss in the adjacent lung", location: "right lower lobe", required: false }
+  severity: mild
+  laterality: right
+  negatives:
+    - true lung mass without pleural association
+    - cavitation
+    - lymphadenopathy
+    - multiple nodules
+pattern_checks:
+  - { name: round_atelectasis, check_type: regex, pattern: "(?i)(round\\s+atelectasis|Blesovsky|folded\\s+lung)", required: true }
+  - { name: not_mass, check_type: regex, pattern: "(?i)(rather\\s+than.{0,20}mass|not.{0,20}(true\\s+)?mass|benign|atelectasis.{0,20}not.{0,20}malignan)", required: true }
+  - { name: comet_tail, check_type: regex, pattern: "(?i)(comet.?tail|curving.{0,20}(vessel|bronch)|vessel.{0,20}converging)", required: true }
+  - { name: pleural_thickening, check_type: regex, pattern: "(?i)(pleural\\s+(thicken|plaque)|asbestos)", required: false }
+reference_solution: |
+  PA chest radiograph demonstrates a rounded opacity in the right lower zone
+  abutting the posterior pleural surface, which could be mistaken for a primary
+  lung mass. However, the characteristic comet tail sign is present, with
+  pulmonary vessels and bronchi curving toward the opacity, which is pathognomonic
+  for round atelectasis (Blesovsky syndrome). Adjacent pleural thickening is
+  noted along the right posterior chest wall, often seen in association with
+  asbestos exposure. The opacity represents folded, atelectatic lung tissue
+  rather than a true neoplasm. The left lung is clear. No pleural effusion. CT
+  with contrast is recommended to confirm the diagnosis and demonstrate the
+  classic comet tail of vessels on axial imaging.
+  Impression: Round atelectasis — not a primary lung mass. CT confirmation
+  recommended.
+condition_present: true
+confusion_pair: XRAY-008
+source_dataset: mediconfusion
+tags:
+  - round-atelectasis
+  - lung-mass-mimic
+  - comet-tail
+  - confusion-pair
+  - chest

@@ -1,0 +1,56 @@
+id: MRI-017
+name: Cerebral atrophy confusion pair for NPH
+modality: mri
+anatomy: head
+task_type: diagnosis
+difficulty: advanced
+image_ref: mri/omnimedvqa/MRI_0017.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Diffuse cerebral atrophy with ex vacuo ventriculomegaly"
+  differential:
+    - normal pressure hydrocephalus
+    - Alzheimer disease
+    - frontotemporal dementia
+    - chronic alcohol-related brain atrophy
+  key_findings:
+    - { finding: "ventriculomegaly proportionate to sulcal enlargement", location: "bilateral lateral ventricles and cerebral sulci", required: true }
+    - { finding: "diffuse widening of cortical sulci including the high convexity", location: "bilateral cerebral hemispheres including vertex", required: true }
+    - { finding: "proportionately enlarged sylvian fissures matching overall sulcal pattern", location: "bilateral sylvian fissures", required: false }
+    - { finding: "callosal angle greater than 100 degrees on coronal images", location: "corpus callosum", required: false }
+  severity: moderate
+  laterality: ""
+  negatives:
+    - tight high-convexity sulci (DESH pattern, favors NPH)
+    - disproportionate sylvian fissure enlargement
+    - transependymal CSF flow
+    - obstructing mass lesion
+pattern_checks:
+  - { name: atrophy_mentioned, check_type: regex, pattern: "atrophy|atroph|volume\\s+loss|involut|ex\\s+vacuo", required: true }
+  - { name: proportionate, check_type: regex, pattern: "proportionat|diffuse|generalized|sulcal.*widen|global", required: true }
+  - { name: ventriculomegaly_noted, check_type: regex, pattern: "ventriculomegal|ventricle.*enlarg|ventricle.*dilat", required: true }
+  - { name: not_nph, check_type: not_contains, pattern: "normal pressure hydrocephalus", required: false }
+reference_solution: |
+  MRI of the brain demonstrates diffuse cerebral volume loss affecting both
+  hemispheres. The lateral ventricles are enlarged but in proportion to the
+  degree of sulcal widening, consistent with ex vacuo ventriculomegaly rather
+  than hydrocephalus. Cortical sulci are diffusely widened including at the
+  high convexity, a pattern that distinguishes atrophy from normal pressure
+  hydrocephalus (NPH), which characteristically shows tight high-convexity
+  sulci with disproportionately enlarged sylvian fissures (DESH). The callosal
+  angle measures approximately 115 degrees, well above the NPH threshold of
+  90 degrees. No focal parenchymal lesion or abnormal enhancement. No
+  restricted diffusion. No transependymal CSF migration.
+  Impression: Diffuse cerebral atrophy with ex vacuo ventriculomegaly,
+  distinguishable from normal pressure hydrocephalus by the proportionate
+  sulcal and ventricular enlargement pattern. Clinical correlation with
+  neurodegenerative history recommended.
+condition_present: true
+confusion_pair: MRI-016
+source_dataset: omnimedvqa-open
+tags:
+  - atrophy
+  - neuro
+  - dementia
+  - confusion-pair
+  - ventriculomegaly

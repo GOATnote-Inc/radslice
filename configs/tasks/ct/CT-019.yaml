@@ -1,0 +1,58 @@
+id: CT-019
+name: Acute diverticulitis with abscess
+modality: ct
+anatomy: abdomen
+task_type: diagnosis
+difficulty: intermediate
+image_ref: ct/eurorad/EUR_0019.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Acute sigmoid diverticulitis with pericolonic abscess"
+  differential:
+    - colorectal carcinoma with perforation
+    - epiploic appendagitis
+    - sigmoid volvulus
+    - pelvic inflammatory disease
+    - Crohn disease colitis
+  key_findings:
+    - { finding: "sigmoid colon wall thickening with pericolonic fat stranding", location: "sigmoid colon", required: true }
+    - { finding: "multiple diverticula", location: "sigmoid colon", required: true }
+    - { finding: "pericolonic fluid collection with rim enhancement", location: "left lower quadrant", required: false }
+    - { finding: "focal free fluid", location: "pelvis", required: false }
+  severity: moderate
+  laterality: left
+  negatives:
+    - free intraperitoneal air
+    - bowel obstruction
+    - colonic mass
+    - ureteral obstruction
+    - distant abscess
+pattern_checks:
+  - { name: diverticulitis_mentioned, check_type: regex, pattern: "diverticulitis", required: true }
+  - { name: sigmoid, check_type: regex, pattern: "sigmoid", required: true }
+  - { name: abscess_or_collection, check_type: regex, pattern: "abscess|collection|phlegmon", required: true }
+  - { name: fat_stranding, check_type: regex, pattern: "fat\\s+strand|pericolonic.*inflam|inflammatory\\s+change", required: false }
+reference_solution: |
+  Contrast-enhanced CT of the abdomen and pelvis demonstrates marked wall
+  thickening of the sigmoid colon with extensive pericolonic fat stranding.
+  Multiple diverticula are present throughout the sigmoid colon. A 3.5 cm
+  rim-enhancing fluid collection is identified in the left lower quadrant
+  adjacent to the sigmoid colon, consistent with a pericolonic abscess. A
+  small amount of free fluid is noted in the pelvis. No extraluminal free
+  air to suggest frank perforation. No evidence of colonic obstruction. The
+  affected segment of sigmoid measures approximately 8 cm in length. No
+  suspicious colonic mass identified, though evaluation is limited due to
+  inflammation. Modified Hinchey classification: Stage Ib (pericolonic
+  abscess).
+  Impression: Acute sigmoid diverticulitis complicated by a 3.5 cm
+  pericolonic abscess (Hinchey Ib). Consideration of percutaneous drainage
+  and intravenous antibiotics recommended.
+condition_present: true
+confusion_pair: null
+source_dataset: eurorad
+tags:
+  - diverticulitis
+  - abscess
+  - abdomen
+  - gastrointestinal
+  - surgical

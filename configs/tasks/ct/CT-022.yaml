@@ -1,0 +1,56 @@
+id: CT-022
+name: Cerebral atrophy (confusion pair for hydrocephalus)
+modality: ct
+anatomy: head
+task_type: diagnosis
+difficulty: intermediate
+image_ref: ct/omnimedvqa/CT_0022.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Diffuse cerebral atrophy with ex vacuo ventriculomegaly"
+  differential:
+    - normal pressure hydrocephalus
+    - obstructive hydrocephalus
+    - communicating hydrocephalus
+    - frontotemporal dementia
+  key_findings:
+    - { finding: "proportionate sulcal widening and ventriculomegaly", location: "bilateral cerebral hemispheres", required: true }
+    - { finding: "prominent sylvian fissures", location: "bilateral sylvian fissures", required: true }
+    - { finding: "widened temporal horns proportionate to sulci", location: "bilateral temporal horns", required: false }
+    - { finding: "no periventricular hypodensity", location: "periventricular white matter", required: false }
+  severity: mild
+  laterality: bilateral
+  negatives:
+    - disproportionate ventriculomegaly
+    - transependymal CSF flow
+    - mass lesion
+    - acute infarction
+    - intracranial hemorrhage
+pattern_checks:
+  - { name: atrophy_mentioned, check_type: regex, pattern: "atrophy|atroph|volume\\s+loss|involution", required: true }
+  - { name: not_hydrocephalus, check_type: regex, pattern: "atrophy|ex\\s+vacuo|proportionate|age.?related", required: true }
+  - { name: sulcal_widening, check_type: regex, pattern: "sulcal\\s+widen|prominent\\s+sulci|sulci.*prominent", required: true }
+  - { name: ventriculomegaly, check_type: regex, pattern: "ventriculomegaly|ventricle.*dilat|enlarg.*ventricle", required: false }
+reference_solution: |
+  Non-contrast CT of the head demonstrates diffuse cerebral volume loss with
+  proportionate sulcal widening and ventriculomegaly, consistent with
+  generalized cerebral atrophy. The sulci are diffusely prominent throughout
+  bilateral cerebral hemispheres. The sylvian fissures are widened
+  bilaterally. The lateral ventricles, third ventricle, and fourth ventricle
+  are all mildly enlarged in proportion to the degree of sulcal widening,
+  indicating ex vacuo ventriculomegaly rather than obstructive
+  hydrocephalus. Importantly, there is no periventricular hypodensity to
+  suggest transependymal CSF flow. No intracranial hemorrhage, mass lesion,
+  or acute infarction.
+  Impression: Diffuse cerebral atrophy with ex vacuo ventriculomegaly,
+  likely age-related or neurodegenerative in etiology. The proportionate
+  enlargement of sulci and ventricles argues against true hydrocephalus.
+  Clinical correlation recommended.
+condition_present: true
+confusion_pair: CT-021
+source_dataset: omnimedvqa-open
+tags:
+  - cerebral-atrophy
+  - head
+  - neurodegenerative
+  - confusion-pair

@@ -1,0 +1,51 @@
+id: XRAY-043
+name: Normal CXR - elderly patient with aortic tortuosity
+modality: xray
+anatomy: chest
+task_type: diagnosis
+difficulty: intermediate
+image_ref: xray/omnimedvqa/CXR_0043.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Normal chest radiograph with age-related aortic unfolding"
+  differential: []
+  key_findings:
+    - { finding: "unfolded tortuous thoracic aorta", location: "aortic arch and descending aorta", required: true }
+    - { finding: "clear lung fields", location: "bilateral lungs", required: true }
+    - { finding: "normal cardiac silhouette for age", location: "cardiomediastinal", required: true }
+    - { finding: "aortic calcification", location: "aortic wall", required: false }
+  severity: mild
+  laterality: ""
+  negatives:
+    - aortic aneurysm
+    - aortic dissection
+    - cardiomegaly
+    - pleural effusion
+    - consolidation
+    - mass
+pattern_checks:
+  - { name: no_acute_disease, check_type: regex, pattern: "(?i)(no\\s+acute|normal|unremarkable|no.{0,20}significant)", required: true }
+  - { name: aortic_unfolding, check_type: regex, pattern: "(?i)(unfolded|tortuou|ectatic|elongat).{0,20}aort", required: true }
+  - { name: age_related, check_type: regex, pattern: "(?i)(age.?related|degenerative|atheroscler|chronic)", required: true }
+  - { name: lungs_clear, check_type: regex, pattern: "(?i)(clear|no.*opaci|no.*consolidat)", required: true }
+reference_solution: |
+  PA chest radiograph demonstrates a prominent unfolded thoracic aorta with
+  tortuosity, which is an age-related degenerative change and should not be
+  confused with an aortic aneurysm. Atherosclerotic calcification is seen along
+  the aortic wall. The lungs are clear bilaterally without focal consolidation,
+  mass, or pleural effusion. No pneumothorax. The cardiac silhouette is within
+  normal limits for the patient's age. The costophrenic angles are sharp. The
+  mediastinal width is within normal limits when accounting for the aortic
+  tortuosity. The visualized osseous structures are intact with mild degenerative
+  changes of the thoracic spine.
+  Impression: Age-related aortic unfolding and atherosclerosis. No acute
+  cardiopulmonary disease.
+condition_present: false
+confusion_pair: null
+source_dataset: omnimedvqa-open
+tags:
+  - normal
+  - aortic-unfolding
+  - elderly
+  - chest
+  - baseline

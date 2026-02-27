@@ -1,0 +1,53 @@
+id: CT-049
+name: Normal non-contrast head CT (elderly)
+modality: ct
+anatomy: head
+task_type: diagnosis
+difficulty: basic
+image_ref: ct/eurorad/EUR_0049.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Normal non-contrast head CT with age-appropriate changes"
+  differential:
+    - early small vessel ischemic disease
+    - chronic microvascular changes
+    - mild age-related atrophy
+  key_findings:
+    - { finding: "preserved gray-white matter differentiation", location: "bilateral cerebral hemispheres", required: true }
+    - { finding: "no intracranial hemorrhage", location: "brain", required: true }
+    - { finding: "no acute territorial infarction", location: "bilateral hemispheres", required: true }
+    - { finding: "mild generalized volume loss appropriate for age", location: "cerebral hemispheres", required: false }
+  severity: mild
+  laterality: ""
+  negatives:
+    - intracranial hemorrhage
+    - acute infarction
+    - mass lesion
+    - midline shift
+    - hydrocephalus (beyond age-appropriate)
+    - skull fracture
+pattern_checks:
+  - { name: normal_identified, check_type: regex, pattern: "normal|unremarkable|no\\s+acute|negative|age.?appropriate", required: true }
+  - { name: no_hemorrhage, check_type: regex, pattern: "no.{0,30}(hemorrhage|haemorrhage|bleed|blood)", required: true }
+  - { name: no_infarct, check_type: regex, pattern: "no.{0,30}(infarct|isch[ae]mi|stroke)", required: true }
+reference_solution: |
+  Non-contrast CT of the head demonstrates preserved gray-white matter
+  differentiation throughout bilateral cerebral hemispheres. No intracranial
+  hemorrhage, including no epidural, subdural, subarachnoid, or
+  intraparenchymal blood. No acute territorial infarction. No mass lesion or
+  mass effect. Midline structures are normal in position. The ventricles are
+  mildly prominent with mild generalized cerebral volume loss, consistent
+  with age-appropriate involutional changes. No focal lesion. The
+  visualized paranasal sinuses and mastoid air cells are well aerated.
+  Osseous structures are intact without fracture.
+  Impression: Normal non-contrast head CT for age. No acute intracranial
+  abnormality. Mild generalized cerebral volume loss is age-appropriate.
+condition_present: false
+confusion_pair: null
+source_dataset: eurorad
+tags:
+  - normal
+  - head
+  - baseline
+  - elderly
+  - negative-study

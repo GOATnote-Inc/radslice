@@ -1,0 +1,55 @@
+id: XRAY-037
+name: Bilateral apical fibrotic changes - post-TB sequelae
+modality: xray
+anatomy: chest
+task_type: finding_detection
+difficulty: intermediate
+image_ref: xray/omnimedvqa/CXR_0037.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Bilateral apical fibrotic changes consistent with prior tuberculosis"
+  differential:
+    - active tuberculosis reactivation
+    - apical fibrosis from ankylosing spondylitis
+    - radiation fibrosis
+    - chronic sarcoidosis (stage IV)
+  key_findings:
+    - { finding: "bilateral apical fibrocavitary changes", location: "bilateral lung apices", required: true }
+    - { finding: "volume loss in the upper lobes with upward retraction of the hila", location: "bilateral upper zones", required: true }
+    - { finding: "calcified granulomas", location: "bilateral upper lobes", required: false }
+    - { finding: "compensatory lower lobe hyperinflation", location: "bilateral lower lobes", required: false }
+  severity: moderate
+  laterality: bilateral
+  negatives:
+    - active consolidation
+    - pleural effusion
+    - cavitary lesion with air-fluid level
+    - mediastinal mass
+pattern_checks:
+  - { name: fibrotic_changes, check_type: regex, pattern: "(?i)(fibro(tic|sis)|scarring|fibrocalcific|calcif)", required: true }
+  - { name: bilateral_apical, check_type: regex, pattern: "(?i)(bilateral.{0,20}apic|apic.{0,20}bilateral|both.{0,20}apic)", required: true }
+  - { name: prior_tb, check_type: regex, pattern: "(?i)(prior|old|treated|healed|sequela|post).{0,20}(TB|tubercul)", required: true }
+  - { name: volume_loss, check_type: regex, pattern: "(?i)(volume\\s+loss|retraction|elevated.{0,20}hil)", required: false }
+reference_solution: |
+  PA chest radiograph demonstrates bilateral apical fibrocavitary changes with
+  volume loss in both upper lobes. There is upward retraction of the bilateral
+  hila, indicating chronic upper lobe volume loss. Calcified granulomas are seen
+  scattered in the bilateral apices. The fibrotic changes include linear
+  opacities and architectural distortion. The lower lobes demonstrate
+  compensatory hyperinflation. No active consolidation or air-fluid levels to
+  suggest reactivation. The cardiac silhouette is normal. No pleural effusion.
+  These findings are consistent with sequelae of prior granulomatous disease,
+  most likely tuberculosis. If clinical symptoms (cough, fever, weight loss)
+  are present, sputum for AFB should be obtained to exclude reactivation.
+  Impression: Bilateral apical fibrotic changes — sequelae of prior TB. Exclude
+  reactivation if clinically indicated.
+condition_present: true
+confusion_pair: null
+source_dataset: omnimedvqa-open
+tags:
+  - tuberculosis-sequelae
+  - fibrosis
+  - apical
+  - bilateral
+  - granulomatous
+  - chest

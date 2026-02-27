@@ -1,0 +1,61 @@
+id: MRI-028
+name: Myocarditis confusion pair for myocardial infarction
+modality: mri
+anatomy: heart
+task_type: diagnosis
+difficulty: expert
+image_ref: mri/eurorad/EUR_0028.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Acute myocarditis with non-ischemic delayed gadolinium enhancement pattern"
+  differential:
+    - myocardial infarction (ischemic pattern)
+    - cardiac sarcoidosis
+    - dilated cardiomyopathy
+    - arrhythmogenic right ventricular cardiomyopathy
+    - Chagas cardiomyopathy
+  key_findings:
+    - { finding: "mid-wall and/or epicardial delayed gadolinium enhancement in a non-coronary distribution", location: "inferolateral wall of the left ventricle, mid-wall to epicardial", required: true }
+    - { finding: "myocardial edema on T2-weighted/STIR or T2 mapping (elevated native T2)", location: "inferolateral and lateral wall", required: true }
+    - { finding: "elevated native T1 and ECV values on T1 mapping", location: "affected myocardial segments", required: false }
+    - { finding: "regional wall motion abnormality", location: "inferolateral segments on cine images", required: false }
+  severity: moderate
+  laterality: ""
+  negatives:
+    - subendocardial enhancement in a coronary distribution (ischemic pattern)
+    - coronary artery occlusion
+    - intracardiac thrombus
+    - pericardial constriction
+    - valvular disease
+pattern_checks:
+  - { name: myocarditis_mentioned, check_type: regex, pattern: "myocarditis|myocard.*inflamm|inflamm.*myocard|viral.*myocard", required: true }
+  - { name: non_ischemic_pattern, check_type: regex, pattern: "non.?ischem|epicardial|mid.?wall|non.?coronary", required: true }
+  - { name: delayed_enhancement, check_type: regex, pattern: "delayed.*enhanc|late.*gadolinium|DGE|LGE", required: true }
+  - { name: edema_present, check_type: regex, pattern: "edema|T2.*hyperintens|T2.*elevated|STIR.*hyperintens|inflamm", required: true }
+reference_solution: |
+  Cardiac MRI demonstrates findings consistent with acute myocarditis. Late
+  gadolinium enhancement (LGE) images show patchy mid-wall and epicardial
+  enhancement in the inferolateral wall of the left ventricle. This
+  non-ischemic pattern (epicardial/mid-wall rather than subendocardial) is
+  the critical distinguishing feature from myocardial infarction, which
+  characteristically shows subendocardial-to-transmural enhancement in a
+  coronary artery territory. T2-weighted STIR images demonstrate myocardial
+  edema in the same distribution, and T2 mapping shows elevated native T2
+  values confirming active inflammation. Native T1 values and ECV are elevated
+  in the affected segments. Cine images show mild hypokinesis of the
+  inferolateral wall. The overall left ventricular ejection fraction is mildly
+  reduced at 48%. No pericardial effusion. Modified Lake Louise criteria are
+  satisfied with both a T2-based criterion (edema) and a T1-based criterion
+  (LGE/elevated T1/elevated ECV).
+  Impression: Acute myocarditis with non-ischemic LGE pattern (mid-wall and
+  epicardial inferolateral) and myocardial edema. Not consistent with
+  ischemic injury.
+condition_present: true
+confusion_pair: MRI-027
+source_dataset: eurorad
+tags:
+  - myocarditis
+  - cardiac
+  - delayed-enhancement
+  - inflammatory
+  - confusion-pair

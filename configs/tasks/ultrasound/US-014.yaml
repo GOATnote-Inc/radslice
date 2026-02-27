@@ -1,0 +1,58 @@
+id: US-014
+name: Pediatric intussusception with target sign
+modality: ultrasound
+anatomy: abdomen
+task_type: diagnosis
+difficulty: advanced
+image_ref: ultrasound/radimagenet/US_0014.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Ileocolic intussusception"
+  differential:
+    - small bowel intussusception (transient)
+    - colonic mass acting as lead point
+    - thickened bowel loop from inflammatory bowel disease
+    - mesenteric lymphadenopathy
+    - bowel-within-bowel from Meckel diverticulum
+  key_findings:
+    - { finding: "target sign (concentric alternating hyper- and hypoechoic rings) on transverse imaging", location: "right lower quadrant", required: true }
+    - { finding: "pseudokidney sign on longitudinal imaging", location: "right lower quadrant", required: false }
+    - { finding: "trapped mesenteric fat and lymph nodes within the intussusceptum", location: "center of the target", required: false }
+  severity: severe
+  laterality: right
+  negatives:
+    - free intraperitoneal fluid
+    - pneumoperitoneum
+    - perforation
+    - pathologic lead point mass
+    - small bowel obstruction
+pattern_checks:
+  - { name: intussusception_mentioned, check_type: regex, pattern: "intussusception|intussuscept", required: true }
+  - { name: target_sign, check_type: regex, pattern: "target\\s+sign|doughnut|concentric.*ring|bull.?s?.?eye", required: true }
+  - { name: bowel_within_bowel, check_type: regex, pattern: "bowel.?within.?bowel|pseudokidney|telescop", required: false }
+  - { name: no_perforation, check_type: regex, pattern: "no.*(perforation|pneumoperitoneum|free\\s+air)", required: true }
+reference_solution: |
+  Abdominal ultrasound of the right lower quadrant in a pediatric patient
+  demonstrates a characteristic target sign on transverse imaging, consisting
+  of concentric alternating hyperechoic and hypoechoic rings of bowel wall.
+  This represents the intussuscipiens enveloping the intussusceptum. On
+  longitudinal scanning, a pseudokidney sign is identified with the
+  intussuscepted bowel mimicking a renal contour. Centrally trapped mesenteric
+  fat appears as hyperechoic material within the intussusceptum. The outer
+  diameter of the intussusception measures approximately 3.2 cm. Color Doppler
+  demonstrates preserved blood flow within the bowel wall, suggesting viability.
+  No free intraperitoneal fluid or pneumoperitoneum is identified. No discrete
+  pathologic lead point mass is visualized.
+  Impression: Ileocolic intussusception with classic target sign. No evidence
+  of perforation or bowel ischemia. Pneumatic or hydrostatic reduction is
+  recommended.
+condition_present: true
+confusion_pair: null
+source_dataset: radimagenet
+tags:
+  - intussusception
+  - pediatric
+  - abdomen
+  - target-sign
+  - emergency
+  - bowel

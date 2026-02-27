@@ -1,0 +1,54 @@
+id: XRAY-031
+name: Right lower lobe bronchiectasis
+modality: xray
+anatomy: chest
+task_type: diagnosis
+difficulty: intermediate
+image_ref: xray/omnimedvqa/CXR_0031.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Right lower lobe bronchiectasis"
+  differential:
+    - cystic fibrosis
+    - post-infectious bronchiectasis
+    - allergic bronchopulmonary aspergillosis
+    - Kartagener syndrome
+  key_findings:
+    - { finding: "tram-track opacities representing dilated bronchi", location: "right lower lobe", required: true }
+    - { finding: "ring shadows (dilated bronchi en face)", location: "right lower zone", required: true }
+    - { finding: "volume loss in the right lower lobe", location: "right lower lobe", required: false }
+    - { finding: "peribronchial thickening", location: "right lower lobe", required: false }
+  severity: moderate
+  laterality: right
+  negatives:
+    - pneumothorax
+    - pleural effusion
+    - left lung abnormality
+    - cavitary lesion
+    - consolidation
+pattern_checks:
+  - { name: bronchiectasis_mentioned, check_type: regex, pattern: "(?i)bronchiectasis", required: true }
+  - { name: laterality_right, check_type: regex, pattern: "(?i)right", required: true }
+  - { name: tram_track_or_ring, check_type: regex, pattern: "(?i)(tram.?track|ring\\s+shadow|dilated\\s+bronch|bronchial\\s+dilat)", required: true }
+  - { name: lower_lobe, check_type: regex, pattern: "(?i)(lower\\s+lobe|basilar|RLL|lower\\s+zone)", required: false }
+reference_solution: |
+  PA chest radiograph demonstrates tram-track opacities in the right lower lobe,
+  representing dilated, thick-walled bronchi seen in longitudinal section. Several
+  ring shadows are also present in the right lower zone, representing dilated
+  bronchi seen en face. There is subtle volume loss in the right lower lobe with
+  crowding of the pulmonary vasculature. Peribronchial thickening is noted. The
+  left lung is clear. No pleural effusion, pneumothorax, or consolidation. The
+  cardiac silhouette is normal. These findings are consistent with bronchiectasis
+  in the right lower lobe. HRCT is recommended for definitive characterization
+  and to assess the full extent of disease. Clinical correlation for underlying
+  etiology (post-infectious, cystic fibrosis, immune deficiency) is advised.
+  Impression: Right lower lobe bronchiectasis.
+condition_present: true
+confusion_pair: null
+source_dataset: omnimedvqa-open
+tags:
+  - bronchiectasis
+  - tram-tracks
+  - airway-disease
+  - right-lower-lobe
+  - chest

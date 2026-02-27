@@ -1,0 +1,52 @@
+id: XRAY-057
+name: Chilaiditi sign mimicking pneumoperitoneum
+modality: xray
+anatomy: abdomen
+task_type: diagnosis
+difficulty: advanced
+image_ref: xray/mediconfusion/MCF_0057.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Chilaiditi sign (colonic interposition)"
+  differential:
+    - pneumoperitoneum (free air)
+    - subdiaphragmatic abscess
+    - diaphragmatic hernia
+  key_findings:
+    - { finding: "gas-containing structure between liver and right hemidiaphragm", location: "right subdiaphragmatic region", required: true }
+    - { finding: "haustral markings visible within the interposed gas", location: "right subdiaphragmatic", required: true }
+    - { finding: "no Rigler sign", location: "abdomen", required: false }
+  severity: mild
+  laterality: right
+  negatives:
+    - true pneumoperitoneum
+    - free intraperitoneal air
+    - bowel perforation
+    - peritonitis
+pattern_checks:
+  - { name: chilaiditi, check_type: regex, pattern: "(?i)(Chilaiditi|colonic\\s+interposition|hepatodiaphragmatic\\s+interposition)", required: true }
+  - { name: not_pneumoperitoneum, check_type: regex, pattern: "(?i)(not.{0,20}pneumoperitoneum|rather\\s+than.{0,20}(free\\s+air|pneumoperitoneum)|mimic)", required: true }
+  - { name: haustral, check_type: regex, pattern: "(?i)(haustr|colon|bowel\\s+gas|large\\s+bowel)", required: true }
+  - { name: subdiaphragmatic, check_type: regex, pattern: "(?i)(sub(diaphragmatic|phrenic)|between.{0,30}(liver|diaphragm))", required: false }
+reference_solution: |
+  Upright chest/abdominal radiograph demonstrates a gas-containing structure
+  interposed between the liver and the right hemidiaphragm, which could initially
+  be mistaken for free subdiaphragmatic air (pneumoperitoneum). However, haustral
+  markings are clearly visible within the gas-filled structure, identifying it as
+  colon (hepatic flexure) rather than free air. This represents Chilaiditi sign
+  (hepatodiaphragmatic interposition of the colon). No Rigler sign or other
+  features of true pneumoperitoneum. The remaining bowel gas pattern is
+  nonobstructive. The visualized lung bases are clear. This is usually an
+  incidental finding and does not require surgical intervention in the absence
+  of symptoms (Chilaiditi syndrome).
+  Impression: Chilaiditi sign — colonic interposition, not pneumoperitoneum. No
+  surgical emergency.
+condition_present: true
+confusion_pair: XRAY-016
+source_dataset: mediconfusion
+tags:
+  - Chilaiditi
+  - pneumoperitoneum-mimic
+  - confusion-pair
+  - abdomen
+  - colonic-interposition

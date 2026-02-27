@@ -1,0 +1,52 @@
+id: CT-040
+name: Normal pelvis CT
+modality: ct
+anatomy: abdomen
+task_type: diagnosis
+difficulty: basic
+image_ref: ct/omnimedvqa/CT_0040.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Normal CT pelvis"
+  differential:
+    - small physiologic ovarian cyst
+    - trace physiologic free fluid
+    - benign uterine fibroid below reporting threshold
+  key_findings:
+    - { finding: "normal pelvic organs", location: "bladder, uterus/prostate, rectum", required: true }
+    - { finding: "no pelvic mass or collection", location: "pelvis", required: true }
+    - { finding: "no pelvic lymphadenopathy", location: "pelvic sidewalls", required: true }
+    - { finding: "intact osseous pelvis", location: "pelvic bones", required: false }
+  severity: mild
+  laterality: ""
+  negatives:
+    - pelvic mass
+    - lymphadenopathy
+    - free fluid
+    - fracture
+    - appendicitis
+    - abscess
+    - bowel obstruction
+pattern_checks:
+  - { name: normal_identified, check_type: regex, pattern: "normal|unremarkable|no\\s+acute|negative|no\\s+significant", required: true }
+  - { name: no_mass, check_type: regex, pattern: "no.{0,30}(mass|lesion|collection|abscess)", required: true }
+  - { name: no_lymphadenopathy, check_type: regex, pattern: "no.{0,30}(lymph|adenopath)", required: true }
+reference_solution: |
+  Contrast-enhanced CT of the pelvis demonstrates normal-appearing pelvic
+  organs. The urinary bladder is normally distended without wall thickening
+  or intraluminal mass. The rectum and sigmoid colon are unremarkable
+  without wall thickening. No pelvic mass, abscess, or fluid collection.
+  The pelvic sidewall lymph nodes are within normal limits. The bilateral
+  inguinal regions are unremarkable. The osseous pelvis is intact without
+  fracture or lytic lesion. The bilateral hip joints are normal. No free
+  pelvic fluid. The visualized vasculature is patent.
+  Impression: Normal CT of the pelvis. No acute pelvic pathology.
+condition_present: false
+confusion_pair: null
+source_dataset: omnimedvqa-open
+tags:
+  - normal
+  - abdomen
+  - pelvis
+  - baseline
+  - negative-study

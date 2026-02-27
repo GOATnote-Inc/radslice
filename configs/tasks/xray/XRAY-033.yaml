@@ -1,0 +1,54 @@
+id: XRAY-033
+name: Thoracic aortic aneurysm
+modality: xray
+anatomy: chest
+task_type: diagnosis
+difficulty: advanced
+image_ref: xray/omnimedvqa/CXR_0033.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Thoracic aortic aneurysm"
+  differential:
+    - aortic dissection
+    - tortuous aorta in elderly
+    - mediastinal mass
+    - post-stenotic dilatation of the aorta
+    - aortic pseudoaneurysm
+  key_findings:
+    - { finding: "dilated aortic contour with convex lateral margin", location: "descending thoracic aorta", required: true }
+    - { finding: "widened mediastinal silhouette", location: "superior mediastinum", required: true }
+    - { finding: "mural calcification along the aortic wall", location: "aortic wall", required: false }
+    - { finding: "tracheal deviation", location: "trachea", required: false }
+  severity: severe
+  laterality: ""
+  negatives:
+    - pneumothorax
+    - pleural effusion
+    - focal consolidation
+    - rib fractures
+pattern_checks:
+  - { name: aneurysm_mentioned, check_type: regex, pattern: "(?i)(aortic\\s+aneurysm|aneurysm.{0,20}aort)", required: true }
+  - { name: aortic_dilatation, check_type: regex, pattern: "(?i)(dilat|ectasia|enlarg|widen).{0,30}aort", required: true }
+  - { name: thoracic, check_type: regex, pattern: "(?i)(thoracic|descend)", required: true }
+  - { name: workup, check_type: regex, pattern: "(?i)(CT[A]?|angiograph|CTA|echocardiogra|vascular\\s+surgery)", required: false }
+reference_solution: |
+  PA chest radiograph demonstrates a prominent aortic contour with convex lateral
+  bulging of the descending thoracic aorta and widening of the mediastinal
+  silhouette, consistent with a thoracic aortic aneurysm. Mural calcification is
+  visible along the dilated aortic wall. There is mild rightward tracheal
+  deviation secondary to mass effect from the aneurysm. No associated pleural
+  effusion or hemothorax. The lung fields are clear. The cardiac silhouette is
+  borderline enlarged. The aneurysm appears to involve the descending thoracic
+  aorta. CT angiography of the chest is recommended to precisely measure the
+  aneurysm diameter, assess for mural thrombus, and guide surgical planning.
+  Vascular surgery consultation is warranted.
+  Impression: Thoracic aortic aneurysm of the descending aorta — CTA recommended.
+condition_present: true
+confusion_pair: null
+source_dataset: omnimedvqa-open
+tags:
+  - aortic-aneurysm
+  - thoracic-aorta
+  - vascular
+  - chest
+  - mediastinal

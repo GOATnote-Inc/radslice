@@ -1,0 +1,60 @@
+id: CT-027
+name: Brain metastases with vasogenic edema
+modality: ct
+anatomy: head
+task_type: finding_detection
+difficulty: intermediate
+image_ref: ct/omnimedvqa/CT_0027.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Multiple brain metastases"
+  differential:
+    - brain abscesses
+    - primary brain tumors (multifocal glioma)
+    - demyelinating disease (tumefactive MS)
+    - lymphoma
+    - subacute infarctions
+  key_findings:
+    - { finding: "multiple ring-enhancing lesions at gray-white junction", location: "bilateral cerebral hemispheres", required: true }
+    - { finding: "surrounding vasogenic edema", location: "perilesional white matter", required: true }
+    - { finding: "mass effect on adjacent structures", location: "right frontal lobe lesion", required: false }
+    - { finding: "lesions at gray-white matter junction", location: "bilateral frontoparietal regions", required: false }
+  severity: severe
+  laterality: bilateral
+  negatives:
+    - solitary lesion
+    - leptomeningeal enhancement
+    - hemorrhagic transformation
+    - obstructive hydrocephalus
+    - midline shift greater than 5mm
+pattern_checks:
+  - { name: metastases_mentioned, check_type: regex, pattern: "metastas|metastatic|secondary|mets\\b", required: true }
+  - { name: multiple_lesions, check_type: regex, pattern: "multiple|several|numerous|multifocal", required: true }
+  - { name: ring_enhancing, check_type: regex, pattern: "ring.?enhanc|rim.?enhanc|peripheral.*enhanc", required: true }
+  - { name: edema, check_type: regex, pattern: "edema|oedema|vasogenic|perilesional.*hypodensity", required: false }
+  - { name: gwm_junction, check_type: regex, pattern: "gray.?white|corticomedullary|junction", required: false }
+reference_solution: |
+  Contrast-enhanced CT of the head demonstrates multiple ring-enhancing
+  lesions located at the gray-white matter junction in bilateral cerebral
+  hemispheres. The largest lesion in the right frontal lobe measures
+  approximately 2.5 cm with irregular rim enhancement and central necrosis.
+  Additional lesions are identified in the left parietal lobe (1.8 cm) and
+  right occipital lobe (1.2 cm). There is extensive surrounding vasogenic
+  edema causing mass effect with partial effacement of the right frontal
+  horn. The gray-white matter junction distribution and multiplicity are
+  highly characteristic of hematogenous metastatic disease. No
+  leptomeningeal enhancement. Mild midline shift of approximately 3 mm
+  leftward. No obstructive hydrocephalus.
+  Impression: Multiple ring-enhancing lesions at the gray-white matter
+  junction bilaterally, highly suspicious for cerebral metastases.
+  Correlation with primary malignancy history recommended. MRI with
+  gadolinium for further characterization and stereotactic planning.
+condition_present: true
+confusion_pair: null
+source_dataset: omnimedvqa-open
+tags:
+  - brain-metastases
+  - oncology
+  - head
+  - ring-enhancing
+  - finding-detection

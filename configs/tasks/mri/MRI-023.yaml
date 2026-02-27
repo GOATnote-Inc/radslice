@@ -1,0 +1,56 @@
+id: MRI-023
+name: Avascular necrosis of the femoral head
+modality: mri
+anatomy: hip
+task_type: finding_detection
+difficulty: intermediate
+image_ref: mri/omnimedvqa/MRI_0023.png
+prompt_template: finding_detection
+ground_truth:
+  primary_diagnosis: "Avascular necrosis (osteonecrosis) of the left femoral head"
+  differential:
+    - transient osteoporosis of the hip
+    - subchondral insufficiency fracture
+    - septic arthritis with osteomyelitis
+    - bone marrow edema syndrome
+  key_findings:
+    - { finding: "serpiginous T1 hypointense and T2 hyperintense line (double-line sign) in the femoral head", location: "anterosuperior left femoral head", required: true }
+    - { finding: "geographic area of altered marrow signal in the femoral head", location: "left femoral head", required: true }
+    - { finding: "subchondral crescent sign indicating subchondral fracture", location: "anterosuperior femoral head articular surface", required: false }
+    - { finding: "surrounding bone marrow edema on STIR/T2 fat-sat", location: "left femoral head and neck", required: false }
+  severity: moderate
+  laterality: left
+  negatives:
+    - joint effusion with synovial enhancement (favors septic arthritis)
+    - diffuse marrow edema without demarcation line (favors transient osteoporosis)
+    - femoral head collapse
+    - contralateral femoral head involvement
+pattern_checks:
+  - { name: avn_mentioned, check_type: regex, pattern: "avascular\\s+necros|osteonecrosis|AVN|ischemic\\s+necros|bone\\s+infarct", required: true }
+  - { name: femoral_head, check_type: regex, pattern: "femoral\\s+head|femur\\s+head", required: true }
+  - { name: double_line, check_type: regex, pattern: "double.?line|serpiginous|demarcation|geographic|crescen", required: true }
+  - { name: laterality_left, check_type: regex, pattern: "left", required: true }
+reference_solution: |
+  MRI of the left hip demonstrates findings of avascular necrosis (osteonecrosis)
+  of the left femoral head. On T1-weighted images, there is a serpiginous
+  hypointense line in the anterosuperior femoral head demarcating the necrotic
+  segment. On T2-weighted images, this line demonstrates the characteristic
+  double-line sign with an outer hypointense line (sclerosis) and inner
+  hyperintense line (granulation tissue). The necrotic segment involves
+  approximately 30% of the weight-bearing surface of the femoral head. There
+  is surrounding bone marrow edema on STIR sequences in the femoral head and
+  proximal femoral neck. No definite subchondral collapse or crescent sign is
+  identified at this stage. The articular cartilage appears preserved. The
+  contralateral femoral head is normal.
+  Impression: Left femoral head avascular necrosis with double-line sign,
+  Ficat stage II. Orthopedic consultation recommended for staging and
+  management, including consideration of core decompression.
+condition_present: true
+confusion_pair: null
+source_dataset: omnimedvqa-open
+tags:
+  - avn
+  - hip
+  - musculoskeletal
+  - osteonecrosis
+  - femoral-head

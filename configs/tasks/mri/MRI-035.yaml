@@ -1,0 +1,59 @@
+id: MRI-035
+name: Epidural abscess of the lumbar spine
+modality: mri
+anatomy: spine
+task_type: diagnosis
+difficulty: advanced
+image_ref: mri/eurorad/EUR_0035.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Lumbar epidural abscess with adjacent discitis-osteomyelitis"
+  differential:
+    - epidural hematoma
+    - epidural metastatic disease
+    - disc herniation with epidural component
+    - epidural lipomatosis
+    - Guillain-Barre syndrome (nerve root enhancement)
+  key_findings:
+    - { finding: "epidural collection with peripheral rim enhancement on post-gadolinium images", location: "posterior epidural space L3-L5", required: true }
+    - { finding: "T2 hyperintense signal within the epidural space with restricted diffusion", location: "posterior epidural space L3-L5", required: true }
+    - { finding: "adjacent disc space enhancement and endplate erosion (discitis-osteomyelitis)", location: "L4-L5 disc space and adjacent endplates", required: false }
+    - { finding: "compression and displacement of the cauda equina nerve roots", location: "thecal sac at L3-L5", required: false }
+  severity: severe
+  laterality: ""
+  negatives:
+    - spinal cord signal abnormality (below conus)
+    - vertebral body compression fracture
+    - paraspinal abscess extension
+    - meningeal enhancement (meningitis)
+pattern_checks:
+  - { name: epidural_abscess, check_type: regex, pattern: "epidural.*abscess|abscess.*epidural|epidural.*infect|epidural.*collect", required: true }
+  - { name: rim_enhancement, check_type: regex, pattern: "rim.*enhanc|peripheral.*enhanc|ring.*enhanc|enhancing.*rim", required: true }
+  - { name: discitis, check_type: regex, pattern: "discitis|osteomyelit|disc.*infect|endplate.*erosi|endplate.*signal", required: true }
+  - { name: lumbar_location, check_type: regex, pattern: "lumbar|L[3-5]", required: true }
+reference_solution: |
+  MRI of the lumbar spine with and without gadolinium demonstrates a posterior
+  epidural collection extending from L3 through L5. The collection is T2
+  hyperintense and demonstrates restricted diffusion on DWI, consistent with
+  purulent material. Post-gadolinium images show avid peripheral rim
+  enhancement surrounding the collection, characteristic of an epidural
+  abscess. The collection causes compression and anterior displacement of
+  the cauda equina nerve roots within the thecal sac. At the L4-L5 level,
+  the disc space shows T2 hyperintense signal with loss of the normal
+  intranuclear cleft and enhancement of the adjacent L4 and L5 endplates,
+  which show erosive changes, consistent with discitis-osteomyelitis as the
+  likely source of the epidural infection. No paraspinal abscess extension.
+  The vertebral body heights are maintained.
+  Impression: Lumbar epidural abscess (L3-L5) with adjacent L4-L5
+  discitis-osteomyelitis and cauda equina compression. Emergent neurosurgical
+  consultation recommended for decompression and drainage.
+condition_present: true
+confusion_pair: null
+source_dataset: eurorad
+tags:
+  - epidural-abscess
+  - spine
+  - infection
+  - emergency
+  - lumbar
+  - discitis

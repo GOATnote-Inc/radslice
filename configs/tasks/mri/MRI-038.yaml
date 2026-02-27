@@ -1,0 +1,53 @@
+id: MRI-038
+name: Normal pelvis MRI
+modality: mri
+anatomy: pelvis
+task_type: diagnosis
+difficulty: basic
+image_ref: mri/omnimedvqa/MRI_0038.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Normal pelvic MRI (female)"
+  differential:
+    - functional ovarian cyst (physiologic)
+    - nabothian cysts of the cervix (normal variant)
+    - small amount of physiologic free fluid in cul-de-sac
+  key_findings:
+    - { finding: "normal uterine size, morphology, and signal with preserved zonal anatomy", location: "uterus", required: true }
+    - { finding: "normal bilateral ovaries without mass or complex cyst", location: "bilateral adnexa", required: true }
+    - { finding: "no pelvic lymphadenopathy", location: "pelvic sidewalls", required: false }
+    - { finding: "no free fluid or peritoneal implants", location: "cul-de-sac and peritoneal surfaces", required: false }
+  severity: mild
+  laterality: ""
+  negatives:
+    - uterine fibroid
+    - ovarian mass or complex cyst
+    - endometriosis
+    - pelvic lymphadenopathy
+    - free fluid (pathologic amount)
+    - bone marrow signal abnormality
+pattern_checks:
+  - { name: normal_mentioned, check_type: regex, pattern: "normal|unremarkable|no.*abnormal|negative|no.*pathol", required: true }
+  - { name: no_mass, check_type: regex, pattern: "no.*mass|no.*lesion|no.*cyst|without.*mass|no.*fibroid", required: true }
+  - { name: normal_ovaries, check_type: regex, pattern: "normal.*ovar|ovar.*normal|unremarkable.*ovar|ovar.*unremark", required: true }
+reference_solution: |
+  MRI of the pelvis demonstrates normal findings. The uterus is normal in
+  size, position, and signal with preserved zonal anatomy on T2-weighted
+  images (hyperintense endometrium, hypointense junctional zone, intermediate
+  signal myometrium). No uterine fibroids or focal myometrial lesion. The
+  endometrial stripe is normal in thickness. The cervix is unremarkable. The
+  bilateral ovaries are normal in size and morphology, identified with
+  physiologic follicles. No ovarian mass, complex cyst, or adnexal
+  abnormality. The pelvic sidewalls are clear without lymphadenopathy. No
+  significant free fluid in the cul-de-sac. The urinary bladder is
+  unremarkable. No bone marrow signal abnormality in the visualized osseous
+  structures.
+  Impression: Normal pelvic MRI.
+condition_present: false
+confusion_pair: null
+source_dataset: omnimedvqa-open
+tags:
+  - normal
+  - pelvis
+  - gynecologic
+  - negative-case

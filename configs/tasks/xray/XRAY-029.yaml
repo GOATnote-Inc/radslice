@@ -1,0 +1,51 @@
+id: XRAY-029
+name: Malpositioned endotracheal tube
+modality: xray
+anatomy: chest
+task_type: finding_detection
+difficulty: intermediate
+image_ref: xray/omnimedvqa/CXR_0029.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Malpositioned endotracheal tube in the right mainstem bronchus"
+  differential:
+    - appropriate ETT positioning
+    - esophageal intubation
+    - ETT above the thoracic inlet
+  key_findings:
+    - { finding: "ETT tip in the right mainstem bronchus", location: "right mainstem bronchus", required: true }
+    - { finding: "ETT tip below the carina", location: "below carina", required: true }
+    - { finding: "left lung atelectasis or volume loss", location: "left lung", required: false }
+  severity: severe
+  laterality: right
+  negatives:
+    - esophageal intubation
+    - pneumothorax
+    - appropriate ETT position
+    - pleural effusion
+pattern_checks:
+  - { name: ett_malposition, check_type: regex, pattern: "(?i)(malposition|low.{0,15}(ETT|endotracheal|tube)|right\\s+mainstem)", required: true }
+  - { name: ett_mentioned, check_type: regex, pattern: "(?i)(endotracheal\\s+tube|ETT|intubat)", required: true }
+  - { name: below_carina, check_type: regex, pattern: "(?i)(below.{0,15}carina|past.{0,15}carina|beyond.{0,15}carina|right\\s+mainstem\\s+bronch)", required: true }
+  - { name: reposition, check_type: regex, pattern: "(?i)(withdraw|reposition|pull\\s+back|retract)", required: false }
+reference_solution: |
+  Portable AP chest radiograph demonstrates an endotracheal tube with the tip
+  positioned in the right mainstem bronchus, approximately 3 cm below the carina.
+  This represents malposition, as the ETT tip should ideally be located 3-5 cm
+  above the carina in the mid-trachea. There is developing left lung opacification
+  consistent with atelectasis from the preferential right-sided ventilation. No
+  pneumothorax. A nasogastric tube is in satisfactory position with its tip
+  below the diaphragm. The cardiac silhouette is normal. Immediate withdrawal of
+  the ETT by approximately 4-5 cm is recommended to position the tip in the
+  mid-trachea, followed by a confirmatory radiograph.
+  Impression: Malpositioned ETT in the right mainstem bronchus — immediate
+  repositioning required.
+condition_present: true
+confusion_pair: null
+source_dataset: omnimedvqa-open
+tags:
+  - tube-malposition
+  - endotracheal-tube
+  - critical
+  - ICU
+  - lines-and-tubes

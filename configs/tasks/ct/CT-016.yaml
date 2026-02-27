@@ -1,0 +1,59 @@
+id: CT-016
+name: Abdominal aortic aneurysm with rupture
+modality: ct
+anatomy: abdomen
+task_type: diagnosis
+difficulty: expert
+image_ref: ct/eurorad/EUR_0016.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Ruptured infrarenal abdominal aortic aneurysm"
+  differential:
+    - contained aortic rupture
+    - mycotic aneurysm with periaortic inflammation
+    - retroperitoneal fibrosis
+    - aortocaval fistula
+    - retroperitoneal hemorrhage from other source
+  key_findings:
+    - { finding: "fusiform infrarenal aortic aneurysm", location: "infrarenal abdominal aorta", required: true }
+    - { finding: "retroperitoneal hematoma", location: "left retroperitoneum and periaortic space", required: true }
+    - { finding: "active contrast extravasation", location: "posterior wall of aneurysm", required: false }
+    - { finding: "mural thrombus", location: "within aneurysm sac", required: false }
+    - { finding: "crescent sign indicating impending rupture", location: "posterior aneurysm wall", required: false }
+  severity: severe
+  laterality: ""
+  negatives:
+    - thoracic aortic involvement
+    - aortic dissection flap
+    - renal artery involvement
+    - free intraperitoneal rupture
+    - iliac artery aneurysm
+pattern_checks:
+  - { name: aaa_mentioned, check_type: regex, pattern: "aortic\\s+aneurysm|AAA\\b|aneurysm.{0,30}aort", required: true }
+  - { name: rupture_identified, check_type: regex, pattern: "ruptur|leak|extravasa|retroperitoneal.*h[ae]mat|h[ae]mat.*retroperitoneal", required: true }
+  - { name: infrarenal, check_type: regex, pattern: "infrarenal|abdominal\\s+aort", required: true }
+  - { name: emergency, check_type: regex, pattern: "emergent|urgent|surgical|immediate|life.?threaten", required: false }
+reference_solution: |
+  Contrast-enhanced CT angiography of the abdomen demonstrates a large
+  fusiform infrarenal abdominal aortic aneurysm measuring 7.8 cm in maximal
+  diameter. There is a large left retroperitoneal hematoma extending from the
+  periaortic space into the left psoas muscle and pararenal space, consistent
+  with aneurysm rupture. Active contrast extravasation is identified along
+  the posterior wall of the aneurysm. Eccentric mural thrombus lines the
+  aneurysm sac. The aneurysm extends to the aortic bifurcation but the
+  common iliac arteries are normal in caliber. The renal arteries arise above
+  the aneurysm neck. No aortic dissection flap. No free intraperitoneal
+  rupture.
+  Impression: Ruptured infrarenal abdominal aortic aneurysm with large left
+  retroperitoneal hematoma and active extravasation. Emergent vascular
+  surgical repair required. This is a life-threatening emergency.
+condition_present: true
+confusion_pair: null
+source_dataset: eurorad
+tags:
+  - aortic-aneurysm
+  - rupture
+  - emergency
+  - abdomen
+  - vascular
+  - life-threatening

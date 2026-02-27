@@ -1,0 +1,59 @@
+id: CT-038
+name: Aortic dissection type B
+modality: ct
+anatomy: chest
+task_type: diagnosis
+difficulty: expert
+image_ref: ct/eurorad/EUR_0038.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Stanford type B aortic dissection"
+  differential:
+    - type A aortic dissection
+    - intramural hematoma
+    - penetrating aortic ulcer
+    - aortic aneurysm with mural thrombus
+    - artifact mimicking intimal flap
+  key_findings:
+    - { finding: "intimal flap beginning distal to left subclavian artery", location: "proximal descending thoracic aorta", required: true }
+    - { finding: "true and false lumen with differential enhancement", location: "descending thoracic aorta", required: true }
+    - { finding: "extension into abdominal aorta", location: "abdominal aorta", required: false }
+    - { finding: "patent ascending aorta without flap", location: "ascending aorta and arch", required: true }
+  severity: severe
+  laterality: ""
+  negatives:
+    - ascending aorta involvement (type A)
+    - aortic rupture
+    - pericardial effusion
+    - branch vessel occlusion with end-organ ischemia
+    - coronary involvement
+pattern_checks:
+  - { name: dissection_mentioned, check_type: regex, pattern: "dissection", required: true }
+  - { name: type_b_stanford, check_type: regex, pattern: "type\\s*B|Stanford\\s*B|DeBakey\\s*III|descending", required: true }
+  - { name: intimal_flap, check_type: regex, pattern: "intimal\\s+flap|dissection\\s+flap|flap", required: true }
+  - { name: no_ascending, check_type: regex, pattern: "sparing.*ascending|ascending.*normal|ascending.*intact|distal\\s+to.*subclavian|below.*subclavian", required: true }
+reference_solution: |
+  CT aortography demonstrates an intimal flap originating just distal to
+  the left subclavian artery origin, with creation of true and false lumens
+  extending through the descending thoracic aorta, consistent with Stanford
+  type B aortic dissection. The ascending aorta and aortic arch are normal
+  without intimal flap, confirming type B classification. The false lumen is
+  larger than the true lumen. The dissection extends into the abdominal
+  aorta to the level of the renal arteries. The celiac and superior
+  mesenteric arteries arise from the true lumen. The bilateral renal
+  arteries appear patent. No end-organ malperfusion. No aortic rupture or
+  periaortic hematoma. No pericardial effusion.
+  Impression: Stanford type B aortic dissection originating distal to the
+  left subclavian artery extending to the renal arteries. No end-organ
+  malperfusion. Medical management with blood pressure optimization is
+  first-line therapy. Vascular surgery consultation recommended.
+condition_present: true
+confusion_pair: CT-006
+source_dataset: eurorad
+tags:
+  - aortic-dissection
+  - type-b
+  - emergency
+  - chest
+  - vascular
+  - confusion-pair

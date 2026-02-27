@@ -1,0 +1,46 @@
+id: XRAY-053
+name: Normal CXR with AICD device
+modality: xray
+anatomy: chest
+task_type: finding_detection
+difficulty: basic
+image_ref: xray/vindrcxr/VDR_0053.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Normal chest radiograph with implantable cardioverter-defibrillator"
+  differential: []
+  key_findings:
+    - { finding: "AICD generator in the left pectoral region", location: "left infraclavicular", required: true }
+    - { finding: "defibrillator lead with shock coil in right ventricle", location: "right ventricle", required: true }
+    - { finding: "clear lung fields", location: "bilateral lungs", required: true }
+  severity: mild
+  laterality: ""
+  negatives:
+    - lead fracture
+    - lead malposition
+    - pneumothorax
+    - pleural effusion
+    - cardiomegaly
+pattern_checks:
+  - { name: device_mentioned, check_type: regex, pattern: "(?i)(AICD|ICD|defibrillator|cardioverter)", required: true }
+  - { name: satisfactory_position, check_type: regex, pattern: "(?i)(satisfactor|appropriat|intact|stable|well.?position|unchanged)", required: true }
+  - { name: no_complication, check_type: regex, pattern: "(?i)(no\\s+acute|normal|no.{0,20}complicat|no.{0,20}pneumothorax)", required: true }
+reference_solution: |
+  PA chest radiograph demonstrates a left pectoral implantable cardioverter-
+  defibrillator (AICD) with leads coursing through the left subclavian vein into
+  the right heart. The shock coil and defibrillator lead tip are in the right
+  ventricle in satisfactory position. No lead fracture, kinking, or
+  dislodgement. The lungs are clear bilaterally without focal consolidation,
+  pleural effusion, or pneumothorax. The cardiac silhouette is within normal
+  limits. The costophrenic angles are sharp. No other acute abnormality.
+  Impression: AICD with leads in satisfactory position. No acute cardiopulmonary
+  abnormality.
+condition_present: false
+confusion_pair: null
+source_dataset: vindrcxr
+tags:
+  - normal
+  - AICD
+  - cardiac-device
+  - chest
+  - baseline

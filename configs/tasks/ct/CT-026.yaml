@@ -1,0 +1,59 @@
+id: CT-026
+name: Compression fracture (confusion pair for burst fracture)
+modality: ct
+anatomy: spine
+task_type: diagnosis
+difficulty: intermediate
+image_ref: ct/eurorad/EUR_0026.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Osteoporotic T12 compression fracture"
+  differential:
+    - burst fracture
+    - pathologic fracture from metastatic disease
+    - Schmorl node with endplate depression
+    - old healed fracture
+    - vertebral body hemangioma
+  key_findings:
+    - { finding: "anterior wedge compression deformity", location: "T12 vertebral body", required: true }
+    - { finding: "intact posterior vertebral body cortex", location: "posterior T12 wall", required: true }
+    - { finding: "no retropulsed fragment", location: "spinal canal at T12", required: true }
+    - { finding: "mild kyphotic angulation", location: "thoracolumbar junction", required: false }
+  severity: moderate
+  laterality: ""
+  negatives:
+    - retropulsed fragment
+    - spinal canal compromise
+    - posterior element fracture
+    - lytic lesion suggesting metastasis
+    - paravertebral soft tissue mass
+    - burst component
+pattern_checks:
+  - { name: compression_fracture, check_type: regex, pattern: "compression\\s+fracture|wedge.*fracture|vertebral.*fracture", required: true }
+  - { name: t12_location, check_type: regex, pattern: "T12|T-?12|twelfth\\s+thoracic", required: true }
+  - { name: no_burst, check_type: regex, pattern: "no.{0,20}(burst|retropuls|canal\\s+compromise)|intact.*posterior.*cortex|posterior.*cortex.*intact", required: true }
+  - { name: osteoporotic, check_type: regex, pattern: "osteoporo|insufficiency|benign|atraumatic|demineraliz", required: false }
+reference_solution: |
+  CT of the thoracolumbar spine demonstrates an anterior wedge compression
+  deformity of the T12 vertebral body with approximately 25% loss of
+  anterior height. The posterior vertebral body cortex is intact without
+  retropulsed fragment or burst component. The spinal canal is patent without
+  compromise at this level. The posterior elements including pedicles and
+  laminae are intact. There is mild kyphotic angulation at the thoracolumbar
+  junction centered at the fracture. Diffuse osteopenia is noted throughout
+  the visualized vertebral bodies. No lytic or blastic lesion to suggest
+  metastatic disease. No paravertebral soft tissue mass. The adjacent T11
+  and L1 vertebral bodies are intact.
+  Impression: Osteoporotic T12 anterior wedge compression fracture without
+  burst component or spinal canal compromise. This is a stable, anterior
+  column-only injury. Conservative management with bracing and osteoporosis
+  treatment is appropriate. MRI can assess acuity if clinical concern
+  exists.
+condition_present: true
+confusion_pair: CT-025
+source_dataset: eurorad
+tags:
+  - compression-fracture
+  - spine
+  - osteoporotic
+  - confusion-pair

@@ -1,0 +1,62 @@
+id: XRAY-080
+name: Left hilar mass with post-obstructive atelectasis
+modality: xray
+anatomy: chest
+task_type: finding_detection
+difficulty: expert
+image_ref: xray/omnimedvqa/CXR_0080.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Left hilar mass with post-obstructive left lower lobe atelectasis"
+  differential:
+    - central bronchogenic carcinoma
+    - lymphoma
+    - carcinoid tumor
+    - hilar lymphadenopathy from metastatic disease
+    - mucous plug with lobar collapse
+  key_findings:
+    - { finding: "left hilar mass with lobulated contour", location: "left hilum", required: true }
+    - { finding: "left lower lobe opacification from post-obstructive collapse", location: "left lower lobe", required: true }
+    - { finding: "S sign of Golden (concave-convex interface)", location: "left hilum/minor fissure region", required: false }
+    - { finding: "volume loss with mediastinal shift to the left", location: "mediastinum", required: false }
+  severity: severe
+  laterality: left
+  negatives:
+    - right lung abnormality
+    - pleural effusion
+    - pneumothorax
+    - bilateral involvement
+pattern_checks:
+  - { name: hilar_mass, check_type: regex, pattern: "(?i)(hilar\\s+mass|left\\s+hil.{0,20}(mass|tumor|lesion))", required: true }
+  - { name: post_obstructive, check_type: regex, pattern: "(?i)(post.?obstructive|obstructive.{0,20}(atelectasis|collapse|pneumonia))", required: true }
+  - { name: left_sided, check_type: regex, pattern: "(?i)left", required: true }
+  - { name: malignancy_concern, check_type: regex, pattern: "(?i)(bronchogenic|carcinoma|malignan|neoplasm|cancer|biopsy|bronchoscopy|staging)", required: true }
+  - { name: ct_or_biopsy, check_type: regex, pattern: "(?i)(CT|biopsy|bronchoscop|staging|PET)", required: false }
+reference_solution: |
+  PA chest radiograph demonstrates a lobulated mass at the left hilum with
+  associated opacification of the left lower lobe, consistent with post-
+  obstructive atelectasis/consolidation. The S sign of Golden may be present, with
+  the proximal convex margin of the mass transitioning to the concave margin of
+  the collapsed lobe, which is pathognomonic for a central obstructing lesion.
+  There is volume loss on the left side with subtle leftward mediastinal shift.
+  The right lung is clear. No pleural effusion or pneumothorax. The cardiac
+  silhouette is partially obscured. These findings are highly concerning for a
+  central bronchogenic carcinoma causing left lower lobe bronchus obstruction.
+  Contrast-enhanced CT chest is urgently recommended for staging, followed by
+  bronchoscopy with biopsy for tissue diagnosis. PET-CT should be considered
+  for complete staging.
+  Impression: Left hilar mass with post-obstructive left lower lobe collapse —
+  strongly suspicious for bronchogenic carcinoma. Urgent CT and bronchoscopy
+  recommended.
+condition_present: true
+confusion_pair: null
+source_dataset: omnimedvqa-open
+tags:
+  - hilar-mass
+  - post-obstructive
+  - atelectasis
+  - oncology
+  - bronchogenic-carcinoma
+  - S-sign-Golden
+  - finding-detection
+  - chest

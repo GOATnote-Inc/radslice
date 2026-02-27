@@ -1,0 +1,59 @@
+id: CT-025
+name: Thoracolumbar burst fracture
+modality: ct
+anatomy: spine
+task_type: finding_detection
+difficulty: advanced
+image_ref: ct/eurorad/EUR_0025.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "L1 burst fracture with retropulsed fragment"
+  differential:
+    - compression fracture without burst component
+    - pathologic fracture from metastatic disease
+    - chance fracture
+    - vertebral body hemangioma with pathologic fracture
+  key_findings:
+    - { finding: "comminuted fracture of L1 vertebral body", location: "L1 vertebral body", required: true }
+    - { finding: "retropulsed posterior fragment into spinal canal", location: "posterior L1 vertebral body", required: true }
+    - { finding: "loss of vertebral body height", location: "L1", required: false }
+    - { finding: "involvement of posterior elements", location: "L1 lamina", required: false }
+  severity: severe
+  laterality: ""
+  negatives:
+    - additional contiguous vertebral fractures
+    - aortic injury
+    - spinal cord transection visible on CT
+    - preexisting lytic lesion suggesting pathologic fracture
+    - dislocation
+pattern_checks:
+  - { name: burst_fracture, check_type: regex, pattern: "burst\\s+fracture|comminu", required: true }
+  - { name: l1_location, check_type: regex, pattern: "L1|L-?1|first\\s+lumbar", required: true }
+  - { name: retropulsion, check_type: regex, pattern: "retropuls|posterior.*fragment|canal.*compromise|spinal\\s+canal.*narrow", required: true }
+  - { name: canal_compromise, check_type: regex, pattern: "canal|stenosis|compromise|narrow|cord\\s+compress", required: false }
+reference_solution: |
+  CT of the thoracolumbar spine demonstrates a comminuted burst fracture of
+  the L1 vertebral body. There is significant loss of vertebral body height,
+  approximately 40% anteriorly. A retropulsed posterior vertebral body
+  fragment is displaced into the anterior spinal canal, causing
+  approximately 30% canal compromise. Fracture lines extend through both the
+  anterior and posterior cortex of the vertebral body. There is a
+  non-displaced fracture of the right L1 lamina, indicating three-column
+  involvement (Denis classification). The adjacent vertebral bodies at T12
+  and L2 appear intact without fracture. The aorta is normal without
+  traumatic injury. No preexisting lytic lesion to suggest pathologic
+  etiology.
+  Impression: L1 burst fracture with retropulsed fragment causing 30%
+  spinal canal compromise and three-column involvement. Mechanically
+  unstable injury. Emergent spine surgery consultation for stabilization.
+  MRI recommended for spinal cord assessment.
+condition_present: true
+confusion_pair: null
+source_dataset: eurorad
+tags:
+  - burst-fracture
+  - spine
+  - trauma
+  - emergency
+  - spinal-canal
+  - finding-detection

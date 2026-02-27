@@ -1,0 +1,51 @@
+id: XRAY-054
+name: Skin fold mimicking pneumothorax
+modality: xray
+anatomy: chest
+task_type: diagnosis
+difficulty: intermediate
+image_ref: xray/mediconfusion/MCF_0054.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Skin fold artifact mimicking pneumothorax"
+  differential:
+    - true pneumothorax
+    - clothing artifact
+    - companion shadow of rib
+  key_findings:
+    - { finding: "linear opacity extending beyond the lung margin", location: "right hemithorax", required: true }
+    - { finding: "lung markings visible peripheral to the line", location: "right lateral chest wall", required: true }
+    - { finding: "line does not conform to expected visceral pleural contour", location: "right hemithorax", required: false }
+  severity: mild
+  laterality: right
+  negatives:
+    - true visceral pleural line
+    - absent lung markings peripherally
+    - mediastinal shift
+    - tension physiology
+pattern_checks:
+  - { name: skin_fold, check_type: regex, pattern: "(?i)(skin\\s+fold|artifact|pseudopneumothorax|not.{0,20}(true\\s+)?pneumothorax)", required: true }
+  - { name: markings_beyond, check_type: regex, pattern: "(?i)(marking.{0,30}(beyond|peripher|lateral|past)|lung.{0,20}marking.{0,20}(present|visible))", required: true }
+  - { name: extends_beyond, check_type: regex, pattern: "(?i)(extend.{0,20}beyond|not.{0,20}conform|not.{0,20}parallel)", required: false }
+  - { name: no_pneumothorax, check_type: regex, pattern: "(?i)(no.{0,20}(true\\s+)?pneumothorax|not\\s+a\\s+pneumothorax|rather\\s+than\\s+pneumothorax)", required: true }
+reference_solution: |
+  PA chest radiograph demonstrates a linear opacity in the right hemithorax that
+  could be initially mistaken for a visceral pleural line suggesting pneumothorax.
+  However, several features distinguish this as a skin fold artifact: the line
+  extends beyond the lung margin superiorly and inferiorly, lung markings are
+  clearly visible peripheral to the line, and the opacity is a broad linear band
+  rather than the sharp thin line expected with a visceral pleural surface. A true
+  pneumothorax would show absent lung markings peripheral to the pleural line. The
+  lungs are clear. No true pneumothorax, pleural effusion, or other acute
+  abnormality identified.
+  Impression: Skin fold artifact — not a true pneumothorax. No acute
+  cardiopulmonary disease.
+condition_present: true
+confusion_pair: XRAY-020
+source_dataset: mediconfusion
+tags:
+  - skin-fold
+  - pneumothorax-mimic
+  - artifact
+  - confusion-pair
+  - chest

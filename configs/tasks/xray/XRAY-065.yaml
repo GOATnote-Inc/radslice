@@ -1,0 +1,54 @@
+id: XRAY-065
+name: Enlarged pulmonary artery mimicking hilar lymphadenopathy
+modality: xray
+anatomy: chest
+task_type: diagnosis
+difficulty: advanced
+image_ref: xray/mediconfusion/MCF_0065.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Pulmonary arterial hypertension with enlarged main pulmonary artery"
+  differential:
+    - bilateral hilar lymphadenopathy
+    - sarcoidosis
+    - lymphoma
+    - bilateral hilar masses
+  key_findings:
+    - { finding: "enlarged main pulmonary artery segment", location: "main pulmonary artery", required: true }
+    - { finding: "bilateral prominent hilar shadows due to enlarged pulmonary arteries", location: "bilateral hila", required: true }
+    - { finding: "rapid tapering of peripheral pulmonary vessels (pruning)", location: "bilateral peripheral lungs", required: false }
+    - { finding: "hilar dance (pulsatile hila on fluoroscopy)", location: "bilateral hila", required: false }
+  severity: moderate
+  laterality: bilateral
+  negatives:
+    - hilar lymphadenopathy
+    - parenchymal mass
+    - pleural effusion
+    - consolidation
+pattern_checks:
+  - { name: pulmonary_hypertension, check_type: regex, pattern: "(?i)(pulmonary.{0,20}(hypertension|arterial\\s+hypertension)|PAH|pulmonary\\s+artery.{0,20}enlarg)", required: true }
+  - { name: enlarged_pa, check_type: regex, pattern: "(?i)(enlarg.{0,20}pulmonary\\s+arter|prominent.{0,20}pulmonary\\s+arter|main\\s+pulmonary)", required: true }
+  - { name: not_lymphadenopathy, check_type: regex, pattern: "(?i)(not.{0,20}lymphadenopathy|vascular.{0,20}rather\\s+than|pulmonary\\s+arter.{0,20}not.{0,20}lymph)", required: true }
+  - { name: pruning, check_type: regex, pattern: "(?i)(pruning|taper|peripheral.{0,20}(attenuat|decrease|narrow))", required: false }
+reference_solution: |
+  PA chest radiograph demonstrates bilateral prominent hilar shadows which could
+  initially suggest hilar lymphadenopathy. However, the bilateral enlargement
+  follows the expected vascular pattern with the main pulmonary artery segment
+  prominently convex along the left heart border. The hilar overlay sign is
+  negative, indicating the hilum prominence is due to vascular enlargement rather
+  than superimposed lymph nodes. Rapid tapering (pruning) of the peripheral
+  pulmonary vessels is noted, consistent with pulmonary arterial hypertension.
+  The lung parenchyma is clear. No pleural effusion. The right heart may be
+  mildly enlarged. Echocardiography is recommended to estimate pulmonary artery
+  pressures and assess right ventricular function.
+  Impression: Enlarged pulmonary arteries consistent with pulmonary arterial
+  hypertension — not hilar lymphadenopathy.
+condition_present: true
+confusion_pair: XRAY-014
+source_dataset: mediconfusion
+tags:
+  - pulmonary-hypertension
+  - hilar-lymphadenopathy-mimic
+  - vascular
+  - confusion-pair
+  - chest

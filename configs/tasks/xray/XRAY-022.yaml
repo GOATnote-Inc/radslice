@@ -1,0 +1,54 @@
+id: XRAY-022
+name: Miliary tuberculosis
+modality: xray
+anatomy: chest
+task_type: diagnosis
+difficulty: expert
+image_ref: xray/omnimedvqa/CXR_0022.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Miliary tuberculosis"
+  differential:
+    - miliary metastases
+    - sarcoidosis
+    - fungal infection (histoplasmosis)
+    - pneumoconiosis (silicosis)
+    - varicella pneumonia
+  key_findings:
+    - { finding: "diffuse bilateral miliary nodules", location: "bilateral lung fields", required: true }
+    - { finding: "uniform 1-3 mm nodular opacities", location: "bilateral lung fields diffusely", required: true }
+    - { finding: "random distribution without zonal predilection", location: "bilateral lungs", required: false }
+    - { finding: "possible hilar lymphadenopathy", location: "bilateral hila", required: false }
+  severity: severe
+  laterality: bilateral
+  negatives:
+    - focal consolidation
+    - cavitation
+    - pleural effusion
+    - pneumothorax
+    - isolated upper lobe disease
+pattern_checks:
+  - { name: miliary_mentioned, check_type: regex, pattern: "(?i)miliary", required: true }
+  - { name: tuberculosis_mentioned, check_type: regex, pattern: "(?i)(tuberculosis|TB|mycobacter)", required: true }
+  - { name: bilateral_nodules, check_type: regex, pattern: "(?i)(bilateral.{0,30}(nodule|micronodule)|diffuse.{0,30}(nodule|micronodule))", required: true }
+  - { name: small_size, check_type: regex, pattern: "(?i)(1.{0,5}(mm|millimeter)|2.{0,5}(mm|millimeter)|3.{0,5}(mm|millimeter)|tiny|small|fine)", required: false }
+reference_solution: |
+  PA chest radiograph demonstrates innumerable tiny (1-3 mm) nodular opacities
+  diffusely distributed throughout both lung fields in a classic miliary pattern.
+  The nodules are uniform in size and randomly distributed without zonal
+  predominance. There is subtle bilateral hilar prominence that may represent
+  lymphadenopathy. No focal consolidation, cavitary lesion, or pleural effusion
+  is identified. The cardiac silhouette is normal in size. In the appropriate
+  clinical context of fever, weight loss, and immunocompromise, these findings
+  are highly suspicious for miliary tuberculosis. Sputum AFB cultures, CT chest,
+  and consideration of bronchoscopy with BAL are recommended.
+  Impression: Miliary pattern — highly suspicious for miliary tuberculosis.
+condition_present: true
+confusion_pair: null
+source_dataset: omnimedvqa-open
+tags:
+  - miliary
+  - tuberculosis
+  - infection
+  - chest
+  - diffuse-nodules

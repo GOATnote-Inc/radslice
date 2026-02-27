@@ -1,0 +1,55 @@
+id: XRAY-076
+name: Chest tube with residual pneumothorax
+modality: xray
+anatomy: chest
+task_type: finding_detection
+difficulty: intermediate
+image_ref: xray/omnimedvqa/CXR_0076.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Residual right pneumothorax with chest tube in situ"
+  differential:
+    - resolving pneumothorax
+    - chest tube malposition
+    - loculated pneumothorax
+    - large bulla
+  key_findings:
+    - { finding: "right-sided chest tube with side hole in the hemithorax", location: "right hemithorax", required: true }
+    - { finding: "residual apical pneumothorax", location: "right apex", required: true }
+    - { finding: "visible visceral pleural line", location: "right apex", required: true }
+    - { finding: "partial lung re-expansion", location: "right lung", required: false }
+  severity: moderate
+  laterality: right
+  negatives:
+    - tension pneumothorax
+    - chest tube in fissure
+    - hemothorax
+    - left pneumothorax
+pattern_checks:
+  - { name: chest_tube, check_type: regex, pattern: "(?i)(chest\\s+tube|thoracostomy\\s+tube|intercostal\\s+drain|tube\\s+drain)", required: true }
+  - { name: residual_ptx, check_type: regex, pattern: "(?i)(residual.{0,20}pneumothorax|persistent.{0,20}pneumothorax|remaining.{0,20}pneumothorax)", required: true }
+  - { name: right_sided, check_type: regex, pattern: "(?i)right", required: true }
+  - { name: management, check_type: regex, pattern: "(?i)(suction|follow.?up|monitor|serial|repeat)", required: false }
+reference_solution: |
+  Portable AP chest radiograph demonstrates a right-sided chest tube with the tip
+  and side hole projecting over the right hemithorax in satisfactory position.
+  Despite the chest tube, there is a residual right apical pneumothorax with a
+  visible visceral pleural line at the right apex. The pneumothorax appears
+  smaller than expected if there was a prior large pneumothorax, suggesting
+  partial re-expansion. The right lung is partially re-expanded. The left lung is
+  clear. No mediastinal shift or tension physiology. No pleural effusion or
+  hemothorax. Recommend confirming adequate chest tube function (suction, water
+  seal patency, output) and serial follow-up radiograph to assess for further
+  re-expansion.
+  Impression: Right chest tube in satisfactory position with residual apical
+  pneumothorax — monitor for resolution.
+condition_present: true
+confusion_pair: null
+source_dataset: omnimedvqa-open
+tags:
+  - chest-tube
+  - pneumothorax
+  - residual
+  - lines-and-tubes
+  - finding-detection
+  - chest

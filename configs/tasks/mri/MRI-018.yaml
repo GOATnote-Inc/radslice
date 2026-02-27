@@ -1,0 +1,59 @@
+id: MRI-018
+name: Spinal cord compression from metastasis
+modality: mri
+anatomy: spine
+task_type: diagnosis
+difficulty: advanced
+image_ref: mri/eurorad/EUR_0018.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Thoracic spinal cord compression from vertebral metastasis"
+  differential:
+    - multiple myeloma with cord compression
+    - primary vertebral body tumor (chordoma, giant cell tumor)
+    - epidural abscess with cord compression
+    - burst fracture with retropulsed fragment
+    - epidural hematoma
+  key_findings:
+    - { finding: "T1 hypointense and T2 hyperintense marrow-replacing lesion in a vertebral body with pathologic compression fracture", location: "T7 vertebral body", required: true }
+    - { finding: "epidural soft tissue extension causing severe spinal cord compression", location: "posterior T7 vertebral body with epidural extension", required: true }
+    - { finding: "abnormal T2 hyperintense signal within the compressed spinal cord", location: "spinal cord at the T7 level", required: false }
+    - { finding: "additional vertebral body lesions with abnormal marrow signal", location: "scattered thoracolumbar vertebrae", required: false }
+  severity: severe
+  laterality: ""
+  negatives:
+    - normal vertebral body marrow signal
+    - preserved spinal canal caliber
+    - epidural abscess (no rim enhancement)
+    - intradural extramedullary mass
+pattern_checks:
+  - { name: cord_compression, check_type: regex, pattern: "cord.*compress|compress.*cord|spinal\\s+cord.*comprom|stenosis.*cord", required: true }
+  - { name: metastasis_mentioned, check_type: regex, pattern: "metastas|metastatic|secondary|malignan", required: true }
+  - { name: vertebral_involvement, check_type: regex, pattern: "vertebr|T7|thoracic", required: true }
+  - { name: marrow_signal, check_type: regex, pattern: "marrow.*replac|T1.*hypointens|abnormal.*marrow|pathologic.*fracture", required: true }
+reference_solution: |
+  MRI of the thoracic spine demonstrates a pathologic compression fracture of
+  the T7 vertebral body with diffuse T1 hypointense and T2 hyperintense
+  marrow-replacing signal, consistent with metastatic involvement. There is
+  retropulsion of the posterior vertebral body cortex and associated epidural
+  soft tissue mass causing severe compression of the thoracic spinal cord at
+  this level. The compressed spinal cord demonstrates abnormal intramedullary
+  T2 hyperintense signal, which may represent edema or early myelopathy.
+  Post-gadolinium images show avid enhancement of the vertebral body lesion
+  and epidural component. Additional smaller vertebral body lesions with
+  similar marrow signal are identified at T4, T10, and L2, consistent with
+  multifocal osseous metastatic disease. The posterior elements at T7 appear
+  involved. No paraspinal mass.
+  Impression: Metastatic T7 vertebral body compression fracture with epidural
+  extension causing severe spinal cord compression and cord signal abnormality.
+  Urgent neurosurgical or radiation oncology consultation recommended.
+condition_present: true
+confusion_pair: null
+source_dataset: eurorad
+tags:
+  - metastasis
+  - spine
+  - cord-compression
+  - oncology
+  - emergency
+  - thoracic

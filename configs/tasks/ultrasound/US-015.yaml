@@ -1,0 +1,52 @@
+id: US-015
+name: Normal thyroid gland ultrasound
+modality: ultrasound
+anatomy: neck
+task_type: vqa
+difficulty: basic
+image_ref: ultrasound/omnimedvqa/US_0015.png
+prompt_template: vqa
+ground_truth:
+  primary_diagnosis: "Normal thyroid gland"
+  differential:
+    - diffuse thyroiditis (early, subclinical)
+    - subcentimeter thyroid micronodule below resolution
+    - multinodular goiter (early)
+  key_findings:
+    - { finding: "homogeneous parenchymal echogenicity", location: "bilateral thyroid lobes", required: true }
+    - { finding: "normal thyroid gland size", location: "thyroid gland", required: true }
+    - { finding: "normal vascularity on color Doppler", location: "thyroid parenchyma", required: false }
+  severity: mild
+  laterality: ""
+  negatives:
+    - thyroid nodule
+    - calcification
+    - cervical lymphadenopathy
+    - heterogeneous echotexture
+    - thyroid enlargement
+    - increased vascularity (thyroid inferno)
+pattern_checks:
+  - { name: normal_identified, check_type: regex, pattern: "normal|unremarkable|no\\s+(abnormal|pathol|significant)", required: true }
+  - { name: no_nodule, check_type: regex, pattern: "no.*(nodule|mass|lesion|focal)", required: true }
+  - { name: homogeneous, check_type: regex, pattern: "homogeneous|uniform|normal.*echogenicity|echo.?texture", required: true }
+  - { name: no_lymphadenopathy, check_type: regex, pattern: "no.*(lymph|adenopathy|node)", required: false }
+reference_solution: |
+  Ultrasound of the thyroid gland demonstrates bilateral thyroid lobes of
+  normal size and homogeneous parenchymal echogenicity. The right lobe
+  measures 4.8 x 1.6 x 1.5 cm and the left lobe measures 4.5 x 1.5 x 1.4 cm,
+  both within normal limits. The isthmus measures 3 mm in thickness. No focal
+  thyroid nodules, cystic lesions, or calcifications are identified in either
+  lobe. Color Doppler demonstrates normal parenchymal vascularity without
+  increased flow to suggest thyroiditis. No suspicious cervical lymphadenopathy
+  is seen in the central or lateral neck compartments. The strap muscles
+  appear normal.
+  Impression: Normal thyroid ultrasound. No thyroid nodules or
+  lymphadenopathy identified.
+condition_present: false
+confusion_pair: US-010
+source_dataset: omnimedvqa-open
+tags:
+  - normal
+  - thyroid
+  - neck
+  - negative-study

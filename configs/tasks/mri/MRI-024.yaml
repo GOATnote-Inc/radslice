@@ -1,0 +1,60 @@
+id: MRI-024
+name: Transverse myelitis of the spinal cord
+modality: mri
+anatomy: spine
+task_type: diagnosis
+difficulty: advanced
+image_ref: mri/eurorad/EUR_0024.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Transverse myelitis with long-segment spinal cord signal abnormality"
+  differential:
+    - neuromyelitis optica spectrum disorder (NMOSD)
+    - spinal cord infarction
+    - multiple sclerosis (spinal cord plaque)
+    - spinal cord astrocytoma
+    - spinal dural arteriovenous fistula
+  key_findings:
+    - { finding: "longitudinally extensive T2 hyperintense intramedullary signal spanning 3 or more vertebral segments", location: "thoracic spinal cord T4-T9", required: true }
+    - { finding: "central cord involvement with sparing of the peripheral white matter", location: "thoracic spinal cord on axial images", required: true }
+    - { finding: "mild cord expansion at the level of signal abnormality", location: "thoracic spinal cord", required: false }
+    - { finding: "variable patchy enhancement on post-gadolinium images", location: "thoracic cord", required: false }
+  severity: severe
+  laterality: ""
+  negatives:
+    - extrinsic cord compression
+    - disc herniation
+    - syringomyelia
+    - cord hemorrhage
+    - flow voids suggesting vascular malformation
+pattern_checks:
+  - { name: myelitis_mentioned, check_type: regex, pattern: "myelitis|transverse\\s+myelitis|demyelinat.*cord|inflamm.*cord", required: true }
+  - { name: cord_signal, check_type: regex, pattern: "cord.*signal|intramedullary.*T2|T2.*hyperintens.*cord|cord.*hyperintens", required: true }
+  - { name: long_segment, check_type: regex, pattern: "longitudinal|long.?segment|extensive|multiple.*segment|3.*segment|span", required: true }
+  - { name: thoracic_location, check_type: regex, pattern: "thoracic|T[4-9]", required: false }
+reference_solution: |
+  MRI of the thoracic spine demonstrates longitudinally extensive T2
+  hyperintense intramedullary signal abnormality within the thoracic spinal
+  cord extending from T4 through T9, spanning approximately 6 vertebral body
+  segments. On axial images, the signal abnormality predominantly involves
+  the central gray matter with relative sparing of the peripheral white
+  matter tracts. There is mild fusiform expansion of the cord at the level
+  of the signal abnormality. Post-gadolinium images show patchy areas of
+  enhancement within the abnormal cord segment, consistent with active
+  inflammation. No extrinsic compression or disc disease. No flow voids
+  along the cord surface to suggest a dural AV fistula. The longitudinal
+  extent (3 or more segments) raises concern for neuromyelitis optica
+  spectrum disorder, and aquaporin-4 antibody testing should be performed.
+  Impression: Longitudinally extensive transverse myelitis spanning T4-T9.
+  Recommend AQP4-IgG and MOG-IgG antibody testing to evaluate for NMOSD
+  versus MOGAD.
+condition_present: true
+confusion_pair: null
+source_dataset: eurorad
+tags:
+  - myelitis
+  - spine
+  - neuro
+  - autoimmune
+  - spinal-cord
+  - inflammatory

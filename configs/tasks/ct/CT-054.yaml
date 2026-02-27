@@ -1,0 +1,59 @@
+id: CT-054
+name: Spinal stenosis with disc herniation
+modality: ct
+anatomy: spine
+task_type: vqa
+difficulty: intermediate
+image_ref: ct/eurorad/EUR_0054.png
+prompt_template: vqa
+ground_truth:
+  primary_diagnosis: "Severe lumbar spinal stenosis with L4-L5 disc herniation"
+  differential:
+    - epidural lipomatosis
+    - synovial cyst
+    - epidural abscess
+    - epidural hematoma
+    - ligamentum flavum hypertrophy alone
+  key_findings:
+    - { finding: "broad-based disc herniation with central component", location: "L4-L5 level", required: true }
+    - { finding: "severe central canal stenosis", location: "L4-L5 spinal canal", required: true }
+    - { finding: "ligamentum flavum hypertrophy", location: "bilateral L4-L5 ligamenta flava", required: false }
+    - { finding: "bilateral facet joint arthrosis", location: "L4-L5 facet joints", required: false }
+  severity: moderate
+  laterality: bilateral
+  negatives:
+    - disc extrusion or sequestration
+    - spondylolisthesis
+    - vertebral fracture
+    - epidural mass
+    - cauda equina compression with signal change
+pattern_checks:
+  - { name: stenosis_mentioned, check_type: regex, pattern: "stenosis|narrow|compromise", required: true }
+  - { name: disc_herniation, check_type: regex, pattern: "disc.*herniat|herniat.*disc|protrusion|bulge|extrusion", required: true }
+  - { name: l4_l5, check_type: regex, pattern: "L4.?L5|L4.{0,5}5", required: true }
+  - { name: canal_involvement, check_type: regex, pattern: "central.*canal|spinal\\s+canal|thecal\\s+sac", required: false }
+reference_solution: |
+  CT of the lumbar spine demonstrates a broad-based disc herniation at the
+  L4-L5 level with a central and left paracentral component measuring 6 mm
+  in AP dimension. The herniation, in combination with bilateral ligamentum
+  flavum hypertrophy (measuring up to 5 mm on each side) and facet joint
+  arthrosis, results in severe central canal stenosis at this level. The
+  AP diameter of the central canal is reduced to approximately 6 mm.
+  Bilateral lateral recesses are narrowed. Bilateral neural foramina are
+  mildly narrowed. No disc extrusion or free fragment. No
+  spondylolisthesis. The remaining lumbar levels demonstrate mild
+  degenerative changes without significant stenosis. Vertebral body heights
+  are maintained without fracture.
+  Impression: Severe lumbar spinal stenosis at L4-L5 due to a combination
+  of disc herniation, ligamentum flavum hypertrophy, and facet arthrosis.
+  Clinical correlation with symptoms recommended. MRI provides superior
+  assessment of neural compression if surgical intervention is considered.
+condition_present: true
+confusion_pair: null
+source_dataset: eurorad
+tags:
+  - spinal-stenosis
+  - disc-herniation
+  - spine
+  - degenerative
+  - vqa

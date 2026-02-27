@@ -1,0 +1,54 @@
+id: CT-033
+name: Acute sinusitis
+modality: ct
+anatomy: head
+task_type: vqa
+difficulty: basic
+image_ref: ct/omnimedvqa/CT_0033.png
+prompt_template: vqa
+ground_truth:
+  primary_diagnosis: "Acute pansinusitis"
+  differential:
+    - allergic fungal sinusitis
+    - sinonasal polyposis
+    - mucocele
+    - sinusoidal retention cyst
+  key_findings:
+    - { finding: "air-fluid levels within maxillary sinuses", location: "bilateral maxillary sinuses", required: true }
+    - { finding: "complete opacification of ethmoid air cells", location: "bilateral anterior and posterior ethmoid sinuses", required: true }
+    - { finding: "mucosal thickening in frontal sinuses", location: "bilateral frontal sinuses", required: false }
+    - { finding: "ostiomeatal complex obstruction", location: "bilateral ostiomeatal units", required: false }
+  severity: moderate
+  laterality: bilateral
+  negatives:
+    - bony erosion or destruction
+    - orbital complication
+    - intracranial extension
+    - sinonasal mass
+    - fungal calcification pattern
+pattern_checks:
+  - { name: sinusitis_mentioned, check_type: regex, pattern: "sinusitis|sinus.*infect|sinus.*inflam", required: true }
+  - { name: air_fluid_level, check_type: regex, pattern: "air.?fluid|opacif|fluid.*level|sinus.*fluid", required: true }
+  - { name: bilateral, check_type: regex, pattern: "bilateral|both|pansinusitis", required: true }
+  - { name: no_complication, check_type: regex, pattern: "no.{0,20}(orbital|intracranial|erosion|complicat)", required: false }
+reference_solution: |
+  Non-contrast CT of the paranasal sinuses demonstrates bilateral air-fluid
+  levels within the maxillary sinuses, consistent with acute sinusitis. The
+  bilateral anterior and posterior ethmoid air cells are completely
+  opacified. The bilateral frontal sinuses show moderate mucosal thickening.
+  The sphenoid sinuses demonstrate partial opacification. The ostiomeatal
+  complexes are obstructed bilaterally. No bony erosion or destruction of
+  the sinus walls is identified. No orbital complication such as subperiosteal
+  abscess or orbital cellulitis. No intracranial extension. No sinonasal
+  mass or polyposis. The nasal septum is midline.
+  Impression: Acute pansinusitis with bilateral maxillary air-fluid levels
+  and ethmoid opacification without evidence of complications. Clinical
+  management with appropriate antibiotic therapy recommended.
+condition_present: true
+confusion_pair: null
+source_dataset: omnimedvqa-open
+tags:
+  - sinusitis
+  - head
+  - infectious
+  - vqa

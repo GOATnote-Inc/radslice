@@ -1,0 +1,52 @@
+id: XRAY-062
+name: Normal thymic shadow mimicking mediastinal mass
+modality: xray
+anatomy: chest
+task_type: diagnosis
+difficulty: intermediate
+image_ref: xray/mediconfusion/MCF_0062.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Prominent normal thymus mimicking anterior mediastinal mass"
+  differential:
+    - anterior mediastinal mass (thymoma, lymphoma, germ cell tumor)
+    - thymic hyperplasia
+    - thymic cyst
+  key_findings:
+    - { finding: "smooth bilateral mediastinal widening with sail sign", location: "anterior superior mediastinum", required: true }
+    - { finding: "wave sign (thymic tissue indented by anterior ribs)", location: "anterior mediastinum", required: false }
+    - { finding: "normal lung fields without compression", location: "bilateral lungs", required: true }
+  severity: mild
+  laterality: ""
+  negatives:
+    - true mediastinal mass
+    - lymphadenopathy
+    - airway compression
+    - pleural effusion
+    - calcification
+pattern_checks:
+  - { name: thymus_mentioned, check_type: regex, pattern: "(?i)(thymus|thymic|normal\\s+thymus)", required: true }
+  - { name: not_mass, check_type: regex, pattern: "(?i)(not.{0,20}(mass|neoplasm)|normal.{0,20}thymus|prominent.{0,20}thymus|age.?appropriate)", required: true }
+  - { name: sail_or_wave, check_type: regex, pattern: "(?i)(sail\\s+sign|wave\\s+sign|smooth.{0,20}(mediastin|border))", required: true }
+  - { name: pediatric, check_type: regex, pattern: "(?i)(pediatric|child|infant|normal\\s+for\\s+age|age.?appropriate)", required: false }
+reference_solution: |
+  PA chest radiograph in a pediatric patient demonstrates a prominent smooth
+  opacity in the anterior superior mediastinum causing apparent mediastinal
+  widening. The classic sail sign is present, with a triangular opacity extending
+  laterally from the mediastinum. The wave sign (undulating thymic contour indented
+  by the anterior ribs) confirms this as normal thymic tissue rather than a
+  pathologic mass. The lung fields are clear without evidence of airway compression
+  or pleural effusion. No calcification within the opacity. The heart is normal.
+  The thymic shadow is a normal finding in infancy and early childhood and should
+  not be mistaken for an anterior mediastinal mass.
+  Impression: Normal prominent thymus — age-appropriate finding, not an anterior
+  mediastinal mass.
+condition_present: true
+confusion_pair: XRAY-032
+source_dataset: mediconfusion
+tags:
+  - thymic-shadow
+  - mediastinal-mass-mimic
+  - confusion-pair
+  - pediatric
+  - chest

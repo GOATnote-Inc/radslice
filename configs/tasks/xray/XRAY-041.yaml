@@ -1,0 +1,47 @@
+id: XRAY-041
+name: Normal PA CXR - young adult
+modality: xray
+anatomy: chest
+task_type: diagnosis
+difficulty: basic
+image_ref: xray/omnimedvqa/CXR_0041.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Normal chest radiograph"
+  differential: []
+  key_findings:
+    - { finding: "clear lung fields bilaterally", location: "bilateral lungs", required: true }
+    - { finding: "normal cardiac silhouette", location: "cardiomediastinal", required: true }
+    - { finding: "sharp costophrenic angles", location: "bilateral costophrenic angles", required: true }
+    - { finding: "normal mediastinal contour", location: "mediastinum", required: false }
+  severity: mild
+  laterality: ""
+  negatives:
+    - pneumothorax
+    - pleural effusion
+    - consolidation
+    - cardiomegaly
+    - pulmonary edema
+    - mass
+    - fracture
+pattern_checks:
+  - { name: normal_mentioned, check_type: regex, pattern: "(?i)(normal|no\\s+acute|unremarkable|negative|clear)", required: true }
+  - { name: lungs_clear, check_type: regex, pattern: "(?i)(clear|no.*opaci|no.*consolidat|no.*infiltrate)", required: true }
+  - { name: heart_normal, check_type: regex, pattern: "(?i)(normal.*heart|normal.*cardiac|heart.*normal|cardiac.*normal)", required: true }
+  - { name: no_effusion, check_type: regex, pattern: "(?i)(no.*effusion|costophrenic.*sharp|sharp.*costophrenic)", required: true }
+reference_solution: |
+  PA chest radiograph demonstrates no acute cardiopulmonary abnormality. Both
+  lungs are clear without focal consolidation, mass, nodule, pleural effusion,
+  or pneumothorax. The cardiac silhouette is normal in size with a cardiothoracic
+  ratio well within normal limits. The aortic arch and mediastinal contours are
+  normal. The trachea is midline. The costophrenic angles are sharp bilaterally.
+  The visualized osseous structures are intact without fracture. The soft tissues
+  are unremarkable.
+  Impression: Normal PA chest radiograph. No acute cardiopulmonary disease.
+condition_present: false
+confusion_pair: null
+source_dataset: omnimedvqa-open
+tags:
+  - normal
+  - chest
+  - baseline

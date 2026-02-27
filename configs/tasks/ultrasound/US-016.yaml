@@ -1,0 +1,59 @@
+id: US-016
+name: Carotid artery stenosis with plaque and turbulent flow
+modality: ultrasound
+anatomy: neck
+task_type: finding_detection
+difficulty: advanced
+image_ref: ultrasound/radimagenet/US_0016.png
+prompt_template: finding_detection
+ground_truth:
+  primary_diagnosis: "Severe right internal carotid artery stenosis (70-99%)"
+  differential:
+    - carotid artery occlusion
+    - carotid dissection
+    - fibromuscular dysplasia
+    - moderate stenosis overestimated by Doppler angle
+    - external carotid artery stenosis
+  key_findings:
+    - { finding: "echogenic atherosclerotic plaque with luminal narrowing", location: "right internal carotid artery origin", required: true }
+    - { finding: "elevated peak systolic velocity exceeding 230 cm/s", location: "right internal carotid artery", required: true }
+    - { finding: "turbulent flow with spectral broadening and aliasing on color Doppler", location: "right internal carotid artery at the stenosis", required: false }
+  severity: severe
+  laterality: right
+  negatives:
+    - complete carotid occlusion
+    - carotid dissection flap
+    - contralateral carotid stenosis
+    - vertebral artery stenosis
+    - intraluminal thrombus
+pattern_checks:
+  - { name: stenosis_mentioned, check_type: regex, pattern: "stenosis|narrowing|stenos", required: true }
+  - { name: carotid_identified, check_type: regex, pattern: "carotid|ICA|internal\\s+carotid", required: true }
+  - { name: velocity_elevated, check_type: regex, pattern: "peak\\s+systolic|PSV|veloc.*(elevat|increas|>)|>\\s*2[0-9]{2}", required: true }
+  - { name: plaque_described, check_type: regex, pattern: "plaque|atherosclero|calcif.*plaque|echogenic.*plaque", required: true }
+reference_solution: |
+  Duplex ultrasound of the carotid arteries demonstrates a heterogeneous
+  echogenic atherosclerotic plaque at the origin of the right internal carotid
+  artery causing significant luminal narrowing. The plaque contains both
+  calcified and soft tissue components. Peak systolic velocity (PSV) in the
+  right ICA measures 340 cm/s with an end-diastolic velocity (EDV) of 120 cm/s,
+  and an ICA/CCA PSV ratio of 4.2, consistent with severe stenosis in the
+  70-99% range by Society of Radiologists in Ultrasound consensus criteria.
+  Color Doppler demonstrates aliasing and turbulent flow at the stenotic
+  segment. The right common carotid artery and external carotid artery are
+  patent. The left carotid system demonstrates mild intimal thickening without
+  hemodynamically significant stenosis. Bilateral vertebral arteries show
+  antegrade flow.
+  Impression: Severe right internal carotid artery stenosis (70-99%) secondary
+  to atherosclerotic plaque. Vascular surgery or interventional consultation
+  recommended.
+condition_present: true
+confusion_pair: null
+source_dataset: radimagenet
+tags:
+  - carotid-stenosis
+  - neck
+  - vascular
+  - doppler
+  - atherosclerosis
+  - plaque

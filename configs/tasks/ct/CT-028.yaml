@@ -1,0 +1,51 @@
+id: CT-028
+name: Normal spine CT
+modality: ct
+anatomy: spine
+task_type: diagnosis
+difficulty: basic
+image_ref: ct/eurorad/EUR_0028.png
+prompt_template: diagnosis
+ground_truth:
+  primary_diagnosis: "Normal lumbar spine CT"
+  differential:
+    - mild degenerative disc disease below reporting threshold
+    - early facet arthrosis
+    - incidental Schmorl nodes
+  key_findings:
+    - { finding: "normal vertebral body height and alignment", location: "L1 through L5", required: true }
+    - { finding: "no fracture or destructive lesion", location: "lumbar vertebral bodies", required: true }
+    - { finding: "patent spinal canal", location: "lumbar spinal canal", required: true }
+    - { finding: "normal intervertebral disc heights", location: "lumbar discs", required: false }
+  severity: mild
+  laterality: ""
+  negatives:
+    - vertebral fracture
+    - disc herniation
+    - spinal stenosis
+    - spondylolisthesis
+    - lytic or blastic lesion
+    - paravertebral mass
+pattern_checks:
+  - { name: normal_identified, check_type: regex, pattern: "normal|unremarkable|no\\s+acute|intact|negative", required: true }
+  - { name: no_fracture, check_type: regex, pattern: "no.{0,30}fracture|intact.*vertebra|no.*compress", required: true }
+  - { name: no_stenosis, check_type: regex, pattern: "no.{0,30}(stenosis|narrow|compromise|herniat)", required: true }
+reference_solution: |
+  CT of the lumbar spine demonstrates normal vertebral body height and
+  alignment from L1 through L5. No compression fracture or burst injury is
+  identified. The vertebral body marrow attenuation is normal without lytic
+  or blastic lesions. The intervertebral disc spaces are maintained. The
+  spinal canal is patent at all levels without stenosis. The neural foramina
+  are patent bilaterally. The pedicles and posterior elements are intact. No
+  spondylolisthesis. No paravertebral soft tissue mass. The sacrum and
+  sacroiliac joints are unremarkable.
+  Impression: Normal lumbar spine CT. No fracture, stenosis, or destructive
+  process.
+condition_present: false
+confusion_pair: null
+source_dataset: eurorad
+tags:
+  - normal
+  - spine
+  - baseline
+  - negative-study

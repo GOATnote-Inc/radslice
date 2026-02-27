@@ -1,0 +1,59 @@
+id: XRAY-079
+name: Bilateral upper lobe consolidation with cavitation - active TB
+modality: xray
+anatomy: chest
+task_type: report_generation
+difficulty: expert
+image_ref: xray/omnimedvqa/CXR_0079.png
+prompt_template: report_generation
+ground_truth:
+  primary_diagnosis: "Active pulmonary tuberculosis with bilateral upper lobe involvement"
+  differential:
+    - fungal infection (histoplasmosis, coccidioidomycosis)
+    - cavitary squamous cell carcinoma
+    - granulomatosis with polyangiitis
+    - necrotizing pneumonia
+  key_findings:
+    - { finding: "bilateral upper lobe consolidation with cavitation", location: "bilateral upper lobes", required: true }
+    - { finding: "thick-walled cavities with surrounding airspace opacity", location: "bilateral upper lobes", required: true }
+    - { finding: "tree-in-bud nodularity in the lower lobes", location: "bilateral lower zones", required: false }
+    - { finding: "volume loss in upper lobes with hilar retraction", location: "bilateral upper zones", required: false }
+  severity: severe
+  laterality: bilateral
+  negatives:
+    - normal lung fields
+    - pleural effusion
+    - lower lobe predominance
+    - cardiomegaly
+pattern_checks:
+  - { name: tuberculosis, check_type: regex, pattern: "(?i)(tuberculosis|TB|mycobacter)", required: true }
+  - { name: cavitation, check_type: regex, pattern: "(?i)(cavit(y|ary|ation)|cavitat)", required: true }
+  - { name: upper_lobe, check_type: regex, pattern: "(?i)(upper\\s+lobe|apic)", required: true }
+  - { name: impression_section, check_type: regex, pattern: "(?i)impression", required: true }
+  - { name: isolation, check_type: regex, pattern: "(?i)(isolat|AFB|sputum|airborne|infectious|contact)", required: false }
+reference_solution: |
+  FINDINGS: PA chest radiograph demonstrates bilateral upper lobe consolidation
+  with multiple thick-walled cavities. The cavities range from 1.5 to 3 cm in
+  diameter. The surrounding lung parenchyma shows patchy airspace opacities
+  consistent with active disease. There is volume loss in both upper lobes with
+  upward retraction of the bilateral hila. Subtle nodular opacities are seen in
+  the bilateral lower lobes, potentially representing endobronchial spread
+  (tree-in-bud pattern, better assessed on CT). No pleural effusion or
+  pneumothorax. The cardiac silhouette is normal. The trachea is midline.
+  IMPRESSION: Bilateral upper lobe cavitary consolidation, highly suggestive of
+  active pulmonary tuberculosis. Airborne isolation precautions should be
+  initiated. Sputum for AFB smear and culture (three samples) and nucleic acid
+  amplification testing are urgently recommended. CT chest may be obtained for
+  further characterization of disease extent. Public health notification required.
+condition_present: true
+confusion_pair: null
+source_dataset: omnimedvqa-open
+tags:
+  - tuberculosis
+  - active-TB
+  - cavitary
+  - bilateral
+  - upper-lobe
+  - report-generation
+  - infection
+  - chest
