@@ -1,0 +1,55 @@
+# Per-image source mapping for RadSlice corpus.
+# Each key is an image_ref (relative path under corpus/images/).
+# After download, verify checksums with `corpus/download.py`.
+#
+# For the smoke test, 7 images across 4 modalities are needed.
+# Primary source: OmniMedVQA (HuggingFace, open access).
+
+images:
+  # --- X-ray ---
+  xray/openem/acute-heart-failure.png:
+    source: omnimedvqa-open
+    source_id: "omnimedvqa_chestxray_chf_001"
+    original_format: png
+    notes: "Chest X-ray showing cardiomegaly and bilateral pulmonary edema"
+
+  xray/openem/pneumonia.png:
+    source: omnimedvqa-open
+    source_id: "omnimedvqa_chestxray_pneumonia_001"
+    original_format: png
+    notes: "Chest X-ray with focal consolidation"
+
+  # --- CT ---
+  ct/openem/acute-limb-ischemia.png:
+    source: omnimedvqa-open
+    source_id: "omnimedvqa_ct_ali_001"
+    original_format: png
+    window_preset: ct_soft_tissue
+    notes: "CTA lower extremity showing arterial occlusion"
+
+  ct/openem/pulmonary-embolism.png:
+    source: omnimedvqa-open
+    source_id: "omnimedvqa_ct_pe_001"
+    original_format: png
+    window_preset: ct_soft_tissue
+    notes: "CTPA showing filling defect in pulmonary artery"
+
+  # --- MRI ---
+  mri/openem/aortic-dissection.png:
+    source: omnimedvqa-open
+    source_id: "omnimedvqa_mri_aortic_001"
+    original_format: png
+    notes: "MRI showing intimal flap in aorta"
+
+  # --- Ultrasound ---
+  ultrasound/openem/acute-heart-failure.png:
+    source: omnimedvqa-open
+    source_id: "omnimedvqa_us_echo_chf_001"
+    original_format: png
+    notes: "Echocardiogram showing reduced ejection fraction"
+
+  ultrasound/openem/ectopic-pregnancy.png:
+    source: omnimedvqa-open
+    source_id: "omnimedvqa_us_pelvic_ectopic_001"
+    original_format: png
+    notes: "Pelvic ultrasound showing adnexal mass with empty uterus"

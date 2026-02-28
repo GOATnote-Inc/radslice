@@ -100,11 +100,22 @@ def _build_prompt(task: Task) -> str:
 
 
 def _load_image_if_exists(task: Task, corpus_dir: str | Path) -> EncodedImage | None:
-    """Try to load the task's image. Returns None if not found."""
+    """Try to load the task's image. Returns None if not found.
+
+    Tries the exact image_ref path first, then falls back to alternate
+    extensions (.dcm, .dicom) for DICOM files.
+    """
     img_path = Path(corpus_dir) / "images" / task.image_ref
-    if img_path.exists():
-        return load_and_encode(img_path)
-    return None
+    if not img_path.exists():
+        # Try alternate extensions for DICOM
+        for ext in (".dcm", ".dicom"):
+            alt = img_path.with_suffix(ext)
+            if alt.exists():
+                img_path = alt
+                break
+        else:
+            return None
+    return load_and_encode(img_path, window_preset=task.window_preset)
 
 
 class MatrixExecutor:

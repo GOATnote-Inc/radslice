@@ -4,7 +4,9 @@ from __future__ import annotations
 
 import base64
 import io
+from pathlib import Path
 
+import numpy as np
 import pytest
 from PIL import Image
 
@@ -12,10 +14,15 @@ from radslice.image import (
     MAX_DIMENSION,
     SUPPORTED_FORMATS,
     EncodedImage,
+    detect_format,
     encode_bytes,
     load_and_encode,
     resize_if_needed,
 )
+
+pydicom = pytest.importorskip("pydicom")
+from pydicom.dataset import Dataset, FileDataset  # noqa: E402
+from pydicom.uid import CTImageStorage, ExplicitVRLittleEndian  # noqa: E402
 
 
 @pytest.fixture
@@ -158,3 +165,102 @@ class TestSupportedFormats:
         assert "jpeg" in SUPPORTED_FORMATS
         assert "gif" in SUPPORTED_FORMATS
         assert "webp" in SUPPORTED_FORMATS
+
+    def test_dicom_formats(self):
+        assert "dcm" in SUPPORTED_FORMATS
+        assert "dicom" in SUPPORTED_FORMATS
+
+
+# --- DICOM integration helpers ---
+
+
+def _make_and_save_dicom(tmp_path: Path, filename: str = "test.dcm") -> Path:
+    """Create a minimal synthetic DICOM and save to disk."""
+    ds = Dataset()
+    ds.Modality = "CT"
+    ds.Rows = 32
+    ds.Columns = 32
+    ds.BitsAllocated = 16
+    ds.BitsStored = 16
+    ds.HighBit = 15
+    ds.PixelRepresentation = 1
+    ds.PhotometricInterpretation = "MONOCHROME2"
+    ds.SamplesPerPixel = 1
+    ds.RescaleSlope = 1.0
+    ds.RescaleIntercept = -1024.0
+    ds.WindowCenter = 40.0
+    ds.WindowWidth = 80.0
+
+    arr = np.random.randint(-100, 1000, (32, 32), dtype=np.int16)
+    ds.PixelData = arr.tobytes()
+
+    ds.SOPClassUID = CTImageStorage
+    ds.file_meta = pydicom.Dataset()
+    ds.file_meta.TransferSyntaxUID = ExplicitVRLittleEndian
+    ds.file_meta.MediaStorageSOPClassUID = CTImageStorage
+    ds.file_meta.MediaStorageSOPInstanceUID = pydicom.uid.generate_uid()
+    ds.is_little_endian = True
+    ds.is_implicit_VR = False
+
+    path = tmp_path / filename
+    fds = FileDataset(str(path), ds, file_meta=ds.file_meta, preamble=b"\x00" * 128)
+    fds.save_as(str(path))
+    return path
+
+
+class TestDetectFormat:
+    def test_dcm_extension(self, tmp_path):
+        path = tmp_path / "test.dcm"
+        path.write_bytes(b"dummy")
+        assert detect_format(path) == "dicom"
+
+    def test_dicom_extension(self, tmp_path):
+        path = tmp_path / "test.dicom"
+        path.write_bytes(b"dummy")
+        assert detect_format(path) == "dicom"
+
+    def test_png_extension(self, tmp_path):
+        path = tmp_path / "test.png"
+        path.write_bytes(b"dummy")
+        assert detect_format(path) == "raster"
+
+    def test_dicom_magic_bytes(self, tmp_path):
+        """File with DICOM magic bytes but no .dcm extension."""
+        path = tmp_path / "test.img"
+        data = b"\x00" * 128 + b"DICM" + b"\x00" * 100
+        path.write_bytes(data)
+        assert detect_format(path) == "dicom"
+
+
+class TestLoadAndEncodeDicom:
+    def test_load_dicom_file(self, tmp_path):
+        path = _make_and_save_dicom(tmp_path)
+        encoded = load_and_encode(path)
+        assert isinstance(encoded, EncodedImage)
+        assert encoded.width == 32
+        assert encoded.height == 32
+        assert encoded.media_type == "image/png"
+        assert len(encoded.base64_data) > 0
+
+    def test_load_dicom_with_window_preset(self, tmp_path):
+        path = _make_and_save_dicom(tmp_path)
+        encoded = load_and_encode(path, window_preset="ct_brain")
+        assert isinstance(encoded, EncodedImage)
+        # Verify it produces valid base64
+        decoded = base64.b64decode(encoded.base64_data)
+        assert len(decoded) > 0
+
+    def test_dicom_roundtrip(self, tmp_path):
+        """DICOM → EncodedImage → base64 → decode → verify pixel range."""
+        path = _make_and_save_dicom(tmp_path)
+        encoded = load_and_encode(path)
+        decoded_bytes = base64.b64decode(encoded.base64_data)
+        img = Image.open(io.BytesIO(decoded_bytes))
+        arr = np.array(img)
+        assert arr.min() >= 0
+        assert arr.max() <= 255
+
+    def test_dicom_original_path(self, tmp_path):
+        path = _make_and_save_dicom(tmp_path)
+        encoded = load_and_encode(path)
+        assert encoded.original_path == str(path)

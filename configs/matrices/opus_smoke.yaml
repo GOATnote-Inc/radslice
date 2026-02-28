@@ -1,0 +1,17 @@
+tasks_dir: configs/tasks
+n_trials: 1
+max_concurrency: 2
+
+task_ids:
+  - XRAY-001
+  - XRAY-024
+  - CT-001
+  - CT-030
+  - MRI-001
+  - US-001
+  - US-034
+
+models:
+  - name: opus-4.6
+    provider: anthropic
+    model_id: claude-opus-4-6

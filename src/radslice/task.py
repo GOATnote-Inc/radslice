@@ -77,6 +77,9 @@ class Task:
     source_dataset: str = ""
     tags: list[str] = field(default_factory=list)
     metadata: dict[str, Any] = field(default_factory=dict)
+    window_preset: str | None = None  # e.g. "ct_lung", "ct_bone" — see dicom.WINDOW_PRESETS
+    original_format: str | None = None  # "dicom", "png", "nifti" — inferred from extension if unset
+    dicom_metadata: dict[str, Any] | None = None  # Extracted at download time (cached)
 
     def run_pattern_checks(self, text: str) -> dict[str, bool]:
         """Run all pattern checks against text. Returns {name: passed}."""
@@ -90,6 +93,10 @@ class Task:
 VALID_MODALITIES = {"xray", "ct", "mri", "ultrasound"}
 VALID_TASK_TYPES = {"diagnosis", "finding_detection", "vqa", "report_generation"}
 VALID_DIFFICULTIES = {"basic", "intermediate", "advanced", "expert"}
+VALID_WINDOW_PRESETS = {
+    "ct_soft_tissue", "ct_lung", "ct_bone", "ct_brain", "ct_liver", "ct_abdomen",
+    "xray_default", "mri_default", "us_default",
+}
 
 
 def _parse_key_findings(raw: list[dict]) -> list[KeyFinding]:
@@ -151,6 +158,12 @@ def validate_task(task: Task) -> list[str]:
         errors.append("ground_truth.primary_diagnosis is required")
     if not task.condition_id:
         errors.append("condition_id is required (must reference an OpenEM condition)")
+    # Validate window_preset if set
+    if task.window_preset and task.window_preset not in VALID_WINDOW_PRESETS:
+        errors.append(
+            f"Invalid window_preset '{task.window_preset}', "
+            f"must be one of {VALID_WINDOW_PRESETS}"
+        )
     # Validate pattern check types
     for pc in task.pattern_checks:
         if pc.check_type not in {"regex", "contains", "not_contains"}:
@@ -183,6 +196,9 @@ def load_task(path: str | Path) -> Task:
         source_dataset=raw.get("source_dataset", ""),
         tags=raw.get("tags", []),
         metadata=raw.get("metadata", {}),
+        window_preset=raw.get("window_preset"),
+        original_format=raw.get("original_format"),
+        dicom_metadata=raw.get("dicom_metadata"),
     )
 
     errors = validate_task(task)
