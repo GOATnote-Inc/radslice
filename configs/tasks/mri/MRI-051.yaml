@@ -1,0 +1,39 @@
+id: MRI-051
+name: "Necrotizing Enterocolitis on Abdominal MRI"
+modality: mri
+anatomy: abdomen
+task_type: diagnosis
+difficulty: advanced
+image_ref: "mri/openem/necrotizing-enterocolitis.png"
+prompt_template: diagnosis
+condition_id: "necrotizing-enterocolitis"
+lostbench_scenario_id: "MTR-069"
+ground_truth:
+  primary_diagnosis: "Necrotizing enterocolitis (NEC) on abdominal MRI"
+  differential:
+    - "Spontaneous intestinal perforation"
+    - "Hirschsprung-associated enterocolitis"
+    - "Neonatal volvulus"
+  key_findings:
+    - { finding: "Bowel wall thickening with T2 hyperintense edema and intramural gas", location: "Distal ileum and ascending colon", required: true }
+    - { finding: "Pneumatosis intestinalis (intramural gas) appearing as signal void within the bowel wall", location: "Terminal ileum and cecum", required: true }
+    - { finding: "Portal venous gas seen as signal voids in the peripheral liver", location: "Liver", required: false }
+  severity: "critical"
+  laterality: "n/a"
+  negatives:
+    - "No pneumoperitoneum (no perforation)"
+    - "No large mesenteric vessel thrombosis"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(necrotizing\\s+enterocolitis|NEC)", required: true }
+  - { name: "pneumatosis", check_type: regex, pattern: "(?i)(pneumatosis|intramural\\s+(gas|air))", required: true }
+  - { name: "bowel_wall_thickening", check_type: regex, pattern: "(?i)bowel\\s+wall.*(thicken|edema|signal)", required: true }
+reference_solution: |
+  Abdominal MRI of a premature neonate demonstrates bowel wall thickening involving the distal ileum and ascending colon with T2 hyperintense mural edema. Signal voids within the bowel wall on T2 and gradient echo sequences are consistent with pneumatosis intestinalis. Additional signal voids in the peripheral hepatic parenchyma suggest portal venous gas. No pneumoperitoneum to indicate frank perforation. DWI shows restricted diffusion in the affected bowel segments, suggesting ischemia. Findings are consistent with necrotizing enterocolitis (NEC stage II), requiring close surgical monitoring and bowel rest.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - abdominal
+  - pediatric
+  - neonatal
+  - emergency

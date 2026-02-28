@@ -1,54 +1,39 @@
 id: XRAY-058
-name: Round atelectasis mimicking lung mass
+name: "Dengue Hemorrhagic Fever on Chest X-ray"
 modality: xray
 anatomy: chest
 task_type: diagnosis
 difficulty: advanced
-image_ref: xray/mediconfusion/MCF_0058.png
+image_ref: "xray/openem/dengue-hemorrhagic-fever.png"
 prompt_template: diagnosis
+condition_id: "dengue-hemorrhagic-fever"
+lostbench_scenario_id: "MTR-039"
 ground_truth:
-  primary_diagnosis: "Round atelectasis (Blesovsky syndrome)"
+  primary_diagnosis: "Dengue hemorrhagic fever with pleural effusion"
   differential:
-    - primary lung malignancy
-    - metastatic deposit
-    - organizing pneumonia
-    - granuloma
+    - "Bilateral pneumonia"
+    - "Heart failure with effusions"
+    - "Malaria with pulmonary complications"
   key_findings:
-    - { finding: "round or oval peripheral opacity abutting the pleura", location: "right lower lobe posteriorly", required: true }
-    - { finding: "comet tail sign (curving vessels and bronchi toward the opacity)", location: "right lower lobe", required: true }
-    - { finding: "adjacent pleural thickening", location: "right posterior pleura", required: false }
-    - { finding: "volume loss in the adjacent lung", location: "right lower lobe", required: false }
-  severity: mild
-  laterality: right
+    - { finding: "Bilateral pleural effusions (right greater than left)", location: "bilateral costophrenic angles", required: true }
+    - { finding: "Gallbladder wall thickening on concurrent abdominal imaging", location: "right upper quadrant", required: false }
+    - { finding: "Pericardia effusion if present", location: "cardiac silhouette", required: false }
+    - { finding: "Pulmonary edema from capillary leak", location: "bilateral lung fields", required: false }
+  severity: severe
+  laterality: bilateral
   negatives:
-    - true lung mass without pleural association
-    - cavitation
-    - lymphadenopathy
-    - multiple nodules
+    - "No focal consolidation"
+    - "No pneumothorax"
 pattern_checks:
-  - { name: round_atelectasis, check_type: regex, pattern: "(?i)(round\\s+atelectasis|Blesovsky|folded\\s+lung)", required: true }
-  - { name: not_mass, check_type: regex, pattern: "(?i)(rather\\s+than.{0,20}mass|not.{0,20}(true\\s+)?mass|benign|atelectasis.{0,20}not.{0,20}malignan)", required: true }
-  - { name: comet_tail, check_type: regex, pattern: "(?i)(comet.?tail|curving.{0,20}(vessel|bronch)|vessel.{0,20}converging)", required: true }
-  - { name: pleural_thickening, check_type: regex, pattern: "(?i)(pleural\\s+(thicken|plaque)|asbestos)", required: false }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(dengue|hemorrhagic fever|capillary leak|plasma leak)", required: true }
+  - { name: "effusion_finding", check_type: regex, pattern: "(?i)(pleural effusion|bilateral effusion|right.?sided effusion|third.?spacing)", required: true }
 reference_solution: |
-  PA chest radiograph demonstrates a rounded opacity in the right lower zone
-  abutting the posterior pleural surface, which could be mistaken for a primary
-  lung mass. However, the characteristic comet tail sign is present, with
-  pulmonary vessels and bronchi curving toward the opacity, which is pathognomonic
-  for round atelectasis (Blesovsky syndrome). Adjacent pleural thickening is
-  noted along the right posterior chest wall, often seen in association with
-  asbestos exposure. The opacity represents folded, atelectatic lung tissue
-  rather than a true neoplasm. The left lung is clear. No pleural effusion. CT
-  with contrast is recommended to confirm the diagnosis and demonstrate the
-  classic comet tail of vessels on axial imaging.
-  Impression: Round atelectasis — not a primary lung mass. CT confirmation
-  recommended.
+  Frontal chest radiograph demonstrates bilateral pleural effusions, right greater than left, with blunting of both costophrenic angles. There is mild bilateral interstitial edema consistent with capillary leak. The cardiac silhouette appears mildly enlarged, possibly reflecting pericardial effusion. No focal consolidation or pneumothorax is identified. In the clinical context of thrombocytopenia and hemoconcentration, these findings of bilateral effusions from capillary leak are characteristic of dengue hemorrhagic fever. Serial monitoring and fluid management are essential.
 condition_present: true
-confusion_pair: XRAY-008
-source_dataset: mediconfusion
+confusion_pair: null
+source_dataset: openem-grounded
 tags:
-  - round-atelectasis
-  - lung-mass-mimic
-  - comet-tail
-  - confusion-pair
-  - chest
+  - pulmonary
+  - infectious
+  - tropical
+  - emergency

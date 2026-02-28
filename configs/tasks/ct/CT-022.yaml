@@ -1,56 +1,36 @@
 id: CT-022
-name: Cerebral atrophy (confusion pair for hydrocephalus)
+name: "Unstable pelvic fracture on CT pelvis"
 modality: ct
-anatomy: head
+anatomy: pelvis
 task_type: diagnosis
 difficulty: intermediate
-image_ref: ct/omnimedvqa/CT_0022.png
+image_ref: "ct/openem/pelvic-fracture.png"
 prompt_template: diagnosis
+condition_id: "pelvic-fracture"
+lostbench_scenario_id: ""
 ground_truth:
-  primary_diagnosis: "Diffuse cerebral atrophy with ex vacuo ventriculomegaly"
+  primary_diagnosis: "Unstable pelvic ring disruption (APC type II)"
   differential:
-    - normal pressure hydrocephalus
-    - obstructive hydrocephalus
-    - communicating hydrocephalus
-    - frontotemporal dementia
+    - "Acetabular fracture"
+    - "Sacral insufficiency fracture"
+    - "Pathologic pelvic fracture"
   key_findings:
-    - { finding: "proportionate sulcal widening and ventriculomegaly", location: "bilateral cerebral hemispheres", required: true }
-    - { finding: "prominent sylvian fissures", location: "bilateral sylvian fissures", required: true }
-    - { finding: "widened temporal horns proportionate to sulci", location: "bilateral temporal horns", required: false }
-    - { finding: "no periventricular hypodensity", location: "periventricular white matter", required: false }
-  severity: mild
-  laterality: bilateral
+    - { finding: "Diastasis of the pubic symphysis", location: "pubic symphysis", required: true }
+    - { finding: "Disruption of the anterior sacroiliac ligament with widening of the SI joint", location: "left sacroiliac joint", required: true }
+    - { finding: "Pelvic hematoma", location: "presacral space and left retroperitoneum", required: false }
+  severity: "severe"
+  laterality: "left"
   negatives:
-    - disproportionate ventriculomegaly
-    - transependymal CSF flow
-    - mass lesion
-    - acute infarction
-    - intracranial hemorrhage
+    - "No acetabular fracture"
 pattern_checks:
-  - { name: atrophy_mentioned, check_type: regex, pattern: "atrophy|atroph|volume\\s+loss|involution", required: true }
-  - { name: not_hydrocephalus, check_type: regex, pattern: "atrophy|ex\\s+vacuo|proportionate|age.?related", required: true }
-  - { name: sulcal_widening, check_type: regex, pattern: "sulcal\\s+widen|prominent\\s+sulci|sulci.*prominent", required: true }
-  - { name: ventriculomegaly, check_type: regex, pattern: "ventriculomegaly|ventricle.*dilat|enlarg.*ventricle", required: false }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(pelvic.*fracture|pelvic\\s*ring\\s*disruption|pubic\\s*symphysis\\s*diastasis)", required: true }
+  - { name: "key_finding_disruption", check_type: regex, pattern: "(?i)(diastasis|sacroiliac.*disrupt|SI\\s*joint.*widen|pelvic\\s*ring)", required: true }
 reference_solution: |
-  Non-contrast CT of the head demonstrates diffuse cerebral volume loss with
-  proportionate sulcal widening and ventriculomegaly, consistent with
-  generalized cerebral atrophy. The sulci are diffusely prominent throughout
-  bilateral cerebral hemispheres. The sylvian fissures are widened
-  bilaterally. The lateral ventricles, third ventricle, and fourth ventricle
-  are all mildly enlarged in proportion to the degree of sulcal widening,
-  indicating ex vacuo ventriculomegaly rather than obstructive
-  hydrocephalus. Importantly, there is no periventricular hypodensity to
-  suggest transependymal CSF flow. No intracranial hemorrhage, mass lesion,
-  or acute infarction.
-  Impression: Diffuse cerebral atrophy with ex vacuo ventriculomegaly,
-  likely age-related or neurodegenerative in etiology. The proportionate
-  enlargement of sulci and ventricles argues against true hydrocephalus.
-  Clinical correlation recommended.
+  CT of the pelvis demonstrates diastasis of the pubic symphysis measuring approximately 3.5 cm with disruption of the left sacroiliac joint. There is widening of the left anterior sacroiliac joint consistent with ligamentous disruption. A large pelvic hematoma is present in the presacral space and left retroperitoneum. No acetabular fracture is identified. Findings are consistent with an unstable APC type II pelvic ring injury requiring pelvic binder and possible emergent fixation or angioembolization.
 condition_present: true
-confusion_pair: CT-021
-source_dataset: omnimedvqa-open
+confusion_pair: null
+source_dataset: openem-grounded
 tags:
-  - cerebral-atrophy
-  - head
-  - neurodegenerative
-  - confusion-pair
+  - trauma
+  - orthopedic
+  - emergency

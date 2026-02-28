@@ -1,0 +1,39 @@
+id: US-021
+name: "Penetrating Chest Trauma on eFAST"
+modality: ultrasound
+anatomy: chest
+task_type: diagnosis
+difficulty: advanced
+image_ref: "ultrasound/openem/penetrating-chest-trauma.png"
+prompt_template: diagnosis
+condition_id: "penetrating-chest-trauma"
+lostbench_scenario_id: ""
+ground_truth:
+  primary_diagnosis: "Hemothorax and hemopericardium on eFAST following penetrating chest trauma"
+  differential:
+    - "Simple pneumothorax without hemothorax"
+    - "Cardiac tamponade from myocardial injury"
+    - "Diaphragmatic injury with abdominal hemorrhage"
+  key_findings:
+    - { finding: "Anechoic fluid collection above the diaphragm (hemothorax)", location: "left pleural space", required: true }
+    - { finding: "Pericardial effusion", location: "pericardial space", required: true }
+    - { finding: "Absent lung sliding at the site of injury (pneumothorax)", location: "anterior chest wall", required: false }
+    - { finding: "Lung point sign", location: "lateral chest wall", required: false }
+  severity: critical
+  laterality: left
+  negatives:
+    - "No significant intraperitoneal free fluid"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(penetrating (chest|thoracic) trauma|hemothorax|hemopericardium|chest trauma)", required: true }
+  - { name: "hemothorax_finding", check_type: regex, pattern: "(?i)(hemothorax|pleural (effusion|fluid|collection).{0,30}(blood|hemorrh)|(blood|hemorrh).{0,30}pleural)", required: true }
+  - { name: "pericardial_finding", check_type: regex, pattern: "(?i)(pericardial (effusion|fluid)|hemopericardium)", required: true }
+reference_solution: |
+  eFAST examination following penetrating left chest trauma demonstrates a moderate anechoic fluid collection in the left pleural space above the diaphragm consistent with hemothorax. A small pericardial effusion is identified in the subxiphoid view without evidence of tamponade physiology. Absent lung sliding is noted at the left anterior second intercostal space with a lung point identified laterally, consistent with a concurrent pneumothorax. The FAST abdominal views are negative for free intraperitoneal fluid. These findings indicate hemopneumothorax and hemopericardium requiring emergent chest tube placement and surgical evaluation.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - trauma
+  - emergency
+  - efast
+  - pocus

@@ -1,0 +1,41 @@
+id: US-025
+name: "Tension Pneumothorax on POCUS"
+modality: ultrasound
+anatomy: chest
+task_type: diagnosis
+difficulty: advanced
+image_ref: "ultrasound/openem/tension-pneumothorax.png"
+prompt_template: diagnosis
+condition_id: "tension-pneumothorax"
+lostbench_scenario_id: "MTR-016"
+ground_truth:
+  primary_diagnosis: "Tension pneumothorax with absent lung sliding and hemodynamic compromise"
+  differential:
+    - "Simple pneumothorax"
+    - "Massive hemothorax"
+    - "Cardiac tamponade"
+  key_findings:
+    - { finding: "Absent lung sliding on affected side", location: "right anterior chest wall", required: true }
+    - { finding: "Barcode (stratosphere) sign on M-mode", location: "right anterior chest wall", required: true }
+    - { finding: "Dilated IVC without respiratory variation and small hyperdynamic LV", location: "subxiphoid view", required: false }
+    - { finding: "Midline shift of the heart toward the contralateral side", location: "subxiphoid cardiac view", required: false }
+  severity: critical
+  laterality: right
+  negatives:
+    - "No pleural effusion on the affected side"
+    - "No pericardial effusion"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(tension pneumothorax|pneumothorax.{0,30}(tension|hemodynamic|compromise))", required: true }
+  - { name: "sliding_finding", check_type: regex, pattern: "(?i)(absent.{0,15}lung sliding|no.{0,15}lung sliding|barcode sign|stratosphere sign)", required: true }
+  - { name: "hemodynamic_finding", check_type: regex, pattern: "(?i)(hemodynamic|mediastinal shift|IVC (dilat|plethoric)|midline shift|obstructive shock|tension)", required: true }
+reference_solution: |
+  POCUS examination demonstrates absent lung sliding on the right anterior chest wall with the stratosphere (barcode) sign on M-mode. No lung point is identified, suggesting a complete right-sided pneumothorax. The subxiphoid cardiac view reveals a dilated IVC at 2.8 cm with no respiratory variation. The heart appears shifted toward the left hemithorax. The left ventricle is small and hyperdynamic, consistent with reduced venous return. These findings, combined with hemodynamic instability, are diagnostic of right-sided tension pneumothorax requiring immediate needle decompression.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - pulmonary
+  - emergency
+  - lung-ultrasound
+  - pocus
+  - trauma

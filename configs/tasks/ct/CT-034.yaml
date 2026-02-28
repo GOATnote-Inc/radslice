@@ -1,61 +1,37 @@
 id: CT-034
-name: Esophageal perforation with pneumomediastinum
+name: "Acute appendicitis on contrast-enhanced CT abdomen"
 modality: ct
-anatomy: chest
+anatomy: abdomen
 task_type: diagnosis
-difficulty: expert
-image_ref: ct/omnimedvqa/CT_0034.png
+difficulty: intermediate
+image_ref: "ct/openem/acute-appendicitis.png"
 prompt_template: diagnosis
+condition_id: "acute-appendicitis"
+lostbench_scenario_id: "MTR-021"
 ground_truth:
-  primary_diagnosis: "Esophageal perforation (Boerhaave syndrome) with pneumomediastinum"
+  primary_diagnosis: "Acute uncomplicated appendicitis"
   differential:
-    - tracheobronchial rupture
-    - mediastinitis from other etiology
-    - post-procedural esophageal injury
-    - perforated esophageal carcinoma
-    - descending necrotizing mediastinitis
+    - "Right-sided diverticulitis"
+    - "Mesenteric lymphadenitis"
+    - "Crohn disease of the terminal ileum"
   key_findings:
-    - { finding: "pneumomediastinum with gas tracking along mediastinal planes", location: "posterior mediastinum", required: true }
-    - { finding: "esophageal wall defect or discontinuity", location: "distal esophagus above GE junction", required: true }
-    - { finding: "left-sided pleural effusion with debris", location: "left pleural space", required: false }
-    - { finding: "periesophageal fluid and fat stranding", location: "posterior mediastinum", required: false }
-  severity: severe
-  laterality: left
+    - { finding: "Dilated fluid-filled appendix greater than 6 mm in diameter with wall enhancement", location: "right lower quadrant", required: true }
+    - { finding: "Periappendiceal fat stranding", location: "surrounding the appendix", required: true }
+    - { finding: "Appendicolith", location: "appendiceal lumen", required: false }
+  severity: "moderate"
+  laterality: "right"
   negatives:
-    - tracheal or bronchial injury
-    - aortic dissection
-    - esophageal mass
-    - pneumothorax
-    - subcutaneous emphysema extending to neck
+    - "No extraluminal air to suggest perforation"
+    - "No periappendiceal abscess"
 pattern_checks:
-  - { name: esophageal_perforation, check_type: regex, pattern: "esophageal\\s+(perforation|rupture|tear)|Boerhaave", required: true }
-  - { name: pneumomediastinum, check_type: regex, pattern: "pneumomediastinum|mediastinal.*(air|gas|emphysema)", required: true }
-  - { name: distal_esophagus, check_type: regex, pattern: "distal\\s+esophag|lower\\s+esophag|GE\\s+junction|gastroesophageal", required: true }
-  - { name: effusion_or_fluid, check_type: regex, pattern: "effusion|pleural.*fluid|mediastinal.*fluid|periesophageal", required: false }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(appendicitis|inflamed\\s*appendix)", required: true }
+  - { name: "key_finding_appendix", check_type: regex, pattern: "(?i)(dilated.*appendix|appendix.*dilat|fat\\s*stranding|appendicolith)", required: true }
 reference_solution: |
-  Contrast-enhanced CT of the chest with oral contrast demonstrates
-  pneumomediastinum with gas tracking along the posterior mediastinal planes
-  surrounding the esophagus. There is a focal defect in the left
-  posterolateral wall of the distal esophagus approximately 3 cm above the
-  gastroesophageal junction with extraluminal leak of oral contrast. A
-  moderate left-sided pleural effusion with internal debris is present,
-  suspicious for early empyema. Periesophageal fat stranding and fluid are
-  noted in the posterior mediastinum. No pneumoperitoneum. The trachea and
-  main bronchi appear intact. No esophageal mass to suggest underlying
-  malignancy. The clinical history of forceful vomiting is consistent with
-  Boerhaave syndrome.
-  Impression: Esophageal perforation involving the left posterolateral
-  distal esophagus with pneumomediastinum and left pleural effusion,
-  consistent with Boerhaave syndrome. This is a surgical emergency requiring
-  immediate thoracic surgery consultation for operative repair or endoscopic
-  intervention.
+  Contrast-enhanced CT of the abdomen and pelvis demonstrates a dilated, fluid-filled appendix measuring approximately 10 mm in diameter with wall hyperenhancement and surrounding periappendiceal fat stranding. A small appendicolith is noted within the proximal appendiceal lumen. There is no extraluminal air, periappendiceal abscess, or free fluid to suggest perforation. Findings are consistent with acute uncomplicated appendicitis.
 condition_present: true
 confusion_pair: null
-source_dataset: omnimedvqa-open
+source_dataset: openem-grounded
 tags:
-  - esophageal-perforation
-  - boerhaave
-  - emergency
-  - chest
+  - abdominal
   - surgical
-  - life-threatening
+  - emergency

@@ -1,58 +1,37 @@
 id: CT-019
-name: Acute diverticulitis with abscess
+name: "Epidural hematoma on non-contrast CT head"
 modality: ct
-anatomy: abdomen
+anatomy: head
 task_type: diagnosis
 difficulty: intermediate
-image_ref: ct/eurorad/EUR_0019.png
+image_ref: "ct/openem/epidural-hematoma.png"
 prompt_template: diagnosis
+condition_id: "epidural-hematoma"
+lostbench_scenario_id: ""
 ground_truth:
-  primary_diagnosis: "Acute sigmoid diverticulitis with pericolonic abscess"
+  primary_diagnosis: "Acute epidural hematoma"
   differential:
-    - colorectal carcinoma with perforation
-    - epiploic appendagitis
-    - sigmoid volvulus
-    - pelvic inflammatory disease
-    - Crohn disease colitis
+    - "Acute subdural hematoma"
+    - "Epidural abscess"
+    - "Dural metastasis"
   key_findings:
-    - { finding: "sigmoid colon wall thickening with pericolonic fat stranding", location: "sigmoid colon", required: true }
-    - { finding: "multiple diverticula", location: "sigmoid colon", required: true }
-    - { finding: "pericolonic fluid collection with rim enhancement", location: "left lower quadrant", required: false }
-    - { finding: "focal free fluid", location: "pelvis", required: false }
-  severity: moderate
-  laterality: left
+    - { finding: "Biconvex hyperdense extra-axial collection", location: "right temporal region", required: true }
+    - { finding: "Overlying temporal bone fracture", location: "right temporal bone", required: true }
+    - { finding: "Mass effect with uncal herniation", location: "right temporal lobe", required: false }
+  severity: "critical"
+  laterality: "right"
   negatives:
-    - free intraperitoneal air
-    - bowel obstruction
-    - colonic mass
-    - ureteral obstruction
-    - distant abscess
+    - "No contralateral extra-axial collection"
 pattern_checks:
-  - { name: diverticulitis_mentioned, check_type: regex, pattern: "diverticulitis", required: true }
-  - { name: sigmoid, check_type: regex, pattern: "sigmoid", required: true }
-  - { name: abscess_or_collection, check_type: regex, pattern: "abscess|collection|phlegmon", required: true }
-  - { name: fat_stranding, check_type: regex, pattern: "fat\\s+strand|pericolonic.*inflam|inflammatory\\s+change", required: false }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(epidural\\s*hematoma|EDH|extradural\\s*hematoma)", required: true }
+  - { name: "key_finding_biconvex", check_type: regex, pattern: "(?i)(biconvex|lenticular|lens.?shaped)", required: true }
 reference_solution: |
-  Contrast-enhanced CT of the abdomen and pelvis demonstrates marked wall
-  thickening of the sigmoid colon with extensive pericolonic fat stranding.
-  Multiple diverticula are present throughout the sigmoid colon. A 3.5 cm
-  rim-enhancing fluid collection is identified in the left lower quadrant
-  adjacent to the sigmoid colon, consistent with a pericolonic abscess. A
-  small amount of free fluid is noted in the pelvis. No extraluminal free
-  air to suggest frank perforation. No evidence of colonic obstruction. The
-  affected segment of sigmoid measures approximately 8 cm in length. No
-  suspicious colonic mass identified, though evaluation is limited due to
-  inflammation. Modified Hinchey classification: Stage Ib (pericolonic
-  abscess).
-  Impression: Acute sigmoid diverticulitis complicated by a 3.5 cm
-  pericolonic abscess (Hinchey Ib). Consideration of percutaneous drainage
-  and intravenous antibiotics recommended.
+  Non-contrast CT head demonstrates a biconvex hyperdense extra-axial collection in the right temporal region measuring approximately 15 mm in maximal thickness, consistent with an acute epidural hematoma. A linear non-displaced fracture of the right temporal bone is identified overlying the collection, suggesting middle meningeal artery injury. There is local mass effect with early right uncal herniation. No contralateral extra-axial collection is identified. Emergent neurosurgical evacuation is indicated.
 condition_present: true
 confusion_pair: null
-source_dataset: eurorad
+source_dataset: openem-grounded
 tags:
-  - diverticulitis
-  - abscess
-  - abdomen
-  - gastrointestinal
-  - surgical
+  - neuro
+  - trauma
+  - hemorrhage
+  - emergency

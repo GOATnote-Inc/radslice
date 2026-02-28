@@ -1,58 +1,37 @@
 id: CT-030
-name: Empyema with split pleura sign
+name: "Acute pulmonary embolism on CTPA"
 modality: ct
 anatomy: chest
 task_type: diagnosis
 difficulty: advanced
-image_ref: ct/omnimedvqa/CT_0030.png
+image_ref: "ct/openem/pulmonary-embolism.png"
 prompt_template: diagnosis
+condition_id: "pulmonary-embolism"
+lostbench_scenario_id: "MTR-010"
 ground_truth:
-  primary_diagnosis: "Right-sided empyema"
+  primary_diagnosis: "Acute bilateral pulmonary embolism with right heart strain"
   differential:
-    - complicated parapneumonic effusion
-    - pleural metastatic disease
-    - hemothorax
-    - chylothorax
-    - loculated simple effusion
+    - "Chronic pulmonary embolism"
+    - "In-situ pulmonary artery thrombosis"
+    - "Pulmonary artery sarcoma"
   key_findings:
-    - { finding: "loculated pleural collection with split pleura sign", location: "right pleural space", required: true }
-    - { finding: "enhancing thickened visceral and parietal pleura", location: "right hemithorax", required: true }
-    - { finding: "internal septations", location: "right pleural collection", required: false }
-    - { finding: "adjacent compressive atelectasis", location: "right lower lobe", required: false }
-  severity: moderate
-  laterality: right
+    - { finding: "Filling defects within the pulmonary arteries", location: "bilateral main and lobar pulmonary arteries", required: true }
+    - { finding: "Right ventricular dilatation with RV/LV ratio > 1.0", location: "heart", required: true }
+    - { finding: "Interventricular septal bowing toward the left ventricle", location: "interventricular septum", required: false }
+  severity: "critical"
+  laterality: "bilateral"
   negatives:
-    - pneumothorax
-    - pleural mass or nodularity
-    - bronchopleural fistula
-    - chest wall invasion
-    - contralateral effusion
+    - "No pulmonary infarction"
 pattern_checks:
-  - { name: empyema_mentioned, check_type: regex, pattern: "empyema|infected.*effusion|purulent.*effusion", required: true }
-  - { name: split_pleura, check_type: regex, pattern: "split\\s+pleura|pleural.*enhanc.*thicken|thicken.*enhanc.*pleur", required: true }
-  - { name: loculated, check_type: regex, pattern: "loculated|septated|organized|complex\\s+collection", required: true }
-  - { name: right_sided, check_type: regex, pattern: "right", required: true }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(pulmonary\\s*embolism|PE|pulmonary.*thromboembol)", required: true }
+  - { name: "key_finding_filling_defect", check_type: regex, pattern: "(?i)(filling\\s*defect|thrombus.*pulmonary|pulmonary.*thrombus)", required: true }
 reference_solution: |
-  Contrast-enhanced CT of the chest demonstrates a large loculated
-  right-sided pleural collection with enhancing, thickened visceral and
-  parietal pleural layers separated by the collection — the classic split
-  pleura sign — highly suggestive of empyema. The collection measures
-  approximately 12 x 6 cm and contains internal septations. The enhanced
-  pleural surfaces measure up to 3 mm in thickness. There is adjacent
-  compressive atelectasis of the right lower lobe. The collection has
-  higher attenuation (approximately 20 HU) than simple transudative
-  effusion. No pleural nodularity or mass to suggest malignancy. No
-  bronchopleural fistula or pneumothorax. The left hemithorax is clear.
-  Impression: Right-sided empyema with split pleura sign and internal
-  septations. Chest tube drainage or video-assisted thoracoscopic surgery
-  (VATS) debridement recommended. Infectious disease consultation for
-  targeted antibiotic therapy.
+  CTPA demonstrates extensive bilateral filling defects within the main, lobar, and segmental pulmonary arteries consistent with acute pulmonary embolism. The right ventricle is dilated with an RV/LV ratio of approximately 1.3, and the interventricular septum bows toward the left ventricle, indicating right heart strain. No pulmonary infarction is identified. Findings represent acute bilateral pulmonary embolism with signs of right heart strain consistent with submassive PE.
 condition_present: true
 confusion_pair: null
-source_dataset: omnimedvqa-open
+source_dataset: openem-grounded
 tags:
-  - empyema
-  - pleural
-  - chest
-  - infectious
-  - surgical
+  - pulmonary
+  - vascular
+  - emergency
+  - ctpa

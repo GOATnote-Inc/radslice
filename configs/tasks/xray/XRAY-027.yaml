@@ -1,54 +1,38 @@
 id: XRAY-027
-name: Pericardial effusion
+name: "Tracheal Disruption on Chest X-ray"
 modality: xray
 anatomy: chest
 task_type: diagnosis
-difficulty: intermediate
-image_ref: xray/omnimedvqa/CXR_0027.png
+difficulty: expert
+image_ref: "xray/openem/tracheal-disruption.png"
 prompt_template: diagnosis
+condition_id: "tracheal-disruption"
+lostbench_scenario_id: "MTR-076"
 ground_truth:
-  primary_diagnosis: "Pericardial effusion"
+  primary_diagnosis: "Tracheobronchial disruption"
   differential:
-    - cardiomegaly (dilated cardiomyopathy)
-    - globular cardiac shape from valvular disease
-    - pericardial fat pad
-    - constrictive pericarditis
+    - "Esophageal perforation with pneumomediastinum"
+    - "Simple pneumothorax"
+    - "Boerhaave syndrome"
   key_findings:
-    - { finding: "globular (water-bottle) cardiac silhouette", location: "cardiac silhouette", required: true }
-    - { finding: "markedly enlarged cardiac silhouette with smooth margins", location: "cardiomediastinal", required: true }
-    - { finding: "clear lung fields despite cardiac enlargement", location: "bilateral lungs", required: false }
-    - { finding: "epicardial fat pad sign", location: "cardiac border", required: false }
-  severity: moderate
-  laterality: ""
+    - { finding: "Pneumomediastinum with continuous diaphragm sign", location: "mediastinum", required: true }
+    - { finding: "Persistent pneumothorax despite chest tube placement (fallen lung sign)", location: "affected hemithorax", required: true }
+    - { finding: "Extensive subcutaneous emphysema", location: "bilateral neck and chest wall", required: false }
+    - { finding: "Abnormal tracheal or bronchial contour", location: "trachea or mainstem bronchi", required: false }
+  severity: critical
+  laterality: right
   negatives:
-    - pulmonary edema
-    - pleural effusion
-    - pneumothorax
-    - focal consolidation
-    - vascular congestion
+    - "No foreign body"
 pattern_checks:
-  - { name: pericardial_effusion, check_type: regex, pattern: "(?i)pericardial\\s+effusion", required: true }
-  - { name: cardiac_silhouette, check_type: regex, pattern: "(?i)(water.?bottle|globular|flask|enlarg.{0,30}cardiac|cardiac.{0,30}enlarg)", required: true }
-  - { name: smooth_margins, check_type: regex, pattern: "(?i)(smooth.{0,20}(margin|contour|border)|featureless)", required: false }
-  - { name: echocardiogram, check_type: regex, pattern: "(?i)(echocardiogra|echo|ultrasound)", required: true }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(tracheal (disruption|injury|rupture|tear)|tracheobronchial|bronchial (disruption|injury|rupture|tear))", required: true }
+  - { name: "pneumomediastinum_finding", check_type: regex, pattern: "(?i)(pneumomediastinum|subcutaneous emphysema|fallen lung|persistent pneumothorax)", required: true }
 reference_solution: |
-  PA chest radiograph demonstrates a markedly enlarged cardiac silhouette with a
-  globular, water-bottle configuration and smooth featureless margins. The
-  cardiothoracic ratio is significantly increased, exceeding 0.6. Notably, the
-  lung fields are clear without pulmonary vascular congestion or cephalization,
-  which is atypical for cardiomegaly from heart failure and raises strong
-  suspicion for pericardial effusion rather than true cardiac chamber enlargement.
-  No pleural effusion is identified. The mediastinal contours are otherwise normal.
-  No pneumothorax. The differential epicardial fat pad sign may be present.
-  Urgent echocardiogram is recommended to confirm pericardial effusion and assess
-  for tamponade physiology.
-  Impression: Globular cardiac silhouette — pericardial effusion suspected.
-  Echocardiogram recommended.
+  Frontal chest radiograph demonstrates extensive pneumomediastinum and bilateral subcutaneous emphysema. A right-sided pneumothorax persists despite chest tube placement, with the collapsed lung falling to a dependent position (fallen lung sign), which is pathognomonic for tracheobronchial disruption. The continuous diaphragm sign is present. These findings are consistent with a tracheobronchial injury, and urgent bronchoscopy is indicated for localization and surgical planning.
 condition_present: true
 confusion_pair: null
-source_dataset: omnimedvqa-open
+source_dataset: openem-grounded
 tags:
-  - pericardial-effusion
-  - water-bottle-heart
-  - cardiac
-  - chest
+  - trauma
+  - airway
+  - emergency
+  - critical

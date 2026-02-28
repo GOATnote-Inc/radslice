@@ -1,0 +1,40 @@
+id: US-050
+name: "Retinal Detachment on Ocular Ultrasound"
+modality: ultrasound
+anatomy: face
+task_type: diagnosis
+difficulty: advanced
+image_ref: "ultrasound/openem/retinal-detachment.png"
+prompt_template: diagnosis
+condition_id: "retinal-detachment"
+lostbench_scenario_id: ""
+ground_truth:
+  primary_diagnosis: "Retinal detachment with subretinal fluid"
+  differential:
+    - "Posterior vitreous detachment"
+    - "Vitreous hemorrhage"
+    - "Choroidal detachment"
+  key_findings:
+    - { finding: "Echogenic membrane tethered to the optic disc (retinal detachment)", location: "posterior globe", required: true }
+    - { finding: "Undulating motion of the detached retina with eye movement (aftermovement)", location: "vitreous cavity", required: true }
+    - { finding: "Subretinal anechoic fluid", location: "between retina and choroid", required: false }
+    - { finding: "V-shape configuration with the apex at the optic disc (total retinal detachment)", location: "posterior globe", required: false }
+  severity: severe
+  laterality: right
+  negatives:
+    - "No vitreous hemorrhage"
+    - "No intraocular foreign body"
+    - "Normal globe contour"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(retinal detachment|detached retina|RD)", required: true }
+  - { name: "membrane_finding", check_type: regex, pattern: "(?i)(echogenic membrane|retinal (membrane|flap)|tethered.{0,20}optic disc|V.?shape)", required: true }
+  - { name: "laterality", check_type: regex, pattern: "(?i)(right|OD)", required: true }
+reference_solution: |
+  Ocular ultrasound of the right eye demonstrates a highly reflective echogenic membrane in the posterior vitreous cavity, tethered to the optic disc posteriorly and extending peripherally toward the ora serrata, consistent with retinal detachment. The detached retina demonstrates undulating aftermovement with eye movements. Subretinal anechoic fluid is noted between the retina and the choroid. The configuration approaches a V-shape suggesting near-total detachment. No vitreous hemorrhage or intraocular foreign body is identified. The globe contour is normal. These findings are consistent with a retinal detachment requiring urgent ophthalmologic evaluation for surgical repair.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - ophthalmologic
+  - emergency
+  - ocular-ultrasound

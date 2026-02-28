@@ -1,0 +1,37 @@
+id: CT-071
+name: "Sepsis with multiorgan findings on contrast-enhanced CT"
+modality: ct
+anatomy: chest
+task_type: diagnosis
+difficulty: intermediate
+image_ref: "ct/openem/sepsis.png"
+prompt_template: diagnosis
+condition_id: "sepsis"
+lostbench_scenario_id: ""
+ground_truth:
+  primary_diagnosis: "Sepsis with pulmonary source and multiorgan findings"
+  differential:
+    - "Cardiogenic pulmonary edema"
+    - "ARDS"
+    - "Multilobar pneumonia"
+  key_findings:
+    - { finding: "Bilateral pulmonary consolidation and ground-glass opacities", location: "bilateral lung bases", required: true }
+    - { finding: "Bilateral pleural effusions", location: "bilateral pleural spaces", required: true }
+    - { finding: "Diffuse bowel wall thickening and mesenteric edema (shock bowel)", location: "small bowel", required: false }
+  severity: "severe"
+  laterality: "bilateral"
+  negatives:
+    - "No pneumothorax"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(sepsis|septic|multiorgan|shock\\s*bowel|pneumonia.*bilateral)", required: true }
+  - { name: "key_finding_bilateral", check_type: regex, pattern: "(?i)(bilateral.*consolidation|bilateral.*effusion|shock\\s*bowel|bilateral.*opacit)", required: true }
+reference_solution: |
+  Contrast-enhanced CT of the chest and abdomen demonstrates bilateral basilar consolidation and ground-glass opacities consistent with multilobar pneumonia as the likely septic source. Bilateral pleural effusions are present. Diffuse small bowel wall thickening with mucosal hyperenhancement and mesenteric edema is noted, consistent with shock bowel. The IVC is collapsed, suggesting intravascular depletion. Findings are consistent with severe sepsis with pneumonia as the primary source and secondary multiorgan hypoperfusion.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - critical-care
+  - infectious
+  - emergency
+  - pulmonary

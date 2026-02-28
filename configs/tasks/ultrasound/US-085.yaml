@@ -1,0 +1,40 @@
+id: US-085
+name: "Major Joint Dislocation on POCUS"
+modality: ultrasound
+anatomy: shoulder
+task_type: diagnosis
+difficulty: intermediate
+image_ref: "ultrasound/openem/major-joint-dislocation.png"
+prompt_template: diagnosis
+condition_id: "major-joint-dislocation"
+lostbench_scenario_id: ""
+ground_truth:
+  primary_diagnosis: "Anterior shoulder dislocation confirmed by POCUS"
+  differential:
+    - "Posterior shoulder dislocation"
+    - "Greater tuberosity fracture without dislocation"
+    - "Acromioclavicular joint separation"
+  key_findings:
+    - { finding: "Empty glenoid fossa on posterior approach", location: "glenohumeral joint", required: true }
+    - { finding: "Humeral head displaced anteriorly and inferiorly", location: "anterior to glenoid rim", required: true }
+    - { finding: "Increased distance between the posterior glenoid labrum and the humeral head", location: "posterior glenohumeral view", required: false }
+    - { finding: "Possible Hill-Sachs deformity (cortical impaction)", location: "posterior humeral head", required: false }
+  severity: moderate
+  laterality: left
+  negatives:
+    - "No associated fracture identified on POCUS"
+    - "No vascular injury on axillary Doppler"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(shoulder dislocation|glenohumeral dislocation|anterior dislocation|dislocated shoulder)", required: true }
+  - { name: "displacement_finding", check_type: regex, pattern: "(?i)(empty glenoid|humeral head (displac|anterior|out of)|glenoid.{0,20}(empty|vacant)|disloc)", required: true }
+  - { name: "laterality", check_type: regex, pattern: "(?i)(left)", required: true }
+reference_solution: |
+  Point-of-care ultrasound of the left shoulder using the posterior approach demonstrates an empty glenoid fossa with the humeral head displaced anteriorly and inferiorly. The normal convex humeral head contour that should be visualized adjacent to the posterior glenoid rim is absent. On the anterior approach, the humeral head is identified anterior to the glenoid, confirming anterior dislocation. No obvious cortical fracture is identified, though POCUS has limited sensitivity for fracture detection. Axillary artery Doppler demonstrates intact distal flow. The contralateral right shoulder demonstrates normal glenohumeral alignment. These findings confirm an anterior left shoulder dislocation. Post-reduction POCUS can be used to confirm successful relocation.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - musculoskeletal
+  - emergency
+  - pocus
+  - orthopedic

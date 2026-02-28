@@ -1,0 +1,40 @@
+id: US-076
+name: "Acute Muscle Strain on Musculoskeletal Ultrasound"
+modality: ultrasound
+anatomy: extremity
+task_type: diagnosis
+difficulty: basic
+image_ref: "ultrasound/openem/acute-muscle-strain.png"
+prompt_template: diagnosis
+condition_id: "acute-muscle-strain"
+lostbench_scenario_id: "DEF-008"
+ground_truth:
+  primary_diagnosis: "Partial-thickness muscle tear (grade 2 strain) of the gastrocnemius"
+  differential:
+    - "Complete muscle rupture"
+    - "Deep vein thrombosis"
+    - "Plantaris tendon rupture"
+  key_findings:
+    - { finding: "Hypoechoic area at the myotendinous junction representing partial fiber disruption", location: "medial gastrocnemius myotendinous junction", required: true }
+    - { finding: "Surrounding intramuscular hematoma", location: "medial gastrocnemius", required: true }
+    - { finding: "Preserved continuity of the muscle-tendon unit", location: "gastrocnemius-Achilles complex", required: false }
+    - { finding: "Fluid tracking along the fascial planes", location: "posterior leg compartment", required: false }
+  severity: mild
+  laterality: right
+  negatives:
+    - "No complete muscle rupture"
+    - "No Achilles tendon tear"
+    - "No deep vein thrombosis"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(muscle (strain|tear)|gastrocnemius (tear|strain|injury)|partial (thickness|tear|fiber disruption)|grade (2|II))", required: true }
+  - { name: "tear_finding", check_type: regex, pattern: "(?i)(partial (tear|fiber disruption|thickness)|hypoechoic.{0,20}(myotendinous|muscle)|fiber (disruption|discontinuity))", required: true }
+  - { name: "hematoma_finding", check_type: regex, pattern: "(?i)(hematoma|hemorrhage|fluid (collection|tracking)|intramuscular (blood|fluid|hematoma))", required: true }
+reference_solution: |
+  Musculoskeletal ultrasound of the right posterior calf demonstrates a hypoechoic area at the medial gastrocnemius myotendinous junction measuring approximately 3.5 x 1.5 cm, consistent with a partial-thickness muscle tear (grade 2 strain). There is disruption of the normal fibrillar muscle architecture at this site. A small surrounding intramuscular and intermuscular hematoma is noted tracking along the fascial plane. The overall continuity of the gastrocnemius-Achilles tendon unit is maintained. No complete rupture is identified. The Achilles tendon appears intact. These findings are consistent with an acute grade 2 medial gastrocnemius strain (tennis leg).
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - musculoskeletal
+  - sports-medicine
+  - soft-tissue

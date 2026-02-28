@@ -1,59 +1,37 @@
 id: CT-045
-name: Cerebral venous sinus thrombosis
+name: "Compartment syndrome on contrast-enhanced CT extremity"
 modality: ct
-anatomy: head
+anatomy: extremity
 task_type: diagnosis
-difficulty: expert
-image_ref: ct/eurorad/EUR_0045.png
+difficulty: advanced
+image_ref: "ct/openem/compartment-syndrome.png"
 prompt_template: diagnosis
+condition_id: "compartment-syndrome"
+lostbench_scenario_id: "MTR-027"
 ground_truth:
-  primary_diagnosis: "Superior sagittal sinus thrombosis with venous infarction"
+  primary_diagnosis: "Acute compartment syndrome of the lower leg"
   differential:
-    - arachnoid granulations mimicking filling defects
-    - subdural hematoma
-    - arterial ischemic stroke (non-vascular territory)
-    - meningioma with dural sinus invasion
-    - high-riding jugular bulb
+    - "Deep vein thrombosis"
+    - "Cellulitis"
+    - "Necrotizing fasciitis"
   key_findings:
-    - { finding: "filling defect within superior sagittal sinus (empty delta sign)", location: "superior sagittal sinus", required: true }
-    - { finding: "hyperdense cord sign on non-contrast images", location: "superior sagittal sinus", required: false }
-    - { finding: "bilateral parasagittal hemorrhagic venous infarction", location: "bilateral frontal and parietal lobes", required: true }
-    - { finding: "cerebral edema", location: "bilateral parasagittal regions", required: false }
-  severity: severe
-  laterality: bilateral
+    - { finding: "Diffuse enlargement and edema of the anterior compartment musculature with loss of normal fascial plane definition", location: "anterior compartment of the left lower leg", required: true }
+    - { finding: "Decreased enhancement of the affected compartment muscles", location: "anterior compartment", required: true }
+    - { finding: "Associated tibial fracture", location: "proximal left tibia", required: false }
+  severity: "critical"
+  laterality: "left"
   negatives:
-    - arterial territory infarction pattern
-    - epidural hematoma
-    - subdural hematoma
-    - meningeal enhancement suggesting meningitis
-    - hydrocephalus
+    - "No subcutaneous gas to suggest necrotizing fasciitis"
 pattern_checks:
-  - { name: cvst_mentioned, check_type: regex, pattern: "venous.*thrombo|sinus\\s+thrombo|CVST\\b|cerebral\\s+venous|dural\\s+sinus", required: true }
-  - { name: sss_involved, check_type: regex, pattern: "sagittal\\s+sinus|SSS\\b|superior.*sinus", required: true }
-  - { name: empty_delta, check_type: regex, pattern: "empty\\s+delta|filling\\s+defect|delta\\s+sign|cord\\s+sign", required: true }
-  - { name: venous_infarct, check_type: regex, pattern: "venous\\s+infarct|hemorrhagic\\s+infarct|parasagittal.*hemorrh", required: false }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(compartment\\s*syndrome|compartment.*edema|muscle.*ischemia)", required: true }
+  - { name: "key_finding_compartment", check_type: regex, pattern: "(?i)(compartment.*enlarg|muscle.*edema|decreased.*enhancement|compartment.*swell)", required: true }
 reference_solution: |
-  CT venography with non-contrast correlate demonstrates a filling defect
-  within the superior sagittal sinus, with the classic empty delta sign on
-  post-contrast images — peripheral enhancement of the dural walls with a
-  central non-enhancing thrombus. On non-contrast images, a hyperdense cord
-  sign is present within the superior sagittal sinus. Bilateral parasagittal
-  areas of hemorrhagic venous infarction are noted involving the
-  frontoparietal lobes, with mixed-density areas of blood products and
-  surrounding vasogenic edema. The transverse and sigmoid sinuses appear
-  patent bilaterally. The deep venous system (internal cerebral veins, vein
-  of Galen, straight sinus) is patent. No hydrocephalus. No uncal
-  herniation.
-  Impression: Superior sagittal sinus thrombosis with bilateral
-  parasagittal hemorrhagic venous infarctions. Neurology consultation for
-  anticoagulation therapy. Investigation of underlying prothrombotic
-  etiology recommended.
+  Contrast-enhanced CT of the left lower leg demonstrates diffuse enlargement and edema of the anterior compartment musculature with loss of normal intermuscular fascial plane definition. There is decreased enhancement of the anterior compartment muscles compared with the other compartments, suggesting impaired perfusion. An associated fracture of the proximal left tibia is present. No subcutaneous gas is identified. Findings are concerning for acute anterior compartment syndrome requiring emergent fasciotomy.
 condition_present: true
 confusion_pair: null
-source_dataset: eurorad
+source_dataset: openem-grounded
 tags:
-  - cerebral-venous-thrombosis
+  - musculoskeletal
+  - trauma
   - emergency
-  - head
-  - neurovascular
-  - venous-infarction
+  - surgical

@@ -1,0 +1,39 @@
+id: US-026
+name: "Acute Cholecystitis on Right Upper Quadrant Ultrasound"
+modality: ultrasound
+anatomy: abdomen
+task_type: diagnosis
+difficulty: intermediate
+image_ref: "ultrasound/openem/acute-cholecystitis.png"
+prompt_template: diagnosis
+condition_id: "acute-cholecystitis"
+lostbench_scenario_id: ""
+ground_truth:
+  primary_diagnosis: "Acute cholecystitis with cholelithiasis"
+  differential:
+    - "Biliary colic without cholecystitis"
+    - "Acute cholangitis"
+    - "Acute hepatitis"
+  key_findings:
+    - { finding: "Gallstones with posterior acoustic shadowing", location: "gallbladder lumen", required: true }
+    - { finding: "Gallbladder wall thickening greater than 3 mm", location: "gallbladder wall", required: true }
+    - { finding: "Sonographic Murphy sign (focal tenderness with transducer pressure)", location: "gallbladder fundus", required: false }
+    - { finding: "Pericholecystic fluid", location: "gallbladder fossa", required: false }
+  severity: moderate
+  laterality: right
+  negatives:
+    - "No common bile duct dilation"
+    - "No intrahepatic biliary ductal dilation"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(cholecystitis|gallbladder (inflam|infection|wall thicken))", required: true }
+  - { name: "gallstone_finding", check_type: regex, pattern: "(?i)(gallstone|cholelithiasis|acoustic shadow|echogenic focus.{0,20}gallbladder)", required: true }
+  - { name: "wall_thickening", check_type: regex, pattern: "(?i)(wall thicken|gallbladder wall.{0,20}(thick|>\\s*3|edematous)|thickened.{0,10}wall)", required: true }
+reference_solution: |
+  Right upper quadrant ultrasound demonstrates a distended gallbladder containing multiple echogenic foci with clean posterior acoustic shadowing consistent with cholelithiasis. The gallbladder wall is diffusely thickened measuring 5 mm with a striated (layered) appearance suggesting edema. Pericholecystic fluid is present along the gallbladder fossa. A positive sonographic Murphy sign is elicited with maximal tenderness over the gallbladder fundus during transducer compression. The common bile duct measures 4 mm with no intrahepatic biliary dilation. These findings are consistent with acute calculous cholecystitis.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - abdominal
+  - emergency
+  - hepatobiliary

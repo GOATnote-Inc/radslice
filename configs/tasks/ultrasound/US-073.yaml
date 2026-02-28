@@ -1,0 +1,40 @@
+id: US-073
+name: "Acute Appendicitis on Graded Compression Ultrasound"
+modality: ultrasound
+anatomy: abdomen
+task_type: diagnosis
+difficulty: advanced
+image_ref: "ultrasound/openem/acute-appendicitis.png"
+prompt_template: diagnosis
+condition_id: "acute-appendicitis"
+lostbench_scenario_id: "MTR-021"
+ground_truth:
+  primary_diagnosis: "Acute appendicitis with distended non-compressible appendix"
+  differential:
+    - "Mesenteric lymphadenitis"
+    - "Meckel diverticulitis"
+    - "Right ovarian pathology (torsion, cyst rupture)"
+  key_findings:
+    - { finding: "Non-compressible blind-ending tubular structure greater than 6 mm in diameter", location: "right lower quadrant", required: true }
+    - { finding: "Appendiceal wall hyperemia on color Doppler", location: "appendix wall", required: true }
+    - { finding: "Periappendiceal fat inflammation (echogenic periappendiceal fat)", location: "periappendiceal tissue", required: false }
+    - { finding: "Appendicolith (echogenic focus with acoustic shadowing)", location: "appendiceal lumen", required: false }
+  severity: moderate
+  laterality: right
+  negatives:
+    - "No free fluid in the pelvis"
+    - "No periappendiceal abscess"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(appendicitis|inflamed appendix|acute appendicitis)", required: true }
+  - { name: "appendix_finding", check_type: regex, pattern: "(?i)(appendix.{0,20}(distended|dilated|non.?compress|>\\s*6|greater than 6)|non.?compressible.{0,20}(appendix|tubular))", required: true }
+  - { name: "inflammation_finding", check_type: regex, pattern: "(?i)(hyperemia|periappendiceal (fat|inflam|strand)|appendiceal wall.{0,20}(thicken|hyperemic)|Doppler.{0,20}(flow|signal))", required: true }
+reference_solution: |
+  Graded compression ultrasound of the right lower quadrant demonstrates a non-compressible blind-ending tubular structure in the right iliac fossa measuring 9 mm in maximal outer diameter (normal less than 6 mm), consistent with a distended appendix. The appendiceal wall appears thickened and hyperemic on color Doppler. The surrounding periappendiceal fat is echogenic, indicating inflammatory changes. An echogenic focus with posterior acoustic shadowing is identified within the appendiceal lumen consistent with an appendicolith. No periappendiceal abscess or significant free fluid is present. These findings are diagnostic of acute appendicitis.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - abdominal
+  - emergency
+  - gastrointestinal
+  - surgical

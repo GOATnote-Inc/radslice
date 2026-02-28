@@ -1,60 +1,37 @@
 id: CT-041
-name: Spinal epidural abscess
+name: "GI hemorrhage with active bleeding on CTA"
 modality: ct
-anatomy: spine
+anatomy: abdomen
 task_type: diagnosis
 difficulty: advanced
-image_ref: ct/eurorad/EUR_0041.png
+image_ref: "ct/openem/gi-hemorrhage.png"
 prompt_template: diagnosis
+condition_id: "gi-hemorrhage"
+lostbench_scenario_id: "MTR-011"
 ground_truth:
-  primary_diagnosis: "Lumbar spinal epidural abscess with discitis-osteomyelitis"
+  primary_diagnosis: "Active lower gastrointestinal hemorrhage"
   differential:
-    - spinal epidural hematoma
-    - epidural metastatic disease
-    - disc herniation with inflammatory changes
-    - vertebral compression fracture with retropulsion
-    - epidural lipomatosis
+    - "Diverticular hemorrhage"
+    - "Angiodysplasia"
+    - "Colonic neoplasm with hemorrhage"
   key_findings:
-    - { finding: "rim-enhancing epidural collection", location: "posterior epidural space L3-L5", required: true }
-    - { finding: "disc space narrowing with endplate erosion", location: "L4-L5 disc space", required: true }
-    - { finding: "paraspinal soft tissue phlegmon", location: "bilateral paraspinal muscles at L4-L5", required: false }
-    - { finding: "spinal canal compromise", location: "L4-L5 level", required: false }
-  severity: severe
-  laterality: ""
+    - { finding: "Active contrast extravasation into the bowel lumen", location: "sigmoid colon", required: true }
+    - { finding: "Hyperdense intraluminal material representing blood products", location: "distal colon and rectum", required: true }
+    - { finding: "Adjacent colonic diverticulosis", location: "sigmoid colon", required: false }
+  severity: "severe"
+  laterality: "left"
   negatives:
-    - normal disc height
-    - epidural hematoma (hemorrhagic density)
-    - metastatic lytic destruction
-    - cord signal abnormality (CT limitation)
-    - abscess extension into psoas
+    - "No colonic mass lesion"
 pattern_checks:
-  - { name: epidural_abscess, check_type: regex, pattern: "epidural\\s+abscess|epidural.*collection|abscess.*epidural", required: true }
-  - { name: discitis_osteomyelitis, check_type: regex, pattern: "discitis|osteomyelitis|spondylodiscitis|disc.*infect|endplate.*erosion", required: true }
-  - { name: lumbar, check_type: regex, pattern: "lumbar|L[3-5]", required: true }
-  - { name: canal_compromise, check_type: regex, pattern: "canal.*compromise|stenosis|compress|narrow.*canal|thecal.*sac", required: false }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(GI\\s*(hemorrhage|bleed)|gastrointestinal.*hemorrhage|active.*bleed.*colon|colonic.*bleed)", required: true }
+  - { name: "key_finding_extravasation", check_type: regex, pattern: "(?i)(contrast\\s*extravasation|active.*bleed|intraluminal.*blood)", required: true }
 reference_solution: |
-  Contrast-enhanced CT of the lumbar spine demonstrates a rim-enhancing
-  epidural collection in the posterior epidural space extending from L3 to
-  L5, consistent with an epidural abscess. The collection causes moderate
-  spinal canal narrowing with compression of the thecal sac. At the L4-L5
-  level, there is disc space narrowing with irregular erosion of the
-  adjacent L4 inferior and L5 superior endplates, indicating associated
-  discitis-osteomyelitis. Bilateral paraspinal soft tissue phlegmon is
-  present at the L4-L5 level. No extension into the psoas muscles. The
-  collection does not demonstrate high density to suggest epidural hematoma.
-  No lytic bone destruction pattern suggesting metastatic disease.
-  Impression: Lumbar spinal epidural abscess (L3-L5) with L4-L5
-  discitis-osteomyelitis and paraspinal phlegmon. MRI recommended for better
-  characterization of spinal cord/cauda equina compression. Emergent
-  neurosurgical consultation for decompression and drainage. Blood cultures
-  and IV antibiotics indicated.
+  CTA of the abdomen and pelvis demonstrates a focus of active contrast extravasation within the sigmoid colon, indicating active arterial hemorrhage. High-attenuation intraluminal material is present in the distal colon and rectum, representing blood products. Extensive diverticulosis of the sigmoid colon is noted, likely representing the etiology. No colonic mass lesion is identified. Findings confirm active lower GI hemorrhage from the sigmoid colon amenable to angiographic embolization or surgical intervention.
 condition_present: true
 confusion_pair: null
-source_dataset: eurorad
+source_dataset: openem-grounded
 tags:
-  - epidural-abscess
-  - discitis
-  - osteomyelitis
-  - spine
-  - infectious
+  - abdominal
+  - vascular
   - emergency
+  - cta

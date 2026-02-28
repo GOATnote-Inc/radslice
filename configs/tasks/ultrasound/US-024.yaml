@@ -1,0 +1,40 @@
+id: US-024
+name: "Spontaneous Pneumothorax on Lung Ultrasound"
+modality: ultrasound
+anatomy: chest
+task_type: diagnosis
+difficulty: intermediate
+image_ref: "ultrasound/openem/spontaneous-pneumothorax.png"
+prompt_template: diagnosis
+condition_id: "spontaneous-pneumothorax"
+lostbench_scenario_id: ""
+ground_truth:
+  primary_diagnosis: "Spontaneous pneumothorax with absent lung sliding"
+  differential:
+    - "Mainstem intubation with contralateral absent sliding"
+    - "Severe bullous emphysema"
+    - "Pleural adhesions"
+  key_findings:
+    - { finding: "Absent lung sliding on B-mode", location: "left anterior chest wall", required: true }
+    - { finding: "Barcode (stratosphere) sign on M-mode", location: "left anterior chest wall", required: true }
+    - { finding: "Lung point identified at the transition zone", location: "left lateral chest wall", required: false }
+    - { finding: "Absent B-lines in the affected hemithorax", location: "left lung", required: false }
+  severity: moderate
+  laterality: left
+  negatives:
+    - "Normal lung sliding on the contralateral (right) side"
+    - "No pleural effusion"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(pneumothorax|absent lung sliding)", required: true }
+  - { name: "sliding_finding", check_type: regex, pattern: "(?i)(absent.{0,15}(lung sliding|pleural sliding)|no.{0,15}lung sliding|barcode sign|stratosphere sign)", required: true }
+  - { name: "laterality", check_type: regex, pattern: "(?i)(left)", required: true }
+reference_solution: |
+  Lung ultrasound demonstrates absent lung sliding along the left anterior chest wall. M-mode imaging reveals the stratosphere (barcode) sign with only parallel horizontal lines and absence of the normal seashore pattern, confirming lack of visceral-parietal pleural apposition. A lung point is identified at the left mid-axillary line in the 4th intercostal space, marking the transition between pneumothorax and normal lung. No B-lines are present in the affected hemithorax. The contralateral right lung demonstrates normal lung sliding with A-lines. These findings are diagnostic of a left-sided pneumothorax.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - pulmonary
+  - emergency
+  - lung-ultrasound
+  - pocus

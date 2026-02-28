@@ -1,49 +1,40 @@
 id: XRAY-047
-name: Normal CXR - post-mastectomy right side
+name: "Retropharyngeal Abscess on Lateral Neck X-ray"
 modality: xray
-anatomy: chest
+anatomy: neck
 task_type: diagnosis
-difficulty: basic
-image_ref: xray/vindrcxr/VDR_0047.png
+difficulty: intermediate
+image_ref: "xray/openem/retropharyngeal-abscess.png"
 prompt_template: diagnosis
+condition_id: "retropharyngeal-abscess"
+lostbench_scenario_id: ""
 ground_truth:
-  primary_diagnosis: "Normal chest radiograph with right mastectomy changes"
-  differential: []
+  primary_diagnosis: "Retropharyngeal abscess"
+  differential:
+    - "Retropharyngeal hematoma"
+    - "Epiglottitis"
+    - "Cervical osteomyelitis"
+    - "Normal retropharyngeal fat pad (in crying child)"
   key_findings:
-    - { finding: "absent right breast shadow", location: "right chest wall", required: true }
-    - { finding: "asymmetric lucency of right hemithorax due to mastectomy", location: "right hemithorax", required: true }
-    - { finding: "clear lung fields bilaterally", location: "bilateral lungs", required: true }
-  severity: mild
-  laterality: right
+    - { finding: "Widened prevertebral soft tissues (greater than 7mm at C2 or 14mm at C6 in adults)", location: "prevertebral space", required: true }
+    - { finding: "Loss of normal cervical lordosis (muscle spasm)", location: "cervical spine", required: false }
+    - { finding: "Gas within the prevertebral soft tissues if present", location: "retropharyngeal space", required: false }
+    - { finding: "Airway displacement anteriorly", location: "pharyngeal airway", required: false }
+  severity: severe
+  laterality: midline
   negatives:
-    - pneumothorax
-    - pleural effusion
-    - consolidation
-    - pulmonary metastases
-    - rib fracture
-    - recurrent mass
+    - "No epiglottic swelling (thumbprint sign absent)"
+    - "No cervical spine fracture"
 pattern_checks:
-  - { name: mastectomy_noted, check_type: regex, pattern: "(?i)(mastectomy|absent.{0,15}breast|post.?surgical)", required: true }
-  - { name: no_acute_disease, check_type: regex, pattern: "(?i)(no\\s+acute|normal|unremarkable|no.{0,20}metast)", required: true }
-  - { name: lungs_clear, check_type: regex, pattern: "(?i)(clear|no.*opaci|no.*consolidat)", required: true }
-  - { name: asymmetry_explained, check_type: regex, pattern: "(?i)(asymmetr|lucen.{0,30}(mastectomy|absent\\s+breast)|increased\\s+lucen.{0,30}right)", required: false }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(retropharyngeal abscess|prevertebral (widening|swelling|soft tissue))", required: true }
+  - { name: "prevertebral_finding", check_type: regex, pattern: "(?i)(prevertebral (soft tissue|widening|thickening|swelling)|retropharyngeal)", required: true }
 reference_solution: |
-  PA chest radiograph demonstrates absence of the right breast shadow consistent
-  with prior right mastectomy. The right hemithorax appears relatively more lucent
-  than the left due to the absence of the overlying breast tissue, which should
-  not be mistaken for pneumothorax or asymmetric lung disease. The lungs are clear
-  bilaterally without focal consolidation, pulmonary nodules, or pleural effusion.
-  No pneumothorax. The cardiac silhouette is normal in size. The mediastinal
-  contours are unremarkable. The visualized osseous structures are intact without
-  metastatic disease.
-  Impression: Post-right mastectomy changes. No acute cardiopulmonary disease.
-  No evidence of pulmonary metastatic disease.
-condition_present: false
+  Lateral soft tissue neck radiograph demonstrates marked widening of the prevertebral soft tissues measuring 15 mm at C2 and 22 mm at C6, significantly exceeding normal limits. The pharyngeal airway is displaced anteriorly. No gas is identified within the soft tissues. The epiglottis appears normal. Loss of the normal cervical lordosis is noted, likely secondary to muscle spasm. These findings are consistent with a retropharyngeal abscess. CT with contrast is recommended for further characterization and surgical planning.
+condition_present: true
 confusion_pair: null
-source_dataset: vindrcxr
+source_dataset: openem-grounded
 tags:
-  - normal
-  - mastectomy
-  - post-surgical
-  - chest
-  - baseline
+  - infection
+  - airway
+  - emergency
+  - pediatric-common

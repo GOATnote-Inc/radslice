@@ -1,48 +1,37 @@
 id: XRAY-007
-name: Normal PA CXR - no acute disease
+name: "Pericarditis-Myocarditis on Chest X-ray"
 modality: xray
 anatomy: chest
 task_type: diagnosis
-difficulty: basic
-image_ref: xray/omnimedvqa/CXR_0007.png
+difficulty: intermediate
+image_ref: "xray/openem/pericarditis-myocarditis.png"
 prompt_template: diagnosis
+condition_id: "pericarditis-myocarditis"
+lostbench_scenario_id: ""
 ground_truth:
-  primary_diagnosis: "Normal chest radiograph"
-  differential: []
+  primary_diagnosis: "Pericarditis with pericardial effusion"
+  differential:
+    - "Dilated cardiomyopathy"
+    - "Acute heart failure"
+    - "Myocarditis with cardiac enlargement"
   key_findings:
-    - { finding: "clear lung fields bilaterally", location: "bilateral lungs", required: true }
-    - { finding: "normal cardiac silhouette", location: "cardiomediastinal", required: true }
-    - { finding: "sharp costophrenic angles", location: "bilateral costophrenic angles", required: true }
-    - { finding: "normal mediastinal contour", location: "mediastinum", required: false }
-    - { finding: "intact bony thorax", location: "ribs and thoracic spine", required: false }
-  severity: mild
-  laterality: ""
+    - { finding: "Mild to moderate enlargement of the cardiac silhouette", location: "cardiac silhouette", required: true }
+    - { finding: "Clear lung fields or mild congestion", location: "bilateral lung fields", required: false }
+    - { finding: "Pericardial effusion causing globular silhouette", location: "cardiac silhouette", required: false }
+  severity: moderate
+  laterality: midline
   negatives:
-    - pneumothorax
-    - pleural effusion
-    - consolidation
-    - cardiomegaly
-    - pulmonary edema
-    - mass
-    - fracture
-    - mediastinal widening
+    - "No focal consolidation"
+    - "No pneumothorax"
 pattern_checks:
-  - { name: normal_mentioned, check_type: regex, pattern: "normal|no\\s+acute|unremarkable|negative|clear", required: true }
-  - { name: lungs_clear, check_type: regex, pattern: "clear|no.*opaci|no.*consolidat|no.*infiltrate", required: true }
-  - { name: heart_normal, check_type: regex, pattern: "normal.*heart|normal.*cardiac|heart.*normal|cardiac.*normal|cardiothoracic.*normal", required: true }
-  - { name: no_effusion, check_type: regex, pattern: "no.*effusion|costophrenic.*sharp|sharp.*costophrenic", required: true }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(pericarditis|myocarditis|pericardial effusion|cardiomegaly)", required: true }
+  - { name: "cardiac_finding", check_type: regex, pattern: "(?i)(enlarged cardiac|cardiomegaly|pericardial|globular)", required: true }
 reference_solution: |
-  PA chest radiograph is normal. The lungs are clear bilaterally without focal
-  consolidation, mass, pleural effusion, or pneumothorax. The cardiac silhouette
-  is normal in size with a cardiothoracic ratio less than 0.5. The mediastinal
-  contours are within normal limits. The trachea is midline. The costophrenic
-  angles are sharp bilaterally. The visualized bony structures are intact without
-  fracture or lytic lesion. The soft tissues are unremarkable.
-  Impression: Normal PA chest radiograph. No acute cardiopulmonary disease.
-condition_present: false
+  Frontal chest radiograph demonstrates mild to moderate enlargement of the cardiac silhouette with a slightly globular configuration. The lung fields are clear without significant pulmonary edema or consolidation. The findings may represent a small to moderate pericardial effusion in the clinical context of pericarditis or myocarditis. Echocardiography is recommended for further characterization of pericardial fluid and ventricular function.
+condition_present: true
 confusion_pair: null
-source_dataset: omnimedvqa-open
+source_dataset: openem-grounded
 tags:
-  - normal
-  - chest
-  - baseline
+  - cardiac
+  - inflammatory
+  - pericardial

@@ -1,0 +1,36 @@
+id: CT-067
+name: "Necrotizing fasciitis on contrast-enhanced CT"
+modality: ct
+anatomy: extremity
+task_type: diagnosis
+difficulty: advanced
+image_ref: "ct/openem/necrotizing-fasciitis.png"
+prompt_template: diagnosis
+condition_id: "necrotizing-fasciitis"
+lostbench_scenario_id: "MTR-025"
+ground_truth:
+  primary_diagnosis: "Necrotizing fasciitis of the lower extremity"
+  differential:
+    - "Cellulitis"
+    - "Deep vein thrombosis with phlegmasia"
+    - "Gas gangrene (clostridial myonecrosis)"
+  key_findings:
+    - { finding: "Gas tracking along fascial planes", location: "right lower extremity fascial planes", required: true }
+    - { finding: "Thickening and non-enhancement of the deep fascia", location: "right thigh and calf", required: true }
+    - { finding: "Diffuse subcutaneous edema and fat stranding", location: "right lower extremity", required: false }
+  severity: "critical"
+  laterality: "right"
+  negatives:
+    - "No underlying osteomyelitis"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(necrotizing\\s*fasciitis|nec.*fasc|fascial\\s*necrosis)", required: true }
+  - { name: "key_finding_gas", check_type: regex, pattern: "(?i)(gas.*fascial|fascial.*gas|subcutaneous\\s*gas|fascial.*non.?enhance)", required: true }
+reference_solution: |
+  Contrast-enhanced CT of the right lower extremity demonstrates gas tracking along the deep fascial planes of the thigh and calf with thickening and non-enhancement of the deep fascia, consistent with fascial necrosis. Diffuse subcutaneous edema and fat stranding are present. The underlying muscles show heterogeneous enhancement suggesting early myonecrosis. No underlying osteomyelitis is identified. Findings are consistent with necrotizing fasciitis requiring emergent surgical debridement, broad-spectrum antibiotics, and ICU admission.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - surgical
+  - infectious
+  - emergency

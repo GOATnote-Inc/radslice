@@ -1,0 +1,37 @@
+id: CT-083
+name: "Crush syndrome with renal and muscular findings on contrast-enhanced CT"
+modality: ct
+anatomy: extremity
+task_type: diagnosis
+difficulty: advanced
+image_ref: "ct/openem/crush-syndrome-mci.png"
+prompt_template: diagnosis
+condition_id: "crush-syndrome-mci"
+lostbench_scenario_id: "MTR-056"
+ground_truth:
+  primary_diagnosis: "Crush syndrome with rhabdomyolysis and acute kidney injury"
+  differential:
+    - "Compartment syndrome"
+    - "Traumatic devascularization"
+    - "Ischemia-reperfusion injury"
+  key_findings:
+    - { finding: "Diffuse muscle edema and heterogeneous enhancement with areas of necrosis", location: "bilateral lower extremities", required: true }
+    - { finding: "Bilateral nephromegaly with striated nephrogram suggesting acute tubular necrosis", location: "bilateral kidneys", required: true }
+    - { finding: "Subcutaneous edema", location: "bilateral lower extremities", required: false }
+  severity: "critical"
+  laterality: "bilateral"
+  negatives:
+    - "No vascular occlusion"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(crush\\s*syndrome|crush\\s*injury|rhabdomyolysis|myonecrosis)", required: true }
+  - { name: "key_finding_muscle", check_type: regex, pattern: "(?i)(muscle.*necrosis|muscle.*edema|striated\\s*nephrogram|acute\\s*tubular)", required: true }
+reference_solution: |
+  Contrast-enhanced CT of the extremities and abdomen demonstrates diffuse edema and heterogeneous enhancement of the bilateral lower extremity musculature with areas of non-enhancement consistent with myonecrosis from prolonged crush injury. The bilateral kidneys are enlarged with a striated nephrogram pattern consistent with acute tubular necrosis from myoglobinuric renal failure. No vascular occlusion is identified. Findings are consistent with crush syndrome with rhabdomyolysis and acute kidney injury requiring aggressive fluid resuscitation and renal replacement therapy.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - trauma
+  - emergency
+  - mass-casualty
+  - renal

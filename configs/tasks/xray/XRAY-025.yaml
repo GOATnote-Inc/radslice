@@ -1,54 +1,37 @@
 id: XRAY-025
-name: Pulmonary fibrosis with honeycombing
+name: "Spontaneous Pneumothorax on Chest X-ray"
 modality: xray
 anatomy: chest
 task_type: diagnosis
-difficulty: advanced
-image_ref: xray/omnimedvqa/CXR_0025.png
+difficulty: intermediate
+image_ref: "xray/openem/spontaneous-pneumothorax.png"
 prompt_template: diagnosis
+condition_id: "spontaneous-pneumothorax"
+lostbench_scenario_id: ""
 ground_truth:
-  primary_diagnosis: "Pulmonary fibrosis with honeycombing (usual interstitial pneumonia pattern)"
+  primary_diagnosis: "Spontaneous pneumothorax"
   differential:
-    - nonspecific interstitial pneumonia
-    - chronic hypersensitivity pneumonitis
-    - asbestosis
-    - connective tissue disease-associated ILD
+    - "Skin fold artifact"
+    - "Large bulla mimicking pneumothorax"
+    - "Pneumomediastinum"
   key_findings:
-    - { finding: "bilateral peripheral reticular opacities", location: "bilateral lower zones", required: true }
-    - { finding: "honeycombing pattern", location: "bilateral lung bases peripherally", required: true }
-    - { finding: "reduced lung volumes", location: "bilateral", required: false }
-    - { finding: "traction bronchiectasis", location: "bilateral lower lobes", required: false }
-  severity: severe
-  laterality: bilateral
+    - { finding: "Visible visceral pleural line with absent lung markings peripherally", location: "right apex and lateral chest", required: true }
+    - { finding: "Absence of lung markings beyond the visceral pleural line", location: "right hemithorax periphery", required: true }
+    - { finding: "Deep sulcus sign if supine", location: "right costophrenic angle", required: false }
+  severity: moderate
+  laterality: right
   negatives:
-    - pleural effusion
-    - focal consolidation
-    - upper lobe predominant disease
-    - pneumothorax
-    - lymphadenopathy
+    - "No mediastinal shift (not tension)"
+    - "No pleural effusion"
 pattern_checks:
-  - { name: fibrosis_mentioned, check_type: regex, pattern: "(?i)(fibrosis|fibrot|interstitial\\s+(lung|pneumonia)|UIP|IPF)", required: true }
-  - { name: honeycombing, check_type: regex, pattern: "(?i)(honeycomb|cystic\\s+change.{0,30}bas|reticular.{0,20}bas)", required: true }
-  - { name: bilateral_basal, check_type: regex, pattern: "(?i)(bilateral.{0,30}(bas(al|e)|lower)|lower.{0,20}(zone|lobe).{0,20}bilateral)", required: true }
-  - { name: peripheral, check_type: regex, pattern: "(?i)(peripheral|subpleural)", required: false }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(pneumothorax|visceral pleural line)", required: true }
+  - { name: "pleural_line_finding", check_type: regex, pattern: "(?i)(visceral pleural line|absent lung markings|pleural line|no lung markings)", required: true }
 reference_solution: |
-  PA chest radiograph demonstrates bilateral peripheral reticular opacities
-  predominantly in the lower lung zones with a pattern of honeycombing, consistent
-  with pulmonary fibrosis in a usual interstitial pneumonia (UIP) distribution.
-  The lung volumes appear reduced. There is suggestion of traction bronchiectasis
-  in the lower lobes bilaterally. The upper lung zones are relatively spared. No
-  pleural effusion or pneumothorax. The cardiac silhouette is normal in size. No
-  hilar or mediastinal lymphadenopathy. High-resolution CT of the chest is
-  recommended for definitive characterization. In the appropriate clinical context,
-  these findings are consistent with idiopathic pulmonary fibrosis (IPF).
-  Impression: Bilateral basal peripheral fibrosis with honeycombing — UIP pattern,
-  consistent with IPF. HRCT recommended.
+  Frontal chest radiograph demonstrates a visible visceral pleural line along the right hemithorax with absence of lung markings peripheral to this line, consistent with a right-sided pneumothorax. The pneumothorax is moderate in size. There is no mediastinal shift to suggest tension physiology. The left lung is clear. No pleural effusion is identified. Clinical correlation regarding symptoms and need for chest tube placement versus observation is recommended.
 condition_present: true
 confusion_pair: null
-source_dataset: omnimedvqa-open
+source_dataset: openem-grounded
 tags:
-  - pulmonary-fibrosis
-  - honeycombing
-  - interstitial-lung-disease
-  - UIP
-  - bilateral
+  - pulmonary
+  - emergency
+  - pneumothorax

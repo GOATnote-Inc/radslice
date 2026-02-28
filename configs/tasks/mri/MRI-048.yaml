@@ -1,0 +1,39 @@
+id: MRI-048
+name: "Pediatric Acute Otitis Media Complications on MRI"
+modality: mri
+anatomy: head
+task_type: diagnosis
+difficulty: intermediate
+image_ref: "mri/openem/pediatric-acute-otitis-media.png"
+prompt_template: diagnosis
+condition_id: "pediatric-acute-otitis-media"
+lostbench_scenario_id: "DEF-005"
+ground_truth:
+  primary_diagnosis: "Complicated acute otitis media with middle ear effusion and mastoid opacification on MRI"
+  differential:
+    - "Cholesteatoma"
+    - "Middle ear tumor (rhabdomyosarcoma in pediatric patient)"
+    - "Coalescent mastoiditis"
+  key_findings:
+    - { finding: "T2 hyperintense fluid in the middle ear cavity", location: "Right middle ear", required: true }
+    - { finding: "Opacification of the ipsilateral mastoid air cells", location: "Right mastoid", required: true }
+    - { finding: "Enhancement of the middle ear mucosa on post-gadolinium images", location: "Right middle ear", required: false }
+  severity: "mild"
+  laterality: "right"
+  negatives:
+    - "No coalescent mastoiditis (septations preserved)"
+    - "No intracranial complication"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(otitis\\s+media|middle\\s+ear.*(effusion|infection|inflamm))", required: true }
+  - { name: "middle_ear_fluid", check_type: regex, pattern: "(?i)(middle\\s+ear|tympanic).*(fluid|effusion|opacif)", required: true }
+  - { name: "laterality", check_type: regex, pattern: "(?i)right", required: true }
+reference_solution: |
+  MRI of the temporal bones demonstrates T2 hyperintense fluid in the right middle ear cavity with associated opacification of the right mastoid air cells. The mastoid septations appear preserved, without evidence of coalescent mastoiditis. Mild mucosal enhancement is noted in the right middle ear on post-gadolinium images. No intracranial complication such as epidural abscess, sigmoid sinus thrombosis, or meningitis. The left middle ear and mastoid are clear. Findings are consistent with acute otitis media with reactive mastoid effusion in a pediatric patient.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - head-neck
+  - pediatric
+  - infection
+  - defer

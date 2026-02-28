@@ -1,65 +1,38 @@
 id: MRI-010
-name: Brain metastasis (confusion pair for glioblastoma)
+name: "Hemorrhagic Stroke on Brain MRI"
 modality: mri
 anatomy: head
 task_type: diagnosis
 difficulty: advanced
-image_ref: mri/omnimedvqa/MRI_0010.png
+image_ref: "mri/openem/hemorrhagic-stroke.png"
 prompt_template: diagnosis
+condition_id: "hemorrhagic-stroke"
+lostbench_scenario_id: "MTR-068"
 ground_truth:
-  primary_diagnosis: "Brain metastasis with multiple ring-enhancing lesions"
+  primary_diagnosis: "Acute intracerebral hemorrhage (hemorrhagic stroke) on MRI"
   differential:
-    - glioblastoma multiforme
-    - brain abscess
-    - primary CNS lymphoma
-    - tumefactive demyelination
-    - radiation necrosis
+    - "Hemorrhagic transformation of ischemic stroke"
+    - "Hemorrhagic neoplasm"
+    - "Cavernous malformation with acute hemorrhage"
   key_findings:
-    - { finding: "multiple discrete ring-enhancing lesions at the gray-white matter junction", location: "bilateral cerebral hemispheres, right frontal and left parietal lobes", required: true }
-    - { finding: "thin smooth ring enhancement with central T1 hypointensity", location: "each individual lesion", required: true }
-    - { finding: "surrounding vasogenic edema disproportionate to lesion size", location: "perilesional white matter", required: true }
-    - { finding: "lesions at the gray-white matter junction", location: "bilateral cerebral hemispheres", required: false }
-    - { finding: "relative sparing of the corpus callosum", location: "corpus callosum", required: false }
-  severity: severe
-  laterality: bilateral
+    - { finding: "Acute hematoma with T1 isointense and T2 hypointense signal (deoxyhemoglobin phase)", location: "Left basal ganglia", required: true }
+    - { finding: "Susceptibility artifact (blooming) on GRE/SWI sequences", location: "Left basal ganglia", required: true }
+    - { finding: "Surrounding vasogenic edema with T2/FLAIR hyperintensity", location: "Left periventricular white matter", required: false }
+  severity: "critical"
+  laterality: "left"
   negatives:
-    - single large heterogeneous mass (favoring GBM)
-    - corpus callosum infiltration
-    - leptomeningeal carcinomatosis
-    - hemorrhagic transformation
-    - hydrocephalus
+    - "No underlying enhancing mass to suggest hemorrhagic neoplasm"
+    - "No intraventricular hemorrhage extension"
 pattern_checks:
-  - { name: metastasis_mentioned, check_type: regex, pattern: "metastas|metastatic|secondary|mets\\b", required: true }
-  - { name: multiple_lesions, check_type: regex, pattern: "multiple|several|numerous|bilateral.*lesion", required: true }
-  - { name: ring_enhancement, check_type: regex, pattern: "ring.?enhanc|rim.*enhanc|peripheral.*enhanc", required: true }
-  - { name: gray_white_junction, check_type: regex, pattern: "gray.?white|corticomedullary|junction", required: true }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(intracerebral\\s+hemorrhage|hemorrhagic\\s+stroke|intraparenchymal\\s+hematoma)", required: true }
+  - { name: "location_specified", check_type: regex, pattern: "(?i)basal\\s+ganglia", required: true }
+  - { name: "laterality", check_type: regex, pattern: "(?i)left", required: true }
 reference_solution: |
-  MRI of the brain with and without gadolinium demonstrates multiple discrete
-  ring-enhancing lesions in the bilateral cerebral hemispheres, the largest
-  measuring 2.1 cm in the right frontal lobe and 1.8 cm in the left parietal
-  lobe. The lesions are located at the gray-white matter junction and
-  demonstrate thin, relatively smooth ring enhancement on post-gadolinium
-  T1-weighted images with central T1 hypointensity and T2 hyperintensity
-  suggesting central necrosis. Each lesion is surrounded by vasogenic edema
-  that appears disproportionately large relative to the lesion size, a
-  characteristic feature of metastatic disease. The corpus callosum is spared.
-  There is no leptomeningeal enhancement to suggest carcinomatosis. No
-  hemorrhagic components identified on SWI. Mild mass effect from the right
-  frontal lesion without significant midline shift. The multiplicity of
-  lesions at the gray-white junction, thin ring enhancement, and relative
-  edema all favor metastatic disease over a primary brain neoplasm such as
-  glioblastoma, which typically presents as a solitary heterogeneous mass with
-  thick irregular enhancement.
-  Impression: Multiple ring-enhancing lesions at the gray-white matter
-  junction, most consistent with brain metastases. Recommend correlation with
-  primary malignancy screening (chest CT, body PET/CT).
+  MRI of the brain demonstrates an acute intraparenchymal hematoma centered in the left basal ganglia. The hematoma shows T1 isointensity and T2 hypointensity consistent with the deoxyhemoglobin phase of acute hemorrhage, with marked susceptibility artifact on GRE sequences. Surrounding T2/FLAIR hyperintense vasogenic edema is present. Mild mass effect on the left lateral ventricle is noted without midline shift. No intraventricular extension of hemorrhage. Post-contrast images show no underlying enhancing mass. Findings are most consistent with hypertensive hemorrhagic stroke.
 condition_present: true
-confusion_pair: MRI-003
-source_dataset: omnimedvqa-open
+confusion_pair: null
+source_dataset: openem-grounded
 tags:
-  - metastasis
-  - brain-tumor
-  - neuro-oncology
   - neuro
-  - ring-enhancing
-  - confusion-pair
+  - hemorrhage
+  - emergency

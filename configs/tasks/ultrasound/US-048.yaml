@@ -1,0 +1,41 @@
+id: US-048
+name: "Central Retinal Artery Occlusion on Ocular Ultrasound"
+modality: ultrasound
+anatomy: face
+task_type: diagnosis
+difficulty: expert
+image_ref: "ultrasound/openem/central-retinal-artery-occlusion.png"
+prompt_template: diagnosis
+condition_id: "central-retinal-artery-occlusion"
+lostbench_scenario_id: "MTR-007"
+ground_truth:
+  primary_diagnosis: "Central retinal artery occlusion with absent retinal arterial flow"
+  differential:
+    - "Ophthalmic artery occlusion"
+    - "Central retinal vein occlusion"
+    - "Giant cell arteritis with ophthalmic involvement"
+  key_findings:
+    - { finding: "Absent or markedly diminished central retinal artery flow on color Doppler", location: "central retinal artery", required: true }
+    - { finding: "Spot sign (echogenic focus in the retinal artery suggesting embolus)", location: "central retinal artery", required: true }
+    - { finding: "Preserved central retinal vein flow", location: "central retinal vein", required: false }
+    - { finding: "Normal optic nerve sheath diameter", location: "optic nerve", required: false }
+  severity: critical
+  laterality: left
+  negatives:
+    - "No retinal detachment"
+    - "No vitreous hemorrhage"
+    - "No orbital mass"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(central retinal artery occlusion|CRAO|retinal artery (occlusion|embol))", required: true }
+  - { name: "doppler_finding", check_type: regex, pattern: "(?i)(absent.{0,20}(retinal artery|CRA)|diminished.{0,20}flow|no.{0,20}(retinal arterial|CRA) flow|retinal artery.{0,20}(absent|occlu))", required: true }
+  - { name: "laterality", check_type: regex, pattern: "(?i)(left|OS)", required: true }
+reference_solution: |
+  Ocular ultrasound with color Doppler of the left eye demonstrates absent color flow in the central retinal artery. A small echogenic focus is identified within the retinal artery at the optic disc, likely representing an embolus. The central retinal vein flow appears preserved. The vitreous is clear without hemorrhage or detachment. The optic nerve sheath diameter is within normal limits at 4.5 mm. The right eye demonstrates normal central retinal artery and vein flow. These findings are consistent with left central retinal artery occlusion, a time-sensitive emergency requiring immediate evaluation and consideration of intra-arterial thrombolysis.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - ophthalmologic
+  - emergency
+  - ocular-ultrasound
+  - doppler

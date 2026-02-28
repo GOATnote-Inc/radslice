@@ -1,55 +1,38 @@
 id: XRAY-034
-name: COPD with hyperinflation
+name: "Acute Gout on Foot X-ray"
 modality: xray
-anatomy: chest
+anatomy: foot
 task_type: diagnosis
 difficulty: intermediate
-image_ref: xray/omnimedvqa/CXR_0034.png
+image_ref: "xray/openem/acute-gout.png"
 prompt_template: diagnosis
+condition_id: "acute-gout"
+lostbench_scenario_id: ""
 ground_truth:
-  primary_diagnosis: "Chronic obstructive pulmonary disease with hyperinflation"
+  primary_diagnosis: "Acute gouty arthritis"
   differential:
-    - asthma with air trapping
-    - emphysema
-    - chronic bronchitis
-    - bilateral bullous disease
+    - "Septic arthritis"
+    - "Calcium pyrophosphate deposition (pseudogout)"
+    - "Rheumatoid arthritis"
   key_findings:
-    - { finding: "flattened hemidiaphragms bilaterally", location: "bilateral diaphragms", required: true }
-    - { finding: "increased AP diameter and barrel chest configuration", location: "thorax", required: false }
-    - { finding: "increased retrosternal clear space", location: "retrosternal", required: false }
-    - { finding: "hyperlucent lung fields with attenuated vascular markings", location: "bilateral lungs", required: true }
-    - { finding: "vertical cardiac silhouette", location: "cardiac silhouette", required: false }
+    - { finding: "Periarticular soft tissue swelling", location: "first metatarsophalangeal joint", required: true }
+    - { finding: "Juxta-articular erosions with overhanging edges (rat-bite erosions)", location: "first metatarsophalangeal joint", required: false }
+    - { finding: "Preserved joint space (early disease)", location: "first MTP joint", required: false }
+    - { finding: "Tophi appearing as soft tissue nodules", location: "periarticular", required: false }
   severity: moderate
-  laterality: bilateral
+  laterality: right
   negatives:
-    - focal consolidation
-    - pleural effusion
-    - pneumothorax
-    - cardiomegaly
-    - mediastinal mass
+    - "No fracture"
+    - "No foreign body"
 pattern_checks:
-  - { name: copd_mentioned, check_type: regex, pattern: "(?i)(COPD|chronic\\s+obstructive|emphysema)", required: true }
-  - { name: hyperinflation, check_type: regex, pattern: "(?i)(hyperinflat|over.?inflat|air\\s+trapping)", required: true }
-  - { name: flat_diaphragm, check_type: regex, pattern: "(?i)(flat(ten)?.*diaphragm|diaphragm.*flat|low.*diaphragm)", required: true }
-  - { name: hyperlucent, check_type: regex, pattern: "(?i)(hyperlucen|increased\\s+(lucen|transpar)|attenuated.{0,20}vascul)", required: false }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(gout|gouty|tophi|tophaceous|urate)", required: true }
+  - { name: "joint_finding", check_type: regex, pattern: "(?i)(first (MTP|metatarsophalangeal)|soft tissue swelling|erosion|overhanging edge)", required: true }
 reference_solution: |
-  PA chest radiograph demonstrates findings consistent with chronic obstructive
-  pulmonary disease and hyperinflation. The hemidiaphragms are markedly flattened
-  bilaterally with more than 10 posterior ribs visible above the diaphragm. The
-  lung fields are hyperlucent with attenuation of the peripheral vascular
-  markings, consistent with emphysematous changes. The cardiac silhouette appears
-  elongated and vertically oriented. The retrosternal clear space is increased.
-  No focal consolidation, pleural effusion, or pneumothorax is identified. No
-  acute superimposed process. These findings are consistent with moderate to
-  severe COPD with hyperinflation. Pulmonary function testing is recommended for
-  disease severity quantification.
-  Impression: COPD with bilateral hyperinflation and emphysematous changes.
+  Radiograph of the right foot demonstrates prominent periarticular soft tissue swelling centered on the first metatarsophalangeal joint. Well-defined juxta-articular erosions with sclerotic margins and characteristic overhanging edges are noted at the first metatarsal head, consistent with chronic tophaceous gout. Joint space is relatively preserved. Soft tissue density nodules are present in the periarticular region, suggestive of tophi. No fracture or dislocation is identified.
 condition_present: true
 confusion_pair: null
-source_dataset: omnimedvqa-open
+source_dataset: openem-grounded
 tags:
-  - COPD
-  - emphysema
-  - hyperinflation
-  - chest
-  - airway-disease
+  - musculoskeletal
+  - inflammatory
+  - arthritis

@@ -1,0 +1,40 @@
+id: US-065
+name: "Bronchiolitis on Lung Ultrasound"
+modality: ultrasound
+anatomy: chest
+task_type: diagnosis
+difficulty: intermediate
+image_ref: "ultrasound/openem/bronchiolitis.png"
+prompt_template: diagnosis
+condition_id: "bronchiolitis"
+lostbench_scenario_id: ""
+ground_truth:
+  primary_diagnosis: "Bronchiolitis with interstitial syndrome pattern on lung ultrasound"
+  differential:
+    - "Viral pneumonia with consolidation"
+    - "Congestive heart failure in infant"
+    - "Aspiration pneumonitis"
+  key_findings:
+    - { finding: "Diffuse B-lines in bilateral lung fields (interstitial syndrome)", location: "bilateral lung fields", required: true }
+    - { finding: "Irregular pleural line with subpleural consolidations", location: "anterior and lateral lung zones", required: true }
+    - { finding: "Small subpleural consolidations", location: "bilateral lung periphery", required: false }
+    - { finding: "Normal lung sliding present", location: "bilateral lung fields", required: false }
+  severity: moderate
+  laterality: bilateral
+  negatives:
+    - "No large lobar consolidation"
+    - "No pleural effusion"
+    - "No pneumothorax"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(bronchiolitis|interstitial (syndrome|pattern)|viral (lower respiratory|bronchiolitis))", required: true }
+  - { name: "b_lines_finding", check_type: regex, pattern: "(?i)(B[- ]?lines|interstitial (syndrome|pattern)|comet.?tail)", required: true }
+  - { name: "subpleural_finding", check_type: regex, pattern: "(?i)(subpleural consolidation|irregular pleural line|pleural.{0,15}(irregularity|thicken|abnormal))", required: true }
+reference_solution: |
+  Lung ultrasound in a pediatric patient demonstrates diffuse bilateral B-lines in three or more zones per hemithorax, consistent with an interstitial syndrome pattern. The pleural line appears irregular and thickened with multiple small subpleural consolidations measuring 3-5 mm bilaterally, more prominent in the posterior and lateral zones. Normal lung sliding is preserved bilaterally. No significant lobar consolidation or pleural effusion is identified. The A-line pattern is replaced by confluent B-lines. These findings are consistent with bronchiolitis, where lung ultrasound has been shown to have high sensitivity for detecting lower airway inflammation and correlates with disease severity.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - pulmonary
+  - pediatric
+  - lung-ultrasound

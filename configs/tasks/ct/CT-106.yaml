@@ -1,0 +1,38 @@
+id: CT-106
+name: "Neonatal emergencies with hypoxic-ischemic brain injury on non-contrast CT head"
+modality: ct
+anatomy: head
+task_type: diagnosis
+difficulty: advanced
+image_ref: "ct/openem/neonatal-emergencies.png"
+prompt_template: diagnosis
+condition_id: "neonatal-emergencies"
+lostbench_scenario_id: "MTR-001"
+ground_truth:
+  primary_diagnosis: "Neonatal hypoxic-ischemic encephalopathy"
+  differential:
+    - "Neonatal sepsis with meningoencephalitis"
+    - "Congenital brain malformation"
+    - "Metabolic encephalopathy (inborn error)"
+  key_findings:
+    - { finding: "Diffuse cerebral edema with loss of gray-white matter differentiation", location: "bilateral cerebral hemispheres", required: true }
+    - { finding: "Reversal sign (white cerebellum sign) with relatively preserved posterior fossa density", location: "cerebellum relative to cerebrum", required: true }
+    - { finding: "Effacement of the basal cisterns and sulci", location: "basal cisterns", required: false }
+  severity: "critical"
+  laterality: "bilateral"
+  negatives:
+    - "No intracranial hemorrhage"
+    - "No congenital malformation"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(hypoxic.?ischemic|HIE|neonatal.*encephalopathy|birth\\s*asphyxia)", required: true }
+  - { name: "key_finding_reversal", check_type: regex, pattern: "(?i)(reversal\\s*sign|white\\s*cerebellum|gray.?white.*differenti|diffuse.*edema)", required: true }
+reference_solution: |
+  Non-contrast CT head of a neonate demonstrates diffuse cerebral edema with marked loss of gray-white matter differentiation throughout both cerebral hemispheres. The cerebellum and brainstem demonstrate relatively preserved density compared with the diffusely edematous cerebrum, producing the reversal sign (white cerebellum sign), which is an ominous finding. The basal cisterns and cortical sulci are effaced. No intracranial hemorrhage or congenital malformation is identified. Findings are consistent with severe neonatal hypoxic-ischemic encephalopathy requiring therapeutic hypothermia and neuroprotective care.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - neuro
+  - neonatal
+  - pediatric
+  - emergency

@@ -1,0 +1,37 @@
+id: CT-093
+name: "Neutropenic fever with pulmonary findings on CT chest"
+modality: ct
+anatomy: chest
+task_type: diagnosis
+difficulty: intermediate
+image_ref: "ct/openem/neutropenic-fever.png"
+prompt_template: diagnosis
+condition_id: "neutropenic-fever"
+lostbench_scenario_id: ""
+ground_truth:
+  primary_diagnosis: "Invasive pulmonary aspergillosis in the setting of neutropenic fever"
+  differential:
+    - "Bacterial pneumonia"
+    - "Mucormycosis"
+    - "Pulmonary hemorrhage"
+  key_findings:
+    - { finding: "Nodular opacities with surrounding ground-glass halo (halo sign)", location: "bilateral lung fields", required: true }
+    - { finding: "Peripheral wedge-shaped consolidation", location: "right upper lobe", required: true }
+    - { finding: "Air crescent sign (in recovering neutropenia)", location: "right upper lobe nodule", required: false }
+  severity: "severe"
+  laterality: "bilateral"
+  negatives:
+    - "No pleural effusion"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(aspergill|neutropenic.*fever|invasive\\s*fungal|halo\\s*sign)", required: true }
+  - { name: "key_finding_halo", check_type: regex, pattern: "(?i)(halo\\s*sign|nodular.*ground.?glass|air\\s*crescent|wedge.*consolidation)", required: true }
+reference_solution: |
+  CT of the chest in a neutropenic patient demonstrates multiple nodular opacities in bilateral lung fields, several of which are surrounded by a ground-glass halo (halo sign), characteristic of angioinvasive aspergillosis. A peripheral wedge-shaped consolidation is present in the right upper lobe consistent with pulmonary infarction from vessel invasion. No pleural effusion is identified. In the setting of prolonged neutropenia and fever unresponsive to broad-spectrum antibiotics, findings are highly suggestive of invasive pulmonary aspergillosis requiring empiric antifungal therapy.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - pulmonary
+  - infectious
+  - oncology
+  - emergency

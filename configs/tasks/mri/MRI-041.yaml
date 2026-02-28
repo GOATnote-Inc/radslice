@@ -1,0 +1,38 @@
+id: MRI-041
+name: "High Altitude Cerebral Edema (HACE) on Brain MRI"
+modality: mri
+anatomy: head
+task_type: diagnosis
+difficulty: advanced
+image_ref: "mri/openem/high-altitude-illness.png"
+prompt_template: diagnosis
+condition_id: "high-altitude-illness"
+lostbench_scenario_id: ""
+ground_truth:
+  primary_diagnosis: "High altitude cerebral edema (HACE) on brain MRI"
+  differential:
+    - "PRES (posterior reversible encephalopathy syndrome)"
+    - "Acute disseminated encephalomyelitis (ADEM)"
+    - "Cerebral venous thrombosis"
+  key_findings:
+    - { finding: "T2/FLAIR hyperintensity in the splenium of the corpus callosum (pathognomonic for HACE)", location: "Splenium of corpus callosum", required: true }
+    - { finding: "Microhemorrhages on SWI in the corpus callosum", location: "Corpus callosum", required: true }
+    - { finding: "Patchy white matter T2 signal abnormality", location: "Bilateral subcortical white matter", required: false }
+  severity: "severe"
+  laterality: "midline"
+  negatives:
+    - "No large territorial infarction"
+    - "No hydrocephalus"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(high\\s+altitude\\s+cerebral\\s+edema|HACE)", required: true }
+  - { name: "corpus_callosum", check_type: regex, pattern: "(?i)(corpus\\s+callosum|splenium)", required: true }
+  - { name: "signal_abnormality", check_type: regex, pattern: "(?i)(T2|FLAIR).*(hyperinten|signal|bright)", required: true }
+reference_solution: |
+  MRI of the brain demonstrates T2 and FLAIR hyperintensity in the splenium of the corpus callosum, which is a pathognomonic finding for high altitude cerebral edema (HACE). SWI sequences show microhemorrhages within the corpus callosum. Additional patchy areas of T2/FLAIR hyperintensity are noted in the bilateral subcortical white matter. No large territorial infarction or hydrocephalus. DWI shows mixed restricted and facilitated diffusion, consistent with combined cytotoxic and vasogenic edema. Findings are characteristic of HACE requiring immediate descent and dexamethasone administration.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - neuro
+  - environmental
+  - emergency

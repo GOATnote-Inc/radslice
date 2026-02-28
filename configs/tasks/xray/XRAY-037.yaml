@@ -1,55 +1,39 @@
 id: XRAY-037
-name: Bilateral apical fibrotic changes - post-TB sequelae
+name: "Hip Fracture on X-ray"
 modality: xray
-anatomy: chest
-task_type: finding_detection
+anatomy: hip
+task_type: diagnosis
 difficulty: intermediate
-image_ref: xray/omnimedvqa/CXR_0037.png
+image_ref: "xray/openem/hip-fracture.png"
 prompt_template: diagnosis
+condition_id: "hip-fracture"
+lostbench_scenario_id: ""
 ground_truth:
-  primary_diagnosis: "Bilateral apical fibrotic changes consistent with prior tuberculosis"
+  primary_diagnosis: "Femoral neck fracture"
   differential:
-    - active tuberculosis reactivation
-    - apical fibrosis from ankylosing spondylitis
-    - radiation fibrosis
-    - chronic sarcoidosis (stage IV)
+    - "Intertrochanteric fracture"
+    - "Pubic rami fracture"
+    - "Pathologic fracture from metastatic disease"
   key_findings:
-    - { finding: "bilateral apical fibrocavitary changes", location: "bilateral lung apices", required: true }
-    - { finding: "volume loss in the upper lobes with upward retraction of the hila", location: "bilateral upper zones", required: true }
-    - { finding: "calcified granulomas", location: "bilateral upper lobes", required: false }
-    - { finding: "compensatory lower lobe hyperinflation", location: "bilateral lower lobes", required: false }
+    - { finding: "Femoral neck fracture with disruption of Shenton line", location: "left femoral neck", required: true }
+    - { finding: "Shortening and external rotation of the affected extremity", location: "left femur", required: false }
+    - { finding: "Disruption of trabecular pattern at femoral neck", location: "left femoral neck", required: false }
   severity: moderate
-  laterality: bilateral
+  laterality: left
   negatives:
-    - active consolidation
-    - pleural effusion
-    - cavitary lesion with air-fluid level
-    - mediastinal mass
+    - "No acetabular fracture"
+    - "No lytic lesion to suggest pathologic fracture"
 pattern_checks:
-  - { name: fibrotic_changes, check_type: regex, pattern: "(?i)(fibro(tic|sis)|scarring|fibrocalcific|calcif)", required: true }
-  - { name: bilateral_apical, check_type: regex, pattern: "(?i)(bilateral.{0,20}apic|apic.{0,20}bilateral|both.{0,20}apic)", required: true }
-  - { name: prior_tb, check_type: regex, pattern: "(?i)(prior|old|treated|healed|sequela|post).{0,20}(TB|tubercul)", required: true }
-  - { name: volume_loss, check_type: regex, pattern: "(?i)(volume\\s+loss|retraction|elevated.{0,20}hil)", required: false }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(hip fracture|femoral neck fracture|subcapital fracture|intracapsular fracture|intertrochanteric)", required: true }
+  - { name: "fracture_finding", check_type: regex, pattern: "(?i)(fracture|Shenton line|trabecular disruption|displaced|Garden)", required: true }
+  - { name: "laterality_mentioned", check_type: regex, pattern: "(?i)(left)", required: true }
 reference_solution: |
-  PA chest radiograph demonstrates bilateral apical fibrocavitary changes with
-  volume loss in both upper lobes. There is upward retraction of the bilateral
-  hila, indicating chronic upper lobe volume loss. Calcified granulomas are seen
-  scattered in the bilateral apices. The fibrotic changes include linear
-  opacities and architectural distortion. The lower lobes demonstrate
-  compensatory hyperinflation. No active consolidation or air-fluid levels to
-  suggest reactivation. The cardiac silhouette is normal. No pleural effusion.
-  These findings are consistent with sequelae of prior granulomatous disease,
-  most likely tuberculosis. If clinical symptoms (cough, fever, weight loss)
-  are present, sputum for AFB should be obtained to exclude reactivation.
-  Impression: Bilateral apical fibrotic changes — sequelae of prior TB. Exclude
-  reactivation if clinically indicated.
+  AP pelvis radiograph demonstrates a displaced fracture through the left femoral neck (Garden type III) with disruption of Shenton line. The left lower extremity is shortened and externally rotated. The trabecular pattern of the femoral neck is disrupted. No lytic lesions are identified to suggest pathologic fracture. The right hip is unremarkable. Orthopedic consultation for surgical management is recommended.
 condition_present: true
 confusion_pair: null
-source_dataset: omnimedvqa-open
+source_dataset: openem-grounded
 tags:
-  - tuberculosis-sequelae
-  - fibrosis
-  - apical
-  - bilateral
-  - granulomatous
-  - chest
+  - musculoskeletal
+  - fracture
+  - orthopedic
+  - geriatric

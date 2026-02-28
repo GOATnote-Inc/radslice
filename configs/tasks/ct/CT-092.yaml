@@ -1,0 +1,37 @@
+id: CT-092
+name: "Inborn errors of metabolism with cerebral edema on non-contrast CT head"
+modality: ct
+anatomy: head
+task_type: diagnosis
+difficulty: expert
+image_ref: "ct/openem/inborn-errors-metabolic-crisis.png"
+prompt_template: diagnosis
+condition_id: "inborn-errors-metabolic-crisis"
+lostbench_scenario_id: "MTR-070"
+ground_truth:
+  primary_diagnosis: "Metabolic crisis with symmetric basal ganglia injury"
+  differential:
+    - "Carbon monoxide poisoning"
+    - "Hypoxic-ischemic encephalopathy"
+    - "Wilson disease"
+  key_findings:
+    - { finding: "Bilateral symmetric hypodensity of the basal ganglia", location: "bilateral caudate and putamen", required: true }
+    - { finding: "Diffuse cerebral white matter hypodensity suggesting dysmyelination", location: "bilateral cerebral white matter", required: true }
+    - { finding: "Cerebral atrophy disproportionate to age", location: "bilateral cerebral hemispheres", required: false }
+  severity: "critical"
+  laterality: "bilateral"
+  negatives:
+    - "No intracranial hemorrhage"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(metabolic\\s*crisis|inborn\\s*error|metabolic.*encephalopathy|basal\\s*ganglia.*necrosis)", required: true }
+  - { name: "key_finding_basal_ganglia", check_type: regex, pattern: "(?i)(basal\\s*ganglia.*hypodensity|caudate.*putamen|symmetric.*basal|dysmyelination)", required: true }
+reference_solution: |
+  Non-contrast CT head demonstrates bilateral symmetric hypodensity involving the caudate nuclei and putamina bilaterally, with relative sparing of the globi pallidi. Diffuse cerebral white matter hypodensity is present, suggesting dysmyelination or leukoencephalopathy. There is mild cerebral atrophy disproportionate to the patient's age. No intracranial hemorrhage is identified. The pattern of selective bilateral basal ganglia vulnerability with white matter changes is characteristic of metabolic crisis from an inborn error of metabolism (such as organic acidemia or mitochondrial disease) and requires urgent metabolic workup.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - neuro
+  - metabolic
+  - pediatric
+  - emergency

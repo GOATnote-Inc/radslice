@@ -1,57 +1,40 @@
 id: US-017
-name: Normal liver and biliary ultrasound report
+name: "Aortic Transection on FAST/TEE"
 modality: ultrasound
-anatomy: abdomen
-task_type: report_generation
-difficulty: basic
-image_ref: ultrasound/radimagenet/US_0017.png
-prompt_template: report_generation
+anatomy: chest
+task_type: diagnosis
+difficulty: expert
+image_ref: "ultrasound/openem/aortic-transection.png"
+prompt_template: diagnosis
+condition_id: "aortic-transection"
+lostbench_scenario_id: "MTR-064"
 ground_truth:
-  primary_diagnosis: "Normal liver and biliary system"
+  primary_diagnosis: "Traumatic aortic transection with intimal flap at the isthmus"
   differential:
-    - early hepatic steatosis below detection threshold
-    - small hepatic hemangioma below resolution
-    - functional gallbladder dysmotility
+    - "Aortic dissection (non-traumatic)"
+    - "Aortic pseudoaneurysm"
+    - "Mediastinal hematoma from non-aortic source"
   key_findings:
-    - { finding: "homogeneous liver parenchyma without focal lesion", location: "hepatic parenchyma", required: true }
-    - { finding: "normal gallbladder with thin wall and no calculi", location: "gallbladder", required: true }
-    - { finding: "non-dilated common bile duct", location: "common bile duct", required: false }
-  severity: mild
-  laterality: ""
+    - { finding: "Intimal flap or irregularity at the aortic isthmus", location: "descending aorta distal to left subclavian artery", required: true }
+    - { finding: "Periaortic hematoma or mediastinal fluid", location: "descending thoracic aorta", required: true }
+    - { finding: "Left hemothorax on eFAST", location: "left pleural space", required: false }
+    - { finding: "Pseudoaneurysm formation at injury site", location: "aortic isthmus", required: false }
+  severity: critical
+  laterality: left
   negatives:
-    - hepatic mass or cyst
-    - hepatic steatosis
-    - gallstones
-    - gallbladder wall thickening
-    - biliary dilation
-    - ascites
-    - portal vein thrombosis
-    - splenomegaly
+    - "No ascending aortic involvement"
+    - "No cardiac tamponade"
 pattern_checks:
-  - { name: normal_identified, check_type: regex, pattern: "normal|unremarkable|no\\s+(abnormal|pathol|significant)", required: true }
-  - { name: no_hepatic_lesion, check_type: regex, pattern: "no.*(mass|lesion|focal|hemangioma|metastas)", required: true }
-  - { name: no_gallstones, check_type: regex, pattern: "no.*(stone|calcul|lithiasis|cholelithiasis)", required: true }
-  - { name: no_biliary_dilation, check_type: regex, pattern: "no.*(dilat|obstruct|biliary.*dilat)|non.?dilat|normal.*duct", required: true }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(aortic (transection|injury|rupture|tear)|traumatic aort|aortic isthmus)", required: true }
+  - { name: "intimal_finding", check_type: regex, pattern: "(?i)(intimal (flap|tear|irregularity)|pseudoaneurysm|transection|periaortic hematoma)", required: true }
+  - { name: "location_noted", check_type: regex, pattern: "(?i)(isthmus|descending (aort|thoracic)|distal to (left )?subclavian)", required: true }
 reference_solution: |
-  Complete right upper quadrant ultrasound demonstrates a normal-appearing
-  liver with homogeneous parenchymal echogenicity and smooth hepatic contour.
-  No focal hepatic lesion, mass, or cystic structure is identified. The portal
-  vein is patent with hepatopetal flow. The hepatic veins are normal in caliber.
-  The gallbladder is well-distended with anechoic bile, thin wall measuring
-  less than 3 mm, and no intraluminal calculi, sludge, or polyps. The common
-  bile duct measures 4 mm and is not dilated. No intrahepatic biliary dilation
-  is present. The right kidney is visualized and appears normal. No ascites or
-  splenomegaly is detected.
-  Impression: Normal right upper quadrant ultrasound. No hepatic, biliary,
-  or gallbladder abnormality.
-condition_present: false
+  Transesophageal echocardiography reveals an intimal flap at the aortic isthmus just distal to the left subclavian artery origin. A contained pseudoaneurysm is identified with a periaortic hematoma measuring approximately 1.5 cm. Color Doppler demonstrates flow disturbance at the injury site. eFAST examination reveals a moderate left hemothorax. No ascending aortic involvement or pericardial effusion is identified. These findings are consistent with a traumatic aortic injury (grade III) at the isthmus, the most common site for blunt aortic transection, requiring urgent thoracic endovascular repair.
+condition_present: true
 confusion_pair: null
-source_dataset: radimagenet
+source_dataset: openem-grounded
 tags:
-  - normal
-  - liver
-  - gallbladder
-  - abdomen
-  - hepatobiliary
-  - negative-study
-  - report-generation
+  - trauma
+  - emergency
+  - tee
+  - aortic

@@ -1,49 +1,39 @@
 id: XRAY-050
-name: Normal CXR - pediatric patient
+name: "Intussusception on Abdominal X-ray"
 modality: xray
-anatomy: chest
+anatomy: abdomen
 task_type: diagnosis
-difficulty: basic
-image_ref: xray/omnimedvqa/CXR_0050.png
+difficulty: advanced
+image_ref: "xray/openem/intussusception.png"
 prompt_template: diagnosis
+condition_id: "intussusception"
+lostbench_scenario_id: "MTR-031"
 ground_truth:
-  primary_diagnosis: "Normal pediatric chest radiograph"
-  differential: []
+  primary_diagnosis: "Intussusception"
+  differential:
+    - "Small bowel obstruction"
+    - "Appendicitis"
+    - "Hirschsprung disease"
   key_findings:
-    - { finding: "prominent thymic shadow (sail sign)", location: "anterior mediastinum", required: true }
-    - { finding: "clear lung fields", location: "bilateral lungs", required: true }
-    - { finding: "normal cardiac silhouette for age", location: "cardiomediastinal", required: true }
-  severity: mild
-  laterality: ""
+    - { finding: "Target sign or crescent sign (soft tissue mass in right abdomen)", location: "right upper quadrant or transverse colon", required: true }
+    - { finding: "Paucity of bowel gas in the right lower quadrant", location: "right lower quadrant", required: true }
+    - { finding: "Small bowel dilatation proximal to obstruction", location: "left abdomen", required: false }
+    - { finding: "Meniscus sign on air enema if performed", location: "colon", required: false }
+  severity: severe
+  laterality: right
   negatives:
-    - pneumonia
-    - pleural effusion
-    - pneumothorax
-    - mediastinal mass
-    - cardiomegaly
-    - foreign body
+    - "No free air suggesting perforation"
+    - "No pneumatosis intestinalis"
 pattern_checks:
-  - { name: normal_mentioned, check_type: regex, pattern: "(?i)(normal|no\\s+acute|unremarkable)", required: true }
-  - { name: thymus_noted, check_type: regex, pattern: "(?i)(thymus|thymic|sail\\s+sign|wave\\s+sign)", required: true }
-  - { name: lungs_clear, check_type: regex, pattern: "(?i)(clear|no.*opaci|no.*consolidat)", required: true }
-  - { name: pediatric_context, check_type: regex, pattern: "(?i)(pediatric|child|infant|age.?appropriate|normal\\s+for\\s+age)", required: false }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(intussusception|target sign|crescent sign|soft tissue mass)", required: true }
+  - { name: "mass_finding", check_type: regex, pattern: "(?i)(target sign|crescent sign|soft tissue mass|paucity of (gas|bowel gas)|meniscus)", required: true }
 reference_solution: |
-  AP chest radiograph in a pediatric patient demonstrates a prominent thymic
-  shadow in the superior mediastinum causing apparent mediastinal widening, which
-  is a normal finding in infancy and early childhood (sail sign). This should not
-  be confused with mediastinal mass or lymphadenopathy. The lungs are clear
-  bilaterally without focal consolidation, atelectasis, or pleural effusion. No
-  pneumothorax. The cardiac silhouette is normal in size for the patient's age.
-  The airway is patent and midline. No foreign body identified. The visualized
-  osseous structures are normal.
-  Impression: Normal pediatric chest radiograph with prominent thymic shadow —
-  age-appropriate finding.
-condition_present: false
+  Abdominal radiograph of a child demonstrates a soft tissue density mass in the right upper quadrant with a crescent of gas outlining it (crescent sign), consistent with the intussusceptum. There is paucity of gas in the right lower quadrant (cecum not gas-filled). Mild proximal small bowel dilatation is noted. No free intraperitoneal air or pneumatosis is identified. These findings are consistent with ileocolic intussusception. Ultrasound confirmation and air or hydrostatic enema reduction should be performed urgently.
+condition_present: true
 confusion_pair: null
-source_dataset: omnimedvqa-open
+source_dataset: openem-grounded
 tags:
-  - normal
+  - gastrointestinal
   - pediatric
-  - thymus
-  - chest
-  - baseline
+  - emergency
+  - surgical

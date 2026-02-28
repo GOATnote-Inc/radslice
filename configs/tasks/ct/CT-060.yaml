@@ -1,63 +1,37 @@
 id: CT-060
-name: Cecal volvulus (confusion pair for sigmoid volvulus)
+name: "Globe rupture on CT face"
 modality: ct
-anatomy: abdomen
+anatomy: face
 task_type: diagnosis
 difficulty: advanced
-image_ref: ct/omnimedvqa/CT_0060.png
+image_ref: "ct/openem/globe-rupture.png"
 prompt_template: diagnosis
+condition_id: "globe-rupture"
+lostbench_scenario_id: ""
 ground_truth:
-  primary_diagnosis: "Cecal volvulus"
+  primary_diagnosis: "Left globe rupture with intraocular hemorrhage"
   differential:
-    - sigmoid volvulus
-    - large bowel obstruction from tumor
-    - cecal bascule
-    - pseudo-obstruction (Ogilvie syndrome)
-    - small bowel obstruction with cecal dilatation
+    - "Retrobulbar hemorrhage"
+    - "Lens dislocation"
+    - "Intraocular foreign body"
   key_findings:
-    - { finding: "markedly dilated cecum displaced to left upper quadrant", location: "cecum ectopically positioned in left upper quadrant", required: true }
-    - { finding: "whirl sign of mesenteric vessels at torsion point", location: "right lower quadrant mesentery", required: true }
-    - { finding: "decompressed ascending and transverse colon", location: "right colon and transverse colon", required: false }
-    - { finding: "small bowel obstruction from competent ileocecal valve", location: "terminal ileum", required: false }
-  severity: severe
-  laterality: ""
+    - { finding: "Abnormal globe contour with loss of normal spherical shape", location: "left globe", required: true }
+    - { finding: "Increased density of the vitreous indicating intraocular hemorrhage", location: "left vitreous chamber", required: true }
+    - { finding: "Intraocular air", location: "left globe", required: false }
+  severity: "critical"
+  laterality: "left"
   negatives:
-    - sigmoid dilatation (sigmoid volvulus pattern)
-    - colonic mass at transition point
-    - pneumoperitoneum
-    - normal cecal position
-    - rectal dilatation
+    - "No intraocular foreign body"
+    - "No retrobulbar hematoma"
 pattern_checks:
-  - { name: cecal_volvulus, check_type: regex, pattern: "cecal\\s+volvulus|volvulus.*cec|caecal\\s+volvulus", required: true }
-  - { name: displaced_cecum, check_type: regex, pattern: "displace|ectopic|abnormal\\s+position|left\\s+upper|malposition", required: true }
-  - { name: whirl_or_twist, check_type: regex, pattern: "whirl|twist|torsion|rotation", required: true }
-  - { name: not_sigmoid, check_type: not_contains, pattern: "sigmoid volvulus as primary", required: false }
-  - { name: dilated_cecum, check_type: regex, pattern: "dilat.*cec|cec.*dilat|distend.*cec|cec.*distend", required: true }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(globe\\s*rupture|open\\s*globe|ruptured\\s*globe|globe.*injury)", required: true }
+  - { name: "key_finding_globe", check_type: regex, pattern: "(?i)(globe\\s*contour|globe.*deform|intraocular\\s*(hemorrhage|air)|vitreous.*hemorrhage)", required: true }
 reference_solution: |
-  Contrast-enhanced CT of the abdomen and pelvis demonstrates a markedly
-  dilated cecum measuring approximately 12 cm in diameter, ectopically
-  displaced to the left upper quadrant, crossing the midline. This is
-  consistent with cecal volvulus (axial torsion type). The classic whirl
-  sign is identified in the right lower quadrant where the ileocolic
-  mesenteric vessels converge at the point of torsion. The ascending colon
-  and transverse colon are decompressed. The terminal ileum is dilated
-  proximally, suggesting a competent ileocecal valve causing secondary
-  small bowel obstruction. The cecal wall enhances normally without evidence
-  of pneumatosis or ischemia. No free intraperitoneal air. No colonic mass
-  at the transition point. The sigmoid colon and rectum are normal in
-  caliber, distinguishing this from sigmoid volvulus.
-  Impression: Cecal volvulus with ectopic cecal displacement to the left
-  upper quadrant and mesenteric whirl sign. Unlike sigmoid volvulus, cecal
-  volvulus typically requires surgical intervention (right hemicolectomy) as
-  endoscopic decompression is usually unsuccessful. Emergent surgical
-  consultation required.
+  CT of the orbits demonstrates loss of the normal spherical contour of the left globe with flattening and irregularity of the posterior sclera. The left vitreous chamber is hyperdense compared with the right, consistent with intraocular hemorrhage. A small amount of intraocular air is present. No intraocular foreign body or retrobulbar hematoma is identified. Findings are consistent with open globe rupture of the left eye requiring emergent ophthalmologic consultation and surgical repair.
 condition_present: true
-confusion_pair: CT-050
-source_dataset: omnimedvqa-open
+confusion_pair: null
+source_dataset: openem-grounded
 tags:
-  - cecal-volvulus
-  - abdomen
-  - gastrointestinal
-  - surgical
+  - ophthalmologic
+  - trauma
   - emergency
-  - confusion-pair

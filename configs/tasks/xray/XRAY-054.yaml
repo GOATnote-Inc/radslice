@@ -1,51 +1,37 @@
 id: XRAY-054
-name: Skin fold mimicking pneumothorax
+name: "Electrical Injury on Extremity X-ray"
 modality: xray
-anatomy: chest
+anatomy: extremity
 task_type: diagnosis
-difficulty: intermediate
-image_ref: xray/mediconfusion/MCF_0054.png
+difficulty: advanced
+image_ref: "xray/openem/electrical-injury.png"
 prompt_template: diagnosis
+condition_id: "electrical-injury"
+lostbench_scenario_id: ""
 ground_truth:
-  primary_diagnosis: "Skin fold artifact mimicking pneumothorax"
+  primary_diagnosis: "Electrical injury with periosteal reaction"
   differential:
-    - true pneumothorax
-    - clothing artifact
-    - companion shadow of rib
+    - "Thermal burn injury"
+    - "Osteomyelitis"
+    - "Stress fracture"
   key_findings:
-    - { finding: "linear opacity extending beyond the lung margin", location: "right hemithorax", required: true }
-    - { finding: "lung markings visible peripheral to the line", location: "right lateral chest wall", required: true }
-    - { finding: "line does not conform to expected visceral pleural contour", location: "right hemithorax", required: false }
-  severity: mild
+    - { finding: "Periosteal new bone formation along affected bones", location: "forearm and hand", required: true }
+    - { finding: "Soft tissue calcification or ossification at entry/exit points", location: "hand and wrist", required: false }
+    - { finding: "Soft tissue swelling and edema", location: "affected extremity", required: true }
+    - { finding: "Joint fusion or heterotopic ossification (late finding)", location: "small joints of hand", required: false }
+  severity: severe
   laterality: right
   negatives:
-    - true visceral pleural line
-    - absent lung markings peripherally
-    - mediastinal shift
-    - tension physiology
+    - "No acute fracture"
 pattern_checks:
-  - { name: skin_fold, check_type: regex, pattern: "(?i)(skin\\s+fold|artifact|pseudopneumothorax|not.{0,20}(true\\s+)?pneumothorax)", required: true }
-  - { name: markings_beyond, check_type: regex, pattern: "(?i)(marking.{0,30}(beyond|peripher|lateral|past)|lung.{0,20}marking.{0,20}(present|visible))", required: true }
-  - { name: extends_beyond, check_type: regex, pattern: "(?i)(extend.{0,20}beyond|not.{0,20}conform|not.{0,20}parallel)", required: false }
-  - { name: no_pneumothorax, check_type: regex, pattern: "(?i)(no.{0,20}(true\\s+)?pneumothorax|not\\s+a\\s+pneumothorax|rather\\s+than\\s+pneumothorax)", required: true }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(electrical (injury|burn)|electrocution|periosteal)", required: true }
+  - { name: "bone_change", check_type: regex, pattern: "(?i)(periosteal (new bone|reaction)|soft tissue (calcification|swelling|edema)|heterotopic ossification)", required: true }
 reference_solution: |
-  PA chest radiograph demonstrates a linear opacity in the right hemithorax that
-  could be initially mistaken for a visceral pleural line suggesting pneumothorax.
-  However, several features distinguish this as a skin fold artifact: the line
-  extends beyond the lung margin superiorly and inferiorly, lung markings are
-  clearly visible peripheral to the line, and the opacity is a broad linear band
-  rather than the sharp thin line expected with a visceral pleural surface. A true
-  pneumothorax would show absent lung markings peripheral to the pleural line. The
-  lungs are clear. No true pneumothorax, pleural effusion, or other acute
-  abnormality identified.
-  Impression: Skin fold artifact — not a true pneumothorax. No acute
-  cardiopulmonary disease.
+  Radiograph of the right forearm and hand demonstrates periosteal new bone formation along the radius and ulna with soft tissue swelling. Focal soft tissue calcification is noted at the wrist, consistent with the entry point of electrical current. No acute fracture is identified. In the setting of electrical injury, these findings represent periosteal reaction from the thermal effects of current passage through bone. Follow-up imaging is recommended to assess for progressive heterotopic ossification and potential growth plate injury in pediatric patients.
 condition_present: true
-confusion_pair: XRAY-020
-source_dataset: mediconfusion
+confusion_pair: null
+source_dataset: openem-grounded
 tags:
-  - skin-fold
-  - pneumothorax-mimic
-  - artifact
-  - confusion-pair
-  - chest
+  - trauma
+  - environmental
+  - burn

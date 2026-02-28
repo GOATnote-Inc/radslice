@@ -1,51 +1,39 @@
 id: XRAY-064
-name: Companion shadow of clavicle mimicking pneumothorax
+name: "Active Shooter Response - Gunshot Wound on Chest X-ray"
 modality: xray
 anatomy: chest
 task_type: diagnosis
-difficulty: intermediate
-image_ref: xray/mediconfusion/MCF_0064.png
+difficulty: advanced
+image_ref: "xray/openem/active-shooter-response.png"
 prompt_template: diagnosis
+condition_id: "active-shooter-response"
+lostbench_scenario_id: "MTR-052"
 ground_truth:
-  primary_diagnosis: "Companion shadow of the clavicle"
+  primary_diagnosis: "Multiple gunshot wounds to the chest"
   differential:
-    - small apical pneumothorax
-    - skin fold artifact
-    - extrapleural soft tissue
+    - "Isolated hemothorax"
+    - "Isolated pneumothorax"
+    - "Cardiac injury with tamponade"
   key_findings:
-    - { finding: "thin linear opacity paralleling the inferior cortex of the clavicle", location: "bilateral supraclavicular regions", required: true }
-    - { finding: "lung markings present beyond the linear opacity", location: "bilateral apices", required: true }
-    - { finding: "opacity follows the clavicular contour exactly", location: "bilateral clavicles", required: false }
-  severity: mild
+    - { finding: "Multiple radiopaque projectile fragments", location: "bilateral hemithoraces", required: true }
+    - { finding: "Bilateral hemopneumothoraces", location: "bilateral hemithoraces", required: true }
+    - { finding: "Widened mediastinum suggesting mediastinal hemorrhage", location: "mediastinum", required: false }
+    - { finding: "Rib fractures from projectile impact", location: "bilateral ribs", required: false }
+  severity: critical
   laterality: bilateral
   negatives:
-    - true pneumothorax
-    - visceral pleural line
-    - absent lung markings
-    - mediastinal shift
+    - "No retained tourniquet or external device artifact"
 pattern_checks:
-  - { name: companion_shadow, check_type: regex, pattern: "(?i)(companion\\s+shadow|mach\\s+(band|effect)|soft\\s+tissue.{0,20}(shadow|line))", required: true }
-  - { name: not_pneumothorax, check_type: regex, pattern: "(?i)(not.{0,20}pneumothorax|no.{0,20}(true\\s+)?pneumothorax)", required: true }
-  - { name: markings_present, check_type: regex, pattern: "(?i)(marking.{0,20}(present|visible|beyond|peripheral)|lung.{0,20}marking)", required: true }
-  - { name: clavicle, check_type: regex, pattern: "(?i)clavicl", required: false }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(gunshot|projectile|ballistic|penetrating (chest )?trauma|GSW)", required: true }
+  - { name: "projectile_finding", check_type: regex, pattern: "(?i)(projectile|bullet|fragment|radiopaque (foreign body|metallic)|hemopneumothorax)", required: true }
 reference_solution: |
-  PA chest radiograph demonstrates thin linear opacities paralleling the inferior
-  cortex of both clavicles, which represent companion shadows. These are caused
-  by the soft tissue (skin and subcutaneous fat) overlying the clavicles creating
-  a Mach band effect, and should not be confused with visceral pleural lines of
-  apical pneumothorax. Key distinguishing features include: lung markings are
-  clearly visible beyond the linear opacity, the opacity follows the clavicular
-  contour exactly, and there is no sharp visceral pleural line. The lungs are
-  clear bilaterally. No true pneumothorax. The cardiac silhouette is normal.
-  No other acute abnormality.
-  Impression: Companion shadows of the clavicles — normal finding, not apical
-  pneumothoraces.
+  Supine AP chest radiograph obtained in the trauma bay demonstrates multiple radiopaque projectile fragments within both hemithoraces. Bilateral hemopneumothoraces are present with bilateral air-fluid levels. The mediastinum appears widened, raising concern for great vessel or cardiac injury. Bilateral rib fractures are noted. Bilateral chest tubes should be placed emergently. CT angiography of the chest is urgently recommended once the patient is hemodynamically stabilized to evaluate for aortic, cardiac, and tracheobronchial injuries.
 condition_present: true
-confusion_pair: XRAY-001
-source_dataset: mediconfusion
+confusion_pair: null
+source_dataset: openem-grounded
 tags:
-  - companion-shadow
-  - pneumothorax-mimic
-  - artifact
-  - confusion-pair
-  - chest
+  - trauma
+  - emergency
+  - penetrating
+  - mass-casualty
+  - critical

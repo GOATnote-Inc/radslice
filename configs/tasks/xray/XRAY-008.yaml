@@ -1,57 +1,37 @@
 id: XRAY-008
-name: Solitary pulmonary nodule right upper lobe
+name: "Peripartum Cardiomyopathy on Chest X-ray"
 modality: xray
 anatomy: chest
 task_type: diagnosis
-difficulty: intermediate
-image_ref: xray/omnimedvqa/CXR_0008.png
+difficulty: advanced
+image_ref: "xray/openem/peripartum-cardiomyopathy.png"
 prompt_template: diagnosis
+condition_id: "peripartum-cardiomyopathy"
+lostbench_scenario_id: ""
 ground_truth:
-  primary_diagnosis: "Solitary pulmonary nodule in the right upper lobe"
+  primary_diagnosis: "Peripartum cardiomyopathy"
   differential:
-    - primary lung malignancy
-    - granuloma
-    - metastatic deposit
-    - hamartoma
-    - arteriovenous malformation
-    - round pneumonia
+    - "Dilated cardiomyopathy from other cause"
+    - "Preeclampsia with pulmonary edema"
+    - "Pulmonary embolism"
   key_findings:
-    - { finding: "well-circumscribed round opacity", location: "right upper lobe", required: true }
-    - { finding: "nodule measuring approximately 2 cm", location: "right upper lobe", required: false }
-    - { finding: "no calcification visible", location: "within the nodule", required: false }
-    - { finding: "no associated lymphadenopathy", location: "mediastinum and hila", required: false }
-  severity: moderate
-  laterality: right
+    - { finding: "Cardiomegaly with four-chamber dilatation pattern", location: "cardiac silhouette", required: true }
+    - { finding: "Bilateral pulmonary edema", location: "bilateral lung fields", required: true }
+    - { finding: "Bilateral pleural effusions", location: "costophrenic angles", required: false }
+  severity: severe
+  laterality: bilateral
   negatives:
-    - pleural effusion
-    - rib destruction
-    - cavitation
-    - multiple nodules
-    - consolidation
-    - pneumothorax
+    - "No pneumothorax"
+    - "No focal consolidation"
 pattern_checks:
-  - { name: nodule_mentioned, check_type: regex, pattern: "nodule|mass|lesion|opacity", required: true }
-  - { name: laterality_right, check_type: regex, pattern: "right", required: true }
-  - { name: upper_lobe, check_type: regex, pattern: "upper\\s+lobe|RUL|upper\\s+zone", required: true }
-  - { name: solitary, check_type: regex, pattern: "solitary|single|isolated", required: true }
-  - { name: further_workup, check_type: regex, pattern: "CT|further.*imaging|follow.?up|biopsy|workup|PET", required: true }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(peripartum cardiomyopathy|cardiomyopathy|heart failure|cardiomegaly)", required: true }
+  - { name: "edema_finding", check_type: regex, pattern: "(?i)(pulmonary edema|vascular congestion|interstitial edema|cephalization)", required: true }
 reference_solution: |
-  PA chest radiograph demonstrates a solitary, well-circumscribed round opacity
-  in the right upper lobe measuring approximately 2 cm in diameter. The nodule
-  has smooth margins without visible calcification or cavitation. No additional
-  pulmonary nodules are identified. The hila and mediastinal contours appear
-  normal without lymphadenopathy. The remaining lung fields are clear. No pleural
-  effusion or pneumothorax. The cardiac silhouette is normal. No osseous
-  abnormality. Given the indeterminate nature of this solitary pulmonary nodule,
-  CT of the chest with contrast is recommended for further characterization and
-  to assess for calcification pattern, morphology, and mediastinal staging.
-  Impression: Solitary pulmonary nodule in the right upper lobe — CT chest
-  recommended for further evaluation.
+  Frontal chest radiograph demonstrates marked cardiomegaly with bilateral pulmonary vascular congestion and interstitial edema. Bilateral pleural effusions are present. In the clinical context of a peripartum patient, these findings are consistent with peripartum cardiomyopathy. Echocardiography is recommended for assessment of ventricular function and ejection fraction.
 condition_present: true
 confusion_pair: null
-source_dataset: omnimedvqa-open
+source_dataset: openem-grounded
 tags:
-  - pulmonary-nodule
-  - chest
-  - oncology
-  - follow-up-needed
+  - cardiac
+  - obstetric
+  - emergency

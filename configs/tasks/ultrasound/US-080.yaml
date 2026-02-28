@@ -1,0 +1,41 @@
+id: US-080
+name: "Hypertensive Emergency on Echocardiography"
+modality: ultrasound
+anatomy: chest
+task_type: diagnosis
+difficulty: advanced
+image_ref: "ultrasound/openem/hypertensive-emergency.png"
+prompt_template: diagnosis
+condition_id: "hypertensive-emergency"
+lostbench_scenario_id: "MTR-049"
+ground_truth:
+  primary_diagnosis: "Hypertensive emergency with left ventricular hypertrophy and diastolic dysfunction"
+  differential:
+    - "Hypertrophic cardiomyopathy"
+    - "Aortic stenosis with LVH"
+    - "Infiltrative cardiomyopathy (amyloid)"
+  key_findings:
+    - { finding: "Concentric left ventricular hypertrophy with wall thickness greater than 12 mm", location: "left ventricle", required: true }
+    - { finding: "Diastolic dysfunction with abnormal mitral inflow pattern (E/A reversal or elevated E/e')", location: "mitral valve inflow", required: true }
+    - { finding: "Preserved systolic function with hyperdynamic ejection fraction", location: "left ventricle", required: false }
+    - { finding: "Left atrial enlargement", location: "left atrium", required: false }
+  severity: severe
+  laterality: n/a
+  negatives:
+    - "No aortic stenosis"
+    - "No systolic anterior motion of the mitral valve (no HOCM)"
+    - "No pericardial effusion"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(hypertensive (emergency|heart disease|cardiomyopathy)|LVH|left ventricular hypertrophy|diastolic dysfunction)", required: true }
+  - { name: "lvh_finding", check_type: regex, pattern: "(?i)(LVH|left ventricular hypertrophy|concentric hypertrophy|wall (thickness|thicken).{0,20}(>|greater|increas|12))", required: true }
+  - { name: "diastolic_finding", check_type: regex, pattern: "(?i)(diastolic dysfunction|E/A|E/e'|impaired relaxation|mitral inflow.{0,20}(abnormal|reversed))", required: true }
+reference_solution: |
+  Transthoracic echocardiography demonstrates concentric left ventricular hypertrophy with the interventricular septum measuring 14 mm and the posterior wall measuring 13 mm. The left ventricular systolic function is hyperdynamic with an estimated ejection fraction of 70%. Pulsed-wave Doppler of the mitral inflow demonstrates an impaired relaxation pattern with E/A ratio reversal and prolonged deceleration time. Tissue Doppler demonstrates reduced e' velocities with an elevated E/e' ratio of 18, consistent with elevated filling pressures. The left atrium is dilated at 4.5 cm. No aortic stenosis or LVOT obstruction is identified. These findings are consistent with hypertensive heart disease with diastolic dysfunction in the setting of a hypertensive emergency.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - cardiac
+  - emergency
+  - echocardiography
+  - hypertensive

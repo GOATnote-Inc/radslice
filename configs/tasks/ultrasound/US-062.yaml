@@ -1,0 +1,40 @@
+id: US-062
+name: "Venous Air Embolism on Echocardiography"
+modality: ultrasound
+anatomy: chest
+task_type: diagnosis
+difficulty: expert
+image_ref: "ultrasound/openem/air-embolism.png"
+prompt_template: diagnosis
+condition_id: "air-embolism"
+lostbench_scenario_id: "MTR-066"
+ground_truth:
+  primary_diagnosis: "Venous air embolism with intracardiac air on echocardiography"
+  differential:
+    - "Pulmonary embolism (thrombotic)"
+    - "Right heart failure from other cause"
+    - "Artifact or ultrasound contrast"
+  key_findings:
+    - { finding: "Echogenic swirling intracavitary air bubbles in the right heart chambers", location: "right atrium and right ventricle", required: true }
+    - { finding: "Right ventricular dilation with dysfunction", location: "right ventricle", required: true }
+    - { finding: "Air-fluid level in the right ventricle (with patient in left lateral decubitus)", location: "right ventricle", required: false }
+    - { finding: "Tricuspid regurgitation", location: "tricuspid valve", required: false }
+  severity: critical
+  laterality: n/a
+  negatives:
+    - "No intracardiac thrombus"
+    - "No pericardial effusion"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(air embolism|venous air embolism|VAE|intracardiac air)", required: true }
+  - { name: "air_finding", check_type: regex, pattern: "(?i)(air (bubble|embol)|echogenic.{0,20}(bubbles|air)|intracavitary air|swirling.{0,20}(echogenic|air))", required: true }
+  - { name: "rv_finding", check_type: regex, pattern: "(?i)(right (ventricle|heart|atrium|chambers)|RV (dilat|dysfunc)|right.{0,20}(dilat|dysfunc))", required: true }
+reference_solution: |
+  Emergent transthoracic echocardiography demonstrates echogenic swirling material consistent with air bubbles within the right atrium and right ventricle. The right ventricle is acutely dilated with reduced systolic function. The right atrium appears distended with visible air-fluid interface. Moderate tricuspid regurgitation is noted. The left heart chambers appear normal, suggesting no paradoxical air embolism through a patent foramen ovale. The IVC is dilated reflecting acute right heart strain. In the clinical context (central line placement/removal or surgical procedure), these findings are diagnostic of venous air embolism requiring immediate position change to left lateral decubitus with Trendelenburg and consideration of aspiration via central venous catheter.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - cardiac
+  - emergency
+  - echocardiography
+  - iatrogenic

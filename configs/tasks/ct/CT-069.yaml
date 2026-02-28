@@ -1,0 +1,37 @@
+id: CT-069
+name: "Retropharyngeal abscess on contrast-enhanced CT neck"
+modality: ct
+anatomy: neck
+task_type: diagnosis
+difficulty: intermediate
+image_ref: "ct/openem/retropharyngeal-abscess.png"
+prompt_template: diagnosis
+condition_id: "retropharyngeal-abscess"
+lostbench_scenario_id: ""
+ground_truth:
+  primary_diagnosis: "Retropharyngeal abscess"
+  differential:
+    - "Retropharyngeal edema from prevertebral cellulitis"
+    - "Retropharyngeal hematoma"
+    - "Vertebral osteomyelitis with prevertebral collection"
+  key_findings:
+    - { finding: "Rim-enhancing fluid collection in the retropharyngeal space", location: "retropharyngeal space at C2-C4 level", required: true }
+    - { finding: "Anterior displacement and narrowing of the airway", location: "oropharynx and hypopharynx", required: true }
+    - { finding: "Edema in the prevertebral muscles", location: "longus colli muscles", required: false }
+  severity: "severe"
+  laterality: "midline"
+  negatives:
+    - "No vertebral osteomyelitis or discitis"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(retropharyngeal\\s*abscess|retropharyngeal.*collection)", required: true }
+  - { name: "key_finding_collection", check_type: regex, pattern: "(?i)(retropharyngeal.*fluid|retropharyngeal.*collection|rim.?enhancing.*retropharyn)", required: true }
+reference_solution: |
+  Contrast-enhanced CT of the neck demonstrates a rim-enhancing hypodense fluid collection in the retropharyngeal space extending from C2 to C4, consistent with a retropharyngeal abscess. The collection displaces the posterior pharyngeal wall anteriorly with narrowing of the oropharyngeal airway. Edema is present in the longus colli muscles. No vertebral body destruction or discitis is identified. Findings represent a retropharyngeal abscess with potential for airway compromise requiring emergent surgical drainage and airway management.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - ent
+  - infectious
+  - emergency
+  - airway

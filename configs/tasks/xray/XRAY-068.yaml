@@ -1,41 +1,38 @@
 id: XRAY-068
-name: VQA - Is there a pleural effusion on this CXR?
+name: "High-Altitude Pulmonary Edema on Chest X-ray"
 modality: xray
 anatomy: chest
-task_type: vqa
-difficulty: basic
-image_ref: xray/vindrcxr/VDR_0068.png
-prompt_template: vqa
+task_type: diagnosis
+difficulty: advanced
+image_ref: "xray/openem/high-altitude-illness.png"
+prompt_template: diagnosis
+condition_id: "high-altitude-illness"
+lostbench_scenario_id: ""
 ground_truth:
-  primary_diagnosis: "Large left pleural effusion"
-  differential: []
+  primary_diagnosis: "High-altitude pulmonary edema (HAPE)"
+  differential:
+    - "Pneumonia"
+    - "Cardiogenic pulmonary edema"
+    - "ARDS"
   key_findings:
-    - { finding: "large left-sided pleural effusion with meniscus sign", location: "left hemithorax", required: true }
-    - { finding: "blunting of the left costophrenic angle", location: "left costophrenic angle", required: true }
-  severity: moderate
-  laterality: left
+    - { finding: "Patchy bilateral alveolar opacities (often asymmetric, right greater than left)", location: "bilateral lung fields", required: true }
+    - { finding: "Normal cardiac silhouette", location: "cardiac silhouette", required: true }
+    - { finding: "Prominent pulmonary arteries from pulmonary hypertension", location: "pulmonary vasculature", required: false }
+  severity: severe
+  laterality: bilateral
   negatives:
-    - right-sided effusion
-    - pneumothorax
+    - "No cardiomegaly"
+    - "No pneumothorax"
+    - "No focal lobar consolidation"
 pattern_checks:
-  - { name: yes_effusion, check_type: regex, pattern: "(?i)(yes|present|identified|there\\s+is|confirmed|large.{0,20}effusion)", required: true }
-  - { name: left_sided, check_type: regex, pattern: "(?i)left", required: true }
-  - { name: pleural_effusion, check_type: regex, pattern: "(?i)pleural\\s+effusion", required: true }
-  - { name: meniscus_or_blunting, check_type: regex, pattern: "(?i)(meniscus|blunt|costophrenic)", required: false }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(high.?altitude (pulmonary edema|illness)|HAPE|altitude sickness)", required: true }
+  - { name: "edema_finding", check_type: regex, pattern: "(?i)(pulmonary edema|alveolar opacit|bilateral (opacit|infiltrate|edema)|patchy)", required: true }
 reference_solution: |
-  Yes, there is a pleural effusion on this chest radiograph. A large left-sided
-  pleural effusion is present, evidenced by homogeneous opacification of the left
-  lower hemithorax with a characteristic meniscus sign and complete blunting of
-  the left costophrenic angle. The effusion layers along the lateral chest wall.
-  The right lung is clear without effusion. The visible cardiac silhouette is
-  partially obscured by the effusion. No pneumothorax. Further evaluation with
-  ultrasound-guided thoracentesis may be indicated for diagnostic and therapeutic
-  purposes.
+  Frontal chest radiograph demonstrates patchy bilateral alveolar opacities, asymmetric and more prominent on the right. The cardiac silhouette is normal in size, indicating a non-cardiogenic etiology. The pulmonary arteries appear prominent, suggesting elevated pulmonary artery pressure. No pleural effusion or pneumothorax is identified. In the clinical context of recent rapid ascent to high altitude, these findings are consistent with high-altitude pulmonary edema (HAPE). Immediate descent and supplemental oxygen are the primary treatments.
 condition_present: true
 confusion_pair: null
-source_dataset: vindrcxr
+source_dataset: openem-grounded
 tags:
-  - vqa
-  - pleural-effusion
-  - left
-  - chest
+  - pulmonary
+  - environmental
+  - emergency

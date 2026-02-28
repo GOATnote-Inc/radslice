@@ -1,54 +1,38 @@
 id: MRI-001
-name: ACL tear on knee MRI
+name: "Aortic Dissection on MR Angiography"
 modality: mri
-anatomy: knee
+anatomy: chest
 task_type: diagnosis
-difficulty: intermediate
-image_ref: mri/omnimedvqa/MRI_0001.png
+difficulty: expert
+image_ref: "mri/openem/aortic-dissection.png"
 prompt_template: diagnosis
+condition_id: "aortic-dissection"
+lostbench_scenario_id: "MTR-015"
 ground_truth:
-  primary_diagnosis: "Complete anterior cruciate ligament (ACL) tear"
+  primary_diagnosis: "Aortic dissection with intimal flap on MRA"
   differential:
-    - partial ACL tear
-    - mucoid degeneration of the ACL
-    - ACL ganglion cyst
-    - cyclops lesion
+    - "Intramural hematoma"
+    - "Penetrating aortic ulcer"
+    - "Aortic aneurysm with mural thrombus"
   key_findings:
-    - { finding: "discontinuity of ACL fibers with abnormal T2 hyperintense signal", location: "intercondylar notch", required: true }
-    - { finding: "loss of normal taut band morphology of the ACL", location: "from femoral attachment to tibial insertion", required: true }
-    - { finding: "anterior tibial translation relative to femoral condyles", location: "lateral compartment", required: false }
-    - { finding: "bone marrow edema on T2/STIR sequences", location: "lateral femoral condyle and posterolateral tibial plateau", required: false }
-  severity: moderate
-  laterality: left
+    - { finding: "Intimal flap separating true and false lumen", location: "Thoracic aorta", required: true }
+    - { finding: "Differential flow signal between true and false lumen on MRA", location: "Aortic arch and descending aorta", required: true }
+    - { finding: "T1 hyperintense mural thrombus in false lumen", location: "Descending aorta", required: false }
+  severity: "critical"
+  laterality: "midline"
   negatives:
-    - posterior cruciate ligament tear
-    - meniscal tear
-    - medial collateral ligament injury
-    - lateral collateral ligament injury
-    - patellar dislocation
+    - "No pericardial effusion"
+    - "No branch vessel occlusion identified"
 pattern_checks:
-  - { name: acl_mentioned, check_type: regex, pattern: "ACL|anterior\\s+cruciate", required: true }
-  - { name: tear_mentioned, check_type: regex, pattern: "tear|rupture|disrupt|discontinu", required: true }
-  - { name: laterality_left, check_type: regex, pattern: "left", required: true }
-  - { name: signal_abnormality, check_type: regex, pattern: "T2.*hyperintens|signal.*abnormal|edema|high\\s+signal", required: true }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)aortic\\s+dissection", required: true }
+  - { name: "intimal_flap", check_type: regex, pattern: "(?i)intimal\\s+flap", required: true }
+  - { name: "false_lumen", check_type: regex, pattern: "(?i)false\\s+lumen", required: true }
 reference_solution: |
-  MRI of the left knee demonstrates a complete tear of the anterior cruciate
-  ligament (ACL). The ACL fibers are discontinuous with diffuse T2 hyperintense
-  signal replacing the normal low-signal ligament within the intercondylar
-  notch. The normal taut band morphology is lost from the femoral attachment
-  through the tibial insertion. There is associated bone marrow edema pattern
-  on T2-weighted/STIR sequences involving the lateral femoral condyle and
-  posterolateral tibial plateau, consistent with a pivot-shift mechanism of
-  injury. Mild anterior tibial translation is noted on the sagittal images.
-  The posterior cruciate ligament is intact with normal low T2 signal. The
-  medial and lateral menisci are intact. The collateral ligaments are normal.
-  Impression: Complete left ACL tear with characteristic bone contusion pattern.
+  MR angiography of the chest demonstrates an intimal flap within the thoracic aorta, separating the true and false lumens. There is differential flow signal on contrast-enhanced MRA with slower flow in the false lumen. The dissection extends from the aortic arch into the descending thoracic aorta, consistent with a Stanford Type B dissection. No pericardial effusion or branch vessel compromise is identified.
 condition_present: true
 confusion_pair: null
-source_dataset: omnimedvqa-open
+source_dataset: openem-grounded
 tags:
-  - acl
-  - knee
-  - ligament
-  - musculoskeletal
-  - sports-injury
+  - vascular
+  - emergency
+  - mra

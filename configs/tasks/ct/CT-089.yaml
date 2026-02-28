@@ -1,0 +1,37 @@
+id: CT-089
+name: "Dengue hemorrhagic fever with abdominal findings on contrast-enhanced CT"
+modality: ct
+anatomy: abdomen
+task_type: diagnosis
+difficulty: advanced
+image_ref: "ct/openem/dengue-hemorrhagic-fever.png"
+prompt_template: diagnosis
+condition_id: "dengue-hemorrhagic-fever"
+lostbench_scenario_id: "MTR-039"
+ground_truth:
+  primary_diagnosis: "Dengue hemorrhagic fever with plasma leakage"
+  differential:
+    - "Septic shock with capillary leak"
+    - "Hemorrhagic viral fever (other)"
+    - "Acute pancreatitis with fluid collections"
+  key_findings:
+    - { finding: "Gallbladder wall thickening and pericholecystic fluid (hallmark finding)", location: "gallbladder", required: true }
+    - { finding: "Bilateral pleural effusions and ascites (plasma leakage)", location: "pleural and peritoneal spaces", required: true }
+    - { finding: "Hepatosplenomegaly", location: "liver and spleen", required: false }
+  severity: "severe"
+  laterality: "bilateral"
+  negatives:
+    - "No hepatic or splenic infarct"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(dengue|hemorrhagic\\s*fever|plasma\\s*leakage|capillary\\s*leak)", required: true }
+  - { name: "key_finding_gb_wall", check_type: regex, pattern: "(?i)(gallbladder\\s*wall\\s*thicken|pericholecystic|ascites|pleural\\s*effusion)", required: true }
+reference_solution: |
+  Contrast-enhanced CT of the abdomen demonstrates marked gallbladder wall thickening with pericholecystic fluid, a hallmark finding of dengue hemorrhagic fever. Bilateral pleural effusions and moderate ascites are present, indicating significant plasma leakage. Hepatosplenomegaly is noted. No hepatic or splenic infarction is identified. No active hemorrhage is present. In the clinical context of thrombocytopenia and positive dengue serology, findings are consistent with dengue hemorrhagic fever with plasma leakage requiring aggressive fluid management.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - infectious
+  - tropical
+  - emergency
+  - abdominal

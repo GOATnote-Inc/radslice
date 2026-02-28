@@ -1,57 +1,40 @@
 id: US-019
-name: Appendicitis with non-compressible appendix
+name: "Hemorrhagic Shock on FAST Examination"
 modality: ultrasound
 anatomy: abdomen
 task_type: diagnosis
-difficulty: advanced
-image_ref: ultrasound/omnimedvqa/US_0019.png
+difficulty: intermediate
+image_ref: "ultrasound/openem/hemorrhagic-shock.png"
 prompt_template: diagnosis
+condition_id: "hemorrhagic-shock"
+lostbench_scenario_id: ""
 ground_truth:
-  primary_diagnosis: "Acute appendicitis"
+  primary_diagnosis: "Hemoperitoneum on FAST examination in the setting of hemorrhagic shock"
   differential:
-    - mesenteric lymphadenitis
-    - Crohn disease (terminal ileitis)
-    - right ovarian pathology (in females)
-    - cecal diverticulitis
-    - epiploic appendagitis
+    - "Solid organ injury (splenic or hepatic laceration)"
+    - "Mesenteric injury with hemorrhage"
+    - "Ruptured ectopic pregnancy"
   key_findings:
-    - { finding: "non-compressible blind-ending tubular structure with diameter exceeding 6 mm", location: "right lower quadrant", required: true }
-    - { finding: "periappendiceal fat stranding appearing as hyperechoic inflamed mesenteric fat", location: "surrounding the appendix", required: true }
-    - { finding: "appendicolith with posterior acoustic shadowing", location: "appendiceal lumen", required: false }
-    - { finding: "increased vascularity on color Doppler", location: "appendiceal wall", required: false }
-  severity: moderate
-  laterality: right
+    - { finding: "Free fluid in Morison pouch (hepatorenal recess)", location: "right upper quadrant", required: true }
+    - { finding: "Free fluid in the pelvis (rectovesical/pouch of Douglas)", location: "pelvis", required: true }
+    - { finding: "Free fluid in the splenorenal recess", location: "left upper quadrant", required: false }
+    - { finding: "Flat IVC with complete inspiratory collapse", location: "subxiphoid IVC view", required: false }
+  severity: critical
+  laterality: bilateral
   negatives:
-    - appendiceal perforation
-    - periappendiceal abscess
-    - free intraperitoneal fluid
-    - small bowel obstruction
-    - right ovarian abnormality
+    - "No pericardial effusion"
+    - "No pneumothorax on eFAST"
 pattern_checks:
-  - { name: appendicitis_mentioned, check_type: regex, pattern: "appendicitis|inflam.*appendix|appendic", required: true }
-  - { name: non_compressible, check_type: regex, pattern: "non.?compress|incompress|fail.*compress|not.*compress", required: true }
-  - { name: diameter_threshold, check_type: regex, pattern: "(>|exceed|greater).*6\\s*mm|dilat.*append|enlarg.*append|\\d+\\s*mm", required: true }
-  - { name: no_perforation, check_type: regex, pattern: "no.*(perforat|abscess|rupture|free\\s+fluid)", required: false }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(hemorrhagic shock|hemoperitoneum|free fluid|intra.?abdominal (hemorrhage|blood|fluid))", required: true }
+  - { name: "fast_positive", check_type: regex, pattern: "(?i)(FAST.{0,15}positive|free fluid|Morison.?s? pouch|hepatorenal (recess|space))", required: true }
+  - { name: "multiple_quadrants", check_type: regex, pattern: "(?i)((pelvi(s|c)|Douglas|rectovesical).{0,60}(Morison|RUQ|LUQ)|(Morison|RUQ|LUQ).{0,60}(pelvi|Douglas|rectovesical))", required: true }
 reference_solution: |
-  Graded compression ultrasound of the right lower quadrant demonstrates a
-  non-compressible, blind-ending tubular structure in the expected location of
-  the appendix, measuring 9 mm in maximal outer diameter, exceeding the normal
-  threshold of 6 mm. The appendiceal wall is hyperemic with increased vascularity
-  on color Doppler interrogation. The surrounding mesenteric fat appears
-  hyperechoic and inflamed, consistent with periappendiceal fat stranding. A
-  small echogenic focus with posterior acoustic shadowing is identified within
-  the appendiceal lumen, compatible with an appendicolith. No periappendiceal
-  fluid collection or abscess is seen. The terminal ileum and cecum appear
-  unremarkable. No free intraperitoneal fluid is identified.
-  Impression: Acute appendicitis with dilated non-compressible appendix
-  measuring 9 mm and appendicolith. No evidence of perforation or abscess.
-  Surgical consultation recommended.
+  FAST examination is positive for free intraperitoneal fluid. Anechoic fluid is identified in Morison pouch (hepatorenal recess) measuring a stripe of approximately 2 cm. Free fluid is also present in the splenorenal recess and pelvis. The IVC is flat and completely collapses with respiration, consistent with hypovolemia. No pericardial effusion is identified. Lung sliding is present bilaterally. In the setting of blunt abdominal trauma with hemodynamic instability, these findings indicate significant hemoperitoneum consistent with hemorrhagic shock.
 condition_present: true
 confusion_pair: null
-source_dataset: omnimedvqa-open
+source_dataset: openem-grounded
 tags:
-  - appendicitis
-  - abdomen
+  - trauma
   - emergency
-  - graded-compression
-  - appendicolith
+  - fast
+  - pocus

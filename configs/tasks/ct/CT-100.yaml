@@ -1,0 +1,38 @@
+id: CT-100
+name: "Guillain-Barre syndrome workup on contrast-enhanced CT spine"
+modality: ct
+anatomy: spine
+task_type: diagnosis
+difficulty: advanced
+image_ref: "ct/openem/guillain-barre-syndrome.png"
+prompt_template: diagnosis
+condition_id: "guillain-barre-syndrome"
+lostbench_scenario_id: ""
+ground_truth:
+  primary_diagnosis: "Guillain-Barre syndrome with cauda equina nerve root enhancement"
+  differential:
+    - "Chronic inflammatory demyelinating polyneuropathy (CIDP)"
+    - "Leptomeningeal carcinomatosis"
+    - "Infectious polyradiculitis (CMV)"
+  key_findings:
+    - { finding: "Enhancement and thickening of the cauda equina nerve roots", location: "lumbar thecal sac", required: true }
+    - { finding: "Smooth enhancement of the anterior nerve roots", location: "lumbar and sacral nerve roots", required: true }
+    - { finding: "No compressive lesion or disc herniation", location: "lumbar spine", required: false }
+  severity: "severe"
+  laterality: "bilateral"
+  negatives:
+    - "No spinal cord compression"
+    - "No epidural mass"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(Guillain.?Barr|GBS|nerve\\s*root\\s*enhancement|polyradiculopathy)", required: true }
+  - { name: "key_finding_enhancement", check_type: regex, pattern: "(?i)(nerve\\s*root.*enhance|cauda\\s*equina.*enhance|root.*thicken)", required: true }
+reference_solution: |
+  Contrast-enhanced CT of the lumbar spine demonstrates smooth enhancement and thickening of the cauda equina nerve roots, particularly involving the anterior (motor) roots. No compressive disc herniation, epidural mass, or spinal cord abnormality is identified. The enhancement pattern is bilateral and symmetric. No leptomeningeal nodularity to suggest carcinomatosis. In the clinical context of ascending weakness and areflexia, findings support the diagnosis of Guillain-Barre syndrome. MRI is recommended for more detailed evaluation, and CSF analysis for albuminocytologic dissociation.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - neuro
+  - spine
+  - emergency
+  - autoimmune

@@ -1,54 +1,37 @@
 id: CT-057
-name: Appendicitis negative (normal appendix)
+name: "Acute pyelonephritis on contrast-enhanced CT abdomen"
 modality: ct
 anatomy: abdomen
 task_type: diagnosis
-difficulty: basic
-image_ref: ct/eurorad/EUR_0057.png
+difficulty: intermediate
+image_ref: "ct/openem/pyelonephritis.png"
 prompt_template: diagnosis
+condition_id: "pyelonephritis"
+lostbench_scenario_id: ""
 ground_truth:
-  primary_diagnosis: "Normal appendix, no evidence of appendicitis"
+  primary_diagnosis: "Acute pyelonephritis"
   differential:
-    - early appendicitis below imaging threshold
-    - mesenteric lymphadenitis
-    - epiploic appendagitis
-    - right ovarian pathology
+    - "Renal infarct"
+    - "Renal cell carcinoma"
+    - "Renal lymphoma"
   key_findings:
-    - { finding: "normal-caliber appendix without wall thickening", location: "right lower quadrant", required: true }
-    - { finding: "no periappendiceal fat stranding", location: "surrounding appendix", required: true }
-    - { finding: "appendix measures less than 6 mm", location: "appendix", required: false }
-    - { finding: "no free fluid in right lower quadrant", location: "right lower quadrant", required: false }
-  severity: mild
-  laterality: right
+    - { finding: "Striated nephrogram with wedge-shaped areas of decreased enhancement", location: "left kidney", required: true }
+    - { finding: "Perinephric fat stranding", location: "left perinephric space", required: true }
+    - { finding: "Renal enlargement", location: "left kidney", required: false }
+  severity: "moderate"
+  laterality: "left"
   negatives:
-    - appendiceal dilatation
-    - appendiceal wall thickening
-    - periappendiceal inflammation
-    - appendicolith
-    - abscess
-    - free fluid
+    - "No renal abscess"
+    - "No obstructing calculus"
 pattern_checks:
-  - { name: normal_appendix, check_type: regex, pattern: "normal.*appendix|appendix.*normal|no.*appendicitis|unremarkable.*appendix", required: true }
-  - { name: no_inflammation, check_type: regex, pattern: "no.{0,30}(inflam|strand|appendicitis|thicken)", required: true }
-  - { name: no_dilatation, check_type: regex, pattern: "no.{0,30}(dilat|distend|enlarg)|normal.{0,10}(caliber|size|diameter)", required: true }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(pyelonephritis|renal\\s*infection|kidney\\s*infection)", required: true }
+  - { name: "key_finding_nephrogram", check_type: regex, pattern: "(?i)(striated\\s*nephrogram|wedge.?shaped|decreased\\s*enhance|perinephric\\s*strand)", required: true }
 reference_solution: |
-  Contrast-enhanced CT of the abdomen and pelvis demonstrates a
-  normal-caliber appendix in the right lower quadrant measuring 5 mm in
-  maximal diameter, well below the 6 mm threshold for concern. The
-  appendiceal wall is thin and enhances normally without thickening. There
-  is no periappendiceal fat stranding or inflammatory change. No
-  appendicolith. No periappendiceal fluid collection or abscess. The cecum
-  and terminal ileum are unremarkable. No mesenteric lymphadenopathy. The
-  right lower quadrant is otherwise unremarkable without free fluid. The
-  remaining visualized bowel appears normal.
-  Impression: Normal appendix without evidence of appendicitis. Alternative
-  etiology for the patient's right lower quadrant pain should be
-  considered.
-condition_present: false
+  Contrast-enhanced CT of the abdomen demonstrates a striated nephrogram of the left kidney with multiple wedge-shaped areas of decreased cortical enhancement radiating from the papillae to the cortical surface. The left kidney is mildly enlarged with perinephric fat stranding. No renal abscess or obstructing ureteral calculus is identified. The right kidney enhances normally. Findings are consistent with acute left pyelonephritis.
+condition_present: true
 confusion_pair: null
-source_dataset: eurorad
+source_dataset: openem-grounded
 tags:
-  - normal
-  - appendix
-  - abdomen
-  - negative-study
+  - urologic
+  - infectious
+  - abdominal

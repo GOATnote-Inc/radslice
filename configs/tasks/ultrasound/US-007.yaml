@@ -1,54 +1,40 @@
 id: US-007
-name: Normal liver ultrasound
+name: "Infective Endocarditis on Echocardiography"
 modality: ultrasound
-anatomy: abdomen
+anatomy: chest
 task_type: diagnosis
-difficulty: basic
-image_ref: ultrasound/radimagenet/US_0007.png
+difficulty: expert
+image_ref: "ultrasound/openem/infective-endocarditis.png"
 prompt_template: diagnosis
+condition_id: "infective-endocarditis"
+lostbench_scenario_id: ""
 ground_truth:
-  primary_diagnosis: "Normal liver"
+  primary_diagnosis: "Infective endocarditis with mitral valve vegetation"
   differential:
-    - early hepatic steatosis
-    - diffuse hepatic disease below sonographic threshold
-    - compensatory hepatic hypertrophy
+    - "Nonbacterial thrombotic endocarditis (marantic)"
+    - "Myxomatous mitral valve disease with prolapse"
+    - "Papillary fibroelastoma"
   key_findings:
-    - { finding: "homogeneous hepatic parenchymal echogenicity isoechoic to renal cortex", location: "hepatic parenchyma", required: true }
-    - { finding: "normal hepatic vasculature and portal vein patency", location: "portal vein and hepatic veins", required: true }
-    - { finding: "smooth hepatic contour", location: "liver surface", required: false }
-  severity: mild
-  laterality: ""
+    - { finding: "Oscillating echogenic mass on mitral valve leaflet", location: "anterior mitral leaflet", required: true }
+    - { finding: "Associated mitral regurgitation on color Doppler", location: "mitral valve", required: true }
+    - { finding: "Irregular thickening of valve leaflet", location: "mitral valve", required: false }
+    - { finding: "Possible paravalvular abscess", location: "mitral annulus", required: false }
+  severity: critical
+  laterality: n/a
   negatives:
-    - hepatic steatosis
-    - focal hepatic lesion
-    - biliary dilation
-    - ascites
-    - portal vein thrombosis
-    - splenomegaly
-    - cirrhotic morphology
+    - "No aortic valve involvement"
+    - "No pericardial effusion"
 pattern_checks:
-  - { name: normal_identified, check_type: regex, pattern: "normal|unremarkable|no\\s+(abnormal|pathol|significant)", required: true }
-  - { name: no_steatosis, check_type: regex, pattern: "no.*(steatosis|fatty|fat\\s+infiltrat|increased.*echogenic)", required: true }
-  - { name: no_focal_lesion, check_type: regex, pattern: "no.*(focal|mass|lesion|nodule|hemangioma)", required: true }
-  - { name: homogeneous, check_type: regex, pattern: "homogeneous|uniform|normal.*echogenicity|echo.?texture", required: false }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(endocarditis|vegetation|valvular infection|valve vegetation)", required: true }
+  - { name: "vegetation_finding", check_type: regex, pattern: "(?i)(vegetation|oscillating mass|echogenic mass|mobile mass.{0,20}valve)", required: true }
+  - { name: "valve_identified", check_type: regex, pattern: "(?i)(mitral valve|mitral leaflet|MV)", required: true }
 reference_solution: |
-  Ultrasound of the right upper quadrant demonstrates a normal-appearing liver
-  with homogeneous parenchymal echogenicity. The hepatic echogenicity is
-  isoechoic to the adjacent right renal cortex without increased brightness
-  to suggest steatosis. The liver contour is smooth and regular. The hepatic
-  vasculature is well-visualized with patent hepatic veins draining normally
-  into the inferior vena cava. The portal vein is patent with hepatopetal
-  flow and measures within normal limits. No focal hepatic lesion, mass, or
-  cystic structure is identified. The intrahepatic and extrahepatic bile ducts
-  are not dilated. No ascites or splenomegaly is present.
-  Impression: Normal hepatic ultrasound. No steatosis, focal lesion, or
-  biliary abnormality.
-condition_present: false
+  Transthoracic echocardiography demonstrates an oscillating, irregularly shaped echogenic mass measuring approximately 12 x 8 mm attached to the atrial surface of the anterior mitral valve leaflet, consistent with a vegetation. Color Doppler reveals moderate to severe mitral regurgitation with an eccentric jet directed posterolaterally. The leaflet appears thickened with possible early perforation. No aortic valve vegetations are identified. Left ventricular systolic function is preserved. These findings are highly suggestive of infective endocarditis involving the mitral valve. TEE is recommended for further characterization and assessment for paravalvular abscess.
+condition_present: true
 confusion_pair: null
-source_dataset: radimagenet
+source_dataset: openem-grounded
 tags:
-  - normal
-  - liver
-  - abdomen
-  - hepatic
-  - negative-study
+  - cardiac
+  - emergency
+  - echocardiography
+  - infectious

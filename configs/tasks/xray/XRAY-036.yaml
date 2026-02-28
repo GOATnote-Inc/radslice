@@ -1,58 +1,37 @@
 id: XRAY-036
-name: Right upper lobe cavitary lesion
+name: "Compartment Syndrome on Extremity X-ray"
 modality: xray
-anatomy: chest
+anatomy: extremity
 task_type: diagnosis
-difficulty: expert
-image_ref: xray/omnimedvqa/CXR_0036.png
+difficulty: advanced
+image_ref: "xray/openem/compartment-syndrome.png"
 prompt_template: diagnosis
+condition_id: "compartment-syndrome"
+lostbench_scenario_id: "MTR-027"
 ground_truth:
-  primary_diagnosis: "Right upper lobe cavitary lesion"
+  primary_diagnosis: "Fracture with concern for compartment syndrome"
   differential:
-    - cavitary tuberculosis
-    - lung abscess
-    - cavitary squamous cell carcinoma
-    - granulomatosis with polyangiitis (Wegener)
-    - septic emboli
-    - fungal infection (aspergilloma)
+    - "Simple fracture without compartment syndrome"
+    - "Deep vein thrombosis"
+    - "Rhabdomyolysis"
   key_findings:
-    - { finding: "thick-walled cavitary lesion", location: "right upper lobe", required: true }
-    - { finding: "air-fluid level within the cavity", location: "right upper lobe", required: false }
-    - { finding: "surrounding consolidation or ground-glass opacity", location: "right upper lobe", required: true }
-    - { finding: "cavity wall thickness irregular", location: "right upper lobe", required: false }
-  severity: severe
+    - { finding: "Tibial shaft fracture", location: "tibial diaphysis", required: true }
+    - { finding: "Significant soft tissue swelling obscuring fascial planes", location: "lower leg", required: true }
+    - { finding: "Displacement or comminution of fracture fragments", location: "tibial shaft", required: false }
+  severity: critical
   laterality: right
   negatives:
-    - left lung cavitation
-    - pneumothorax
-    - pleural effusion
-    - mediastinal lymphadenopathy
-    - calcified granulomas
+    - "No gas in soft tissues suggesting necrotizing infection"
 pattern_checks:
-  - { name: cavitary_mentioned, check_type: regex, pattern: "(?i)(cavit(y|ary)|cavitat)", required: true }
-  - { name: right_upper_lobe, check_type: regex, pattern: "(?i)right\\s+upper\\s+(lobe|zone)", required: true }
-  - { name: wall_described, check_type: regex, pattern: "(?i)(thick.{0,15}wall|irregular.{0,15}wall|wall.{0,15}(thick|irregular))", required: true }
-  - { name: differential, check_type: regex, pattern: "(?i)(tubercul|TB|abscess|carcinoma|malignan|fungal|Wegener|granulomatos)", required: false }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(compartment syndrome|tibial fracture|fracture.*soft tissue swelling)", required: true }
+  - { name: "swelling_finding", check_type: regex, pattern: "(?i)(soft tissue swelling|swelling|obscured fascial planes|edema)", required: true }
 reference_solution: |
-  PA chest radiograph demonstrates a thick-walled cavitary lesion in the right
-  upper lobe measuring approximately 4 cm in diameter. The cavity walls are
-  irregular in thickness, with the thickest portion measuring over 1 cm. An
-  air-fluid level is present within the cavity. There is surrounding parenchymal
-  consolidation/opacification adjacent to the cavity. No additional cavitary
-  lesions or satellite nodules are identified. The left lung is clear. No pleural
-  effusion or pneumothorax. The mediastinum appears normal. The differential
-  diagnosis includes cavitary tuberculosis, lung abscess, cavitary squamous cell
-  carcinoma, and granulomatosis with polyangiitis. Sputum for AFB and cultures,
-  CT chest, and consideration of bronchoscopy with biopsy are recommended.
-  Impression: Thick-walled cavitary lesion in the right upper lobe — infectious
-  versus neoplastic etiology. Further workup required.
+  AP and lateral radiographs of the right lower leg demonstrate a comminuted fracture of the tibial shaft with moderate displacement. There is marked soft tissue swelling surrounding the fracture site with loss of normal fascial plane visualization. No subcutaneous gas is identified. In the clinical setting of severe pain out of proportion to the fracture, these imaging findings combined with the fracture pattern raise concern for compartment syndrome. Compartment pressure measurement is the diagnostic standard and should not be delayed for additional imaging.
 condition_present: true
 confusion_pair: null
-source_dataset: omnimedvqa-open
+source_dataset: openem-grounded
 tags:
-  - cavitary-lesion
-  - right-upper-lobe
-  - tuberculosis
-  - lung-abscess
-  - oncology
-  - infection
+  - musculoskeletal
+  - emergency
+  - trauma
+  - surgical

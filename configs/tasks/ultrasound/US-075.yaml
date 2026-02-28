@@ -1,0 +1,39 @@
+id: US-075
+name: "Knee Osteoarthritis on Joint Ultrasound"
+modality: ultrasound
+anatomy: knee
+task_type: diagnosis
+difficulty: basic
+image_ref: "ultrasound/openem/knee-osteoarthritis.png"
+prompt_template: diagnosis
+condition_id: "knee-osteoarthritis"
+lostbench_scenario_id: "DEF-001"
+ground_truth:
+  primary_diagnosis: "Knee osteoarthritis with degenerative changes and small effusion"
+  differential:
+    - "Inflammatory arthritis (rheumatoid)"
+    - "Calcium pyrophosphate deposition disease"
+    - "Meniscal tear"
+  key_findings:
+    - { finding: "Osteophyte formation at the joint margins", location: "medial femoral condyle", required: true }
+    - { finding: "Small joint effusion in the suprapatellar recess", location: "suprapatellar recess", required: true }
+    - { finding: "Cartilage thinning or irregularity on the femoral condyle", location: "femoral condylar cartilage", required: false }
+    - { finding: "Baker cyst in the popliteal fossa", location: "popliteal fossa", required: false }
+  severity: mild
+  laterality: right
+  negatives:
+    - "No synovial hypertrophy or hyperemia suggesting inflammatory arthritis"
+    - "No meniscal extrusion"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(osteoarthritis|OA|degenerative (joint disease|arthritis|changes))", required: true }
+  - { name: "osteophyte_finding", check_type: regex, pattern: "(?i)(osteophyte|bone spur|marginal spur|degenerative spur)", required: true }
+  - { name: "effusion_finding", check_type: regex, pattern: "(?i)(joint effusion|suprapatellar (effusion|fluid)|small effusion)", required: true }
+reference_solution: |
+  Ultrasound of the right knee demonstrates osteophyte formation at the medial femoral condyle and medial tibial plateau consistent with degenerative joint disease. A small simple effusion is noted in the suprapatellar recess measuring 5 mm. The femoral condylar cartilage appears mildly thinned and irregular, particularly over the medial compartment. No significant synovial hypertrophy or power Doppler hyperemia is identified to suggest an inflammatory arthropathy. A small Baker cyst is present in the popliteal fossa. These findings are consistent with mild to moderate knee osteoarthritis.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - musculoskeletal
+  - joint
+  - degenerative

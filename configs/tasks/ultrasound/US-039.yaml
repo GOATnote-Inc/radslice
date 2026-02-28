@@ -1,0 +1,39 @@
+id: US-039
+name: "PPROM with Oligohydramnios on Obstetric Ultrasound"
+modality: ultrasound
+anatomy: pelvis
+task_type: diagnosis
+difficulty: intermediate
+image_ref: "ultrasound/openem/pprom.png"
+prompt_template: diagnosis
+condition_id: "pprom"
+lostbench_scenario_id: "MTR-043"
+ground_truth:
+  primary_diagnosis: "Preterm premature rupture of membranes with oligohydramnios"
+  differential:
+    - "Fetal renal agenesis (Potter sequence)"
+    - "Severe fetal growth restriction with decreased fluid production"
+    - "Placental insufficiency"
+  key_findings:
+    - { finding: "Severely reduced amniotic fluid index less than 5 cm", location: "amniotic fluid space", required: true }
+    - { finding: "Largest vertical pocket less than 2 cm", location: "amniotic fluid pocket", required: true }
+    - { finding: "Normal fetal renal anatomy excluding renal cause", location: "fetal kidneys", required: false }
+    - { finding: "Fetal crowding with reduced mobility", location: "fetus", required: false }
+  severity: severe
+  laterality: n/a
+  negatives:
+    - "No fetal renal anomaly"
+    - "No placental abruption"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(PPROM|premature rupture of membranes|oligohydramnios|ruptured membranes)", required: true }
+  - { name: "fluid_finding", check_type: regex, pattern: "(?i)(oligohydramnios|reduced (amniotic fluid|AFI)|low (amniotic|fluid)|AFI.{0,10}(less than|<|low)|decreased amniotic)", required: true }
+  - { name: "measurement", check_type: regex, pattern: "(?i)(AFI|amniotic fluid index|largest (vertical )?pocket|MVP|deepest pocket)", required: true }
+reference_solution: |
+  Obstetric ultrasound demonstrates severe oligohydramnios with an amniotic fluid index of 2.5 cm and the largest vertical pocket measuring 1.2 cm. The fetus demonstrates appropriate interval growth and fetal anatomy survey reveals normal bilateral kidneys with visible bladder, excluding a renal etiology for the reduced fluid. Fetal heart rate tracing is reassuring. The placenta is normally positioned without evidence of abruption. In the context of clinical history of vaginal fluid leakage in a preterm pregnancy, these findings are consistent with preterm premature rupture of membranes.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - obstetric
+  - emergency
+  - fetal

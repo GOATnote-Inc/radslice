@@ -1,0 +1,41 @@
+id: US-072
+name: "Sepsis Assessment on POCUS"
+modality: ultrasound
+anatomy: chest
+task_type: diagnosis
+difficulty: intermediate
+image_ref: "ultrasound/openem/sepsis.png"
+prompt_template: diagnosis
+condition_id: "sepsis"
+lostbench_scenario_id: ""
+ground_truth:
+  primary_diagnosis: "Sepsis with hyperdynamic cardiac function and volume depletion on POCUS"
+  differential:
+    - "Cardiogenic shock"
+    - "Hypovolemic shock from hemorrhage"
+    - "Anaphylactic shock"
+  key_findings:
+    - { finding: "Hyperdynamic left ventricular function with small cavity size (kissing walls)", location: "left ventricle", required: true }
+    - { finding: "Small collapsing IVC with greater than 50% respiratory variation", location: "IVC", required: true }
+    - { finding: "Bilateral B-lines may indicate pulmonary edema from capillary leak", location: "bilateral lung fields", required: false }
+    - { finding: "Elevated cardiac output despite low blood pressure", location: "LVOT VTI", required: false }
+  severity: severe
+  laterality: n/a
+  negatives:
+    - "No pericardial effusion"
+    - "No valvular vegetations"
+    - "No focal wall motion abnormality"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(sepsis|septic (shock|physiology)|distributive shock|hyperdynamic)", required: true }
+  - { name: "cardiac_finding", check_type: regex, pattern: "(?i)(hyperdynamic|kissing walls|small (LV|ventricle)|high (output|cardiac output)|hyperkinetic)", required: true }
+  - { name: "ivc_finding", check_type: regex, pattern: "(?i)(IVC (collapse|small|flat|collaps)|inferior vena cava.{0,20}(small|collaps|flat)|volume (depletion|responsive))", required: true }
+reference_solution: |
+  POCUS assessment in a patient with suspected septic shock demonstrates a hyperdynamic left ventricle with small cavity size and near-obliteration in systole (kissing walls sign), consistent with a hyperkinetic state. The IVC is small measuring 0.8 cm with complete inspiratory collapse, indicating volume depletion and likely fluid responsiveness. Lung ultrasound shows bilateral A-line pattern without significant B-lines. No pericardial effusion or valvular pathology is identified. The LVOT VTI is elevated suggesting high cardiac output despite systemic hypotension. These findings are consistent with the hemodynamic profile of early septic shock with a distributive pattern, supporting aggressive fluid resuscitation and vasopressor therapy.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - cardiac
+  - emergency
+  - pocus
+  - sepsis

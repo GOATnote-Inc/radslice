@@ -1,59 +1,38 @@
 id: MRI-022
-name: Meningioma on brain MRI
+name: "Septic Arthritis of the Knee on MRI"
 modality: mri
-anatomy: head
+anatomy: knee
 task_type: diagnosis
-difficulty: intermediate
-image_ref: mri/eurorad/EUR_0022.png
+difficulty: advanced
+image_ref: "mri/openem/septic-arthritis.png"
 prompt_template: diagnosis
+condition_id: "septic-arthritis"
+lostbench_scenario_id: "MTR-013"
 ground_truth:
-  primary_diagnosis: "Left convexity meningioma"
+  primary_diagnosis: "Septic arthritis of the knee on MRI"
   differential:
-    - dural metastasis
-    - hemangiopericytoma (solitary fibrous tumor)
-    - dural lymphoma
-    - granulomatous pachymeningitis
-    - plasmacytoma
+    - "Gout flare"
+    - "Reactive arthritis"
+    - "Hemarthrosis"
   key_findings:
-    - { finding: "well-defined extra-axial mass with broad dural base and homogeneous intense enhancement", location: "left frontoparietal convexity", required: true }
-    - { finding: "dural tail sign (linear enhancement of adjacent dura)", location: "dura adjacent to the mass", required: true }
-    - { finding: "T1 isointense and T2 isointense to slightly hyperintense signal relative to gray matter", location: "left convexity mass", required: false }
-    - { finding: "CSF cleft between the mass and brain parenchyma confirming extra-axial location", location: "interface between mass and left frontal cortex", required: false }
-  severity: moderate
-  laterality: left
+    - { finding: "Complex joint effusion with synovial thickening and enhancement", location: "Knee joint", required: true }
+    - { finding: "Periarticular soft tissue edema on T2/STIR", location: "Periarticular soft tissues of the knee", required: true }
+    - { finding: "Bone marrow edema in adjacent subchondral bone suggesting osteomyelitis", location: "Distal femoral condyle and proximal tibial plateau", required: false }
+  severity: "severe"
+  laterality: "right"
   negatives:
-    - intra-axial location
-    - central necrosis or cystic degeneration
-    - significant surrounding edema
-    - restricted diffusion (would favor lymphoma or atypical meningioma)
-    - bone destruction (would favor aggressive lesion)
+    - "No periarticular abscess"
+    - "No ligamentous injury"
 pattern_checks:
-  - { name: meningioma_mentioned, check_type: regex, pattern: "meningioma|meningeal.*tumor|dural.*mass|extra.?axial.*mass", required: true }
-  - { name: dural_tail, check_type: regex, pattern: "dural\\s+tail|meningeal.*enhanc|broad.*dural.*base|dura.*enhanc", required: true }
-  - { name: extra_axial, check_type: regex, pattern: "extra.?axial|dural.?based|CSF\\s+cleft|meningeal", required: true }
-  - { name: laterality_left, check_type: regex, pattern: "left", required: false }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)septic\\s+arthritis", required: true }
+  - { name: "effusion_finding", check_type: regex, pattern: "(?i)(effusion|synovial.*(thicken|enhanc))", required: true }
+  - { name: "laterality", check_type: regex, pattern: "(?i)right", required: true }
 reference_solution: |
-  MRI of the brain with and without gadolinium demonstrates a well-circumscribed
-  extra-axial mass along the left frontoparietal convexity measuring 4.0 x
-  3.2 x 2.8 cm. The mass has a broad dural base and demonstrates homogeneous
-  intense enhancement on post-gadolinium T1-weighted images. A dural tail sign
-  is present with linear enhancement of the adjacent dura extending beyond the
-  margins of the mass. The mass is isointense to gray matter on T1 and mildly
-  hyperintense on T2-weighted images. A CSF cleft is identified between the
-  mass and the underlying brain parenchyma, confirming its extra-axial
-  location. There is minimal surrounding vasogenic edema. Mild mass effect on
-  the adjacent left frontal cortex without significant midline shift. No
-  restricted diffusion. No calcification on gradient echo sequences. No bone
-  erosion or hyperostosis.
-  Impression: Left frontoparietal convexity extra-axial mass with dural tail
-  sign, most consistent with a meningioma (WHO grade I). Neurosurgical
-  consultation for size-based management.
+  MRI of the right knee demonstrates a large complex joint effusion with marked synovial thickening and avid post-gadolinium enhancement, consistent with septic arthritis. Extensive periarticular soft tissue edema is noted on STIR sequences. Subchondral bone marrow edema is present in the distal femoral condyles and proximal tibial plateau, raising concern for early osteomyelitis. No periarticular abscess or drainable collection. No ligamentous or meniscal injury. Urgent joint aspiration is recommended for confirmation and culture.
 condition_present: true
 confusion_pair: null
-source_dataset: eurorad
+source_dataset: openem-grounded
 tags:
-  - meningioma
-  - brain-tumor
-  - neuro
-  - extra-axial
-  - benign
+  - musculoskeletal
+  - infection
+  - emergency

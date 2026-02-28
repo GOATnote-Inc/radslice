@@ -1,58 +1,39 @@
 id: MRI-030
-name: Ovarian dermoid cyst (mature teratoma)
+name: "Cerebral Malaria on Brain MRI"
 modality: mri
-anatomy: pelvis
-task_type: vqa
-difficulty: intermediate
-image_ref: mri/omnimedvqa/MRI_0030.png
-prompt_template: vqa
+anatomy: head
+task_type: diagnosis
+difficulty: expert
+image_ref: "mri/openem/cerebral-malaria.png"
+prompt_template: diagnosis
+condition_id: "cerebral-malaria"
+lostbench_scenario_id: "MTR-038"
 ground_truth:
-  primary_diagnosis: "Right ovarian mature cystic teratoma (dermoid cyst)"
+  primary_diagnosis: "Cerebral malaria with diffuse cerebral edema and multifocal ischemic lesions on MRI"
   differential:
-    - hemorrhagic ovarian cyst
-    - endometrioma
-    - ovarian cystadenoma
-    - tubo-ovarian abscess
-    - ectopic pregnancy
+    - "Viral encephalitis"
+    - "Cerebral venous sinus thrombosis with venous infarcts"
+    - "Thrombotic thrombocytopenic purpura (TTP) with cerebral involvement"
   key_findings:
-    - { finding: "well-circumscribed cystic mass with macroscopic fat demonstrating T1 hyperintense signal that drops on fat-suppressed sequences", location: "right adnexa / right ovary", required: true }
-    - { finding: "Rokitansky nodule (dermoid plug) projecting into the cyst lumen", location: "dependent aspect of the cystic mass", required: true }
-    - { finding: "chemical shift artifact at the fat-fluid interface", location: "within the cystic mass", required: false }
-    - { finding: "no solid enhancing component", location: "cyst wall and Rokitansky nodule", required: false }
-  severity: mild
-  laterality: right
+    - { finding: "Diffuse cerebral edema with sulcal effacement and T2/FLAIR hyperintensity", location: "Bilateral cerebral hemispheres", required: true }
+    - { finding: "Multifocal punctate areas of restricted diffusion on DWI", location: "Bilateral deep white matter and cortical-subcortical junction", required: true }
+    - { finding: "Petechial hemorrhages on SWI/GRE", location: "Bilateral cerebral white matter", required: false }
+  severity: "critical"
+  laterality: "bilateral"
   negatives:
-    - solid enhancing components (would raise concern for immature teratoma)
-    - ascites
-    - peritoneal implants
-    - contralateral adnexal mass
-    - fat-fluid level in the cul-de-sac (ruptured dermoid)
+    - "No large territorial infarction"
+    - "No intracranial mass lesion"
 pattern_checks:
-  - { name: teratoma_or_dermoid, check_type: regex, pattern: "teratoma|dermoid|mature\\s+cystic", required: true }
-  - { name: fat_content, check_type: regex, pattern: "fat|T1.*hyperintens.*drop|lipid|fat.?suppres|fat.?sat.*signal\\s+loss", required: true }
-  - { name: ovarian, check_type: regex, pattern: "ovar|adnex", required: true }
-  - { name: laterality_right, check_type: regex, pattern: "right", required: true }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)cerebral\\s+malaria", required: true }
+  - { name: "cerebral_edema", check_type: regex, pattern: "(?i)(cerebral\\s+edema|diffuse.*(edema|swelling))", required: true }
+  - { name: "multifocal_ischemia", check_type: regex, pattern: "(?i)(multifocal|punctate|scattered).*(restrict|isch|DWI|diffusion)", required: true }
 reference_solution: |
-  MRI of the pelvis demonstrates a well-circumscribed cystic mass in the right
-  adnexa measuring 6.2 x 5.0 cm, arising from the right ovary. The mass
-  contains macroscopic fat that is T1 hyperintense on non-fat-suppressed
-  sequences and loses signal on fat-suppressed images, confirming the lipid
-  content. A Rokitansky nodule (dermoid plug) is seen projecting into the cyst
-  lumen from the dependent wall. Chemical shift artifact is present at the
-  fat-fluid interface within the cyst. No solid enhancing components are
-  identified on post-gadolinium images, making malignant transformation
-  unlikely. No calcification, though teeth or bone elements may be present
-  within the Rokitansky nodule. The left ovary is normal. No free fluid.
-  No peritoneal implants or lymphadenopathy.
-  Impression: Right ovarian mature cystic teratoma (dermoid cyst) with
-  characteristic macroscopic fat and Rokitansky nodule. Benign appearance
-  without features of malignant transformation.
+  MRI of the brain demonstrates diffuse cerebral edema with bilateral sulcal effacement and T2/FLAIR hyperintensity. DWI shows multifocal punctate areas of restricted diffusion scattered throughout the bilateral deep white matter and at the cortical-subcortical junction, representing microischemic injury from parasitized erythrocyte sequestration. SWI sequences reveal petechial susceptibility artifacts in the white matter bilaterally. No large territorial infarction or intracranial mass. In the clinical context of confirmed Plasmodium falciparum infection with altered consciousness, findings are characteristic of cerebral malaria.
 condition_present: true
 confusion_pair: null
-source_dataset: omnimedvqa-open
+source_dataset: openem-grounded
 tags:
-  - teratoma
-  - ovary
-  - pelvic
-  - gynecologic
-  - benign
+  - neuro
+  - infection
+  - tropical
+  - emergency

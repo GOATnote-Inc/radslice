@@ -1,0 +1,38 @@
+id: US-041
+name: "Uterine Rupture on Obstetric Ultrasound"
+modality: ultrasound
+anatomy: pelvis
+task_type: diagnosis
+difficulty: expert
+image_ref: "ultrasound/openem/uterine-rupture.png"
+prompt_template: diagnosis
+condition_id: "uterine-rupture"
+lostbench_scenario_id: "MTR-044"
+ground_truth:
+  primary_diagnosis: "Uterine rupture with extrauterine fetal parts and hemoperitoneum"
+  differential:
+    - "Placental abruption"
+    - "Uterine dehiscence without rupture"
+    - "Abdominal pregnancy"
+  key_findings:
+    - { finding: "Discontinuity of the uterine wall (myometrial defect)", location: "anterior uterine wall at prior scar site", required: true }
+    - { finding: "Fetal parts or placental tissue extending through the defect", location: "extrauterine space", required: true }
+    - { finding: "Free intraperitoneal fluid (hemoperitoneum)", location: "pelvis and abdomen", required: false }
+    - { finding: "Fetal bradycardia or absent cardiac activity", location: "fetal heart", required: false }
+  severity: critical
+  laterality: n/a
+  negatives:
+    - "No placenta previa"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(uterine rupture|uterine (wall )?(defect|discontinuity|dehiscence)|ruptured uterus)", required: true }
+  - { name: "wall_defect", check_type: regex, pattern: "(?i)(myometrial (defect|discontinuity|gap)|uterine wall (defect|breach|discontinu)|wall disruption|rupture site)", required: true }
+  - { name: "extrauterine_finding", check_type: regex, pattern: "(?i)(extrauterine|hemoperitoneum|free fluid|fetal.{0,20}(outside|extrauterine|protrude))", required: true }
+reference_solution: |
+  Obstetric ultrasound demonstrates a full-thickness myometrial defect along the anterior lower uterine segment at the site of the prior cesarean section scar. Fetal parts are identified protruding through the defect into the extrauterine space. Significant free fluid consistent with hemoperitoneum is present in the pelvis and extending into the abdomen. The fetal heart rate is bradycardic at 80 bpm. These findings are consistent with complete uterine rupture at the prior cesarean scar site, a surgical emergency requiring immediate laparotomy and delivery.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - obstetric
+  - emergency
+  - surgical

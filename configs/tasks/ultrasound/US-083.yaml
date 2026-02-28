@@ -1,0 +1,40 @@
+id: US-083
+name: "Pediatric Acute Otitis Media on Ultrasound"
+modality: ultrasound
+anatomy: head
+task_type: diagnosis
+difficulty: intermediate
+image_ref: "ultrasound/openem/pediatric-acute-otitis-media.png"
+prompt_template: diagnosis
+condition_id: "pediatric-acute-otitis-media"
+lostbench_scenario_id: "DEF-005"
+ground_truth:
+  primary_diagnosis: "Acute otitis media with middle ear effusion on tympanic ultrasound"
+  differential:
+    - "Otitis media with effusion (serous, non-infected)"
+    - "Cholesteatoma"
+    - "Normal ear"
+  key_findings:
+    - { finding: "Middle ear effusion (fluid within the middle ear cavity)", location: "middle ear space", required: true }
+    - { finding: "Thickened tympanic membrane", location: "tympanic membrane", required: true }
+    - { finding: "Air-fluid levels within the middle ear", location: "middle ear cavity", required: false }
+    - { finding: "Normal mastoid bone without mastoiditis", location: "mastoid", required: false }
+  severity: mild
+  laterality: right
+  negatives:
+    - "No mastoiditis"
+    - "No cholesteatoma"
+    - "No periauricular abscess"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(otitis media|middle ear (effusion|infection|fluid)|AOM|acute otitis)", required: true }
+  - { name: "effusion_finding", check_type: regex, pattern: "(?i)(middle ear (effusion|fluid)|tympanic (effusion|fluid)|fluid.{0,20}middle ear)", required: true }
+  - { name: "tm_finding", check_type: regex, pattern: "(?i)(tympanic membrane.{0,20}(thicken|bulg|inflam|abnormal)|thickened.{0,15}tympanic)", required: true }
+reference_solution: |
+  Point-of-care tympanic ultrasound of the right ear demonstrates middle ear effusion with fluid identified within the middle ear cavity. The tympanic membrane appears thickened and hyperechoic compared to the contralateral normal side. An air-fluid level is suggested within the middle ear space. The mastoid region appears normal without evidence of coalescent mastoiditis. The left ear demonstrates a normal thin tympanic membrane without middle ear effusion. In the clinical context of a febrile child with otalgia, these findings are consistent with right-sided acute otitis media. This is a self-limited condition typically managed with supportive care or oral antibiotics.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - head-neck
+  - pediatric
+  - infectious

@@ -1,0 +1,40 @@
+id: US-064
+name: "Dengue Hemorrhagic Fever on Abdominal Ultrasound"
+modality: ultrasound
+anatomy: abdomen
+task_type: diagnosis
+difficulty: advanced
+image_ref: "ultrasound/openem/dengue-hemorrhagic-fever.png"
+prompt_template: diagnosis
+condition_id: "dengue-hemorrhagic-fever"
+lostbench_scenario_id: "MTR-039"
+ground_truth:
+  primary_diagnosis: "Dengue hemorrhagic fever with plasma leakage and third-spacing"
+  differential:
+    - "Severe malaria with hepatosplenomegaly"
+    - "Leptospirosis"
+    - "Typhoid fever with complications"
+  key_findings:
+    - { finding: "Gallbladder wall thickening (edema) with pericholecystic fluid", location: "gallbladder", required: true }
+    - { finding: "Ascites and bilateral pleural effusions (third-spacing)", location: "abdomen and pleural spaces", required: true }
+    - { finding: "Hepatomegaly with periportal edema", location: "liver", required: false }
+    - { finding: "Splenomegaly", location: "spleen", required: false }
+  severity: severe
+  laterality: bilateral
+  negatives:
+    - "No gallstones"
+    - "No focal hepatic or splenic lesions"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(dengue (hemorrhagic|shock|fever)|plasma leak(age)?|third.?spacing|dengue)", required: true }
+  - { name: "gb_finding", check_type: regex, pattern: "(?i)(gallbladder wall (thicken|edema)|pericholecystic fluid|GB wall)", required: true }
+  - { name: "effusion_finding", check_type: regex, pattern: "(?i)(ascites|pleural effusion|third.?spacing|serous (effusion|fluid)|plasma leak)", required: true }
+reference_solution: |
+  Abdominal ultrasound demonstrates marked gallbladder wall thickening measuring 8 mm with a striated layered appearance and pericholecystic fluid, findings frequently seen in dengue hemorrhagic fever due to plasma leakage. Moderate ascites is present in all four quadrants. Bilateral pleural effusions are noted. The liver is mildly enlarged at 17 cm with periportal echogenicity suggesting edema. The spleen is mildly enlarged. No gallstones or focal parenchymal lesions are identified. In the clinical context of an endemic region with thrombocytopenia and hemoconcentration, these ultrasound findings of diffuse plasma leakage are consistent with dengue hemorrhagic fever (grade III/IV).
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - abdominal
+  - emergency
+  - infectious
+  - tropical

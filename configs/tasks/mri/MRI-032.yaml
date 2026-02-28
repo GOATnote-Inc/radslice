@@ -1,60 +1,38 @@
 id: MRI-032
-name: Prostate cancer on multiparametric MRI
+name: "Malignant Otitis Externa on MRI"
 modality: mri
-anatomy: pelvis
-task_type: report_generation
-difficulty: expert
-image_ref: mri/eurorad/EUR_0032.png
-prompt_template: report_generation
+anatomy: head
+task_type: diagnosis
+difficulty: advanced
+image_ref: "mri/openem/malignant-otitis-externa.png"
+prompt_template: diagnosis
+condition_id: "malignant-otitis-externa"
+lostbench_scenario_id: "MTR-078"
 ground_truth:
-  primary_diagnosis: "Clinically significant prostate cancer (PI-RADS 5) in the left peripheral zone"
+  primary_diagnosis: "Malignant (necrotizing) otitis externa with skull base osteomyelitis on MRI"
   differential:
-    - prostatitis (acute or granulomatous)
-    - post-biopsy hemorrhage artifact
-    - benign prostatic hyperplasia nodule
-    - prostatic stromal tumor
+    - "Squamous cell carcinoma of the external auditory canal"
+    - "Cholesteatoma with skull base erosion"
+    - "Langerhans cell histiocytosis"
   key_findings:
-    - { finding: "focal T2 hypointense lesion in the peripheral zone", location: "left peripheral zone at the mid-gland level", required: true }
-    - { finding: "markedly restricted diffusion with high DWI signal and low ADC values (<700 um2/s)", location: "left peripheral zone lesion", required: true }
-    - { finding: "early focal enhancement on dynamic contrast-enhanced (DCE) imaging", location: "corresponding to the T2 and DWI abnormality", required: false }
-    - { finding: "extracapsular extension or seminal vesicle invasion", location: "left posterolateral prostatic capsule", required: false }
-  severity: severe
-  laterality: left
+    - { finding: "Abnormal soft tissue in the external auditory canal with enhancement extending to the skull base", location: "Right external auditory canal and right skull base", required: true }
+    - { finding: "Marrow signal abnormality in the temporal bone on T1 and STIR (osteomyelitis)", location: "Right temporal bone and petrous apex", required: true }
+    - { finding: "Extension of inflammatory tissue into the parapharyngeal and masticator spaces", location: "Right infratemporal fossa", required: false }
+  severity: "severe"
+  laterality: "right"
   negatives:
-    - right-sided lesion
-    - transition zone involvement
-    - diffuse T2 signal abnormality (would suggest prostatitis)
-    - lymphadenopathy (>8 mm short axis)
-    - bone metastasis
+    - "No intracranial abscess"
+    - "No sigmoid sinus thrombosis"
 pattern_checks:
-  - { name: prostate_cancer, check_type: regex, pattern: "prostat.*cancer|prostat.*carcinoma|prostat.*neoplas|adenocarcinoma.*prostat", required: true }
-  - { name: pirads_score, check_type: regex, pattern: "PI.?RADS|PIRADS|clinically\\s+significant", required: true }
-  - { name: restricted_diffusion, check_type: regex, pattern: "restrict.*diffusion|DWI.*hyperintens|ADC.*low|ADC.*decrease|DWI.*bright", required: true }
-  - { name: peripheral_zone, check_type: regex, pattern: "peripheral\\s+zone|PZ", required: true }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(malignant|necrotizing)\\s+otitis\\s+externa", required: true }
+  - { name: "skull_base_involvement", check_type: regex, pattern: "(?i)(skull\\s+base|temporal\\s+bone|osteomyelitis)", required: true }
+  - { name: "laterality", check_type: regex, pattern: "(?i)right", required: true }
 reference_solution: |
-  Multiparametric MRI of the prostate demonstrates a focal lesion in the left
-  peripheral zone at the mid-gland level measuring 1.8 x 1.5 cm. On
-  T2-weighted images, the lesion is markedly hypointense compared to the
-  normally hyperintense peripheral zone. DWI shows markedly restricted
-  diffusion with high signal on b=1400 s/mm2 and corresponding low ADC values
-  of approximately 600 um2/s, well below the suspicious threshold. Dynamic
-  contrast-enhanced (DCE) imaging demonstrates early focal enhancement
-  corresponding to the T2 and diffusion abnormality, classified as DCE
-  positive. Per PI-RADS v2.1 criteria, this peripheral zone lesion with focal
-  T2 hypointensity greater than 1.5 cm and markedly restricted diffusion
-  qualifies as PI-RADS 5 (very high probability of clinically significant
-  cancer). There is suggestion of capsular abutment along the left
-  posterolateral margin. The seminal vesicles are normal. No pelvic
-  lymphadenopathy. No osseous metastatic disease.
-  Impression: PI-RADS 5 lesion in the left peripheral zone, highly suspicious
-  for clinically significant prostate cancer. MRI-targeted biopsy recommended.
+  MRI of the temporal bones with gadolinium demonstrates enhancing soft tissue in the right external auditory canal extending into the skull base. T1-weighted images show replacement of normal fatty marrow signal in the right temporal bone and petrous apex, with corresponding STIR hyperintensity, consistent with osteomyelitis. Inflammatory tissue extends into the right infratemporal fossa and parapharyngeal space. No intracranial abscess or sigmoid sinus thrombosis. Findings are consistent with malignant otitis externa with skull base osteomyelitis, typically caused by Pseudomonas aeruginosa in immunocompromised patients.
 condition_present: true
 confusion_pair: null
-source_dataset: eurorad
+source_dataset: openem-grounded
 tags:
-  - prostate-cancer
-  - pelvic
-  - oncology
-  - multiparametric
-  - pirads
-  - genitourinary
+  - head-neck
+  - infection
+  - skull-base

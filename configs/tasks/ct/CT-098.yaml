@@ -1,0 +1,37 @@
+id: CT-098
+name: "Temporal arteritis with superficial temporal artery wall thickening on CTA"
+modality: ct
+anatomy: head
+task_type: diagnosis
+difficulty: advanced
+image_ref: "ct/openem/temporal-arteritis.png"
+prompt_template: diagnosis
+condition_id: "temporal-arteritis"
+lostbench_scenario_id: ""
+ground_truth:
+  primary_diagnosis: "Giant cell (temporal) arteritis with temporal artery wall thickening"
+  differential:
+    - "Atherosclerotic disease"
+    - "Takayasu arteritis"
+    - "IgG4-related disease"
+  key_findings:
+    - { finding: "Concentric wall thickening and mural enhancement of the superficial temporal artery", location: "right superficial temporal artery", required: true }
+    - { finding: "Smooth luminal narrowing of the affected vessel", location: "right temporal artery", required: true }
+    - { finding: "Perivascular soft tissue enhancement", location: "right temporal region", required: false }
+  severity: "severe"
+  laterality: "right"
+  negatives:
+    - "No intracranial large vessel occlusion"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(temporal\\s*arteritis|giant\\s*cell\\s*arteritis|GCA|cranial\\s*arteritis)", required: true }
+  - { name: "key_finding_wall", check_type: regex, pattern: "(?i)(wall\\s*thicken|mural\\s*enhancement|temporal\\s*artery.*thicken|luminal\\s*narrow)", required: true }
+reference_solution: |
+  CTA of the head demonstrates concentric wall thickening with avid mural enhancement of the right superficial temporal artery and its frontal branch, with smooth luminal narrowing. Mild perivascular soft tissue enhancement is noted. The left temporal artery appears normal. No intracranial large vessel occlusion is identified. The ophthalmic arteries are patent bilaterally. In the setting of elevated ESR, temporal headache, and jaw claudication, findings are consistent with giant cell (temporal) arteritis. Urgent temporal artery biopsy and high-dose corticosteroids are recommended.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - vascular
+  - rheumatologic
+  - emergency
+  - cta

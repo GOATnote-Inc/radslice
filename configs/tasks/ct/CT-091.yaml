@@ -1,0 +1,37 @@
+id: CT-091
+name: "Herpes zoster ophthalmicus with orbital involvement on contrast-enhanced CT"
+modality: ct
+anatomy: face
+task_type: diagnosis
+difficulty: advanced
+image_ref: "ct/openem/herpes-zoster-ophthalmicus.png"
+prompt_template: diagnosis
+condition_id: "herpes-zoster-ophthalmicus"
+lostbench_scenario_id: ""
+ground_truth:
+  primary_diagnosis: "Herpes zoster ophthalmicus with orbital inflammatory changes"
+  differential:
+    - "Orbital cellulitis"
+    - "Tolosa-Hunt syndrome"
+    - "Orbital pseudotumor"
+  key_findings:
+    - { finding: "Preseptal and periorbital soft tissue swelling in V1 distribution", location: "left forehead and periorbital region", required: true }
+    - { finding: "Enhancement and thickening of the extraocular muscles or lacrimal gland", location: "left orbit", required: true }
+    - { finding: "Optic nerve sheath enhancement", location: "left optic nerve", required: false }
+  severity: "moderate"
+  laterality: "left"
+  negatives:
+    - "No orbital abscess"
+    - "No cavernous sinus thrombosis"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(herpes\\s*zoster\\s*ophthalmicus|zoster.*ophthalmic|HZO|V1.*zoster)", required: true }
+  - { name: "key_finding_periorbital", check_type: regex, pattern: "(?i)(periorbital.*swell|preseptal|V1\\s*distribut|lacrimal.*enlarge)", required: true }
+reference_solution: |
+  Contrast-enhanced CT of the orbits demonstrates left preseptal and periorbital soft tissue swelling in the V1 (ophthalmic branch) distribution of the trigeminal nerve. There is enhancement and mild thickening of the left superior rectus and lacrimal gland. No discrete orbital abscess or cavernous sinus filling defect is identified. The left optic nerve sheath shows subtle enhancement. Findings in the context of vesicular rash in the V1 dermatome are consistent with herpes zoster ophthalmicus with orbital inflammatory involvement requiring IV antiviral therapy and ophthalmologic consultation.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - ophthalmologic
+  - infectious
+  - emergency

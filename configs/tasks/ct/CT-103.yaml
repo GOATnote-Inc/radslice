@@ -1,0 +1,37 @@
+id: CT-103
+name: "Necrotizing enterocolitis on abdominal CT"
+modality: ct
+anatomy: abdomen
+task_type: diagnosis
+difficulty: advanced
+image_ref: "ct/openem/necrotizing-enterocolitis.png"
+prompt_template: diagnosis
+condition_id: "necrotizing-enterocolitis"
+lostbench_scenario_id: "MTR-069"
+ground_truth:
+  primary_diagnosis: "Necrotizing enterocolitis (NEC) with pneumatosis intestinalis"
+  differential:
+    - "Mesenteric ischemia"
+    - "Spontaneous intestinal perforation"
+    - "Hirschsprung-associated enterocolitis"
+  key_findings:
+    - { finding: "Pneumatosis intestinalis (intramural gas) in the bowel wall", location: "terminal ileum and ascending colon", required: true }
+    - { finding: "Portal venous gas", location: "hepatic portal venous branches", required: true }
+    - { finding: "Bowel wall thickening and dilatation", location: "distal ileum", required: false }
+  severity: "critical"
+  laterality: "right"
+  negatives:
+    - "No pneumoperitoneum (no free perforation)"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(necrotizing\\s*enterocolitis|NEC|pneumatosis)", required: true }
+  - { name: "key_finding_pneumatosis", check_type: regex, pattern: "(?i)(pneumatosis|intramural\\s*gas|portal\\s*venous\\s*gas)", required: true }
+reference_solution: |
+  CT of the abdomen demonstrates pneumatosis intestinalis involving the terminal ileum and ascending colon with linear intramural gas within the bowel wall. Portal venous gas is present within the peripheral branches of the hepatic portal venous system. Bowel wall thickening and dilatation are noted in the distal ileum. No pneumoperitoneum is identified. In a premature neonate with feeding intolerance and bloody stools, findings are consistent with necrotizing enterocolitis (Bell stage II-III) requiring bowel rest, IV antibiotics, and urgent pediatric surgery consultation.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - abdominal
+  - pediatric
+  - emergency
+  - neonatal

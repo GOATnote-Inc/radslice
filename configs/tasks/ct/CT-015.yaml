@@ -1,56 +1,37 @@
 id: CT-015
-name: Small bowel obstruction
+name: "Spinal cord compression on contrast-enhanced CT"
 modality: ct
-anatomy: abdomen
-task_type: finding_detection
-difficulty: intermediate
-image_ref: ct/omnimedvqa/CT_0015.png
+anatomy: spine
+task_type: diagnosis
+difficulty: advanced
+image_ref: "ct/openem/spinal-cord-compression.png"
 prompt_template: diagnosis
+condition_id: "spinal-cord-compression"
+lostbench_scenario_id: "MTR-030"
 ground_truth:
-  primary_diagnosis: "Small bowel obstruction with transition point"
+  primary_diagnosis: "Metastatic spinal cord compression"
   differential:
-    - paralytic ileus
-    - large bowel obstruction with decompression
-    - mesenteric ischemia with dilated loops
-    - small bowel enteritis with reactive ileus
+    - "Spinal epidural abscess"
+    - "Pathologic vertebral compression fracture"
+    - "Primary spinal tumor"
   key_findings:
-    - { finding: "dilated small bowel loops greater than 3 cm", location: "jejunum and proximal ileum", required: true }
-    - { finding: "decompressed distal small bowel", location: "distal ileum", required: true }
-    - { finding: "transition point with adhesive band", location: "mid-ileum right lower quadrant", required: true }
-    - { finding: "small bowel feces sign", location: "proximal to transition point", required: false }
-  severity: moderate
-  laterality: ""
+    - { finding: "Lytic vertebral body lesion with pathologic fracture and retropulsion of bone fragments into the spinal canal", location: "T8 vertebral body", required: true }
+    - { finding: "Severe spinal canal stenosis with cord compression", location: "T8 level", required: true }
+    - { finding: "Enhancing epidural soft tissue mass", location: "posterior T8 vertebral body", required: false }
+  severity: "critical"
+  laterality: "midline"
   negatives:
-    - large bowel dilatation
-    - free intraperitoneal air
-    - closed loop obstruction
-    - strangulation with wall ischemia
-    - hernia
+    - "No additional levels of cord compression"
 pattern_checks:
-  - { name: sbo_mentioned, check_type: regex, pattern: "small\\s+bowel\\s+obstruction|SBO\\b|intestinal\\s+obstruction", required: true }
-  - { name: dilated_bowel, check_type: regex, pattern: "dilat|distend|fluid.?filled\\s+loop", required: true }
-  - { name: transition_point, check_type: regex, pattern: "transition\\s+point|change\\s+in\\s+caliber|decompressed\\s+distal", required: true }
-  - { name: no_perforation, check_type: regex, pattern: "no.{0,20}(free\\s+air|perforation|pneumoperitoneum)", required: false }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(spinal\\s*cord\\s*compression|cord\\s*compress|metasta.*spine)", required: true }
+  - { name: "key_finding_retropulsion", check_type: regex, pattern: "(?i)(retropulsion|pathologic\\s*fracture|lytic.*lesion|bone\\s*fragment)", required: true }
 reference_solution: |
-  Contrast-enhanced CT of the abdomen and pelvis demonstrates multiple
-  dilated fluid-filled small bowel loops measuring up to 4.2 cm in
-  diameter, predominantly involving the jejunum and proximal ileum. A
-  discrete transition point is identified in the mid-ileum at the right
-  lower quadrant, where an adhesive band is suspected as the cause of
-  obstruction. Distal to this point, the small bowel is decompressed. A
-  small bowel feces sign is present proximal to the transition point. The
-  colon is decompressed and normal in caliber. No free intraperitoneal air
-  to suggest perforation. The small bowel wall enhances normally without
-  evidence of ischemia or strangulation. No hernia identified.
-  Impression: High-grade small bowel obstruction with transition point in
-  the mid-ileum, likely adhesive in etiology. No evidence of strangulation
-  or closed-loop obstruction. Surgical consultation recommended.
+  Contrast-enhanced CT of the thoracic spine demonstrates a lytic lesion of the T8 vertebral body with pathologic compression fracture and retropulsion of bone fragments into the spinal canal causing severe spinal canal stenosis. An enhancing epidural soft tissue component extends posteriorly, compressing the spinal cord. No additional levels of cord compression are identified. Findings are consistent with metastatic spinal cord compression requiring emergent neurosurgical or radiation oncology consultation.
 condition_present: true
 confusion_pair: null
-source_dataset: omnimedvqa-open
+source_dataset: openem-grounded
 tags:
-  - small-bowel-obstruction
-  - surgical
-  - abdomen
-  - gastrointestinal
-  - finding-detection
+  - spine
+  - oncology
+  - emergency
+  - neurosurgical

@@ -1,60 +1,38 @@
 id: MRI-037
-name: ARVC on cardiac MRI
+name: "Deep Vein Thrombosis on MR Venography"
 modality: mri
-anatomy: heart
-task_type: report_generation
-difficulty: expert
-image_ref: mri/eurorad/EUR_0037.png
-prompt_template: report_generation
+anatomy: extremity
+task_type: diagnosis
+difficulty: advanced
+image_ref: "mri/openem/deep-vein-thrombosis.png"
+prompt_template: diagnosis
+condition_id: "deep-vein-thrombosis"
+lostbench_scenario_id: ""
 ground_truth:
-  primary_diagnosis: "Arrhythmogenic right ventricular cardiomyopathy (ARVC)"
+  primary_diagnosis: "Deep vein thrombosis on MR venography"
   differential:
-    - right ventricular dilated cardiomyopathy
-    - athlete's heart (physiologic RV dilatation)
-    - cardiac sarcoidosis with RV involvement
-    - Uhl anomaly (parchment heart)
-    - right ventricular infarction
+    - "Baker cyst rupture"
+    - "Superficial thrombophlebitis"
+    - "Cellulitis with soft tissue edema"
   key_findings:
-    - { finding: "right ventricular free wall fatty/fibrofatty infiltration with intramyocardial fat signal", location: "right ventricular free wall, subtricuspid region and RV outflow tract", required: true }
-    - { finding: "regional RV wall motion abnormality (akinesis or dyskinesis with microaneurysms)", location: "RV free wall basal and mid segments", required: true }
-    - { finding: "right ventricular dilatation with RV/LV ratio >1", location: "right ventricle on short-axis cine images", required: false }
-    - { finding: "delayed gadolinium enhancement in the RV free wall", location: "right ventricular free wall", required: false }
-  severity: severe
-  laterality: ""
+    - { finding: "Filling defect within the femoral vein on contrast-enhanced MR venography", location: "Left common femoral and superficial femoral vein", required: true }
+    - { finding: "T1 hyperintense intraluminal signal (subacute thrombus) on non-contrast images", location: "Left femoral vein", required: true }
+    - { finding: "Perivenous soft tissue edema on STIR", location: "Left thigh", required: false }
+  severity: "moderate"
+  laterality: "left"
   negatives:
-    - left ventricular involvement (can occur in advanced disease but not primary finding)
-    - pericardial effusion
-    - valvular heart disease
-    - intracardiac thrombus
-    - congenital heart disease
+    - "No extension to the iliac veins or IVC"
+    - "No Baker cyst"
 pattern_checks:
-  - { name: arvc_mentioned, check_type: regex, pattern: "ARVC|arrhythmogenic\\s+right\\s+ventricular|ARVD|arrhythmogenic.*cardiomyopathy", required: true }
-  - { name: rv_fatty, check_type: regex, pattern: "fat.*infiltrat|fibrofatty|fatty.*replac|intramyocardial.*fat|fat.*rv|fat.*right\\s+ventricle", required: true }
-  - { name: rv_wall_motion, check_type: regex, pattern: "wall.*motion.*abnormal|akinesi|dyskinesi|microaneurysm|RV.*dilat|right.*ventricl.*dilat", required: true }
-  - { name: rv_involvement, check_type: regex, pattern: "right\\s+ventricl|RV\\s|free\\s+wall", required: true }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(deep\\s+vein\\s+thrombosis|DVT)", required: true }
+  - { name: "thrombus_finding", check_type: regex, pattern: "(?i)(thrombus|filling\\s+defect|clot)", required: true }
+  - { name: "laterality", check_type: regex, pattern: "(?i)left", required: true }
 reference_solution: |
-  Cardiac MRI demonstrates findings consistent with arrhythmogenic right
-  ventricular cardiomyopathy (ARVC). The right ventricular free wall shows
-  fibrofatty infiltration with intramyocardial T1 hyperintense fat signal,
-  particularly in the subtricuspid region and RV outflow tract (the "triangle
-  of dysplasia"). Cine SSFP images demonstrate regional wall motion
-  abnormalities with akinesis and small microaneurysms along the RV free wall
-  basal and mid segments. The right ventricle is dilated with a RV/LV
-  end-diastolic volume ratio exceeding 1.0. Late gadolinium enhancement is
-  present in the RV free wall, indicating myocardial fibrosis. The left
-  ventricle demonstrates normal wall motion and morphology. No pericardial
-  effusion. No intracardiac thrombus. These findings satisfy the 2010 revised
-  Task Force Criteria for ARVC with a major criterion for RV regional wall
-  motion abnormality and structural alteration.
-  Impression: Arrhythmogenic right ventricular cardiomyopathy (ARVC) with
-  fibrofatty infiltration, RV wall motion abnormalities, and RV dilatation
-  satisfying Task Force Criteria.
+  MR venography of the left lower extremity demonstrates a filling defect within the left common femoral vein extending into the proximal superficial femoral vein, consistent with deep vein thrombosis. Non-contrast T1-weighted images show hyperintense intraluminal signal within the femoral vein indicating subacute thrombus. STIR images demonstrate perivenous soft tissue edema in the left thigh. No extension of thrombus into the left iliac veins or inferior vena cava. Findings confirm proximal deep vein thrombosis requiring anticoagulation therapy.
 condition_present: true
 confusion_pair: null
-source_dataset: eurorad
+source_dataset: openem-grounded
 tags:
-  - arvc
-  - cardiac
-  - cardiomyopathy
-  - right-ventricle
-  - arrhythmia
+  - vascular
+  - mrv
+  - thrombosis

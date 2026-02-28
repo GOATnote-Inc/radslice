@@ -1,62 +1,36 @@
 id: CT-055
-name: Bilateral ground-glass opacities (viral pneumonia)
+name: "Complicated urinary tract infection with renal abscess on contrast-enhanced CT"
 modality: ct
-anatomy: chest
-task_type: finding_detection
+anatomy: abdomen
+task_type: diagnosis
 difficulty: intermediate
-image_ref: ct/omnimedvqa/CT_0055.png
+image_ref: "ct/openem/complicated-uti.png"
 prompt_template: diagnosis
+condition_id: "complicated-uti"
+lostbench_scenario_id: ""
 ground_truth:
-  primary_diagnosis: "Bilateral ground-glass opacities consistent with viral pneumonia"
+  primary_diagnosis: "Complicated UTI with renal abscess"
   differential:
-    - organizing pneumonia
-    - pulmonary edema
-    - hypersensitivity pneumonitis
-    - alveolar hemorrhage
-    - drug-induced pneumonitis
-    - Pneumocystis pneumonia
+    - "Renal cell carcinoma"
+    - "Xanthogranulomatous pyelonephritis"
+    - "Infected renal cyst"
   key_findings:
-    - { finding: "bilateral peripheral ground-glass opacities", location: "bilateral lower lobes and right middle lobe", required: true }
-    - { finding: "crazy-paving pattern in affected areas", location: "bilateral lower lobes", required: false }
-    - { finding: "subpleural sparing", location: "bilateral lung periphery", required: false }
-    - { finding: "no pleural effusion", location: "bilateral pleural spaces", required: true }
-  severity: moderate
-  laterality: bilateral
+    - { finding: "Rim-enhancing hypodense collection within the renal parenchyma", location: "right kidney upper pole", required: true }
+    - { finding: "Perinephric fat stranding", location: "right perinephric space", required: true }
+    - { finding: "Thickening of the renal fascia (Gerota fascia)", location: "right kidney", required: false }
+  severity: "moderate"
+  laterality: "right"
   negatives:
-    - cavitation
-    - lymphadenopathy
-    - pleural effusion
-    - consolidation (predominantly ground-glass)
-    - tree-in-bud opacities
-    - honeycombing
+    - "No perinephric abscess extension"
 pattern_checks:
-  - { name: ggo_mentioned, check_type: regex, pattern: "ground.?glass|GGO|hazy.*opacit", required: true }
-  - { name: bilateral, check_type: regex, pattern: "bilateral|both\\s+lung|both\\s+sides", required: true }
-  - { name: viral_or_infectious, check_type: regex, pattern: "viral|pneumonia|infectious|COVID|influenza|infect", required: true }
-  - { name: peripheral, check_type: regex, pattern: "peripheral|subpleural|lower\\s+lobe|basilar", required: false }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(renal\\s*abscess|complicated\\s*UTI|kidney.*abscess|pyonephrosis)", required: true }
+  - { name: "key_finding_collection", check_type: regex, pattern: "(?i)(rim.?enhancing|hypodense\\s*collection|renal.*abscess|perinephric.*strand)", required: true }
 reference_solution: |
-  High-resolution CT of the chest demonstrates bilateral predominantly
-  peripheral ground-glass opacities affecting the bilateral lower lobes and
-  right middle lobe. The opacities are multifocal and patchy with some
-  areas showing a crazy-paving pattern (ground-glass opacity with
-  superimposed interlobular septal thickening). Subpleural sparing is noted
-  in several areas. No significant consolidation or cavitation. No pleural
-  effusion. No mediastinal or hilar lymphadenopathy. The upper lobes are
-  relatively spared. No tree-in-bud opacities to suggest bacterial
-  bronchopneumonia. No honeycombing or traction bronchiectasis to suggest
-  fibrotic disease. The airways are patent.
-  Impression: Bilateral peripheral ground-glass opacities with crazy-paving
-  pattern and lower lobe predominance, consistent with viral pneumonia in
-  the appropriate clinical context. Differential includes organizing
-  pneumonia and drug-induced pneumonitis. Clinical correlation with
-  respiratory pathogen testing recommended.
+  Contrast-enhanced CT of the abdomen demonstrates a rim-enhancing hypodense collection within the upper pole of the right kidney measuring approximately 3.5 cm, consistent with a renal abscess. Perinephric fat stranding and thickening of the right Gerota fascia are present. No perinephric extension of the abscess is identified. The right collecting system is not obstructed. Findings are consistent with a complicated urinary tract infection with renal abscess formation requiring IV antibiotics and possible percutaneous drainage.
 condition_present: true
 confusion_pair: null
-source_dataset: omnimedvqa-open
+source_dataset: openem-grounded
 tags:
-  - ground-glass
-  - viral-pneumonia
-  - chest
-  - pulmonary
-  - bilateral
-  - finding-detection
+  - urologic
+  - infectious
+  - abdominal

@@ -1,0 +1,39 @@
+id: US-071
+name: "Tumor Lysis Syndrome on Renal Ultrasound"
+modality: ultrasound
+anatomy: abdomen
+task_type: diagnosis
+difficulty: advanced
+image_ref: "ultrasound/openem/tumor-lysis-syndrome.png"
+prompt_template: diagnosis
+condition_id: "tumor-lysis-syndrome"
+lostbench_scenario_id: ""
+ground_truth:
+  primary_diagnosis: "Tumor lysis syndrome with bilateral nephropathy and uric acid crystal deposition"
+  differential:
+    - "Acute tubular necrosis"
+    - "Obstructive uropathy from retroperitoneal mass"
+    - "Bilateral renal vein thrombosis"
+  key_findings:
+    - { finding: "Bilaterally enlarged kidneys with diffusely increased echogenicity", location: "bilateral kidneys", required: true }
+    - { finding: "Echogenic medullary pyramids with possible uric acid crystal deposition", location: "renal medullary pyramids", required: true }
+    - { finding: "Increased resistive indices on renal Doppler", location: "renal arteries", required: false }
+    - { finding: "Bilateral mild hydronephrosis", location: "bilateral kidneys", required: false }
+  severity: severe
+  laterality: bilateral
+  negatives:
+    - "No renal calculi"
+    - "No retroperitoneal mass causing obstruction"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(tumor lysis|TLS|uric acid nephropathy|urate nephropathy|crystal deposition)", required: true }
+  - { name: "renal_finding", check_type: regex, pattern: "(?i)((enlarged|echogenic) kidneys|renal (enlarge|echogenic)|medullary (echogenicity|hyperechogenicity|pyramids))", required: true }
+  - { name: "bilateral_finding", check_type: regex, pattern: "(?i)(bilateral|both kidneys)", required: true }
+reference_solution: |
+  Renal ultrasound demonstrates bilaterally enlarged kidneys measuring 14 cm on the right and 13.5 cm on the left. Both kidneys display diffusely increased cortical echogenicity with prominent echogenic medullary pyramids, a pattern consistent with crystal nephropathy from uric acid deposition. The renal Doppler reveals elevated resistive indices of 0.82 bilaterally. Mild bilateral pelvicalyceal dilation is noted. No discrete obstructing calculi or retroperitoneal mass is identified. In the clinical context of recent chemotherapy initiation with hyperuricemia, hyperkalemia, and rising creatinine, these findings are consistent with tumor lysis syndrome with urate nephropathy.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - renal
+  - oncologic
+  - emergency

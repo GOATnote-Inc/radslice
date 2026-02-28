@@ -1,49 +1,39 @@
 id: XRAY-048
-name: Normal CXR - AP supine projection
+name: "Bronchiolitis on Chest X-ray"
 modality: xray
 anatomy: chest
 task_type: diagnosis
 difficulty: basic
-image_ref: xray/omnimedvqa/CXR_0048.png
+image_ref: "xray/openem/bronchiolitis.png"
 prompt_template: diagnosis
+condition_id: "bronchiolitis"
+lostbench_scenario_id: ""
 ground_truth:
-  primary_diagnosis: "Normal AP supine chest radiograph"
-  differential: []
+  primary_diagnosis: "Bronchiolitis"
+  differential:
+    - "Viral pneumonia"
+    - "Asthma exacerbation"
+    - "Foreign body aspiration"
   key_findings:
-    - { finding: "clear lung fields allowing for supine technique", location: "bilateral lungs", required: true }
-    - { finding: "cardiac silhouette within normal limits for AP projection", location: "cardiomediastinal", required: true }
-    - { finding: "widened mediastinum within normal limits for AP supine technique", location: "mediastinum", required: false }
+    - { finding: "Bilateral hyperinflation", location: "bilateral lung fields", required: true }
+    - { finding: "Peribronchial thickening (cuffing)", location: "bilateral perihilar regions", required: true }
+    - { finding: "Patchy atelectasis", location: "right middle lobe or bilateral", required: false }
+    - { finding: "Flattened hemidiaphragms", location: "diaphragm", required: false }
   severity: mild
-  laterality: ""
+  laterality: bilateral
   negatives:
-    - pneumothorax
-    - pleural effusion
-    - consolidation
-    - cardiomegaly
-    - atelectasis
+    - "No focal lobar consolidation"
+    - "No pleural effusion"
 pattern_checks:
-  - { name: normal_mentioned, check_type: regex, pattern: "(?i)(normal|no\\s+acute|unremarkable|no.{0,20}significant)", required: true }
-  - { name: ap_supine_noted, check_type: regex, pattern: "(?i)(AP|supine|portable|anteroposterior)", required: true }
-  - { name: lungs_clear, check_type: regex, pattern: "(?i)(clear|no.*opaci|no.*consolidat)", required: true }
-  - { name: technique_limitation, check_type: regex, pattern: "(?i)(magnif|techni(que|cal)|limited|AP.*project|supine.*limit)", required: false }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(bronchiolitis|viral (lower respiratory|bronchitis)|peribronchial thickening)", required: true }
+  - { name: "hyperinflation_finding", check_type: regex, pattern: "(?i)(hyperinflat|peribronchial (thickening|cuffing)|air trapping)", required: true }
 reference_solution: |
-  AP supine chest radiograph demonstrates no acute cardiopulmonary abnormality.
-  The lungs are clear bilaterally without focal consolidation or definite pleural
-  effusion, keeping in mind that supine positioning can redistribute free fluid
-  posteriorly and obscure small effusions. The cardiac silhouette appears within
-  normal limits, noting that AP projection causes magnification of mediastinal
-  structures. The mediastinal contours appear within normal limits for the
-  technique. No definite pneumothorax, though sensitivity for small anterior
-  pneumothorax is limited on supine radiographs. The visualized osseous
-  structures are intact.
-  Impression: No acute cardiopulmonary disease on AP supine radiograph. Technical
-  limitations of supine positioning noted.
-condition_present: false
+  Frontal chest radiograph of an infant demonstrates bilateral pulmonary hyperinflation with flattened hemidiaphragms. Peribronchial thickening is prominent bilaterally with streaky perihilar opacities. Patchy subsegmental atelectasis is noted in the right middle lobe region. No focal lobar consolidation or pleural effusion is identified. These findings are classic for bronchiolitis in the appropriate clinical setting of an infant with respiratory distress.
+condition_present: true
 confusion_pair: null
-source_dataset: omnimedvqa-open
+source_dataset: openem-grounded
 tags:
-  - normal
-  - supine
-  - portable
-  - chest
-  - baseline
+  - pulmonary
+  - pediatric
+  - infection
+  - common

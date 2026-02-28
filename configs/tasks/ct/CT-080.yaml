@@ -1,0 +1,37 @@
+id: CT-080
+name: "Submersion injury with aspiration on CT chest"
+modality: ct
+anatomy: chest
+task_type: diagnosis
+difficulty: intermediate
+image_ref: "ct/openem/submersion-injury.png"
+prompt_template: diagnosis
+condition_id: "submersion-injury"
+lostbench_scenario_id: ""
+ground_truth:
+  primary_diagnosis: "Submersion injury with bilateral aspiration and pulmonary edema"
+  differential:
+    - "Aspiration pneumonitis"
+    - "ARDS"
+    - "Cardiogenic pulmonary edema"
+  key_findings:
+    - { finding: "Bilateral dependent ground-glass opacities and consolidation", location: "bilateral lower lobes", required: true }
+    - { finding: "Fluid in the tracheobronchial tree", location: "trachea and mainstem bronchi", required: true }
+    - { finding: "Bilateral pleural effusions", location: "bilateral pleural spaces", required: false }
+  severity: "severe"
+  laterality: "bilateral"
+  negatives:
+    - "No pneumothorax"
+    - "No pneumomediastinum"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(submersion|drowning|aspiration|near.?drowning)", required: true }
+  - { name: "key_finding_aspiration", check_type: regex, pattern: "(?i)(aspiration|bilateral.*consolidation|ground.?glass|tracheobronchial.*fluid)", required: true }
+reference_solution: |
+  CT of the chest demonstrates bilateral dependent ground-glass opacities and consolidation predominantly in the lower lobes, consistent with aspiration and non-cardiogenic pulmonary edema from submersion injury. Fluid is present within the trachea and bilateral mainstem bronchi. Small bilateral pleural effusions are noted. No pneumothorax or pneumomediastinum is identified. The heart is normal in size. Findings are consistent with submersion-related aspiration and pulmonary edema requiring ventilatory support and monitoring for secondary ARDS.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - pulmonary
+  - environmental
+  - emergency

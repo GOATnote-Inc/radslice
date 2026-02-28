@@ -1,0 +1,39 @@
+id: US-063
+name: "Cellulitis with Abscess on Soft Tissue Ultrasound"
+modality: ultrasound
+anatomy: extremity
+task_type: diagnosis
+difficulty: basic
+image_ref: "ultrasound/openem/cellulitis-abscess.png"
+prompt_template: diagnosis
+condition_id: "cellulitis-abscess"
+lostbench_scenario_id: ""
+ground_truth:
+  primary_diagnosis: "Subcutaneous abscess within area of cellulitis"
+  differential:
+    - "Cellulitis without drainable abscess"
+    - "Infected hematoma"
+    - "Sebaceous cyst (inflamed)"
+  key_findings:
+    - { finding: "Well-defined hypoechoic fluid collection with posterior acoustic enhancement", location: "subcutaneous tissue of forearm", required: true }
+    - { finding: "Surrounding cobblestoning of subcutaneous fat (cellulitis)", location: "subcutaneous tissue", required: true }
+    - { finding: "Internal debris or septations within the collection", location: "abscess cavity", required: false }
+    - { finding: "Hyperemia on color Doppler in the surrounding tissue", location: "perilesional tissue", required: false }
+  severity: mild
+  laterality: right
+  negatives:
+    - "No involvement of deep fascia (no necrotizing fasciitis)"
+    - "No foreign body"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(abscess|cellulitis.{0,20}abscess|subcutaneous (abscess|collection)|soft tissue (abscess|infection))", required: true }
+  - { name: "collection_finding", check_type: regex, pattern: "(?i)(fluid collection|hypoechoic (collection|mass)|posterior acoustic enhancement|drainable)", required: true }
+  - { name: "cellulitis_finding", check_type: regex, pattern: "(?i)(cobbleston|cellulitis|subcutaneous (edema|fat.{0,10}(edema|strand|thicken)))", required: true }
+reference_solution: |
+  Soft tissue ultrasound of the right forearm demonstrates a well-defined hypoechoic fluid collection measuring 3.2 x 1.8 cm in the subcutaneous tissue with posterior acoustic enhancement, consistent with an abscess. Internal debris and thin septations are noted within the collection. The surrounding subcutaneous fat demonstrates a cobblestone appearance with interdigitating hypoechoic fluid between hyperechoic fat lobules, consistent with cellulitis. Color Doppler shows hyperemia in the surrounding tissue. No involvement of the deep fascia or muscle compartment is identified, and no foreign body is seen. These findings indicate a subcutaneous abscess within an area of cellulitis, amenable to incision and drainage.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - soft-tissue
+  - infectious
+  - pocus

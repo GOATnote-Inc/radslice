@@ -1,52 +1,40 @@
 id: US-015
-name: Normal thyroid gland ultrasound
+name: "Acute Ischemic Stroke - Carotid Doppler"
 modality: ultrasound
 anatomy: neck
-task_type: vqa
-difficulty: basic
-image_ref: ultrasound/omnimedvqa/US_0015.png
-prompt_template: vqa
+task_type: diagnosis
+difficulty: advanced
+image_ref: "ultrasound/openem/acute-ischemic-stroke.png"
+prompt_template: diagnosis
+condition_id: "acute-ischemic-stroke"
+lostbench_scenario_id: "MTR-012"
 ground_truth:
-  primary_diagnosis: "Normal thyroid gland"
+  primary_diagnosis: "High-grade internal carotid artery stenosis with hemodynamically significant flow disturbance"
   differential:
-    - diffuse thyroiditis (early, subclinical)
-    - subcentimeter thyroid micronodule below resolution
-    - multinodular goiter (early)
+    - "Complete carotid artery occlusion"
+    - "Carotid artery dissection"
+    - "Fibromuscular dysplasia"
   key_findings:
-    - { finding: "homogeneous parenchymal echogenicity", location: "bilateral thyroid lobes", required: true }
-    - { finding: "normal thyroid gland size", location: "thyroid gland", required: true }
-    - { finding: "normal vascularity on color Doppler", location: "thyroid parenchyma", required: false }
-  severity: mild
-  laterality: ""
+    - { finding: "Echogenic plaque with greater than 70% stenosis", location: "internal carotid artery origin", required: true }
+    - { finding: "Elevated peak systolic velocity greater than 230 cm/s", location: "internal carotid artery", required: true }
+    - { finding: "Elevated ICA/CCA ratio greater than 4.0", location: "carotid bifurcation", required: false }
+    - { finding: "Post-stenotic turbulence on color Doppler", location: "distal internal carotid artery", required: false }
+  severity: critical
+  laterality: left
   negatives:
-    - thyroid nodule
-    - calcification
-    - cervical lymphadenopathy
-    - heterogeneous echotexture
-    - thyroid enlargement
-    - increased vascularity (thyroid inferno)
+    - "No complete occlusion of the internal carotid artery"
+    - "Contralateral carotid appears normal"
 pattern_checks:
-  - { name: normal_identified, check_type: regex, pattern: "normal|unremarkable|no\\s+(abnormal|pathol|significant)", required: true }
-  - { name: no_nodule, check_type: regex, pattern: "no.*(nodule|mass|lesion|focal)", required: true }
-  - { name: homogeneous, check_type: regex, pattern: "homogeneous|uniform|normal.*echogenicity|echo.?texture", required: true }
-  - { name: no_lymphadenopathy, check_type: regex, pattern: "no.*(lymph|adenopathy|node)", required: false }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(carotid (stenosis|occlusion|plaque)|ICA stenosis|internal carotid.{0,20}steno)", required: true }
+  - { name: "stenosis_severity", check_type: regex, pattern: "(?i)(high.?grade|severe|>\\s*70%|greater than 70|critical|hemodynamically significant)", required: true }
+  - { name: "laterality", check_type: regex, pattern: "(?i)(left)", required: true }
 reference_solution: |
-  Ultrasound of the thyroid gland demonstrates bilateral thyroid lobes of
-  normal size and homogeneous parenchymal echogenicity. The right lobe
-  measures 4.8 x 1.6 x 1.5 cm and the left lobe measures 4.5 x 1.5 x 1.4 cm,
-  both within normal limits. The isthmus measures 3 mm in thickness. No focal
-  thyroid nodules, cystic lesions, or calcifications are identified in either
-  lobe. Color Doppler demonstrates normal parenchymal vascularity without
-  increased flow to suggest thyroiditis. No suspicious cervical lymphadenopathy
-  is seen in the central or lateral neck compartments. The strap muscles
-  appear normal.
-  Impression: Normal thyroid ultrasound. No thyroid nodules or
-  lymphadenopathy identified.
-condition_present: false
-confusion_pair: US-010
-source_dataset: omnimedvqa-open
+  Carotid duplex ultrasound demonstrates a heterogeneous echogenic plaque at the origin of the left internal carotid artery causing greater than 70% diameter stenosis by NASCET criteria. Peak systolic velocity within the stenosis measures 285 cm/s with an end-diastolic velocity of 110 cm/s. The ICA/CCA ratio is 4.5. Color Doppler shows aliasing and post-stenotic turbulence. The right carotid system demonstrates no hemodynamically significant stenosis. These findings indicate severe left internal carotid artery stenosis, which in the setting of acute neurological deficit is consistent with a symptomatic high-grade stenosis warranting emergent evaluation for intervention.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
 tags:
-  - normal
-  - thyroid
-  - neck
-  - negative-study
+  - vascular
+  - emergency
+  - doppler
+  - neurovascular

@@ -1,53 +1,36 @@
 id: CT-005
-name: Normal head CT
+name: "Infective endocarditis with septic emboli on contrast-enhanced CT"
 modality: ct
-anatomy: head
+anatomy: chest
 task_type: diagnosis
-difficulty: basic
-image_ref: ct/omnimedvqa/CT_0005.png
+difficulty: expert
+image_ref: "ct/openem/infective-endocarditis.png"
 prompt_template: diagnosis
+condition_id: "infective-endocarditis"
+lostbench_scenario_id: ""
 ground_truth:
-  primary_diagnosis: "Normal head CT"
+  primary_diagnosis: "Infective endocarditis with septic pulmonary emboli"
   differential:
-    - early ischemic changes below detection threshold
-    - small vessel disease
-    - age-appropriate volume loss
+    - "Marantic endocarditis"
+    - "Valvular vegetation from rheumatic heart disease"
+    - "Metastatic pulmonary disease"
   key_findings:
-    - { finding: "normal gray-white matter differentiation", location: "bilateral cerebral hemispheres", required: true }
-    - { finding: "no intracranial hemorrhage", location: "brain", required: true }
-    - { finding: "midline structures normal", location: "midline", required: true }
-    - { finding: "ventricles normal in size", location: "lateral and third ventricles", required: false }
-  severity: mild
-  laterality: ""
+    - { finding: "Irregular low-attenuation mass on the valve leaflet representing vegetation", location: "aortic valve", required: true }
+    - { finding: "Multiple peripheral wedge-shaped pulmonary opacities with cavitation", location: "bilateral lung fields", required: true }
+    - { finding: "Perivalvular abscess", location: "aortic root", required: false }
+  severity: "critical"
+  laterality: "bilateral"
   negatives:
-    - intracranial hemorrhage
-    - midline shift
-    - mass lesion
-    - hydrocephalus
-    - skull fracture
-    - acute infarction
-    - extra-axial collection
+    - "No aortic root pseudoaneurysm"
 pattern_checks:
-  - { name: normal_identified, check_type: regex, pattern: "normal|unremarkable|no\\s+acute|negative", required: true }
-  - { name: no_hemorrhage, check_type: regex, pattern: "no.{0,30}(hemorrhage|haemorrhage|bleed|blood)", required: true }
-  - { name: no_mass_effect, check_type: regex, pattern: "no.{0,30}(mass\\s+effect|midline\\s+shift|shift)", required: true }
-  - { name: no_hydrocephalus, check_type: regex, pattern: "no.{0,30}(hydrocephalus|ventricul.{0,15}dilat)", required: false }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(infective\\s*endocarditis|vegetation|septic\\s*emboli)", required: true }
+  - { name: "key_finding_vegetation", check_type: regex, pattern: "(?i)(vegetation|valvular\\s*mass|valve.*mass)", required: true }
 reference_solution: |
-  Non-contrast CT of the head demonstrates normal gray-white matter
-  differentiation throughout bilateral cerebral hemispheres. The ventricles
-  are normal in size and configuration. Midline structures are in normal
-  position without shift. No intracranial hemorrhage, extra-axial
-  collection, or mass lesion is identified. No acute territorial infarction.
-  The sulci are normal in caliber. Visualized osseous structures are intact
-  without fracture. The paranasal sinuses and mastoid air cells are well
-  aerated.
-  Impression: Normal non-contrast head CT. No acute intracranial
-  abnormality.
-condition_present: false
+  Contrast-enhanced CT of the chest demonstrates an irregular low-attenuation mass on the aortic valve leaflet consistent with vegetation. Multiple bilateral peripheral wedge-shaped pulmonary opacities with early cavitation are present, consistent with septic emboli. Subtle perivalvular hypoattenuation at the aortic root raises concern for early abscess formation. No pseudoaneurysm identified. Findings are consistent with infective endocarditis complicated by septic pulmonary embolization.
+condition_present: true
 confusion_pair: null
-source_dataset: omnimedvqa-open
+source_dataset: openem-grounded
 tags:
-  - normal
-  - head
-  - baseline
-  - negative-study
+  - cardiac
+  - infectious
+  - emergency

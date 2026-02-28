@@ -1,0 +1,40 @@
+id: US-068
+name: "Necrotizing Enterocolitis on Abdominal Ultrasound"
+modality: ultrasound
+anatomy: abdomen
+task_type: diagnosis
+difficulty: advanced
+image_ref: "ultrasound/openem/necrotizing-enterocolitis.png"
+prompt_template: diagnosis
+condition_id: "necrotizing-enterocolitis"
+lostbench_scenario_id: "MTR-069"
+ground_truth:
+  primary_diagnosis: "Necrotizing enterocolitis with pneumatosis intestinalis and portal venous gas"
+  differential:
+    - "Neonatal sepsis with ileus"
+    - "Spontaneous intestinal perforation"
+    - "Hirschsprung-associated enterocolitis"
+  key_findings:
+    - { finding: "Pneumatosis intestinalis (echogenic foci within the bowel wall)", location: "bowel wall", required: true }
+    - { finding: "Portal venous gas (echogenic foci within the portal veins)", location: "liver portal venous system", required: true }
+    - { finding: "Bowel wall thickening with absent peristalsis", location: "small bowel", required: false }
+    - { finding: "Free intraperitoneal fluid", location: "pelvis and flanks", required: false }
+  severity: critical
+  laterality: n/a
+  negatives:
+    - "No pneumoperitoneum on ultrasound"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(necrotizing enterocolitis|NEC|pneumatosis intestinalis|portal venous gas)", required: true }
+  - { name: "pneumatosis_finding", check_type: regex, pattern: "(?i)(pneumatosis (intestinalis)?|intramural (gas|air)|bowel wall (gas|air|echogenic))", required: true }
+  - { name: "portal_gas_finding", check_type: regex, pattern: "(?i)(portal venous gas|portal (vein|venous).{0,20}(gas|air|echogenic)|hepatic portal gas)", required: true }
+reference_solution: |
+  Abdominal ultrasound in a premature neonate demonstrates echogenic foci within the bowel wall representing pneumatosis intestinalis, most prominent in the right lower quadrant. Echogenic foci are identified within the portal venous system of the liver, consistent with portal venous gas. The bowel walls appear thickened and aperistaltic in multiple loops. A moderate amount of free intraperitoneal fluid with internal echoes is present. No definite pneumoperitoneum is identified on ultrasound. These findings are consistent with necrotizing enterocolitis (Bell Stage III) and require emergent surgical consultation and aggressive medical management.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - abdominal
+  - pediatric
+  - neonatal
+  - emergency
+  - gastrointestinal

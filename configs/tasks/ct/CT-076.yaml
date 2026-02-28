@@ -1,0 +1,37 @@
+id: CT-076
+name: "Pheochromocytoma on contrast-enhanced CT abdomen"
+modality: ct
+anatomy: abdomen
+task_type: diagnosis
+difficulty: advanced
+image_ref: "ct/openem/pheochromocytoma-crisis.png"
+prompt_template: diagnosis
+condition_id: "pheochromocytoma-crisis"
+lostbench_scenario_id: "MTR-071"
+ground_truth:
+  primary_diagnosis: "Pheochromocytoma of the right adrenal gland"
+  differential:
+    - "Adrenocortical carcinoma"
+    - "Adrenal metastasis"
+    - "Adrenal adenoma"
+  key_findings:
+    - { finding: "Heterogeneously enhancing adrenal mass with areas of central necrosis", location: "right adrenal gland", required: true }
+    - { finding: "Mass greater than 3 cm with avid peripheral enhancement", location: "right adrenal gland", required: true }
+    - { finding: "Possible areas of hemorrhage within the mass", location: "right adrenal mass", required: false }
+  severity: "severe"
+  laterality: "right"
+  negatives:
+    - "No distant metastases"
+    - "No contralateral adrenal abnormality"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(pheochromocytoma|adrenal\\s*mass|paraganglioma|catecholamine)", required: true }
+  - { name: "key_finding_adrenal_mass", check_type: regex, pattern: "(?i)(adrenal\\s*mass|adrenal.*enhancing|heterogeneous.*adrenal|adrenal.*necrosis)", required: true }
+reference_solution: |
+  Contrast-enhanced CT of the abdomen demonstrates a 5.2 cm heterogeneously enhancing mass arising from the right adrenal gland with areas of central necrosis and possible hemorrhage. The mass demonstrates avid peripheral enhancement on arterial phase. The left adrenal gland is normal. No distant metastatic disease is identified. In the setting of paroxysmal hypertension and elevated catecholamines, the appearance is characteristic of pheochromocytoma. Alpha-blockade should be initiated prior to any surgical intervention.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - endocrine
+  - emergency
+  - abdominal

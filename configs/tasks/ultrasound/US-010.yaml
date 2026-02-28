@@ -1,57 +1,39 @@
 id: US-010
-name: Thyroid nodule with suspicious features
+name: "Ruptured Abdominal Aortic Aneurysm on POCUS"
 modality: ultrasound
-anatomy: neck
-task_type: finding_detection
-difficulty: intermediate
-image_ref: ultrasound/omnimedvqa/US_0010.png
-prompt_template: finding_detection
+anatomy: abdomen
+task_type: diagnosis
+difficulty: advanced
+image_ref: "ultrasound/openem/ruptured-aaa.png"
+prompt_template: diagnosis
+condition_id: "ruptured-aaa"
+lostbench_scenario_id: ""
 ground_truth:
-  primary_diagnosis: "Suspicious thyroid nodule (TI-RADS 4)"
+  primary_diagnosis: "Ruptured abdominal aortic aneurysm"
   differential:
-    - thyroid carcinoma (papillary, follicular, medullary)
-    - follicular adenoma
-    - thyroid cyst with inspissated colloid
-    - hyperplastic nodule
-    - parathyroid adenoma
+    - "Unruptured abdominal aortic aneurysm"
+    - "Retroperitoneal hemorrhage from other cause"
+    - "Aortoenteric fistula"
   key_findings:
-    - { finding: "hypoechoic solid nodule with irregular margins", location: "right thyroid lobe", required: true }
-    - { finding: "microcalcifications", location: "within the thyroid nodule", required: true }
-    - { finding: "taller-than-wide orientation", location: "right thyroid lobe", required: false }
-    - { finding: "internal vascularity on color Doppler", location: "within the thyroid nodule", required: false }
-  severity: moderate
-  laterality: right
+    - { finding: "Fusiform abdominal aortic aneurysm greater than 5 cm", location: "infrarenal abdominal aorta", required: true }
+    - { finding: "Irregular aortic wall contour or extraluminal hypoechoic collection", location: "periaortic region", required: true }
+    - { finding: "Mural thrombus within the aneurysm sac", location: "abdominal aorta", required: false }
+    - { finding: "Free intraperitoneal fluid", location: "Morison pouch or pelvis", required: false }
+  severity: critical
+  laterality: midline
   negatives:
-    - cervical lymphadenopathy
-    - extrathyroidal extension
-    - contralateral thyroid nodule
-    - tracheal deviation
-    - macrocalcification with comet-tail artifact
+    - "No evidence of aortic dissection flap"
 pattern_checks:
-  - { name: nodule_mentioned, check_type: regex, pattern: "nodule|thyroid.*mass|thyroid.*lesion", required: true }
-  - { name: hypoechoic, check_type: regex, pattern: "hypoechoic|low.*echogenic|decreased.*echogenicity", required: true }
-  - { name: microcalcifications, check_type: regex, pattern: "microcalcif|punctate.*calcif|small.*calcif|echogenic.*foci", required: true }
-  - { name: tirads_or_suspicious, check_type: regex, pattern: "TI-?RADS|suspicious|biopsy|FNA|malignan", required: false }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(ruptured (AAA|abdominal aortic aneurysm|aortic aneurysm)|AAA.{0,20}rupture|aortic aneurysm.{0,20}rupture)", required: true }
+  - { name: "aneurysm_size", check_type: regex, pattern: "(?i)(aneurysm|aort(ic|a).{0,20}(dilat|aneurysm|ectatic|>\\s*5|greater than 5))", required: true }
+  - { name: "rupture_evidence", check_type: regex, pattern: "(?i)(rupture|extraluminal|retroperitoneal|periaortic (fluid|hematoma|collection)|free fluid)", required: true }
 reference_solution: |
-  Ultrasound of the thyroid gland demonstrates a solid hypoechoic nodule in the
-  right thyroid lobe measuring 1.8 x 1.5 x 1.2 cm. The nodule has irregular
-  margins with scattered microcalcifications appearing as punctate hyperechoic
-  foci without posterior acoustic shadowing. The nodule demonstrates a
-  taller-than-wide orientation on transverse imaging. Color Doppler shows
-  increased internal vascularity. No extrathyroidal extension is identified.
-  The left thyroid lobe is homogeneous without focal nodule. No suspicious
-  cervical lymphadenopathy is seen in the lateral neck compartments. The
-  isthmus is normal in thickness.
-  Impression: Suspicious right thyroid nodule (ACR TI-RADS 4) with hypoechoic
-  composition, irregular margins, and microcalcifications. Fine-needle
-  aspiration biopsy is recommended.
+  POCUS of the abdominal aorta demonstrates a fusiform infrarenal abdominal aortic aneurysm measuring 7.2 cm in maximal transverse diameter. Eccentric mural thrombus is identified within the aneurysm sac. There is irregular contour of the posterior aortic wall with a hypoechoic periaortic collection consistent with retroperitoneal hematoma. Free fluid is identified in the pelvis and Morison pouch. In the setting of hemodynamic instability, these findings are consistent with ruptured abdominal aortic aneurysm requiring emergent vascular surgery consultation.
 condition_present: true
 confusion_pair: null
-source_dataset: omnimedvqa-open
+source_dataset: openem-grounded
 tags:
-  - thyroid
-  - nodule
-  - neck
-  - microcalcification
-  - ti-rads
-  - biopsy
+  - vascular
+  - emergency
+  - pocus
+  - aortic

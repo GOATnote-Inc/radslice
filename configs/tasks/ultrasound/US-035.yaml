@@ -1,0 +1,40 @@
+id: US-035
+name: "HELLP Syndrome on Abdominal Ultrasound"
+modality: ultrasound
+anatomy: abdomen
+task_type: diagnosis
+difficulty: advanced
+image_ref: "ultrasound/openem/hellp-syndrome.png"
+prompt_template: diagnosis
+condition_id: "hellp-syndrome"
+lostbench_scenario_id: "MTR-019"
+ground_truth:
+  primary_diagnosis: "HELLP syndrome with subcapsular hepatic hematoma"
+  differential:
+    - "Hepatic infarction"
+    - "Hepatic adenoma with hemorrhage"
+    - "Acute fatty liver of pregnancy"
+  key_findings:
+    - { finding: "Subcapsular hepatic hematoma (hypoechoic or mixed echogenicity collection)", location: "liver subcapsular space", required: true }
+    - { finding: "Heterogeneous liver parenchyma with periportal edema", location: "liver parenchyma", required: true }
+    - { finding: "Ascites or perihepatic free fluid", location: "perihepatic space", required: false }
+    - { finding: "Hepatomegaly", location: "liver", required: false }
+  severity: critical
+  laterality: right
+  negatives:
+    - "No focal liver mass"
+    - "No hepatic vein thrombosis"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(HELLP|subcapsular (hematoma|hemorrhage)|hepatic hematoma|hepatic (hemorrhage|rupture))", required: true }
+  - { name: "hematoma_finding", check_type: regex, pattern: "(?i)(subcapsular (hematoma|collection|hemorrhage)|hepatic hematoma|liver.{0,20}(hematoma|hemorrhage))", required: true }
+  - { name: "liver_finding", check_type: regex, pattern: "(?i)(heterogeneous liver|periportal (edema|changes)|liver parenchyma.{0,20}(heterogeneous|abnormal))", required: true }
+reference_solution: |
+  Abdominal ultrasound of the liver demonstrates a subcapsular hypoechoic to mixed echogenicity fluid collection along the anterior and lateral surface of the right hepatic lobe measuring approximately 8 x 3 cm, consistent with a subcapsular hepatic hematoma. The liver parenchyma appears heterogeneous with periportal hyperechogenicity suggestive of edema. A small amount of perihepatic free fluid is present. No focal parenchymal mass is identified. In the context of a pregnant patient with thrombocytopenia, hemolysis, and elevated liver enzymes, these findings are consistent with HELLP syndrome complicated by hepatic hemorrhage.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - abdominal
+  - emergency
+  - obstetric
+  - hepatic

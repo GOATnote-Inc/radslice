@@ -1,58 +1,37 @@
 id: CT-020
-name: Splenic laceration from blunt trauma
+name: "Fat embolism syndrome on contrast-enhanced CT chest"
 modality: ct
-anatomy: abdomen
-task_type: finding_detection
+anatomy: chest
+task_type: diagnosis
 difficulty: advanced
-image_ref: ct/omnimedvqa/CT_0020.png
+image_ref: "ct/openem/fat-embolism-syndrome.png"
 prompt_template: diagnosis
+condition_id: "fat-embolism-syndrome"
+lostbench_scenario_id: "MTR-065"
 ground_truth:
-  primary_diagnosis: "Grade III splenic laceration with hemoperitoneum"
+  primary_diagnosis: "Fat embolism syndrome"
   differential:
-    - splenic infarction
-    - splenic vein thrombosis
-    - accessory spleen mimicking clot
-    - hepatic laceration with referred perisplenic fluid
+    - "Aspiration pneumonitis"
+    - "ARDS"
+    - "Pulmonary contusion"
   key_findings:
-    - { finding: "linear hypoattenuating laceration through splenic parenchyma", location: "spleen mid-body", required: true }
-    - { finding: "perisplenic hematoma", location: "perisplenic space", required: true }
-    - { finding: "hemoperitoneum", location: "perihepatic and pelvic free fluid", required: true }
-    - { finding: "active contrast extravasation", location: "within splenic parenchyma", required: false }
-  severity: severe
-  laterality: left
+    - { finding: "Diffuse bilateral ground-glass opacities with interlobular septal thickening", location: "bilateral lung fields", required: true }
+    - { finding: "Peripheral and gravity-dependent distribution of opacities", location: "bilateral lung bases", required: true }
+    - { finding: "Absence of filling defects in the pulmonary arteries", location: "pulmonary arteries", required: false }
+  severity: "severe"
+  laterality: "bilateral"
   negatives:
-    - hepatic laceration
-    - renal injury
-    - pancreatic injury
-    - mesenteric injury
-    - retroperitoneal hemorrhage
+    - "No pulmonary embolism on CTPA"
+    - "No pleural effusion"
 pattern_checks:
-  - { name: splenic_injury, check_type: regex, pattern: "splenic\\s+(lacerat|injur|ruptur|trauma)|spleen.{0,20}(lacerat|injur)", required: true }
-  - { name: hemoperitoneum, check_type: regex, pattern: "hemoperitoneum|h[ae]moperitoneum|free\\s+fluid|intraperitoneal.*blood", required: true }
-  - { name: grade_mentioned, check_type: regex, pattern: "grade|AAST|III|3", required: false }
-  - { name: laceration, check_type: regex, pattern: "lacerat|tear|fracture.{0,10}spleen", required: true }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(fat\\s*embolism|fat\\s*emboli)", required: true }
+  - { name: "key_finding_ggo", check_type: regex, pattern: "(?i)(ground.?glass|diffuse.*opacit|bilateral.*opacit)", required: true }
 reference_solution: |
-  Contrast-enhanced trauma CT of the abdomen demonstrates a linear
-  hypoattenuating laceration extending through the mid-body of the spleen
-  measuring approximately 5 cm in length, involving greater than 50% of the
-  splenic parenchyma, consistent with AAST Grade III injury. A large
-  perisplenic hematoma is present measuring approximately 8 x 4 cm. Free
-  fluid consistent with hemoperitoneum is seen in the perihepatic space,
-  paracolic gutters, and pelvis. The sentinel clot sign (highest density
-  fluid) is adjacent to the spleen, confirming splenic origin. No active
-  contrast extravasation on this phase. No hepatic, renal, or pancreatic
-  injury identified. The adrenal glands are normal.
-  Impression: AAST Grade III splenic laceration with significant
-  hemoperitoneum. Trauma surgery consultation for consideration of
-  observation with serial imaging versus embolization or operative
-  management.
+  Contrast-enhanced CT of the chest demonstrates diffuse bilateral ground-glass opacities with interlobular septal thickening in a predominantly peripheral and gravity-dependent distribution. No filling defects are identified within the pulmonary arteries to suggest thromboembolism. No pleural effusions are noted. In the setting of recent long bone fracture, these findings are consistent with fat embolism syndrome. The pattern differs from typical ARDS by the presence of septal thickening and peripheral predominance.
 condition_present: true
 confusion_pair: null
-source_dataset: omnimedvqa-open
+source_dataset: openem-grounded
 tags:
-  - splenic-laceration
+  - pulmonary
   - trauma
   - emergency
-  - abdomen
-  - hemoperitoneum
-  - finding-detection

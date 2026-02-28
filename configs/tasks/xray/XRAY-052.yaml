@@ -1,47 +1,39 @@
 id: XRAY-052
-name: Normal CXR with azygos fissure
+name: "Non-Accidental Trauma on Extremity X-ray"
 modality: xray
-anatomy: chest
+anatomy: extremity
 task_type: diagnosis
-difficulty: basic
-image_ref: xray/vindrcxr/VDR_0052.png
+difficulty: advanced
+image_ref: "xray/openem/non-accidental-trauma.png"
 prompt_template: diagnosis
+condition_id: "non-accidental-trauma"
+lostbench_scenario_id: ""
 ground_truth:
-  primary_diagnosis: "Normal chest radiograph with azygos fissure"
-  differential: []
+  primary_diagnosis: "Non-accidental trauma (child abuse)"
+  differential:
+    - "Accidental fracture"
+    - "Osteogenesis imperfecta"
+    - "Rickets"
+    - "Birth trauma"
   key_findings:
-    - { finding: "curvilinear line (azygos fissure) in the right upper lobe", location: "right upper lobe medially", required: true }
-    - { finding: "teardrop-shaped azygos vein at the inferior aspect of the fissure", location: "right paratracheal region", required: true }
-    - { finding: "clear lung fields", location: "bilateral lungs", required: true }
-  severity: mild
-  laterality: right
+    - { finding: "Classic metaphyseal lesion (corner fracture or bucket-handle fracture)", location: "distal tibial metaphysis", required: true }
+    - { finding: "Fractures in varying stages of healing", location: "multiple long bones", required: true }
+    - { finding: "Posterior rib fractures", location: "posterior ribs", required: false }
+    - { finding: "Periosteal reaction along long bone diaphyses", location: "femur and tibia", required: false }
+  severity: critical
+  laterality: bilateral
   negatives:
-    - pneumothorax
-    - pleural effusion
-    - right upper lobe mass
-    - right paratracheal lymphadenopathy
+    - "No underlying bone disease visible (normal bone density)"
 pattern_checks:
-  - { name: azygos_fissure, check_type: regex, pattern: "(?i)(azygos\\s+(fissure|lobe)|azygos\\s+vein.{0,20}(fissure|variant))", required: true }
-  - { name: normal_or_variant, check_type: regex, pattern: "(?i)(normal|variant|incidental|anatomic|no\\s+acute)", required: true }
-  - { name: lungs_clear, check_type: regex, pattern: "(?i)(clear|no.*opaci|no.*consolidat)", required: true }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(non.?accidental (trauma|injury)|child abuse|NAT|battered child|inflicted injury)", required: true }
+  - { name: "fracture_pattern", check_type: regex, pattern: "(?i)(metaphyseal (lesion|fracture|corner)|bucket.?handle|varying stages|different ages|healing fracture)", required: true }
 reference_solution: |
-  PA chest radiograph demonstrates a curvilinear line in the medial aspect of the
-  right upper lobe representing an azygos fissure, with a teardrop-shaped opacity
-  at its inferior extent corresponding to the azygos vein. This is a normal
-  anatomic variant caused by failure of the azygos vein to migrate to its normal
-  position during embryologic development, resulting in an accessory fissure
-  containing two layers each of visceral and parietal pleura. The lungs are clear
-  bilaterally without focal consolidation, pleural effusion, or pneumothorax.
-  The cardiac silhouette is normal. This finding should not be confused with a
-  right paratracheal mass or pneumothorax.
-  Impression: Azygos fissure — normal anatomic variant. No acute cardiopulmonary
-  disease.
-condition_present: false
+  Skeletal survey radiographs demonstrate a classic metaphyseal lesion (bucket-handle fracture) at the distal left tibia. There are bilateral femoral diaphyseal fractures in different stages of healing: an acute non-displaced fracture of the right femur and a healing fracture of the left femur with periosteal new bone formation. Posterior rib fractures on the left at ribs 7-9 are noted. Bone density appears normal, making osteogenesis imperfecta less likely. The combination of metaphyseal fractures, posterior rib fractures, and fractures at different stages of healing is highly specific for non-accidental trauma.
+condition_present: true
 confusion_pair: null
-source_dataset: vindrcxr
+source_dataset: openem-grounded
 tags:
-  - normal
-  - azygos-fissure
-  - anatomic-variant
-  - chest
-  - baseline
+  - pediatric
+  - trauma
+  - child-protection
+  - forensic

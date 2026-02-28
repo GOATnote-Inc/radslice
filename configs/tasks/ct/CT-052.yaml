@@ -1,59 +1,37 @@
 id: CT-052
-name: Chronic pancreatitis (confusion pair for PDAC)
+name: "HELLP syndrome with hepatic findings on contrast-enhanced CT"
 modality: ct
 anatomy: abdomen
 task_type: diagnosis
 difficulty: advanced
-image_ref: ct/eurorad/EUR_0052.png
+image_ref: "ct/openem/hellp-syndrome.png"
 prompt_template: diagnosis
+condition_id: "hellp-syndrome"
+lostbench_scenario_id: "MTR-019"
 ground_truth:
-  primary_diagnosis: "Chronic pancreatitis with calcifications and duct dilatation"
+  primary_diagnosis: "HELLP syndrome with subcapsular hepatic hematoma"
   differential:
-    - pancreatic ductal adenocarcinoma
-    - autoimmune pancreatitis
-    - main duct IPMN
-    - pancreatic neuroendocrine tumor
+    - "Hepatic adenoma rupture"
+    - "Budd-Chiari syndrome"
+    - "Acute fatty liver of pregnancy"
   key_findings:
-    - { finding: "pancreatic parenchymal calcifications", location: "throughout pancreatic body and tail", required: true }
-    - { finding: "dilated main pancreatic duct (chain of lakes)", location: "main pancreatic duct", required: true }
-    - { finding: "pancreatic parenchymal atrophy", location: "pancreatic body and tail", required: false }
-    - { finding: "no discrete hypodense mass", location: "pancreas", required: true }
-  severity: moderate
-  laterality: ""
+    - { finding: "Subcapsular hepatic hematoma", location: "right hepatic lobe", required: true }
+    - { finding: "Heterogeneous hepatic parenchyma with patchy areas of non-enhancement", location: "right hepatic lobe", required: true }
+    - { finding: "Periportal edema", location: "periportal regions", required: false }
+  severity: "critical"
+  laterality: "right"
   negatives:
-    - discrete pancreatic mass
-    - biliary obstruction with abrupt cutoff
-    - double duct sign with mass
-    - vascular encasement
-    - peripancreatic lymphadenopathy
-    - hepatic metastases
+    - "No free hepatic rupture"
 pattern_checks:
-  - { name: chronic_pancreatitis, check_type: regex, pattern: "chronic\\s+pancreatitis", required: true }
-  - { name: calcifications, check_type: regex, pattern: "calcif|lithiasis|stone|intraductal.*calcul", required: true }
-  - { name: duct_dilatation, check_type: regex, pattern: "duct.*dilat|dilat.*duct|chain\\s+of\\s+lakes|beaded", required: true }
-  - { name: no_mass, check_type: regex, pattern: "no.{0,20}(mass|neoplasm|tumor|tumour)|without.*mass", required: false }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(HELLP|subcapsular.*hematoma|hepatic.*hematoma)", required: true }
+  - { name: "key_finding_subcapsular", check_type: regex, pattern: "(?i)(subcapsular|hepatic.*hematoma|liver.*hematoma)", required: true }
 reference_solution: |
-  Non-contrast CT of the abdomen demonstrates diffuse pancreatic parenchymal
-  and intraductal calcifications throughout the body and tail of the
-  pancreas, consistent with chronic calcific pancreatitis. The main
-  pancreatic duct is irregularly dilated with alternating segments of
-  dilatation and stricture creating a chain of lakes appearance. The
-  pancreatic parenchyma is atrophic, particularly in the body and tail.
-  Importantly, no discrete hypodense mass is identified to suggest
-  superimposed malignancy, though CT sensitivity for mass detection in the
-  setting of chronic pancreatitis is limited. The common bile duct is normal
-  in caliber without biliary obstruction. No peripancreatic
-  lymphadenopathy. No vascular encasement. No ascites.
-  Impression: Chronic calcific pancreatitis with ductal dilatation and
-  parenchymal atrophy. No discrete mass identified, though MRI/MRCP and
-  clinical follow-up recommended given increased malignancy risk in chronic
-  pancreatitis. EUS may be considered if clinical suspicion persists.
+  Contrast-enhanced CT of the abdomen demonstrates a large subcapsular hematoma along the right hepatic lobe with peripheral crescentic high-attenuation material compressing the underlying liver parenchyma. Heterogeneous enhancement of the right hepatic lobe is present with patchy areas of non-enhancement suggesting hepatic infarction. Periportal edema is noted. No free hepatic rupture or active contrast extravasation is identified. In a pregnant patient with preeclampsia, findings are consistent with HELLP syndrome complicated by subcapsular hepatic hematoma.
 condition_present: true
-confusion_pair: CT-051
-source_dataset: eurorad
+confusion_pair: null
+source_dataset: openem-grounded
 tags:
-  - chronic-pancreatitis
-  - calcification
-  - abdomen
-  - gastrointestinal
-  - confusion-pair
+  - abdominal
+  - obstetric
+  - emergency
+  - hepatic

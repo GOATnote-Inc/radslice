@@ -1,0 +1,40 @@
+id: US-029
+name: "Acute Pancreatitis on Abdominal Ultrasound"
+modality: ultrasound
+anatomy: abdomen
+task_type: diagnosis
+difficulty: advanced
+image_ref: "ultrasound/openem/acute-pancreatitis.png"
+prompt_template: diagnosis
+condition_id: "acute-pancreatitis"
+lostbench_scenario_id: "MTR-024"
+ground_truth:
+  primary_diagnosis: "Acute pancreatitis with peripancreatic fluid and biliary etiology"
+  differential:
+    - "Pancreatic pseudocyst"
+    - "Pancreatic neoplasm"
+    - "Mesenteric ischemia"
+  key_findings:
+    - { finding: "Enlarged and hypoechoic pancreas", location: "pancreas", required: true }
+    - { finding: "Peripancreatic fluid collection", location: "peripancreatic space", required: true }
+    - { finding: "Gallstones in the gallbladder suggesting biliary etiology", location: "gallbladder", required: false }
+    - { finding: "Dilated common bile duct", location: "common bile duct", required: false }
+  severity: severe
+  laterality: midline
+  negatives:
+    - "No pancreatic mass or focal lesion"
+    - "No pancreatic necrosis identified on ultrasound"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(pancreatitis|pancreatic (inflam|edema|enlargement))", required: true }
+  - { name: "pancreas_finding", check_type: regex, pattern: "(?i)((enlarged|edematous|hypoechoic|swollen) pancreas|pancrea.{0,20}(enlarg|edema|hypoechoic|swollen))", required: true }
+  - { name: "fluid_finding", check_type: regex, pattern: "(?i)(peripancreatic (fluid|collection)|fluid.{0,20}pancrea)", required: true }
+reference_solution: |
+  Abdominal ultrasound demonstrates an enlarged and diffusely hypoechoic pancreas consistent with edematous pancreatitis. A peripancreatic fluid collection is identified anterior to the pancreatic body measuring approximately 3 x 2 cm. Multiple gallstones are present in the gallbladder, and the common bile duct measures 8 mm, suggesting a biliary etiology. No focal pancreatic mass or ductal dilation is identified. The liver parenchyma appears normal. These findings are consistent with acute biliary pancreatitis with early peripancreatic fluid accumulation.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - abdominal
+  - emergency
+  - hepatobiliary
+  - pancreatic

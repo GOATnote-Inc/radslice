@@ -1,49 +1,38 @@
 id: XRAY-020
-name: Right apical pneumothorax
+name: "COPD Exacerbation on Chest X-ray"
 modality: xray
 anatomy: chest
 task_type: diagnosis
-difficulty: intermediate
-image_ref: xray/omnimedvqa/CXR_0020.png
+difficulty: basic
+image_ref: "xray/openem/copd-exacerbation.png"
 prompt_template: diagnosis
+condition_id: "copd-exacerbation"
+lostbench_scenario_id: ""
 ground_truth:
-  primary_diagnosis: "Right apical pneumothorax"
+  primary_diagnosis: "COPD exacerbation"
   differential:
-    - skin fold artifact
-    - bullous disease at the apex
-    - prior apical scarring with lucency
+    - "Acute asthma exacerbation"
+    - "Pneumonia superimposed on COPD"
+    - "Pneumothorax"
   key_findings:
-    - { finding: "thin visceral pleural line at the right apex", location: "right apex", required: true }
-    - { finding: "absence of lung markings peripheral to the pleural line", location: "right apical region", required: true }
-    - { finding: "no mediastinal shift", location: "mediastinum", required: false }
+    - { finding: "Hyperinflation with flattened hemidiaphragms", location: "bilateral lung fields", required: true }
+    - { finding: "Increased AP diameter", location: "chest", required: false }
+    - { finding: "Bullous changes or emphysematous blebs", location: "bilateral upper lobes", required: false }
+    - { finding: "Peribronchial cuffing", location: "bilateral perihilar regions", required: false }
   severity: moderate
-  laterality: right
+  laterality: bilateral
   negatives:
-    - tension pneumothorax
-    - mediastinal shift
-    - left pneumothorax
-    - rib fracture
-    - subcutaneous emphysema
-    - pleural effusion
+    - "No pneumothorax"
+    - "No focal consolidation"
 pattern_checks:
-  - { name: primary_diagnosis, check_type: regex, pattern: "(?i)(right.{0,20}(apical\\s+)?pneumothorax|pneumothorax.{0,20}right\\s+(apex|apical))", required: true }
-  - { name: pleural_line, check_type: regex, pattern: "(?i)(visceral\\s+pleural\\s+line|pleural\\s+line|white\\s+line.{0,20}(apex|apical))", required: true }
-  - { name: absent_markings, check_type: regex, pattern: "(?i)(absent|no|lack|without).{0,20}(lung\\s+)?marking", required: false }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(COPD|emphysema|chronic obstructive|hyperinflat)", required: true }
+  - { name: "hyperinflation_finding", check_type: regex, pattern: "(?i)(hyperinflat|flattened diaphragm|emphysema|bullous|increased.*lucency)", required: true }
 reference_solution: |
-  Frontal chest radiograph demonstrates a thin visceral pleural line at the right
-  apex with absence of lung markings peripheral to this line, consistent with a
-  right apical pneumothorax. The pneumothorax appears small to moderate in size.
-  There is no mediastinal shift or tracheal deviation to suggest tension physiology.
-  The left lung is fully expanded and clear. No rib fractures or subcutaneous
-  emphysema identified. No pleural effusion. The finding should be distinguished
-  from a skin fold artifact, which typically extends beyond the lung margin and
-  does not demonstrate a sharp visceral pleural line. Clinical correlation and
-  follow-up imaging recommended to assess for interval change.
+  Frontal chest radiograph demonstrates marked bilateral pulmonary hyperinflation with flattened hemidiaphragms and a barrel-chest configuration. Emphysematous bullous changes are noted in the upper lobes. Peribronchial thickening is present bilaterally. The cardiac silhouette is vertically oriented and elongated. No focal consolidation or pneumothorax is identified. These findings are consistent with underlying COPD, and the peribronchial thickening suggests an acute exacerbation.
 condition_present: true
 confusion_pair: null
-source_dataset: omnimedvqa-open
+source_dataset: openem-grounded
 tags:
-  - pneumothorax
-  - right-apex
-  - pleural-line
-  - small-pneumothorax
+  - pulmonary
+  - chronic
+  - airway

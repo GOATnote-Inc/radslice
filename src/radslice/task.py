@@ -72,6 +72,8 @@ class Task:
     reference_solution: str = ""
     condition_present: bool = True
     confusion_pair: str | None = None
+    condition_id: str = ""  # OpenEM condition identifier (e.g. "spontaneous-pneumothorax")
+    lostbench_scenario_id: str = ""  # LostBench scenario ID (e.g. "MTR-016") if applicable
     source_dataset: str = ""
     tags: list[str] = field(default_factory=list)
     metadata: dict[str, Any] = field(default_factory=dict)
@@ -147,6 +149,8 @@ def validate_task(task: Task) -> list[str]:
         errors.append("image_ref is required")
     if not task.ground_truth.primary_diagnosis:
         errors.append("ground_truth.primary_diagnosis is required")
+    if not task.condition_id:
+        errors.append("condition_id is required (must reference an OpenEM condition)")
     # Validate pattern check types
     for pc in task.pattern_checks:
         if pc.check_type not in {"regex", "contains", "not_contains"}:
@@ -174,6 +178,8 @@ def load_task(path: str | Path) -> Task:
         reference_solution=raw.get("reference_solution", ""),
         condition_present=raw.get("condition_present", True),
         confusion_pair=raw.get("confusion_pair"),
+        condition_id=raw.get("condition_id", ""),
+        lostbench_scenario_id=raw.get("lostbench_scenario_id", ""),
         source_dataset=raw.get("source_dataset", ""),
         tags=raw.get("tags", []),
         metadata=raw.get("metadata", {}),

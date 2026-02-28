@@ -1,60 +1,36 @@
 id: CT-032
-name: Focal nodular hyperplasia (confusion pair for HCC)
+name: "Tension pneumothorax on CT chest"
 modality: ct
-anatomy: abdomen
+anatomy: chest
 task_type: diagnosis
 difficulty: advanced
-image_ref: ct/eurorad/EUR_0032.png
+image_ref: "ct/openem/tension-pneumothorax.png"
 prompt_template: diagnosis
+condition_id: "tension-pneumothorax"
+lostbench_scenario_id: "MTR-016"
 ground_truth:
-  primary_diagnosis: "Focal nodular hyperplasia"
+  primary_diagnosis: "Left tension pneumothorax"
   differential:
-    - hepatocellular carcinoma
-    - hepatic adenoma
-    - fibrolamellar carcinoma
-    - hypervascular metastasis
-    - hemangioma
+    - "Simple pneumothorax"
+    - "Large pleural effusion with mediastinal shift"
+    - "Complete lung collapse from endobronchial obstruction"
   key_findings:
-    - { finding: "homogeneously hyperenhancing mass in arterial phase", location: "left hepatic lobe segment 3", required: true }
-    - { finding: "central hypodense scar with delayed enhancement", location: "center of lesion", required: true }
-    - { finding: "isodense to liver on portal venous and delayed phases", location: "left hepatic lobe", required: false }
-    - { finding: "no washout appearance", location: "lesion on portal venous phase", required: false }
-  severity: mild
-  laterality: left
+    - { finding: "Large pneumothorax with complete lung collapse", location: "left hemithorax", required: true }
+    - { finding: "Contralateral mediastinal shift", location: "mediastinum shifted to the right", required: true }
+    - { finding: "Flattening or inversion of the left hemidiaphragm", location: "left hemidiaphragm", required: false }
+  severity: "critical"
+  laterality: "left"
   negatives:
-    - portal venous washout
-    - pseudocapsule
-    - background cirrhosis
-    - portal vein thrombus
-    - biliary dilatation
-    - hemorrhage or necrosis
+    - "No hemothorax"
 pattern_checks:
-  - { name: fnh_mentioned, check_type: regex, pattern: "focal\\s+nodular\\s+hyperplasia|FNH\\b", required: true }
-  - { name: central_scar, check_type: regex, pattern: "central\\s+scar|central.*hypodense|stellate.*scar", required: true }
-  - { name: arterial_enhancement, check_type: regex, pattern: "arterial.*enhanc|hyperenhanc|hypervascular", required: true }
-  - { name: no_washout, check_type: regex, pattern: "no.*washout|isodense|isoattenuat|without.*washout|homogeneous.*portal", required: false }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(tension\\s*pneumothorax)", required: true }
+  - { name: "key_finding_shift", check_type: regex, pattern: "(?i)(mediastinal\\s*shift|contralateral.*shift|tension.*pneumo)", required: true }
 reference_solution: |
-  Multiphase contrast-enhanced CT of the abdomen demonstrates a 3.2 cm
-  well-circumscribed mass in segment 3 of the left hepatic lobe. The lesion
-  shows homogeneous arterial phase hyperenhancement and becomes isodense to
-  the surrounding liver parenchyma on portal venous and delayed phases
-  without washout. A central hypodense scar is present on arterial and
-  portal phases with progressive delayed enhancement of the scar, a
-  characteristic finding of focal nodular hyperplasia. The background liver
-  is normal in morphology without cirrhosis. No pseudocapsule is identified.
-  No portal vein thrombosis. The remaining liver parenchyma is homogeneous
-  without additional lesions. No biliary dilatation.
-  Impression: Left hepatic lobe lesion with imaging characteristics
-  diagnostic of focal nodular hyperplasia (central scar with delayed
-  enhancement, arterial hyperenhancement without washout, non-cirrhotic
-  liver). No further workup necessary if diagnosis is confident on
-  multiphase imaging.
+  CT of the chest demonstrates a large left-sided pneumothorax with complete collapse of the left lung. There is significant rightward mediastinal shift with compression of the right lung and flattening of the left hemidiaphragm, consistent with tension physiology. The right lung is partially compressed. No hemothorax is identified. Findings represent a tension pneumothorax requiring emergent needle decompression followed by chest tube placement.
 condition_present: true
-confusion_pair: CT-031
-source_dataset: eurorad
+confusion_pair: null
+source_dataset: openem-grounded
 tags:
-  - focal-nodular-hyperplasia
-  - hepatic
-  - abdomen
-  - benign
-  - confusion-pair
+  - pulmonary
+  - emergency
+  - critical-care

@@ -1,51 +1,37 @@
 id: XRAY-043
-name: Normal CXR - elderly patient with aortic tortuosity
+name: "Spinal Cord Compression on Spine X-ray"
 modality: xray
-anatomy: chest
+anatomy: spine
 task_type: diagnosis
-difficulty: intermediate
-image_ref: xray/omnimedvqa/CXR_0043.png
+difficulty: advanced
+image_ref: "xray/openem/spinal-cord-compression.png"
 prompt_template: diagnosis
+condition_id: "spinal-cord-compression"
+lostbench_scenario_id: "MTR-030"
 ground_truth:
-  primary_diagnosis: "Normal chest radiograph with age-related aortic unfolding"
-  differential: []
+  primary_diagnosis: "Metastatic spinal cord compression"
+  differential:
+    - "Vertebral compression fracture (osteoporotic)"
+    - "Vertebral osteomyelitis with epidural abscess"
+    - "Multiple myeloma"
   key_findings:
-    - { finding: "unfolded tortuous thoracic aorta", location: "aortic arch and descending aorta", required: true }
-    - { finding: "clear lung fields", location: "bilateral lungs", required: true }
-    - { finding: "normal cardiac silhouette for age", location: "cardiomediastinal", required: true }
-    - { finding: "aortic calcification", location: "aortic wall", required: false }
-  severity: mild
-  laterality: ""
+    - { finding: "Vertebral body collapse with pedicle destruction (winking owl sign absent)", location: "thoracic spine", required: true }
+    - { finding: "Loss of pedicle on AP view (absent pedicle sign)", location: "thoracic vertebral body", required: true }
+    - { finding: "Pathologic compression fracture with posterior vertebral body retropulsion", location: "thoracic spine", required: false }
+  severity: critical
+  laterality: midline
   negatives:
-    - aortic aneurysm
-    - aortic dissection
-    - cardiomegaly
-    - pleural effusion
-    - consolidation
-    - mass
+    - "No disc space narrowing or endplate irregularity to suggest infection"
 pattern_checks:
-  - { name: no_acute_disease, check_type: regex, pattern: "(?i)(no\\s+acute|normal|unremarkable|no.{0,20}significant)", required: true }
-  - { name: aortic_unfolding, check_type: regex, pattern: "(?i)(unfolded|tortuou|ectatic|elongat).{0,20}aort", required: true }
-  - { name: age_related, check_type: regex, pattern: "(?i)(age.?related|degenerative|atheroscler|chronic)", required: true }
-  - { name: lungs_clear, check_type: regex, pattern: "(?i)(clear|no.*opaci|no.*consolidat)", required: true }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(spinal cord compression|metastatic|pathologic fracture|cord compression)", required: true }
+  - { name: "bone_destruction", check_type: regex, pattern: "(?i)(pedicle (destruction|erosion|absent|loss)|vertebral (collapse|destruction)|lytic|pathologic)", required: true }
 reference_solution: |
-  PA chest radiograph demonstrates a prominent unfolded thoracic aorta with
-  tortuosity, which is an age-related degenerative change and should not be
-  confused with an aortic aneurysm. Atherosclerotic calcification is seen along
-  the aortic wall. The lungs are clear bilaterally without focal consolidation,
-  mass, or pleural effusion. No pneumothorax. The cardiac silhouette is within
-  normal limits for the patient's age. The costophrenic angles are sharp. The
-  mediastinal width is within normal limits when accounting for the aortic
-  tortuosity. The visualized osseous structures are intact with mild degenerative
-  changes of the thoracic spine.
-  Impression: Age-related aortic unfolding and atherosclerosis. No acute
-  cardiopulmonary disease.
-condition_present: false
+  AP and lateral radiographs of the thoracic spine demonstrate collapse of the T8 vertebral body with loss of the left pedicle on the AP view (absent winking owl sign), highly suggestive of a metastatic lytic lesion. There is posterior vertebral body retropulsion on the lateral view. The disc spaces above and below are preserved, arguing against an infectious etiology. These findings indicate pathologic compression fracture with concern for epidural extension and spinal cord compression. Urgent MRI of the entire spine is required.
+condition_present: true
 confusion_pair: null
-source_dataset: omnimedvqa-open
+source_dataset: openem-grounded
 tags:
-  - normal
-  - aortic-unfolding
-  - elderly
-  - chest
-  - baseline
+  - musculoskeletal
+  - spine
+  - oncologic
+  - emergency

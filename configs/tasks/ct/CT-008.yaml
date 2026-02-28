@@ -1,57 +1,37 @@
 id: CT-008
-name: Acute ischemic stroke with dense MCA sign
+name: "Spontaneous coronary artery dissection on CTA"
 modality: ct
-anatomy: head
+anatomy: chest
 task_type: diagnosis
-difficulty: advanced
-image_ref: ct/omnimedvqa/CT_0008.png
+difficulty: expert
+image_ref: "ct/openem/spontaneous-coronary-artery-dissection.png"
 prompt_template: diagnosis
+condition_id: "spontaneous-coronary-artery-dissection"
+lostbench_scenario_id: "MTR-067"
 ground_truth:
-  primary_diagnosis: "Acute ischemic stroke in left MCA territory"
+  primary_diagnosis: "Spontaneous coronary artery dissection (SCAD) of the left anterior descending artery"
   differential:
-    - hemorrhagic stroke
-    - cerebral venous thrombosis with infarction
-    - encephalitis
-    - brain tumor with vasogenic edema
-    - Todd paralysis postictal changes
+    - "Atherosclerotic coronary artery disease"
+    - "Coronary artery vasospasm"
+    - "Coronary artery embolism"
   key_findings:
-    - { finding: "loss of gray-white matter differentiation", location: "left insular cortex and left frontal operculum", required: true }
-    - { finding: "hyperdense left MCA sign", location: "left middle cerebral artery M1 segment", required: true }
-    - { finding: "sulcal effacement", location: "left frontotemporal convexity", required: false }
-    - { finding: "early lentiform nucleus obscuration", location: "left basal ganglia", required: false }
-  severity: severe
-  laterality: left
+    - { finding: "Intramural hematoma with eccentric luminal narrowing", location: "mid left anterior descending artery", required: true }
+    - { finding: "Smooth long-segment tapering of the coronary artery lumen", location: "LAD", required: true }
+    - { finding: "Absence of coronary calcification at the site of narrowing", location: "LAD", required: false }
+  severity: "critical"
+  laterality: "left"
   negatives:
-    - intracranial hemorrhage
-    - midline shift
-    - hydrocephalus
-    - established hypodensity indicating completed infarction
-    - right hemisphere abnormality
+    - "No significant atherosclerotic plaque burden"
 pattern_checks:
-  - { name: stroke_mentioned, check_type: regex, pattern: "ischemic\\s+stroke|infarct|isch[ae]mi[ac]|CVA|cerebrovascular\\s+accident", required: true }
-  - { name: mca_territory, check_type: regex, pattern: "MCA|middle\\s+cerebral\\s+arter", required: true }
-  - { name: laterality_left, check_type: regex, pattern: "left", required: true }
-  - { name: dense_mca_or_gwm_loss, check_type: regex, pattern: "dense\\s+MCA|hyperdense.{0,20}(MCA|middle\\s+cerebral)|gray.?white.{0,15}(loss|differenti|obscur)|insular\\s+ribbon", required: true }
-  - { name: early_changes, check_type: regex, pattern: "early|acute|hyperacute|subtle", required: false }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(spontaneous\\s*coronary\\s*artery\\s*dissection|SCAD|coronary.*dissection)", required: true }
+  - { name: "key_finding_narrowing", check_type: regex, pattern: "(?i)(intramural\\s*hematoma|luminal\\s*narrowing|long.?segment\\s*taper)", required: true }
 reference_solution: |
-  Non-contrast CT of the head demonstrates a hyperdense left middle cerebral
-  artery sign at the M1 segment, indicating acute thrombus. There is subtle
-  loss of gray-white matter differentiation involving the left insular
-  cortex (insular ribbon sign) and left frontal operculum. Early obscuration
-  of the left lentiform nucleus is noted. Mild sulcal effacement is present
-  along the left frontotemporal convexity compared to the right. No
-  established hypodensity to suggest completed territorial infarction. No
-  intracranial hemorrhage. No midline shift. The right hemisphere appears
-  normal. ASPECTS score estimated at 7.
-  Impression: Acute left MCA territory ischemic stroke with hyperdense MCA
-  sign and early ischemic changes. Immediate neurology consultation for
-  thrombolytic and/or endovascular therapy evaluation.
+  Coronary CTA demonstrates smooth long-segment eccentric luminal narrowing of the mid left anterior descending artery with a surrounding crescent of intramural hematoma. There is no significant coronary calcification or atherosclerotic plaque at the affected segment. The remaining coronary arteries are patent. Findings are characteristic of spontaneous coronary artery dissection (SCAD), most commonly seen in young female patients.
 condition_present: true
 confusion_pair: null
-source_dataset: omnimedvqa-open
+source_dataset: openem-grounded
 tags:
-  - ischemic-stroke
+  - cardiac
+  - vascular
   - emergency
-  - head
-  - neurovascular
-  - time-critical
+  - cta

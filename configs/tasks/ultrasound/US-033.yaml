@@ -1,0 +1,40 @@
+id: US-033
+name: "Eclampsia on Obstetric Ultrasound"
+modality: ultrasound
+anatomy: pelvis
+task_type: diagnosis
+difficulty: advanced
+image_ref: "ultrasound/openem/eclampsia.png"
+prompt_template: diagnosis
+condition_id: "eclampsia"
+lostbench_scenario_id: "MTR-045"
+ground_truth:
+  primary_diagnosis: "Eclampsia with fetal distress and placental insufficiency on obstetric ultrasound"
+  differential:
+    - "Severe preeclampsia without seizure"
+    - "HELLP syndrome"
+    - "Placental abruption"
+  key_findings:
+    - { finding: "Abnormal umbilical artery Doppler with elevated S/D ratio or absent end-diastolic flow", location: "umbilical artery", required: true }
+    - { finding: "Fetal growth restriction (estimated fetal weight below 10th percentile)", location: "fetal biometry", required: true }
+    - { finding: "Oligohydramnios or reduced amniotic fluid index", location: "amniotic fluid", required: false }
+    - { finding: "Abnormal uterine artery Doppler with notching", location: "uterine arteries", required: false }
+  severity: critical
+  laterality: n/a
+  negatives:
+    - "No placental abruption identified"
+    - "No fetal demise"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(eclampsia|pre.?eclampsia|toxemia|placental insufficiency)", required: true }
+  - { name: "doppler_finding", check_type: regex, pattern: "(?i)(umbilical artery.{0,30}(abnormal|elevated|absent|reversed)|absent end.?diastolic|S/D ratio|AEDF|REDF)", required: true }
+  - { name: "fetal_finding", check_type: regex, pattern: "(?i)(fetal (growth restriction|distress)|IUGR|FGR|small for gestational|biophysical)", required: true }
+reference_solution: |
+  Obstetric ultrasound demonstrates a single intrauterine pregnancy with estimated fetal weight below the 5th percentile for gestational age consistent with fetal growth restriction. Umbilical artery Doppler reveals absent end-diastolic flow, indicating significant placental insufficiency. The amniotic fluid index is reduced at 4 cm, consistent with oligohydramnios. Uterine artery Doppler demonstrates bilateral notching with elevated pulsatility indices. In the setting of maternal seizure activity with severe hypertension, these findings are consistent with eclampsia with placental insufficiency and fetal compromise requiring emergent delivery.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - obstetric
+  - emergency
+  - doppler
+  - fetal

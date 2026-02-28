@@ -1,0 +1,39 @@
+id: US-043
+name: "Acute Urinary Retention on Bladder Ultrasound"
+modality: ultrasound
+anatomy: pelvis
+task_type: diagnosis
+difficulty: basic
+image_ref: "ultrasound/openem/acute-urinary-retention.png"
+prompt_template: diagnosis
+condition_id: "acute-urinary-retention"
+lostbench_scenario_id: ""
+ground_truth:
+  primary_diagnosis: "Acute urinary retention with markedly distended bladder"
+  differential:
+    - "Large ovarian cyst"
+    - "Ascites"
+    - "Pelvic mass"
+  key_findings:
+    - { finding: "Markedly distended urinary bladder with volume greater than 500 mL", location: "urinary bladder", required: true }
+    - { finding: "Anechoic urine within a thin-walled bladder", location: "urinary bladder", required: true }
+    - { finding: "Bilateral hydronephrosis", location: "kidneys", required: false }
+    - { finding: "Enlarged prostate (if male patient)", location: "prostate", required: false }
+  severity: moderate
+  laterality: midline
+  negatives:
+    - "No bladder wall thickening or mass"
+    - "No pelvic mass"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(urinary retention|bladder distension|distended bladder|retention.{0,20}urin)", required: true }
+  - { name: "volume_finding", check_type: regex, pattern: "(?i)(distended bladder|bladder volume|>\\s*500|greater than 500|markedly (distended|full)|large.{0,10}bladder)", required: true }
+  - { name: "bladder_appearance", check_type: regex, pattern: "(?i)(anechoic|thin.?walled|bladder.{0,20}(full|distend))", required: true }
+reference_solution: |
+  Pelvic ultrasound demonstrates a markedly distended urinary bladder with an estimated volume of approximately 800 mL. The bladder is thin-walled and filled with anechoic urine without evidence of intraluminal mass, calculi, or wall irregularity. Bilateral mild hydronephrosis is noted, likely secondary to bladder outflow obstruction. The prostate appears mildly enlarged on transabdominal view. These findings are consistent with acute urinary retention, and bladder catheterization is recommended.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - urologic
+  - pocus
+  - bladder

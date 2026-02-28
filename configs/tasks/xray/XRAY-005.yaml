@@ -1,49 +1,36 @@
 id: XRAY-005
-name: Left clavicle fracture
+name: "Atrial Fibrillation with RVR on Chest X-ray"
 modality: xray
-anatomy: shoulder
+anatomy: chest
 task_type: diagnosis
-difficulty: basic
-image_ref: xray/omnimedvqa/CXR_0005.png
+difficulty: intermediate
+image_ref: "xray/openem/atrial-fibrillation-rvr.png"
 prompt_template: diagnosis
+condition_id: "atrial-fibrillation-rvr"
+lostbench_scenario_id: ""
 ground_truth:
-  primary_diagnosis: "Left clavicle fracture"
+  primary_diagnosis: "Atrial fibrillation with rapid ventricular response"
   differential:
-    - pathologic fracture
-    - os acromiale variant
-    - acromioclavicular separation
-    - old healed fracture with pseudoarthrosis
+    - "Heart failure with cardiomegaly"
+    - "Valvular heart disease"
+    - "Pericardial effusion"
   key_findings:
-    - { finding: "cortical disruption with fracture line", location: "left clavicle mid-shaft", required: true }
-    - { finding: "displacement of fracture fragments", location: "left clavicle", required: false }
-    - { finding: "overlying soft tissue swelling", location: "left supraclavicular region", required: false }
+    - { finding: "Cardiomegaly with left atrial enlargement", location: "cardiac silhouette", required: true }
+    - { finding: "Pulmonary vascular congestion", location: "bilateral lung fields", required: false }
+    - { finding: "Double density sign of left atrial enlargement", location: "retrocardiac region", required: false }
   severity: moderate
-  laterality: left
+  laterality: bilateral
   negatives:
-    - rib fractures
-    - pneumothorax
-    - glenohumeral dislocation
-    - acromioclavicular widening
-    - scapula fracture
+    - "No focal consolidation"
+    - "No pneumothorax"
 pattern_checks:
-  - { name: fracture_mentioned, check_type: regex, pattern: "fracture|break|disruption", required: true }
-  - { name: clavicle_mentioned, check_type: regex, pattern: "clavicle|clavicular", required: true }
-  - { name: laterality_left, check_type: regex, pattern: "left", required: true }
-  - { name: location_described, check_type: regex, pattern: "mid.?shaft|middle\\s+third|diaphys", required: true }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(atrial fibrillation|cardiomegaly|left atrial enlargement|atrial enlargement)", required: true }
+  - { name: "cardiac_finding", check_type: regex, pattern: "(?i)(cardiomegaly|enlarged heart|left atrial|double density)", required: true }
 reference_solution: |
-  Radiograph of the left shoulder/clavicle demonstrates an acute fracture of
-  the left clavicle at the mid-shaft. There is a transverse fracture line with
-  cortical disruption and mild inferior displacement of the distal fragment.
-  Overlying soft tissue swelling is noted in the left supraclavicular region.
-  No associated pneumothorax is seen on the included lung apex. The
-  acromioclavicular and glenohumeral joints are intact. No additional rib
-  fractures or scapular fracture identified.
-  Impression: Acute left mid-shaft clavicle fracture with mild displacement.
+  Frontal chest radiograph demonstrates cardiomegaly with prominence of the left atrial appendage and a double density sign at the right heart border consistent with left atrial enlargement. There is mild pulmonary vascular congestion. No focal consolidation or pleural effusion is identified. These findings are consistent with underlying atrial enlargement, commonly seen in the setting of atrial fibrillation. Clinical and electrocardiographic correlation is recommended.
 condition_present: true
 confusion_pair: null
-source_dataset: omnimedvqa-open
+source_dataset: openem-grounded
 tags:
-  - fracture
-  - clavicle
-  - trauma
-  - musculoskeletal
+  - cardiac
+  - arrhythmia

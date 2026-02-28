@@ -1,0 +1,38 @@
+id: MRI-046
+name: "Acute Angle-Closure Glaucoma on Orbital MRI"
+modality: mri
+anatomy: face
+task_type: diagnosis
+difficulty: advanced
+image_ref: "mri/openem/acute-angle-closure-glaucoma.png"
+prompt_template: diagnosis
+condition_id: "acute-angle-closure-glaucoma"
+lostbench_scenario_id: "MTR-029"
+ground_truth:
+  primary_diagnosis: "Acute angle-closure glaucoma on orbital MRI"
+  differential:
+    - "Uveal melanoma"
+    - "Retinal detachment"
+    - "Endophthalmitis"
+  key_findings:
+    - { finding: "Shallow anterior chamber depth with anteriorly bowed iris on T2-weighted images", location: "Left globe anterior chamber", required: true }
+    - { finding: "Distended globe with increased T2 signal intensity of the aqueous humor", location: "Left globe", required: true }
+    - { finding: "Choroidal effusion or thickening", location: "Left globe posterior segment", required: false }
+  severity: "severe"
+  laterality: "left"
+  negatives:
+    - "No intraocular mass"
+    - "No retinal detachment"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(angle.?closure\\s+glaucoma|acute\\s+glaucoma)", required: true }
+  - { name: "anterior_chamber", check_type: regex, pattern: "(?i)(anterior\\s+chamber|shallow|narrow\\s+angle)", required: true }
+  - { name: "laterality", check_type: regex, pattern: "(?i)left", required: true }
+reference_solution: |
+  MRI of the orbits demonstrates a shallow anterior chamber in the left globe with anteriorly bowed iris configuration on T2-weighted images, consistent with angle closure. The left globe appears mildly distended compared to the right. There is subtle choroidal thickening in the left eye. No intraocular mass lesion or retinal detachment. The right globe demonstrates normal anterior chamber depth for comparison. While MRI is not the primary diagnostic modality for glaucoma, the shallow anterior chamber and clinical correlation support the diagnosis of acute angle-closure glaucoma requiring emergent intraocular pressure reduction.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - orbital
+  - ophthalmologic
+  - emergency

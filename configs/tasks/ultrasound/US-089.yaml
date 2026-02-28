@@ -1,0 +1,41 @@
+id: US-089
+name: "Benign Palpitations - Normal Echocardiography"
+modality: ultrasound
+anatomy: chest
+task_type: diagnosis
+difficulty: basic
+image_ref: "ultrasound/openem/benign-palpitations.png"
+prompt_template: diagnosis
+condition_id: "benign-palpitations"
+lostbench_scenario_id: ""
+ground_truth:
+  primary_diagnosis: "Normal echocardiography excluding structural cardiac disease in the setting of benign palpitations"
+  differential:
+    - "Mitral valve prolapse"
+    - "Hypertrophic cardiomyopathy"
+    - "Arrhythmogenic right ventricular cardiomyopathy"
+  key_findings:
+    - { finding: "Normal left ventricular size, wall thickness, and systolic function", location: "left ventricle", required: true }
+    - { finding: "Normal right ventricular size and function", location: "right ventricle", required: true }
+    - { finding: "Normal valvular structure without prolapse", location: "mitral valve", required: false }
+    - { finding: "No left ventricular outflow tract obstruction", location: "LVOT", required: false }
+  severity: mild
+  laterality: n/a
+  negatives:
+    - "No mitral valve prolapse"
+    - "No hypertrophic cardiomyopathy"
+    - "No ARVC features"
+    - "No pericardial effusion"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(normal (echocardiogram|echo|TTE|cardiac)|benign palpitations|no structural (heart|cardiac) disease)", required: true }
+  - { name: "lv_normal", check_type: regex, pattern: "(?i)(normal.{0,20}(LV|left ventric|systolic function|wall thickness)|preserved.{0,15}(function|EF))", required: true }
+  - { name: "no_hcm", check_type: regex, pattern: "(?i)(no (hypertrophic|HCM|LVOT obstruction|asymmetric hypertrophy)|normal.{0,15}wall thickness)", required: true }
+reference_solution: |
+  Transthoracic echocardiography demonstrates a structurally normal heart. The left ventricle is normal in size with normal wall thickness (IVS 9 mm, PW 9 mm) and preserved systolic function with an estimated ejection fraction of 60%. No asymmetric septal hypertrophy or LVOT obstruction is present, excluding hypertrophic cardiomyopathy. The right ventricle is normal in size and function without wall motion abnormalities or aneurysms. The mitral valve demonstrates normal coaptation without prolapse. All valves are structurally normal. No pericardial effusion. In a patient with palpitations, a normal ECG, and a normal echocardiogram, the findings support a diagnosis of benign palpitations with no structural cardiac disease identified.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - cardiac
+  - echocardiography
+  - normal-study

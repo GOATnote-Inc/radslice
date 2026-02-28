@@ -1,0 +1,40 @@
+id: US-031
+name: "Septic Arthritis on Joint Ultrasound"
+modality: ultrasound
+anatomy: knee
+task_type: diagnosis
+difficulty: intermediate
+image_ref: "ultrasound/openem/septic-arthritis.png"
+prompt_template: diagnosis
+condition_id: "septic-arthritis"
+lostbench_scenario_id: "MTR-013"
+ground_truth:
+  primary_diagnosis: "Septic arthritis of the knee with complex joint effusion"
+  differential:
+    - "Acute gout or pseudogout"
+    - "Reactive arthritis"
+    - "Traumatic hemarthrosis"
+  key_findings:
+    - { finding: "Complex joint effusion with internal echoes and debris", location: "suprapatellar recess", required: true }
+    - { finding: "Synovial thickening with hyperemia on power Doppler", location: "knee joint synovium", required: true }
+    - { finding: "Distension of the suprapatellar bursa", location: "suprapatellar recess", required: false }
+    - { finding: "Periarticular soft tissue edema", location: "periarticular knee soft tissue", required: false }
+  severity: severe
+  laterality: left
+  negatives:
+    - "No periarticular abscess"
+    - "No cortical bony erosions"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(septic arthritis|joint infection|infected joint|pyogenic arthritis)", required: true }
+  - { name: "effusion_finding", check_type: regex, pattern: "(?i)(joint effusion|complex (effusion|fluid)|internal echoes|purulent|debris)", required: true }
+  - { name: "synovitis_finding", check_type: regex, pattern: "(?i)(synovial (thicken|hypertrophy|hyperemia)|synovitis|Doppler.{0,20}(signal|flow|hyperemia))", required: true }
+reference_solution: |
+  Ultrasound of the left knee demonstrates a large complex joint effusion in the suprapatellar recess with internal echoes, debris, and septations, consistent with a complicated effusion rather than simple serous fluid. The synovium is markedly thickened and demonstrates increased power Doppler signal indicating hypervascularity. Periarticular soft tissue edema is present. No periarticular abscess or cortical erosions are identified. In the clinical context of an acutely swollen, erythematous joint with fever, these findings are highly suspicious for septic arthritis and warrant emergent arthrocentesis.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - musculoskeletal
+  - emergency
+  - infectious
+  - joint

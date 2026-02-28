@@ -1,0 +1,37 @@
+id: CT-085
+name: "Orbital compartment syndrome requiring lateral canthotomy on CT face"
+modality: ct
+anatomy: face
+task_type: diagnosis
+difficulty: advanced
+image_ref: "ct/openem/lateral-canthotomy.png"
+prompt_template: diagnosis
+condition_id: "lateral-canthotomy"
+lostbench_scenario_id: "MTR-059"
+ground_truth:
+  primary_diagnosis: "Orbital compartment syndrome from retrobulbar hemorrhage"
+  differential:
+    - "Orbital cellulitis with subperiosteal abscess"
+    - "Orbital tumor"
+    - "Thyroid eye disease"
+  key_findings:
+    - { finding: "Retrobulbar hemorrhage with proptosis", location: "left orbit", required: true }
+    - { finding: "Tenting of the posterior globe (stretched optic nerve)", location: "left posterior globe", required: true }
+    - { finding: "Orbital wall fracture as inciting cause", location: "left orbital floor", required: false }
+  severity: "critical"
+  laterality: "left"
+  negatives:
+    - "No globe rupture"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(orbital\\s*compartment|retrobulbar\\s*hemorrhage|lateral\\s*canthotomy)", required: true }
+  - { name: "key_finding_proptosis", check_type: regex, pattern: "(?i)(proptosis|retrobulbar|posterior.*globe.*tent|optic\\s*nerve.*stretch)", required: true }
+reference_solution: |
+  CT of the orbits demonstrates a large retrobulbar hemorrhage within the left intraconal space causing marked proptosis. The posterior globe demonstrates tenting with stretching of the left optic nerve, indicating elevated intraorbital pressure. An associated left orbital floor fracture is present. No globe rupture is identified. Findings represent orbital compartment syndrome requiring emergent lateral canthotomy and cantholysis to decompress the orbit and preserve vision.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - ophthalmologic
+  - trauma
+  - emergency
+  - procedural

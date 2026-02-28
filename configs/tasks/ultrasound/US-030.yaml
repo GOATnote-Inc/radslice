@@ -1,0 +1,39 @@
+id: US-030
+name: "Acute Gout with Double Contour Sign on Ultrasound"
+modality: ultrasound
+anatomy: foot
+task_type: diagnosis
+difficulty: advanced
+image_ref: "ultrasound/openem/acute-gout.png"
+prompt_template: diagnosis
+condition_id: "acute-gout"
+lostbench_scenario_id: ""
+ground_truth:
+  primary_diagnosis: "Acute gouty arthritis with monosodium urate crystal deposition"
+  differential:
+    - "Septic arthritis"
+    - "Calcium pyrophosphate deposition disease (pseudogout)"
+    - "Reactive arthritis"
+  key_findings:
+    - { finding: "Double contour sign (hyperechoic line on articular cartilage surface)", location: "first metatarsophalangeal joint", required: true }
+    - { finding: "Joint effusion with synovial hypertrophy", location: "first MTP joint", required: true }
+    - { finding: "Tophi (hyperechoic aggregates with surrounding hypoechoic rim)", location: "periarticular soft tissue", required: false }
+    - { finding: "Power Doppler signal in the synovium", location: "first MTP joint synovium", required: false }
+  severity: moderate
+  laterality: right
+  negatives:
+    - "No cortical erosions"
+    - "No soft tissue abscess"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(gout|gouty arthritis|monosodium urate|MSU|uric acid)", required: true }
+  - { name: "double_contour", check_type: regex, pattern: "(?i)(double contour|hyperechoic.{0,30}cartilage|crystal deposition|urate deposit)", required: true }
+  - { name: "joint_finding", check_type: regex, pattern: "(?i)(MTP|metatarsophalangeal|first (MTP|toe)|joint effusion)", required: true }
+reference_solution: |
+  Musculoskeletal ultrasound of the right first metatarsophalangeal joint demonstrates the double contour sign, with a hyperechoic irregular band on the surface of the articular cartilage representing monosodium urate crystal deposition. There is a moderate joint effusion with synovial hypertrophy demonstrating increased power Doppler signal consistent with active synovitis. Small periarticular echogenic aggregates consistent with microtophi are noted. No cortical erosions are identified. These findings are consistent with acute gouty arthritis of the first MTP joint.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - musculoskeletal
+  - rheumatologic
+  - joint

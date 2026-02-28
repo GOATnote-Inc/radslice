@@ -1,50 +1,37 @@
 id: XRAY-045
-name: Normal CXR with pacemaker in situ
+name: "Globe Rupture with Intraocular Foreign Body on Face X-ray"
 modality: xray
-anatomy: chest
-task_type: finding_detection
-difficulty: basic
-image_ref: xray/vindrcxr/VDR_0045.png
+anatomy: face
+task_type: diagnosis
+difficulty: advanced
+image_ref: "xray/openem/globe-rupture.png"
 prompt_template: diagnosis
+condition_id: "globe-rupture"
+lostbench_scenario_id: ""
 ground_truth:
-  primary_diagnosis: "Normal chest radiograph with dual-chamber pacemaker in satisfactory position"
-  differential: []
+  primary_diagnosis: "Globe rupture with intraocular foreign body"
+  differential:
+    - "Orbital fracture without globe injury"
+    - "Retrobulbar hemorrhage"
+    - "Orbital foreign body without globe penetration"
   key_findings:
-    - { finding: "pacemaker generator in the left pectoral region", location: "left infraclavicular", required: true }
-    - { finding: "atrial lead tip in the right atrial appendage", location: "right atrial appendage", required: true }
-    - { finding: "ventricular lead tip at the right ventricular apex", location: "right ventricular apex", required: true }
-    - { finding: "clear lung fields", location: "bilateral lungs", required: false }
-  severity: mild
-  laterality: ""
+    - { finding: "Intraocular radiopaque foreign body", location: "right orbit", required: true }
+    - { finding: "Orbital soft tissue swelling", location: "right periorbital region", required: false }
+    - { finding: "Orbital wall fracture if present", location: "orbital floor or medial wall", required: false }
+  severity: critical
+  laterality: right
   negatives:
-    - lead fracture
-    - lead malposition
-    - pneumothorax
-    - pleural effusion
-    - cardiomegaly
-    - lead perforation
+    - "No intracranial foreign body"
 pattern_checks:
-  - { name: pacemaker_mentioned, check_type: regex, pattern: "(?i)(pacemaker|pacer|cardiac\\s+(device|implant)|dual.?chamber)", required: true }
-  - { name: leads_satisfactory, check_type: regex, pattern: "(?i)(satisfactor|appropriat|intact|stable|good\\s+position|well.?position)", required: true }
-  - { name: no_complication, check_type: regex, pattern: "(?i)(no\\s+acute|normal|no.{0,20}(complicat|pneumothorax))", required: true }
-  - { name: lead_position, check_type: regex, pattern: "(?i)(atri(al|um)|ventricul(ar|e)|apex|appendage)", required: false }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(globe rupture|intraocular foreign body|open globe|penetrating (eye|globe|ocular))", required: true }
+  - { name: "foreign_body_finding", check_type: regex, pattern: "(?i)(foreign body|radiopaque|intraocular|metallic)", required: true }
 reference_solution: |
-  PA chest radiograph demonstrates a dual-chamber pacemaker with the generator
-  positioned in the left infraclavicular pectoral region. The atrial lead tip is
-  in the right atrial appendage and the ventricular lead tip is at the right
-  ventricular apex, both in satisfactory position. No lead fracture, kinking, or
-  dislodgement. No pneumothorax related to the device. The lungs are clear
-  bilaterally without consolidation or pleural effusion. The cardiac silhouette
-  is normal in size. The costophrenic angles are sharp. The mediastinum is
-  unremarkable.
-  Impression: Dual-chamber pacemaker with leads in satisfactory position. No
-  acute cardiopulmonary abnormality.
-condition_present: false
+  Radiograph of the face (modified Waters view) demonstrates a small radiopaque foreign body projected within the right orbit, consistent with an intraocular foreign body. Periorbital soft tissue swelling is noted. No orbital fracture is identified on this view. In the clinical context of penetrating eye injury, these findings raise concern for globe rupture. CT of the orbits is recommended for precise localization. Emergent ophthalmologic consultation is required, and MRI is contraindicated if a metallic foreign body is suspected.
+condition_present: true
 confusion_pair: null
-source_dataset: vindrcxr
+source_dataset: openem-grounded
 tags:
-  - normal
-  - pacemaker
-  - cardiac-device
-  - chest
-  - baseline
+  - ophthalmologic
+  - trauma
+  - emergency
+  - foreign-body

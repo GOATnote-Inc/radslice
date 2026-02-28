@@ -1,53 +1,40 @@
 id: US-002
-name: Abdominal aortic aneurysm
+name: "Acute Limb Ischemia on Arterial Doppler Ultrasound"
 modality: ultrasound
-anatomy: abdomen
+anatomy: extremity
 task_type: diagnosis
 difficulty: advanced
-image_ref: ultrasound/radimagenet/US_0002.png
+image_ref: "ultrasound/openem/acute-limb-ischemia.png"
 prompt_template: diagnosis
+condition_id: "acute-limb-ischemia"
+lostbench_scenario_id: "MTR-023"
 ground_truth:
-  primary_diagnosis: "Abdominal aortic aneurysm"
+  primary_diagnosis: "Acute arterial occlusion of the lower extremity"
   differential:
-    - aortic pseudoaneurysm
-    - retroperitoneal mass displacing aorta
-    - aortic dissection
-    - tortuous aorta mimicking dilation
+    - "Severe peripheral arterial disease with critical stenosis"
+    - "Arterial embolism from cardiac source"
+    - "Aortic dissection with limb malperfusion"
   key_findings:
-    - { finding: "fusiform dilation of the abdominal aorta exceeding 3 cm", location: "infrarenal abdominal aorta", required: true }
-    - { finding: "intraluminal mural thrombus", location: "anterior and lateral aortic wall", required: false }
-    - { finding: "anechoic lumen with laminar flow on color Doppler", location: "aortic lumen", required: false }
-  severity: severe
-  laterality: ""
+    - { finding: "Absent arterial Doppler signal distal to occlusion", location: "affected lower extremity artery", required: true }
+    - { finding: "Echogenic intraluminal thrombus", location: "femoral or popliteal artery", required: true }
+    - { finding: "Monophasic or absent waveform on spectral Doppler", location: "distal to occlusion", required: false }
+    - { finding: "Normal contralateral arterial flow", location: "contralateral extremity", required: false }
+  severity: critical
+  laterality: left
   negatives:
-    - dissection flap
-    - free intraperitoneal fluid
-    - aortic rupture
-    - iliac artery aneurysm
-    - renal artery involvement
+    - "No aneurysmal dilation at occlusion site"
+    - "No evidence of deep vein thrombosis"
 pattern_checks:
-  - { name: aaa_mentioned, check_type: regex, pattern: "aortic\\s+aneurysm|AAA|aneurysm.*(aort|abdominal)", required: true }
-  - { name: diameter_measured, check_type: regex, pattern: "\\d+(\\.\\d+)?\\s*(cm|mm)|exceed.*3\\s*cm|greater.*3\\s*cm|dila", required: true }
-  - { name: infrarenal, check_type: regex, pattern: "infrarenal|below.*renal|distal.*renal", required: true }
-  - { name: no_rupture, check_type: regex, pattern: "no.*(rupture|leak|extravasa|free\\s+fluid)", required: true }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(acute (limb|arterial) ischemia|arterial occlusion|thrombotic occlusion|embolic occlusion)", required: true }
+  - { name: "doppler_absent", check_type: regex, pattern: "(?i)(absent (flow|signal|Doppler)|no (flow|signal)|occlu(sion|ded)|thromb(us|osis))", required: true }
+  - { name: "laterality", check_type: regex, pattern: "(?i)(left|unilateral)", required: true }
 reference_solution: |
-  Transverse and longitudinal ultrasound of the abdominal aorta demonstrates
-  fusiform dilation of the infrarenal segment measuring approximately 5.2 cm in
-  maximal anteroposterior diameter, consistent with an abdominal aortic aneurysm
-  (AAA). Eccentric mural thrombus is identified along the anterior and lateral
-  walls, with a patent residual lumen demonstrating laminar flow on color Doppler
-  interrogation. The aortic walls are calcified but intact with no evidence of
-  dissection flap or contained rupture. No free intraperitoneal fluid is seen to
-  suggest rupture. The iliac arteries, to the extent visualized, appear normal in
-  caliber. The suprarenal aorta is not dilated.
-  Impression: Large infrarenal abdominal aortic aneurysm (5.2 cm) with mural
-  thrombus. No evidence of rupture. Recommend CTA for surgical planning.
+  Duplex ultrasound of the left lower extremity demonstrates echogenic intraluminal thrombus within the superficial femoral artery with absent color and spectral Doppler flow distal to the mid-thigh level. Monophasic dampened waveforms are noted in the common femoral artery proximal to the occlusion. No flow is detected in the popliteal or tibial arteries. The contralateral right lower extremity demonstrates normal triphasic arterial waveforms. Findings are consistent with acute arterial occlusion of the left lower extremity.
 condition_present: true
 confusion_pair: null
-source_dataset: radimagenet
+source_dataset: openem-grounded
 tags:
-  - aneurysm
-  - aorta
-  - abdomen
   - vascular
   - emergency
+  - doppler
+  - extremity

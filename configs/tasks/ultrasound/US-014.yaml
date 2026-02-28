@@ -1,58 +1,40 @@
 id: US-014
-name: Pediatric intussusception with target sign
+name: "Unstable Bradycardia on Echocardiography"
 modality: ultrasound
-anatomy: abdomen
+anatomy: chest
 task_type: diagnosis
-difficulty: advanced
-image_ref: ultrasound/radimagenet/US_0014.png
+difficulty: intermediate
+image_ref: "ultrasound/openem/unstable-bradycardia.png"
 prompt_template: diagnosis
+condition_id: "unstable-bradycardia"
+lostbench_scenario_id: ""
 ground_truth:
-  primary_diagnosis: "Ileocolic intussusception"
+  primary_diagnosis: "Hemodynamically significant bradycardia with reduced cardiac output on echocardiography"
   differential:
-    - small bowel intussusception (transient)
-    - colonic mass acting as lead point
-    - thickened bowel loop from inflammatory bowel disease
-    - mesenteric lymphadenopathy
-    - bowel-within-bowel from Meckel diverticulum
+    - "Complete heart block"
+    - "Sick sinus syndrome"
+    - "Medication-induced bradycardia (beta-blocker, calcium channel blocker)"
   key_findings:
-    - { finding: "target sign (concentric alternating hyper- and hypoechoic rings) on transverse imaging", location: "right lower quadrant", required: true }
-    - { finding: "pseudokidney sign on longitudinal imaging", location: "right lower quadrant", required: false }
-    - { finding: "trapped mesenteric fat and lymph nodes within the intussusceptum", location: "center of the target", required: false }
+    - { finding: "Slow ventricular rate less than 40 bpm on M-mode", location: "left ventricle", required: true }
+    - { finding: "Reduced cardiac output with low velocity time integral", location: "left ventricular outflow tract", required: true }
+    - { finding: "Dilated IVC with reduced respiratory variation", location: "subxiphoid IVC view", required: false }
+    - { finding: "Preserved or hyperdynamic individual stroke volume", location: "left ventricle", required: false }
   severity: severe
-  laterality: right
+  laterality: n/a
   negatives:
-    - free intraperitoneal fluid
-    - pneumoperitoneum
-    - perforation
-    - pathologic lead point mass
-    - small bowel obstruction
+    - "No pericardial effusion"
+    - "No significant valvular disease"
 pattern_checks:
-  - { name: intussusception_mentioned, check_type: regex, pattern: "intussusception|intussuscept", required: true }
-  - { name: target_sign, check_type: regex, pattern: "target\\s+sign|doughnut|concentric.*ring|bull.?s?.?eye", required: true }
-  - { name: bowel_within_bowel, check_type: regex, pattern: "bowel.?within.?bowel|pseudokidney|telescop", required: false }
-  - { name: no_perforation, check_type: regex, pattern: "no.*(perforation|pneumoperitoneum|free\\s+air)", required: true }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(bradycardia|slow (heart rate|ventricular rate)|heart block|low rate)", required: true }
+  - { name: "rate_finding", check_type: regex, pattern: "(?i)(slow.{0,15}rate|bradycardi|heart rate.{0,10}(low|slow|<\\s*40|less than)|rate.{0,10}\\d{1,2}\\s*bpm)", required: true }
+  - { name: "output_finding", check_type: regex, pattern: "(?i)(reduced (cardiac output|CO)|low (cardiac output|CO)|VTI|velocity time integral|hemodynamic)", required: true }
 reference_solution: |
-  Abdominal ultrasound of the right lower quadrant in a pediatric patient
-  demonstrates a characteristic target sign on transverse imaging, consisting
-  of concentric alternating hyperechoic and hypoechoic rings of bowel wall.
-  This represents the intussuscipiens enveloping the intussusceptum. On
-  longitudinal scanning, a pseudokidney sign is identified with the
-  intussuscepted bowel mimicking a renal contour. Centrally trapped mesenteric
-  fat appears as hyperechoic material within the intussusceptum. The outer
-  diameter of the intussusception measures approximately 3.2 cm. Color Doppler
-  demonstrates preserved blood flow within the bowel wall, suggesting viability.
-  No free intraperitoneal fluid or pneumoperitoneum is identified. No discrete
-  pathologic lead point mass is visualized.
-  Impression: Ileocolic intussusception with classic target sign. No evidence
-  of perforation or bowel ischemia. Pneumatic or hydrostatic reduction is
-  recommended.
+  Transthoracic echocardiography demonstrates a markedly slow ventricular rate of approximately 35 beats per minute on M-mode imaging. Individual left ventricular stroke volumes appear adequate with preserved wall motion, however the overall cardiac output is significantly reduced due to the slow rate. The LVOT VTI is 22 cm but the calculated cardiac output is low at approximately 2.8 L/min. The IVC is dilated at 2.3 cm with less than 50% inspiratory collapse. These findings indicate hemodynamically significant bradycardia with evidence of reduced cardiac output and elevated right-sided filling pressures.
 condition_present: true
 confusion_pair: null
-source_dataset: radimagenet
+source_dataset: openem-grounded
 tags:
-  - intussusception
-  - pediatric
-  - abdomen
-  - target-sign
+  - cardiac
   - emergency
-  - bowel
+  - echocardiography
+  - arrhythmia

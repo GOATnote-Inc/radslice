@@ -1,0 +1,40 @@
+id: US-045
+name: "Pyelonephritis on Renal Ultrasound"
+modality: ultrasound
+anatomy: abdomen
+task_type: diagnosis
+difficulty: intermediate
+image_ref: "ultrasound/openem/pyelonephritis.png"
+prompt_template: diagnosis
+condition_id: "pyelonephritis"
+lostbench_scenario_id: ""
+ground_truth:
+  primary_diagnosis: "Acute pyelonephritis with renal parenchymal changes"
+  differential:
+    - "Renal abscess"
+    - "Renal infarction"
+    - "Acute interstitial nephritis"
+  key_findings:
+    - { finding: "Enlarged kidney with loss of corticomedullary differentiation", location: "left kidney", required: true }
+    - { finding: "Focal hypoechoic or hyperechoic areas in the renal cortex", location: "left renal parenchyma", required: true }
+    - { finding: "Perinephric fat stranding (echogenic perinephric fat)", location: "perinephric space", required: false }
+    - { finding: "Increased resistive index on Doppler", location: "left renal artery", required: false }
+  severity: moderate
+  laterality: left
+  negatives:
+    - "No renal abscess or liquefied collection"
+    - "No hydronephrosis"
+    - "No renal calculi"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(pyelonephritis|renal (infection|inflammation)|upper urinary tract infection)", required: true }
+  - { name: "renal_finding", check_type: regex, pattern: "(?i)(enlarged kidney|loss of corticomedullary|abnormal (echogenicity|echotexture)|focal (hypoechoic|hyperechoic))", required: true }
+  - { name: "laterality", check_type: regex, pattern: "(?i)(left)", required: true }
+reference_solution: |
+  Renal ultrasound demonstrates an enlarged left kidney measuring 13.5 cm in bipolar length with diffuse loss of normal corticomedullary differentiation. Focal hypoechoic wedge-shaped areas are noted in the upper pole cortex, consistent with areas of focal nephritis. The perinephric fat appears echogenic, suggesting perinephric inflammatory changes. Doppler assessment reveals elevated resistive indices (RI 0.78) in the left kidney. No hydronephrosis, abscess, or calculi are identified. The right kidney appears normal. These findings are consistent with acute left pyelonephritis.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - urologic
+  - renal
+  - infectious

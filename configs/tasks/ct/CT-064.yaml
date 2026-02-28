@@ -1,0 +1,36 @@
+id: CT-064
+name: "HSV encephalitis on contrast-enhanced CT head"
+modality: ct
+anatomy: head
+task_type: diagnosis
+difficulty: advanced
+image_ref: "ct/openem/hsv-encephalitis.png"
+prompt_template: diagnosis
+condition_id: "hsv-encephalitis"
+lostbench_scenario_id: ""
+ground_truth:
+  primary_diagnosis: "Herpes simplex encephalitis"
+  differential:
+    - "Temporal lobe glioma"
+    - "Middle cerebral artery infarct"
+    - "Limbic encephalitis"
+  key_findings:
+    - { finding: "Hypodensity with mass effect in the temporal lobe", location: "left medial temporal lobe and insular cortex", required: true }
+    - { finding: "Gyral enhancement in the affected region", location: "left temporal lobe", required: true }
+    - { finding: "Petechial hemorrhage within the affected parenchyma", location: "left temporal lobe", required: false }
+  severity: "critical"
+  laterality: "left"
+  negatives:
+    - "No ring-enhancing lesion to suggest abscess"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(HSV\\s*encephalitis|herpes.*encephalitis|temporal.*encephalitis)", required: true }
+  - { name: "key_finding_temporal", check_type: regex, pattern: "(?i)(temporal\\s*lobe.*hypodensity|temporal.*edema|insular.*cortex|gyral\\s*enhance)", required: true }
+reference_solution: |
+  Contrast-enhanced CT of the head demonstrates hypodensity and swelling of the left medial temporal lobe extending into the insular cortex with effacement of the adjacent Sylvian fissure. Patchy gyral enhancement is present in the affected region. Subtle foci of petechial hemorrhage are seen within the edematous temporal lobe. No ring-enhancing lesion is identified. Findings are characteristic of herpes simplex encephalitis with a strong predilection for the temporal and insular cortex. MRI and empiric acyclovir are recommended emergently.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - neuro
+  - infectious
+  - emergency

@@ -1,0 +1,38 @@
+id: CT-063
+name: "Cerebral malaria complications on non-contrast CT head"
+modality: ct
+anatomy: head
+task_type: diagnosis
+difficulty: expert
+image_ref: "ct/openem/cerebral-malaria.png"
+prompt_template: diagnosis
+condition_id: "cerebral-malaria"
+lostbench_scenario_id: "MTR-038"
+ground_truth:
+  primary_diagnosis: "Cerebral malaria with diffuse cerebral edema"
+  differential:
+    - "Viral encephalitis"
+    - "Metabolic encephalopathy"
+    - "Acute disseminated encephalomyelitis (ADEM)"
+  key_findings:
+    - { finding: "Diffuse cerebral edema with effacement of sulci and cisterns", location: "bilateral cerebral hemispheres", required: true }
+    - { finding: "Loss of gray-white matter differentiation", location: "diffuse", required: true }
+    - { finding: "Multifocal hypodense areas suggesting microinfarcts", location: "bilateral cerebral hemispheres", required: false }
+  severity: "critical"
+  laterality: "bilateral"
+  negatives:
+    - "No intracranial hemorrhage"
+    - "No hydrocephalus"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(cerebral\\s*malaria|malaria.*cerebr|diffuse\\s*cerebral\\s*edema)", required: true }
+  - { name: "key_finding_edema", check_type: regex, pattern: "(?i)(cerebral\\s*edema|sulcal\\s*effacement|gray.?white.*differenti)", required: true }
+reference_solution: |
+  Non-contrast CT head demonstrates diffuse cerebral edema with effacement of cortical sulci and basal cisterns. There is diffuse loss of gray-white matter differentiation throughout both cerebral hemispheres. Scattered small hypodense foci in the white matter may represent microinfarcts from parasitized erythrocyte sequestration. No intracranial hemorrhage or hydrocephalus is identified. In a patient with known Plasmodium falciparum infection and altered mental status, findings are consistent with cerebral malaria.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - neuro
+  - infectious
+  - tropical
+  - emergency

@@ -1,0 +1,38 @@
+id: US-055
+name: "Superficial Thrombophlebitis on Venous Ultrasound"
+modality: ultrasound
+anatomy: extremity
+task_type: diagnosis
+difficulty: basic
+image_ref: "ultrasound/openem/superficial-thrombophlebitis.png"
+prompt_template: diagnosis
+condition_id: "superficial-thrombophlebitis"
+lostbench_scenario_id: "DEF-015"
+ground_truth:
+  primary_diagnosis: "Superficial thrombophlebitis of the great saphenous vein"
+  differential:
+    - "Deep vein thrombosis"
+    - "Cellulitis"
+    - "Lymphangitis"
+  key_findings:
+    - { finding: "Non-compressible superficial vein with intraluminal echogenic thrombus", location: "great saphenous vein", required: true }
+    - { finding: "Perivascular inflammatory changes (echogenic surrounding tissue)", location: "perivenous soft tissue", required: true }
+    - { finding: "Normal compressibility of the deep venous system", location: "common femoral and popliteal veins", required: false }
+  severity: mild
+  laterality: right
+  negatives:
+    - "No deep vein thrombosis"
+    - "No extension to the saphenofemoral junction"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(superficial thrombophlebitis|superficial (venous|vein) (thrombosis|thrombus)|thrombophlebitis)", required: true }
+  - { name: "superficial_vein", check_type: regex, pattern: "(?i)(saphenous|superficial vein|GSV|great saphenous)", required: true }
+  - { name: "deep_veins_normal", check_type: regex, pattern: "(?i)((deep vein|DVT).{0,20}(normal|negative|patent|compressible)|no (DVT|deep vein thrombosis))", required: true }
+reference_solution: |
+  Venous duplex ultrasound of the right lower extremity demonstrates a non-compressible great saphenous vein in the mid to distal thigh with echogenic intraluminal thrombus. Surrounding perivascular inflammatory changes are noted with echogenic subcutaneous tissue. The thrombus does not extend to the saphenofemoral junction, which appears patent. The deep venous system is fully compressible with normal augmentation, including the common femoral, femoral, and popliteal veins. These findings are consistent with superficial thrombophlebitis of the right great saphenous vein without deep venous involvement.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - vascular
+  - venous
+  - compression-ultrasound

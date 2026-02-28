@@ -1,56 +1,38 @@
 id: MRI-020
-name: Labral tear of the hip
+name: "Acute Low Back Pain with Red Flags on Lumbar MRI"
 modality: mri
-anatomy: hip
+anatomy: spine
 task_type: diagnosis
 difficulty: intermediate
-image_ref: mri/omnimedvqa/MRI_0020.png
+image_ref: "mri/openem/acute-low-back-pain-red-flags.png"
 prompt_template: diagnosis
+condition_id: "acute-low-back-pain-red-flags"
+lostbench_scenario_id: ""
 ground_truth:
-  primary_diagnosis: "Anterior-superior acetabular labral tear of the right hip"
+  primary_diagnosis: "Vertebral compression fracture with retropulsion causing central canal stenosis"
   differential:
-    - labral degeneration without discrete tear
-    - paralabral cyst without definite tear
-    - sublabral sulcus (normal variant)
-    - acetabular cartilage delamination
+    - "Pathologic fracture from metastatic disease"
+    - "Osteoporotic compression fracture"
+    - "Spondylodiscitis"
   key_findings:
-    - { finding: "linear T2 hyperintense signal within the acetabular labrum extending to the articular surface", location: "anterior-superior labrum of the right hip at 1 o'clock position", required: true }
-    - { finding: "detachment of the labrum from the acetabular rim", location: "anterior-superior acetabulum", required: true }
-    - { finding: "adjacent paralabral cyst", location: "anterosuperior to the acetabulum", required: false }
-    - { finding: "cam-type morphology of the femoral head-neck junction", location: "anterolateral femoral head-neck junction", required: false }
-  severity: moderate
-  laterality: right
+    - { finding: "Vertebral body compression fracture with STIR hyperintense marrow edema", location: "L1 vertebral body", required: true }
+    - { finding: "Retropulsion of posterior vertebral body fragment into the spinal canal", location: "L1 posterior cortex", required: true }
+    - { finding: "Mild central canal stenosis at the level of the fracture", location: "L1 level", required: false }
+  severity: "moderate"
+  laterality: "midline"
   negatives:
-    - chondral loss or full-thickness cartilage defect
-    - femoral head avascular necrosis
-    - joint effusion with synovitis
-    - stress fracture of femoral neck
-    - loose body
+    - "No enhancing soft tissue mass to suggest malignancy"
+    - "No disc space infection or endplate destruction"
 pattern_checks:
-  - { name: labral_tear, check_type: regex, pattern: "labr.*tear|tear.*labr|labral.*disrupt|labral.*detach", required: true }
-  - { name: anterior_location, check_type: regex, pattern: "anterior|anterosuperior|1\\s*o.?clock|antero.?superior", required: true }
-  - { name: laterality_right, check_type: regex, pattern: "right", required: true }
-  - { name: hip_joint, check_type: regex, pattern: "hip|acetabul|femoral", required: true }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(compression\\s+fracture|burst\\s+fracture|vertebral\\s+fracture)", required: true }
+  - { name: "retropulsion", check_type: regex, pattern: "(?i)(retropuls|posterior.*(fragment|cortex|wall))", required: true }
+  - { name: "marrow_edema", check_type: regex, pattern: "(?i)(marrow\\s+edema|STIR.*(hyperinten|signal|bright))", required: true }
 reference_solution: |
-  MRI of the right hip demonstrates a tear of the anterior-superior acetabular
-  labrum. On T2-weighted fat-saturated coronal and sagittal oblique images,
-  there is linear hyperintense signal within the labrum at approximately the
-  1 o'clock position, extending to the articular surface with detachment of
-  the labral base from the acetabular rim. A small paralabral cyst is
-  identified anterosuperior to the acetabulum, providing indirect evidence
-  of the labral pathology. There is cam-type morphology at the anterolateral
-  femoral head-neck junction with an elevated alpha angle, suggesting
-  femoroacetabular impingement as the underlying etiology. The articular
-  cartilage appears preserved. No avascular necrosis of the femoral head.
-  No stress fracture. Small joint effusion is present.
-  Impression: Right anterior-superior acetabular labral tear with small
-  paralabral cyst, likely related to cam-type femoroacetabular impingement.
+  MRI of the lumbar spine demonstrates a compression fracture of the L1 vertebral body with loss of approximately 40% of vertebral body height. STIR images show diffuse marrow edema within the L1 vertebral body, confirming acuity. There is retropulsion of the posterior cortex into the spinal canal, causing mild central canal stenosis. No enhancing soft tissue mass or epidural component to suggest pathologic fracture. No adjacent disc space infection. Findings represent an acute compression fracture with posterior cortical retropulsion, constituting a red flag for potential neural compromise.
 condition_present: true
 confusion_pair: null
-source_dataset: omnimedvqa-open
+source_dataset: openem-grounded
 tags:
-  - labrum
-  - hip
-  - musculoskeletal
-  - sports-injury
-  - femoroacetabular-impingement
+  - spine
+  - fracture
+  - red-flag

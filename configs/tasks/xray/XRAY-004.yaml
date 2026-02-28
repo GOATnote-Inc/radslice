@@ -1,52 +1,39 @@
 id: XRAY-004
-name: Cardiomegaly with pulmonary edema
+name: "Aortic Dissection on Chest X-ray"
 modality: xray
 anatomy: chest
 task_type: diagnosis
-difficulty: intermediate
-image_ref: xray/omnimedvqa/CXR_0004.png
+difficulty: advanced
+image_ref: "xray/openem/aortic-dissection.png"
 prompt_template: diagnosis
+condition_id: "aortic-dissection"
+lostbench_scenario_id: "MTR-015"
 ground_truth:
-  primary_diagnosis: "Cardiomegaly with pulmonary edema"
+  primary_diagnosis: "Aortic dissection"
   differential:
-    - pericardial effusion causing apparent cardiomegaly
-    - bilateral pneumonia
-    - ARDS
-    - fluid overload without cardiac etiology
+    - "Aortic aneurysm without dissection"
+    - "Mediastinal mass"
+    - "Mediastinal hemorrhage from other cause"
   key_findings:
-    - { finding: "enlarged cardiac silhouette", location: "cardiomediastinal", required: true }
-    - { finding: "cardiothoracic ratio greater than 0.5", location: "cardiomediastinal", required: true }
-    - { finding: "cephalization of pulmonary vessels", location: "bilateral upper lobes", required: true }
-    - { finding: "bilateral perihilar haziness", location: "bilateral perihilar regions", required: true }
-    - { finding: "Kerley B lines", location: "bilateral lung periphery", required: false }
-    - { finding: "bilateral pleural effusions", location: "bilateral costophrenic angles", required: false }
-  severity: moderate
-  laterality: bilateral
+    - { finding: "Widened mediastinum", location: "superior mediastinum", required: true }
+    - { finding: "Abnormal aortic contour", location: "aortic knob", required: true }
+    - { finding: "Left pleural effusion", location: "left costophrenic angle", required: false }
+    - { finding: "Deviation of trachea or nasogastric tube to the right", location: "trachea", required: false }
+  severity: critical
+  laterality: midline
   negatives:
-    - focal consolidation
-    - pneumothorax
-    - mediastinal mass
-    - rib fractures
+    - "No pneumothorax"
+    - "No rib fractures"
 pattern_checks:
-  - { name: cardiomegaly_mentioned, check_type: regex, pattern: "cardiomegaly|enlarged.*heart|cardiac.*enlarg", required: true }
-  - { name: edema_mentioned, check_type: regex, pattern: "edema|oedema|congestion|fluid\\s+overload", required: true }
-  - { name: ctr_or_silhouette, check_type: regex, pattern: "cardiothoracic|cardiac\\s+silhouette|CTR", required: true }
-  - { name: vascular_redistribution, check_type: regex, pattern: "cephali[zs]ation|vascular.*redistribu|upper\\s+lobe.*diversion", required: true }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(aortic dissection|dissection|widened mediastinum)", required: true }
+  - { name: "mediastinum_finding", check_type: regex, pattern: "(?i)(widened mediastinum|mediastinal widening|abnormal aortic contour|aortic knob)", required: true }
 reference_solution: |
-  PA chest radiograph demonstrates an enlarged cardiac silhouette with a
-  cardiothoracic ratio exceeding 0.5, consistent with cardiomegaly. There is
-  cephalization of the pulmonary vasculature indicating elevated pulmonary venous
-  pressure. Bilateral perihilar haziness in a butterfly distribution is present,
-  compatible with pulmonary edema. Small bilateral pleural effusions are noted
-  with blunting of the costophrenic angles. Kerley B lines are seen in the lung
-  periphery. No focal consolidation or pneumothorax.
-  Impression: Cardiomegaly with findings of congestive heart failure and
-  pulmonary edema.
+  Frontal chest radiograph demonstrates widening of the superior mediastinum with an abnormal aortic contour and indistinct aortic knob. A left-sided pleural effusion is present. The trachea is deviated slightly to the right. These findings are concerning for aortic dissection, and urgent cross-sectional imaging with CT angiography is recommended for definitive diagnosis.
 condition_present: true
 confusion_pair: null
-source_dataset: omnimedvqa-open
+source_dataset: openem-grounded
 tags:
-  - cardiomegaly
-  - pulmonary-edema
-  - congestive-heart-failure
-  - chest
+  - cardiac
+  - emergency
+  - aortic
+  - trauma

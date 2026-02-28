@@ -1,53 +1,38 @@
 id: XRAY-061
-name: Aortic calcification mimicking mediastinal widening
+name: "Tetanus on Spine X-ray"
 modality: xray
-anatomy: chest
+anatomy: spine
 task_type: diagnosis
-difficulty: intermediate
-image_ref: xray/mediconfusion/MCF_0061.png
+difficulty: advanced
+image_ref: "xray/openem/tetanus.png"
 prompt_template: diagnosis
+condition_id: "tetanus"
+lostbench_scenario_id: ""
 ground_truth:
-  primary_diagnosis: "Tortuous calcified aorta without true mediastinal widening"
+  primary_diagnosis: "Tetanus with spinal fracture from sustained muscle spasms"
   differential:
-    - aortic dissection
-    - aortic aneurysm
-    - mediastinal mass
-    - mediastinal hemorrhage
+    - "Osteoporotic compression fracture"
+    - "Ankylosing spondylitis with fracture"
+    - "Seizure-related vertebral fracture"
   key_findings:
-    - { finding: "prominent aortic contour with wall calcification tracing the aortic margin", location: "aortic arch and descending aorta", required: true }
-    - { finding: "aortic tortuosity without focal aneurysmal dilatation", location: "thoracic aorta", required: true }
-    - { finding: "mediastinal width within normal limits when accounting for tortuosity", location: "mediastinum", required: false }
-  severity: mild
-  laterality: ""
+    - { finding: "Thoracic vertebral compression fracture from opisthotonus", location: "thoracic spine", required: true }
+    - { finding: "Widened intervertebral disc spaces (muscle spasm effect)", location: "thoracic spine", required: false }
+    - { finding: "Endotracheal tube and ICU support lines if present", location: "trachea", required: false }
+  severity: severe
+  laterality: midline
   negatives:
-    - true aneurysm
-    - aortic dissection
-    - mediastinal mass
-    - pleural cap
-    - tracheal compression
+    - "No pre-existing degenerative changes to suggest chronic disease"
+    - "No lytic lesion"
 pattern_checks:
-  - { name: tortuous_aorta, check_type: regex, pattern: "(?i)(tortuou|ectatic|unfolded).{0,20}aort", required: true }
-  - { name: not_aneurysm, check_type: regex, pattern: "(?i)(no.{0,20}(true\\s+)?aneurysm|not.{0,20}aneurysm|without.{0,20}focal.{0,20}dilat|atheroscler)", required: true }
-  - { name: calcification, check_type: regex, pattern: "(?i)(calcif|atheroscler).{0,30}aort", required: true }
-  - { name: no_acute, check_type: regex, pattern: "(?i)(no\\s+acute|no.{0,20}dissect|stable|degenerative)", required: false }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(tetanus|opisthotonus|muscle spasm|vertebral (compression )?fracture)", required: true }
+  - { name: "fracture_finding", check_type: regex, pattern: "(?i)(compression fracture|vertebral fracture|height loss|wedging)", required: true }
 reference_solution: |
-  PA chest radiograph demonstrates a prominent tortuous thoracic aorta with
-  extensive atherosclerotic wall calcification, which could initially mimic
-  mediastinal widening or aortic aneurysm. However, the aortic wall calcification
-  traces the true outer margin of the aorta, and when the tortuosity is accounted
-  for, there is no focal aneurysmal dilatation. The mediastinal width is within
-  normal limits for the degree of aortic ectasia. No pleural cap or tracheal
-  compression. The lung fields are clear. No pleural effusion. The cardiac
-  silhouette is within normal limits. This represents age-related atherosclerotic
-  change and is not concerning for acute aortic pathology.
-  Impression: Tortuous calcified aorta — atherosclerotic change, no true
-  mediastinal widening or aneurysm.
+  Lateral thoracic spine radiograph demonstrates compression fractures of multiple thoracic vertebral bodies, likely sustained during severe opisthotonus (sustained muscle spasms). The vertebral endplates are disrupted without lytic lesions, consistent with traumatic rather than pathologic fracture. The patient is intubated with an endotracheal tube in satisfactory position. These findings in the context of tetanus reflect the severe musculoskeletal consequences of sustained muscle spasms, which can generate sufficient force to fracture vertebral bodies.
 condition_present: true
-confusion_pair: XRAY-010
-source_dataset: mediconfusion
+confusion_pair: null
+source_dataset: openem-grounded
 tags:
-  - aortic-tortuosity
-  - mediastinal-widening-mimic
-  - atherosclerosis
-  - confusion-pair
-  - chest
+  - musculoskeletal
+  - infection
+  - spine
+  - emergency

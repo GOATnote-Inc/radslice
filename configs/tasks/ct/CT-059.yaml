@@ -1,54 +1,38 @@
 id: CT-059
-name: Normal renal CT (no stone)
+name: "Central retinal artery occlusion workup on CTA head and neck"
 modality: ct
-anatomy: abdomen
+anatomy: head
 task_type: diagnosis
-difficulty: basic
-image_ref: ct/eurorad/EUR_0059.png
+difficulty: expert
+image_ref: "ct/openem/central-retinal-artery-occlusion.png"
 prompt_template: diagnosis
+condition_id: "central-retinal-artery-occlusion"
+lostbench_scenario_id: "MTR-007"
 ground_truth:
-  primary_diagnosis: "Normal non-contrast CT of the abdomen and pelvis, no urolithiasis"
+  primary_diagnosis: "Carotid artery stenosis with suspected retinal artery embolism"
   differential:
-    - recently passed stone with residual mild hydronephrosis
-    - phlebolith mimicking distal ureteral stone
-    - small non-obstructing stone below resolution
+    - "Giant cell arteritis with ophthalmic artery occlusion"
+    - "Cardiac embolism to the ophthalmic artery"
+    - "Carotid artery dissection"
   key_findings:
-    - { finding: "no renal or ureteral calculus", location: "bilateral kidneys and ureters", required: true }
-    - { finding: "no hydronephrosis", location: "bilateral renal collecting systems", required: true }
-    - { finding: "normal kidney size and parenchyma", location: "bilateral kidneys", required: true }
-    - { finding: "no perinephric stranding", location: "bilateral perinephric spaces", required: false }
-  severity: mild
-  laterality: ""
+    - { finding: "Severe stenosis or plaque at the carotid bifurcation", location: "left internal carotid artery origin", required: true }
+    - { finding: "Diminished caliber of the ophthalmic artery on the affected side", location: "left ophthalmic artery", required: true }
+    - { finding: "Dense calcific plaque at the carotid bifurcation", location: "left carotid bifurcation", required: false }
+  severity: "critical"
+  laterality: "left"
   negatives:
-    - renal calculus
-    - ureteral calculus
-    - hydronephrosis
-    - perinephric stranding
-    - renal mass
-    - bladder calculus
-    - appendicitis
+    - "No carotid artery dissection"
+    - "No intracranial large vessel occlusion"
 pattern_checks:
-  - { name: no_stone, check_type: regex, pattern: "no.{0,30}(stone|calcul|lithiasis|urolithiasis)", required: true }
-  - { name: no_hydronephrosis, check_type: regex, pattern: "no.{0,30}(hydronephrosis|obstruction|dilat)", required: true }
-  - { name: normal_kidneys, check_type: regex, pattern: "normal.*kidney|kidney.*normal|unremarkable.*kidney|kidney.*unremarkable", required: true }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(retinal\\s*artery\\s*occlusion|CRAO|carotid.*stenosis|ophthalmic\\s*artery)", required: true }
+  - { name: "key_finding_carotid", check_type: regex, pattern: "(?i)(carotid.*stenosis|carotid.*plaque|ophthalmic.*artery|retinal.*embol)", required: true }
 reference_solution: |
-  Non-contrast CT of the abdomen and pelvis performed for evaluation of
-  suspected renal colic demonstrates no renal, ureteral, or bladder
-  calculus. The bilateral kidneys are normal in size (right 11 cm, left
-  11.5 cm) with normal parenchymal attenuation. No hydronephrosis or
-  hydroureter bilaterally. The bilateral ureters are not dilated and can be
-  followed to the bladder without obstructing calculus. No perinephric
-  stranding. The bladder is normally distended without intraluminal
-  calculus. The appendix appears normal. No other acute abdominal pathology
-  identified.
-  Impression: Negative CT for urolithiasis. No stone, hydronephrosis, or
-  perinephric stranding. Consider alternative etiology for flank pain.
-condition_present: false
+  CTA of the head and neck demonstrates severe atherosclerotic stenosis at the left internal carotid artery origin with approximately 80% luminal narrowing and ulcerated plaque. The left ophthalmic artery demonstrates diminished caliber compared with the right. No carotid dissection or intracranial large vessel occlusion is identified. In the setting of acute painless monocular vision loss, findings are consistent with carotid artery plaque as the embolic source for central retinal artery occlusion requiring emergent intervention.
+condition_present: true
 confusion_pair: null
-source_dataset: eurorad
+source_dataset: openem-grounded
 tags:
-  - normal
-  - abdomen
-  - renal
-  - negative-study
-  - stone-protocol
+  - ophthalmologic
+  - vascular
+  - emergency
+  - cta

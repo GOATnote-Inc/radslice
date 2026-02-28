@@ -1,58 +1,36 @@
 id: CT-044
-name: Traumatic liver laceration
+name: "Acute low back pain with red flags on CT lumbar spine"
 modality: ct
-anatomy: abdomen
-task_type: finding_detection
-difficulty: advanced
-image_ref: ct/omnimedvqa/CT_0044.png
+anatomy: spine
+task_type: diagnosis
+difficulty: intermediate
+image_ref: "ct/openem/acute-low-back-pain-red-flags.png"
 prompt_template: diagnosis
+condition_id: "acute-low-back-pain-red-flags"
+lostbench_scenario_id: ""
 ground_truth:
-  primary_diagnosis: "Grade IV hepatic laceration with active hemorrhage"
+  primary_diagnosis: "Vertebral compression fracture with possible underlying malignancy"
   differential:
-    - hepatic contusion without laceration
-    - hepatic vein injury
-    - subcapsular hepatic hematoma
-    - pre-existing hepatic lesion (hemangioma)
+    - "Osteoporotic compression fracture"
+    - "Vertebral osteomyelitis"
+    - "Multiple myeloma"
   key_findings:
-    - { finding: "deep hepatic laceration extending to hepatic veins", location: "right hepatic lobe segments 5, 6, 7, 8", required: true }
-    - { finding: "active contrast extravasation", location: "within hepatic laceration", required: true }
-    - { finding: "large perihepatic hematoma", location: "perihepatic space", required: true }
-    - { finding: "hemoperitoneum", location: "bilateral paracolic gutters and pelvis", required: false }
-  severity: severe
-  laterality: right
+    - { finding: "Compression fracture with loss of vertebral body height", location: "L1 vertebral body", required: true }
+    - { finding: "Lytic destruction of the vertebral body suggesting pathologic fracture", location: "L1 vertebral body", required: true }
+    - { finding: "Soft tissue mass extending into the epidural space", location: "L1 epidural space", required: false }
+  severity: "severe"
+  laterality: "midline"
   negatives:
-    - hepatic vein transection
-    - IVC injury
-    - splenic injury
-    - biliary injury visible on CT
-    - retroperitoneal hemorrhage
+    - "No spinal cord compression at this level (conus above)"
 pattern_checks:
-  - { name: hepatic_laceration, check_type: regex, pattern: "hepatic.*lacerat|liver.*lacerat|lacerat.*liver", required: true }
-  - { name: active_bleed, check_type: regex, pattern: "active.*extravasa|contrast.*extravasa|active.*bleed|active.*hemorrhage", required: true }
-  - { name: grade, check_type: regex, pattern: "grade\\s*(IV|4)|AAST|high.?grade", required: false }
-  - { name: hemoperitoneum, check_type: regex, pattern: "hemoperitoneum|h[ae]moperitoneum|free\\s+fluid|peritoneal.*blood", required: true }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(compression\\s*fracture|pathologic\\s*fracture|vertebral.*fracture)", required: true }
+  - { name: "key_finding_lytic", check_type: regex, pattern: "(?i)(lytic|pathologic|destructi|vertebral.*height\\s*loss)", required: true }
 reference_solution: |
-  Contrast-enhanced trauma CT of the abdomen demonstrates a deep laceration
-  through the right hepatic lobe involving segments 5, 6, 7, and 8 with
-  the laceration plane extending to the right hepatic vein, consistent with
-  AAST Grade IV hepatic injury. There is a focus of active contrast
-  extravasation within the laceration bed measuring approximately 1.5 cm,
-  indicating ongoing arterial hemorrhage. A large perihepatic hematoma
-  surrounds the right lobe of the liver. Free fluid consistent with
-  hemoperitoneum is present in bilateral paracolic gutters, Morrison pouch,
-  and the pelvis. The spleen, bilateral kidneys, and pancreas appear
-  intact. No IVC injury identified. No retroperitoneal hemorrhage.
-  Impression: AAST Grade IV right hepatic laceration with active
-  extravasation and significant hemoperitoneum. Emergent interventional
-  radiology consultation for hepatic angioembolization or surgical
-  exploration. Massive transfusion protocol should be considered.
+  CT of the lumbar spine demonstrates a compression fracture of the L1 vertebral body with approximately 50% loss of height. Lytic destruction of the posterior vertebral body cortex is present, raising concern for a pathologic fracture. A soft tissue component extends into the anterior epidural space. The conus medullaris terminates above this level. No additional fractures are identified. Given the lytic nature, findings are concerning for pathologic compression fracture, possibly from metastatic disease or myeloma, warranting urgent MRI and oncologic evaluation.
 condition_present: true
 confusion_pair: null
-source_dataset: omnimedvqa-open
+source_dataset: openem-grounded
 tags:
-  - hepatic-laceration
-  - trauma
+  - spine
+  - oncology
   - emergency
-  - abdomen
-  - active-hemorrhage
-  - finding-detection

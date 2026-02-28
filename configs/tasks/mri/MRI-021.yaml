@@ -1,52 +1,38 @@
 id: MRI-021
-name: Normal right knee MRI
+name: "Occult Hip Fracture on MRI"
 modality: mri
-anatomy: knee
+anatomy: hip
 task_type: diagnosis
-difficulty: basic
-image_ref: mri/omnimedvqa/MRI_0021.png
+difficulty: intermediate
+image_ref: "mri/openem/hip-fracture.png"
 prompt_template: diagnosis
+condition_id: "hip-fracture"
+lostbench_scenario_id: ""
 ground_truth:
-  primary_diagnosis: "Normal right knee MRI"
+  primary_diagnosis: "Occult non-displaced femoral neck fracture on MRI"
   differential:
-    - incidental Baker cyst
-    - normal meniscal variant (discoid meniscus)
-    - grade 1 intrasubstance meniscal signal (non-tear)
+    - "Stress fracture of the femoral neck"
+    - "Bone marrow edema syndrome (transient osteoporosis)"
+    - "Avascular necrosis of the femoral head"
   key_findings:
-    - { finding: "intact ACL and PCL with normal low T2 signal and normal tension", location: "intercondylar notch", required: true }
-    - { finding: "intact medial and lateral menisci with normal morphology and signal", location: "bilateral menisci", required: true }
-    - { finding: "normal articular cartilage thickness and signal", location: "femoral condyles, tibial plateaus, patellofemoral compartment", required: false }
-    - { finding: "no joint effusion", location: "suprapatellar recess", required: false }
-  severity: mild
-  laterality: right
+    - { finding: "Linear T1 hypointense fracture line in the femoral neck with surrounding marrow edema", location: "Left femoral neck", required: true }
+    - { finding: "STIR hyperintense marrow edema surrounding the fracture line", location: "Left femoral neck and intertrochanteric region", required: true }
+    - { finding: "No displacement of fracture fragments", location: "Left femoral neck", required: false }
+  severity: "moderate"
+  laterality: "left"
   negatives:
-    - meniscal tear
-    - ligamentous injury
-    - cartilage defect or chondromalacia
-    - bone marrow edema
-    - fracture
-    - loose body
+    - "No avascular necrosis of the femoral head"
+    - "No hip joint effusion"
 pattern_checks:
-  - { name: normal_mentioned, check_type: regex, pattern: "normal|unremarkable|no.*abnormal|negative|intact", required: true }
-  - { name: no_tear, check_type: regex, pattern: "no.*tear|intact.*menisc|intact.*ligament|without.*tear", required: true }
-  - { name: laterality_right, check_type: regex, pattern: "right", required: true }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(femoral\\s+neck\\s+fracture|hip\\s+fracture|occult\\s+fracture)", required: true }
+  - { name: "fracture_line", check_type: regex, pattern: "(?i)(fracture\\s+line|T1.*(hypointen|low|dark).*fracture)", required: true }
+  - { name: "laterality", check_type: regex, pattern: "(?i)left", required: true }
 reference_solution: |
-  MRI of the right knee demonstrates normal findings. The anterior cruciate
-  ligament and posterior cruciate ligament are intact with normal low T2
-  signal and appropriate tension on sagittal images. The medial and lateral
-  menisci are normal in morphology and signal without evidence of tear; any
-  intrasubstance signal does not extend to an articular surface. The medial
-  and lateral collateral ligaments are intact. The articular cartilage is
-  preserved in thickness and signal throughout the femoral condyles, tibial
-  plateaus, and patellofemoral compartment. The extensor mechanism including
-  the quadriceps tendon and patellar tendon is intact. No joint effusion.
-  No bone marrow edema. No fracture or loose body.
-  Impression: Normal right knee MRI.
-condition_present: false
+  MRI of the left hip demonstrates a linear T1 hypointense fracture line traversing the left femoral neck, which was occult on initial radiographs. Surrounding STIR hyperintense marrow edema is present in the femoral neck and intertrochanteric region. The fracture is non-displaced. No avascular necrosis of the femoral head. No significant hip joint effusion. Findings confirm an occult non-displaced femoral neck fracture requiring orthopedic consultation for surgical planning.
+condition_present: true
 confusion_pair: null
-source_dataset: omnimedvqa-open
+source_dataset: openem-grounded
 tags:
-  - normal
-  - knee
   - musculoskeletal
-  - negative-case
+  - fracture
+  - occult

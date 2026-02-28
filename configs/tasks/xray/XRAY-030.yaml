@@ -1,53 +1,38 @@
 id: XRAY-030
-name: Left diaphragmatic hernia (Bochdalek)
+name: "Bowel Obstruction on Abdominal X-ray"
 modality: xray
-anatomy: chest
+anatomy: abdomen
 task_type: diagnosis
-difficulty: advanced
-image_ref: xray/omnimedvqa/CXR_0030.png
+difficulty: intermediate
+image_ref: "xray/openem/bowel-obstruction.png"
 prompt_template: diagnosis
+condition_id: "bowel-obstruction"
+lostbench_scenario_id: ""
 ground_truth:
-  primary_diagnosis: "Left diaphragmatic hernia (Bochdalek hernia)"
+  primary_diagnosis: "Small bowel obstruction"
   differential:
-    - diaphragmatic eventration
-    - left lower lobe consolidation
-    - pleural effusion with loculation
-    - congenital cystic adenomatoid malformation
+    - "Paralytic ileus"
+    - "Large bowel obstruction"
+    - "Pseudo-obstruction (Ogilvie syndrome)"
   key_findings:
-    - { finding: "bowel gas pattern in the left hemithorax", location: "left hemithorax", required: true }
-    - { finding: "absent or disrupted left hemidiaphragm contour", location: "left hemidiaphragm", required: true }
-    - { finding: "displacement of cardiac silhouette to the right", location: "mediastinum", required: false }
-    - { finding: "air-filled visceral structures above the diaphragm", location: "left lower chest", required: true }
-  severity: severe
-  laterality: left
+    - { finding: "Dilated small bowel loops greater than 3 cm with valvulae conniventes", location: "central abdomen", required: true }
+    - { finding: "Multiple air-fluid levels on upright view", location: "central abdomen", required: true }
+    - { finding: "Paucity of distal colonic gas", location: "colon", required: false }
+    - { finding: "String of pearls sign", location: "small bowel", required: false }
+  severity: moderate
+  laterality: n/a
   negatives:
-    - right-sided hernia
-    - pneumothorax
-    - pleural effusion
-    - normal diaphragm
+    - "No free air under the diaphragm"
+    - "No pneumatosis intestinalis"
 pattern_checks:
-  - { name: hernia_mentioned, check_type: regex, pattern: "(?i)(diaphragmatic\\s+hernia|Bochdalek|hernia.{0,30}diaphragm)", required: true }
-  - { name: bowel_in_chest, check_type: regex, pattern: "(?i)(bowel|intestin|stomach|viscera).{0,30}(thorax|chest|hemithorax|above.{0,15}diaphragm)", required: true }
-  - { name: laterality_left, check_type: regex, pattern: "(?i)left", required: true }
-  - { name: diaphragm_defect, check_type: regex, pattern: "(?i)(diaphragm.{0,20}(defect|absent|disrupted|discontinu)|absent.{0,20}diaphragm)", required: false }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(bowel obstruction|small bowel obstruction|SBO|ileus)", required: true }
+  - { name: "dilated_bowel_finding", check_type: regex, pattern: "(?i)(dilated (small )?bowel|air.?fluid level|valvulae conniventes|distended loops)", required: true }
 reference_solution: |
-  PA chest radiograph demonstrates air-filled visceral structures, including loops
-  of bowel and possibly stomach, within the left hemithorax. The left
-  hemidiaphragm contour is absent or markedly disrupted. There is mass effect with
-  displacement of the cardiac silhouette and mediastinal structures to the right.
-  The left lung is partially compressed by the herniated abdominal contents. The
-  right lung is clear and expanded. These findings are consistent with a left-sided
-  diaphragmatic hernia, most likely congenital (Bochdalek type) given the
-  posterolateral location. CT of the chest and abdomen is recommended for surgical
-  planning. In the acute setting, consideration should be given to
-  decompression and surgical repair.
-  Impression: Left diaphragmatic hernia with bowel herniation into the thorax.
+  Abdominal radiograph demonstrates multiple dilated loops of small bowel centrally, measuring up to 4.5 cm in diameter, with prominent valvulae conniventes. The upright view shows multiple air-fluid levels at different heights, consistent with a step-ladder pattern. There is a paucity of gas in the distal colon and rectum. No free intraperitoneal air or pneumatosis is identified. These findings are consistent with a small bowel obstruction, and CT is recommended to identify the transition point and etiology.
 condition_present: true
 confusion_pair: null
-source_dataset: omnimedvqa-open
+source_dataset: openem-grounded
 tags:
-  - diaphragmatic-hernia
-  - Bochdalek
-  - congenital
-  - chest
+  - gastrointestinal
   - surgical
+  - emergency

@@ -1,57 +1,39 @@
 id: US-008
-name: Renal hydronephrosis with ureteral obstruction
+name: "Pericarditis-Myocarditis on Echocardiography"
 modality: ultrasound
-anatomy: abdomen
-task_type: finding_detection
-difficulty: intermediate
-image_ref: ultrasound/radimagenet/US_0008.png
-prompt_template: finding_detection
+anatomy: chest
+task_type: diagnosis
+difficulty: advanced
+image_ref: "ultrasound/openem/pericarditis-myocarditis.png"
+prompt_template: diagnosis
+condition_id: "pericarditis-myocarditis"
+lostbench_scenario_id: ""
 ground_truth:
-  primary_diagnosis: "Moderate right-sided hydronephrosis"
+  primary_diagnosis: "Acute myopericarditis with pericardial effusion and reduced systolic function"
   differential:
-    - extrarenal pelvis (normal variant)
-    - parapelvic cyst
-    - renal sinus lipomatosis
-    - congenital ureteropelvic junction obstruction
-    - vesicoureteral reflux
+    - "Acute decompensated heart failure"
+    - "Stress (Takotsubo) cardiomyopathy"
+    - "Acute myocardial infarction"
   key_findings:
-    - { finding: "dilated renal pelvis and calyces with anechoic fluid", location: "right renal collecting system", required: true }
-    - { finding: "cortical thinning", location: "right renal cortex", required: false }
-    - { finding: "elevated resistive index on Doppler", location: "right renal artery", required: false }
+    - { finding: "Small to moderate pericardial effusion", location: "pericardial space", required: true }
+    - { finding: "Globally reduced left ventricular systolic function", location: "left ventricle", required: true }
+    - { finding: "Increased myocardial wall thickness suggesting edema", location: "left ventricular walls", required: false }
+    - { finding: "Pericardial brightening/thickening", location: "pericardium", required: false }
   severity: moderate
-  laterality: right
+  laterality: n/a
   negatives:
-    - renal calculus
-    - perinephric fluid
-    - renal mass
-    - left-sided hydronephrosis
-    - bladder distension
+    - "No tamponade physiology"
+    - "No valvular vegetations"
 pattern_checks:
-  - { name: hydronephrosis_mentioned, check_type: regex, pattern: "hydronephrosis|hydroureter|collecting.*system.*dilat|dilat.*pelvi", required: true }
-  - { name: laterality_right, check_type: regex, pattern: "right", required: true }
-  - { name: anechoic_calyceal, check_type: regex, pattern: "anechoic|fluid.?(filled|distend)|dilat.*(calyx|calyces|pelvis)", required: true }
-  - { name: severity_graded, check_type: regex, pattern: "moderate|grade\\s+(II|2|III|3)|significant", required: false }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(pericarditis|myocarditis|myopericarditis|pericardial (inflammation|effusion))", required: true }
+  - { name: "effusion_finding", check_type: regex, pattern: "(?i)(pericardial effusion|pericardial fluid)", required: true }
+  - { name: "function_finding", check_type: regex, pattern: "(?i)(reduced (systolic function|EF|ejection fraction)|wall motion|hypokinesis|dysfunction)", required: true }
 reference_solution: |
-  Ultrasound of the right kidney demonstrates moderate dilation of the renal
-  pelvis and calyces, consistent with hydronephrosis. The collecting system
-  is fluid-filled and anechoic, with separation of the central renal sinus
-  echoes. The calyces appear blunted and rounded. The renal cortex shows
-  mild thinning compared to the contralateral kidney. Doppler interrogation
-  reveals an elevated resistive index of 0.78 in the right renal artery,
-  suggesting obstructive physiology. No obstructing calculus is identified
-  at the ureteropelvic junction or distal ureter, though visualization is
-  limited. No perinephric fluid collection is present. The left kidney
-  appears normal without hydronephrosis.
-  Impression: Moderate right-sided hydronephrosis without visible obstructing
-  calculus. Elevated resistive index suggests acute obstruction. CT urogram
-  recommended for further evaluation.
+  Transthoracic echocardiography demonstrates a small to moderate circumferential pericardial effusion without echocardiographic evidence of tamponade physiology. The left ventricle appears mildly dilated with globally reduced systolic function and an estimated ejection fraction of 40%. The myocardium appears mildly thickened, which in the appropriate clinical context may represent edema. The pericardium appears echobright. No valvular vegetations are identified. These echocardiographic findings, in conjunction with the clinical presentation, are consistent with acute myopericarditis.
 condition_present: true
 confusion_pair: null
-source_dataset: radimagenet
+source_dataset: openem-grounded
 tags:
-  - hydronephrosis
-  - kidney
-  - abdomen
-  - urinary
-  - obstruction
-  - doppler
+  - cardiac
+  - echocardiography
+  - inflammatory

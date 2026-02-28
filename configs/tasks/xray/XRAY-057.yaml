@@ -1,52 +1,38 @@
 id: XRAY-057
-name: Chilaiditi sign mimicking pneumoperitoneum
+name: "Acute Muscle Strain on Extremity X-ray"
 modality: xray
-anatomy: abdomen
+anatomy: extremity
 task_type: diagnosis
-difficulty: advanced
-image_ref: xray/mediconfusion/MCF_0057.png
+difficulty: basic
+image_ref: "xray/openem/acute-muscle-strain.png"
 prompt_template: diagnosis
+condition_id: "acute-muscle-strain"
+lostbench_scenario_id: "DEF-008"
 ground_truth:
-  primary_diagnosis: "Chilaiditi sign (colonic interposition)"
+  primary_diagnosis: "Acute muscle strain with normal skeletal structures"
   differential:
-    - pneumoperitoneum (free air)
-    - subdiaphragmatic abscess
-    - diaphragmatic hernia
+    - "Occult fracture"
+    - "Soft tissue contusion"
+    - "Avulsion fracture"
   key_findings:
-    - { finding: "gas-containing structure between liver and right hemidiaphragm", location: "right subdiaphragmatic region", required: true }
-    - { finding: "haustral markings visible within the interposed gas", location: "right subdiaphragmatic", required: true }
-    - { finding: "no Rigler sign", location: "abdomen", required: false }
+    - { finding: "Soft tissue swelling without fracture", location: "affected muscle group", required: true }
+    - { finding: "Normal osseous structures", location: "affected region", required: true }
+    - { finding: "No avulsion fragment at tendon insertion", location: "muscle attachment sites", required: false }
   severity: mild
   laterality: right
   negatives:
-    - true pneumoperitoneum
-    - free intraperitoneal air
-    - bowel perforation
-    - peritonitis
+    - "No fracture identified"
+    - "No dislocation"
+    - "No avulsion injury"
 pattern_checks:
-  - { name: chilaiditi, check_type: regex, pattern: "(?i)(Chilaiditi|colonic\\s+interposition|hepatodiaphragmatic\\s+interposition)", required: true }
-  - { name: not_pneumoperitoneum, check_type: regex, pattern: "(?i)(not.{0,20}pneumoperitoneum|rather\\s+than.{0,20}(free\\s+air|pneumoperitoneum)|mimic)", required: true }
-  - { name: haustral, check_type: regex, pattern: "(?i)(haustr|colon|bowel\\s+gas|large\\s+bowel)", required: true }
-  - { name: subdiaphragmatic, check_type: regex, pattern: "(?i)(sub(diaphragmatic|phrenic)|between.{0,30}(liver|diaphragm))", required: false }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(muscle strain|soft tissue (swelling|injury)|no fracture|normal (osseous|bony|skeletal))", required: true }
+  - { name: "normal_bones", check_type: regex, pattern: "(?i)(no fracture|normal (osseous|bony|bone|skeletal)|unremarkable (osseous|bony))", required: true }
 reference_solution: |
-  Upright chest/abdominal radiograph demonstrates a gas-containing structure
-  interposed between the liver and the right hemidiaphragm, which could initially
-  be mistaken for free subdiaphragmatic air (pneumoperitoneum). However, haustral
-  markings are clearly visible within the gas-filled structure, identifying it as
-  colon (hepatic flexure) rather than free air. This represents Chilaiditi sign
-  (hepatodiaphragmatic interposition of the colon). No Rigler sign or other
-  features of true pneumoperitoneum. The remaining bowel gas pattern is
-  nonobstructive. The visualized lung bases are clear. This is usually an
-  incidental finding and does not require surgical intervention in the absence
-  of symptoms (Chilaiditi syndrome).
-  Impression: Chilaiditi sign — colonic interposition, not pneumoperitoneum. No
-  surgical emergency.
+  Radiograph of the right lower extremity demonstrates mild soft tissue swelling in the region of the calf musculature. The osseous structures are normal in alignment and appearance with no fracture, dislocation, or avulsion injury identified. Joint spaces are preserved. The findings on X-ray are consistent with soft tissue injury such as muscle strain, and the radiograph primarily serves to exclude fracture. Ultrasound or MRI may be considered if clinical concern for significant muscle tear persists.
 condition_present: true
-confusion_pair: XRAY-016
-source_dataset: mediconfusion
+confusion_pair: null
+source_dataset: openem-grounded
 tags:
-  - Chilaiditi
-  - pneumoperitoneum-mimic
-  - confusion-pair
-  - abdomen
-  - colonic-interposition
+  - musculoskeletal
+  - common
+  - defer

@@ -1,0 +1,41 @@
+id: US-061
+name: "REBOA Placement with POCUS Guidance"
+modality: ultrasound
+anatomy: abdomen
+task_type: diagnosis
+difficulty: expert
+image_ref: "ultrasound/openem/reboa.png"
+prompt_template: diagnosis
+condition_id: "reboa"
+lostbench_scenario_id: "MTR-063"
+ground_truth:
+  primary_diagnosis: "Non-compressible torso hemorrhage requiring REBOA with POCUS-guided placement confirmation"
+  differential:
+    - "Hemorrhagic shock from extremity source"
+    - "Cardiac tamponade"
+    - "Tension pneumothorax"
+  key_findings:
+    - { finding: "Positive FAST with large hemoperitoneum", location: "Morison pouch and pelvis", required: true }
+    - { finding: "Aortic balloon catheter tip visualization in Zone 1 aorta", location: "descending thoracic/supraceliac aorta", required: true }
+    - { finding: "Absent or diminished infrarenal aortic flow confirming balloon inflation", location: "infrarenal abdominal aorta", required: false }
+    - { finding: "Flat IVC with hypovolemic physiology", location: "IVC", required: false }
+  severity: critical
+  laterality: midline
+  negatives:
+    - "No cardiac tamponade"
+    - "No pneumothorax"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(REBOA|resuscitative.{0,20}balloon occlusion|aortic balloon|aortic occlusion)", required: true }
+  - { name: "fast_finding", check_type: regex, pattern: "(?i)(hemoperitoneum|positive FAST|free (fluid|blood)|torso hemorrhage)", required: true }
+  - { name: "catheter_finding", check_type: regex, pattern: "(?i)(catheter|balloon.{0,20}(tip|position|placement|Zone)|aortic.{0,20}(balloon|occlusion|catheter))", required: true }
+reference_solution: |
+  POCUS assessment in a patient with non-compressible torso hemorrhage demonstrates a massively positive FAST with free fluid in all quadrants. The IVC is flat and collapsing. POCUS-guided confirmation of REBOA catheter placement shows the balloon tip in the Zone 1 (descending thoracic/supraceliac) aortic position. Following balloon inflation, Doppler interrogation of the infrarenal aorta demonstrates absent flow, confirming effective aortic occlusion. Cardiac POCUS shows a hyperdynamic, underfilled left ventricle. These findings confirm appropriate REBOA placement for temporary hemorrhage control pending definitive surgical management.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - trauma
+  - emergency
+  - pocus
+  - procedural
+  - aortic

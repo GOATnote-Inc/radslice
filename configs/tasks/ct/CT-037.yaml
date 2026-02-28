@@ -1,55 +1,37 @@
 id: CT-037
-name: Normal CT angiogram of circle of Willis
+name: "Ascending cholangitis on contrast-enhanced CT abdomen"
 modality: ct
-anatomy: head
-task_type: vqa
-difficulty: basic
-image_ref: ct/omnimedvqa/CT_0037.png
-prompt_template: vqa
+anatomy: abdomen
+task_type: diagnosis
+difficulty: advanced
+image_ref: "ct/openem/ascending-cholangitis.png"
+prompt_template: diagnosis
+condition_id: "ascending-cholangitis"
+lostbench_scenario_id: "MTR-028"
 ground_truth:
-  primary_diagnosis: "Normal CT angiography of the head and neck"
+  primary_diagnosis: "Ascending cholangitis with biliary obstruction"
   differential:
-    - small aneurysm below resolution threshold
-    - mild atherosclerotic irregularity
-    - variant anatomy (fetal PCA, hypoplastic A1)
+    - "Choledocholithiasis without cholangitis"
+    - "Cholangiocarcinoma"
+    - "Pancreatic head mass with biliary obstruction"
   key_findings:
-    - { finding: "patent circle of Willis", location: "circle of Willis", required: true }
-    - { finding: "no aneurysm or vascular malformation", location: "intracranial vasculature", required: true }
-    - { finding: "normal caliber bilateral internal carotid arteries", location: "bilateral ICAs", required: true }
-    - { finding: "patent vertebrobasilar system", location: "vertebral and basilar arteries", required: false }
-  severity: mild
-  laterality: ""
+    - { finding: "Dilated intrahepatic and extrahepatic bile ducts", location: "biliary tree", required: true }
+    - { finding: "Choledocholithiasis (stone in common bile duct)", location: "distal common bile duct", required: true }
+    - { finding: "Enhancement and thickening of the bile duct walls", location: "common bile duct", required: false }
+  severity: "severe"
+  laterality: "midline"
   negatives:
-    - intracranial aneurysm
-    - arteriovenous malformation
-    - vascular stenosis
-    - dissection
-    - vasospasm
-    - moyamoya pattern
+    - "No hepatic abscess"
 pattern_checks:
-  - { name: normal_identified, check_type: regex, pattern: "normal|unremarkable|no\\s+acute|patent|negative", required: true }
-  - { name: no_aneurysm, check_type: regex, pattern: "no.{0,30}aneurysm", required: true }
-  - { name: no_stenosis, check_type: regex, pattern: "no.{0,30}(stenosis|occlusion|dissection)", required: true }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(cholangitis|biliary\\s*obstruct|choledocholithiasis)", required: true }
+  - { name: "key_finding_dilated_ducts", check_type: regex, pattern: "(?i)(dilated.*bile\\s*duct|biliary\\s*dilat|choledocholithiasis|CBD\\s*stone)", required: true }
 reference_solution: |
-  CT angiography of the head and neck demonstrates a patent circle of Willis
-  with normal caliber and configuration. The bilateral internal carotid
-  arteries are patent without stenosis or dissection. The bilateral middle
-  cerebral arteries, anterior cerebral arteries, and posterior cerebral
-  arteries are patent and of normal caliber. The anterior communicating and
-  posterior communicating arteries are visualized. The vertebral arteries
-  are patent bilaterally with codominant flow. The basilar artery is normal
-  in caliber. No intracranial aneurysm, arteriovenous malformation, or
-  vascular malformation is identified. No significant atherosclerotic
-  stenosis. No vasospasm.
-  Impression: Normal CT angiography of the intracranial vasculature. No
-  aneurysm, stenosis, or vascular malformation.
-condition_present: false
+  Contrast-enhanced CT of the abdomen demonstrates dilatation of the intrahepatic and extrahepatic bile ducts with a hyperdense calculus impacted in the distal common bile duct. There is thickening and hyperenhancement of the common bile duct wall. No hepatic abscess is identified. The gallbladder contains additional calculi. In the clinical setting of Charcot triad (fever, jaundice, RUQ pain), findings are consistent with ascending cholangitis secondary to choledocholithiasis requiring emergent biliary decompression.
+condition_present: true
 confusion_pair: null
-source_dataset: omnimedvqa-open
+source_dataset: openem-grounded
 tags:
-  - normal
-  - head
-  - vascular
-  - cta
-  - negative-study
-  - vqa
+  - abdominal
+  - hepatobiliary
+  - emergency
+  - infectious

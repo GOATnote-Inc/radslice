@@ -1,0 +1,39 @@
+id: MRI-050
+name: "Kawasaki Disease Coronary Artery Aneurysm on Cardiac MRI"
+modality: mri
+anatomy: chest
+task_type: diagnosis
+difficulty: advanced
+image_ref: "mri/openem/kawasaki-disease.png"
+prompt_template: diagnosis
+condition_id: "kawasaki-disease"
+lostbench_scenario_id: "MTR-022"
+ground_truth:
+  primary_diagnosis: "Kawasaki disease with coronary artery aneurysm on cardiac MRI"
+  differential:
+    - "Anomalous coronary artery origin"
+    - "Congenital coronary artery aneurysm"
+    - "Coronary artery fistula"
+  key_findings:
+    - { finding: "Fusiform dilation of the coronary artery (aneurysm) on coronary MRA", location: "Left anterior descending coronary artery", required: true }
+    - { finding: "Myocardial edema on T2-weighted/T2 mapping sequences suggesting active myocarditis", location: "Left ventricular myocardium", required: false }
+    - { finding: "Pericardial effusion", location: "Pericardium", required: false }
+  severity: "severe"
+  laterality: "n/a"
+  negatives:
+    - "No coronary artery thrombosis on MRA"
+    - "No myocardial infarction (no late gadolinium enhancement)"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)kawasaki", required: true }
+  - { name: "coronary_aneurysm", check_type: regex, pattern: "(?i)coronary.*(aneurysm|dilat|ectasia)", required: true }
+  - { name: "cardiac_involvement", check_type: regex, pattern: "(?i)(cardiac|coronary|heart)", required: true }
+reference_solution: |
+  Cardiac MRI with coronary MRA in a pediatric patient demonstrates fusiform dilation of the proximal and mid left anterior descending coronary artery, measuring up to 6 mm in diameter (z-score >10), consistent with a giant coronary artery aneurysm in the setting of Kawasaki disease. T2 mapping shows mildly elevated myocardial T2 values in the left ventricular myocardium suggesting active myocardial inflammation. A small pericardial effusion is present. No coronary artery thrombosis on MRA. No late gadolinium enhancement to indicate myocardial infarction. Findings warrant continued anticoagulation and serial cardiac imaging surveillance.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - cardiac
+  - pediatric
+  - vascular
+  - cardiac-mri

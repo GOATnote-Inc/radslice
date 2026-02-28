@@ -1,61 +1,38 @@
 id: MRI-028
-name: Myocarditis confusion pair for myocardial infarction
+name: "Temporal Arteritis (Giant Cell Arteritis) on Vessel Wall MRI"
 modality: mri
-anatomy: heart
+anatomy: head
 task_type: diagnosis
-difficulty: expert
-image_ref: mri/eurorad/EUR_0028.png
+difficulty: advanced
+image_ref: "mri/openem/temporal-arteritis.png"
 prompt_template: diagnosis
+condition_id: "temporal-arteritis"
+lostbench_scenario_id: ""
 ground_truth:
-  primary_diagnosis: "Acute myocarditis with non-ischemic delayed gadolinium enhancement pattern"
+  primary_diagnosis: "Giant cell arteritis (temporal arteritis) with vessel wall enhancement on high-resolution MRI"
   differential:
-    - myocardial infarction (ischemic pattern)
-    - cardiac sarcoidosis
-    - dilated cardiomyopathy
-    - arrhythmogenic right ventricular cardiomyopathy
-    - Chagas cardiomyopathy
+    - "Atherosclerotic disease of the superficial temporal artery"
+    - "Primary angiitis of the CNS"
+    - "Intracranial atherosclerotic disease"
   key_findings:
-    - { finding: "mid-wall and/or epicardial delayed gadolinium enhancement in a non-coronary distribution", location: "inferolateral wall of the left ventricle, mid-wall to epicardial", required: true }
-    - { finding: "myocardial edema on T2-weighted/STIR or T2 mapping (elevated native T2)", location: "inferolateral and lateral wall", required: true }
-    - { finding: "elevated native T1 and ECV values on T1 mapping", location: "affected myocardial segments", required: false }
-    - { finding: "regional wall motion abnormality", location: "inferolateral segments on cine images", required: false }
-  severity: moderate
-  laterality: ""
+    - { finding: "Mural thickening and enhancement of the superficial temporal artery on vessel wall MRI", location: "Right superficial temporal artery", required: true }
+    - { finding: "Concentric vessel wall enhancement on post-gadolinium T1 fat-saturated images", location: "Bilateral superficial temporal arteries", required: true }
+    - { finding: "Luminal narrowing of the temporal arteries", location: "Superficial temporal arteries", required: false }
+  severity: "severe"
+  laterality: "bilateral"
   negatives:
-    - subendocardial enhancement in a coronary distribution (ischemic pattern)
-    - coronary artery occlusion
-    - intracardiac thrombus
-    - pericardial constriction
-    - valvular disease
+    - "No intracranial vessel wall enhancement"
+    - "No acute intracranial infarction"
 pattern_checks:
-  - { name: myocarditis_mentioned, check_type: regex, pattern: "myocarditis|myocard.*inflamm|inflamm.*myocard|viral.*myocard", required: true }
-  - { name: non_ischemic_pattern, check_type: regex, pattern: "non.?ischem|epicardial|mid.?wall|non.?coronary", required: true }
-  - { name: delayed_enhancement, check_type: regex, pattern: "delayed.*enhanc|late.*gadolinium|DGE|LGE", required: true }
-  - { name: edema_present, check_type: regex, pattern: "edema|T2.*hyperintens|T2.*elevated|STIR.*hyperintens|inflamm", required: true }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(giant\\s+cell\\s+arteritis|temporal\\s+arteritis|GCA)", required: true }
+  - { name: "vessel_wall_enhancement", check_type: regex, pattern: "(?i)(vessel\\s+wall|mural).*(enhanc|thicken|inflam)", required: true }
+  - { name: "temporal_artery", check_type: regex, pattern: "(?i)temporal\\s+arter", required: true }
 reference_solution: |
-  Cardiac MRI demonstrates findings consistent with acute myocarditis. Late
-  gadolinium enhancement (LGE) images show patchy mid-wall and epicardial
-  enhancement in the inferolateral wall of the left ventricle. This
-  non-ischemic pattern (epicardial/mid-wall rather than subendocardial) is
-  the critical distinguishing feature from myocardial infarction, which
-  characteristically shows subendocardial-to-transmural enhancement in a
-  coronary artery territory. T2-weighted STIR images demonstrate myocardial
-  edema in the same distribution, and T2 mapping shows elevated native T2
-  values confirming active inflammation. Native T1 values and ECV are elevated
-  in the affected segments. Cine images show mild hypokinesis of the
-  inferolateral wall. The overall left ventricular ejection fraction is mildly
-  reduced at 48%. No pericardial effusion. Modified Lake Louise criteria are
-  satisfied with both a T2-based criterion (edema) and a T1-based criterion
-  (LGE/elevated T1/elevated ECV).
-  Impression: Acute myocarditis with non-ischemic LGE pattern (mid-wall and
-  epicardial inferolateral) and myocardial edema. Not consistent with
-  ischemic injury.
+  High-resolution vessel wall MRI demonstrates concentric mural thickening and avid post-gadolinium enhancement of the bilateral superficial temporal arteries on T1 fat-saturated images, with associated luminal narrowing. The vessel wall changes are most prominent on the right. No intracranial vessel wall enhancement or acute infarction. Findings are highly suggestive of giant cell arteritis (temporal arteritis) and should prompt urgent rheumatologic consultation and corticosteroid therapy to prevent vision loss.
 condition_present: true
-confusion_pair: MRI-027
-source_dataset: eurorad
+confusion_pair: null
+source_dataset: openem-grounded
 tags:
-  - myocarditis
-  - cardiac
-  - delayed-enhancement
+  - vascular
   - inflammatory
-  - confusion-pair
+  - vessel-wall-mri

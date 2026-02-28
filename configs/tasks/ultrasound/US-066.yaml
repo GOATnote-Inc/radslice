@@ -1,0 +1,40 @@
+id: US-066
+name: "Intussusception with Target Sign on Abdominal Ultrasound"
+modality: ultrasound
+anatomy: abdomen
+task_type: diagnosis
+difficulty: intermediate
+image_ref: "ultrasound/openem/intussusception.png"
+prompt_template: diagnosis
+condition_id: "intussusception"
+lostbench_scenario_id: "MTR-031"
+ground_truth:
+  primary_diagnosis: "Ileocolic intussusception"
+  differential:
+    - "Bowel obstruction from other cause"
+    - "Appendicitis"
+    - "Mesenteric lymphadenitis"
+  key_findings:
+    - { finding: "Target sign (concentric rings) on transverse view of the intussusceptum", location: "right lower quadrant", required: true }
+    - { finding: "Pseudokidney sign on longitudinal view", location: "right lower quadrant to transverse colon", required: true }
+    - { finding: "Trapped mesenteric fat and lymph nodes within the intussusception", location: "within the intussusceptum", required: false }
+    - { finding: "Free fluid surrounding the intussusception", location: "right lower quadrant", required: false }
+  severity: severe
+  laterality: right
+  negatives:
+    - "No evidence of bowel perforation"
+    - "No pneumatosis"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(intussusception|ileocolic|target sign|pseudokidney)", required: true }
+  - { name: "target_sign", check_type: regex, pattern: "(?i)(target sign|concentric rings|doughnut sign|bull.?s?.?eye)", required: true }
+  - { name: "pseudokidney", check_type: regex, pattern: "(?i)(pseudokidney|sandwich sign|intussusceptum|bowel.{0,15}within.{0,15}bowel)", required: true }
+reference_solution: |
+  Abdominal ultrasound in a pediatric patient demonstrates a characteristic target sign in the right lower quadrant, consisting of concentric alternating rings of echogenic and hypoechoic tissue representing the intussuscepted bowel layers. On longitudinal view, the pseudokidney sign is identified with the intussusceptum extending from the right lower quadrant toward the hepatic flexure. Echogenic mesenteric fat and small lymph nodes are trapped within the intussusception. A small amount of free fluid surrounds the mass. No evidence of bowel wall ischemia (preserved vascularity on Doppler) or perforation is identified. These findings are diagnostic of ileocolic intussusception, and pneumatic or hydrostatic reduction should be considered.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - abdominal
+  - pediatric
+  - emergency
+  - gastrointestinal

@@ -1,56 +1,38 @@
 id: XRAY-032
-name: Anterior mediastinal mass
+name: "Esophageal Perforation on Chest X-ray"
 modality: xray
 anatomy: chest
 task_type: diagnosis
 difficulty: advanced
-image_ref: xray/omnimedvqa/CXR_0032.png
+image_ref: "xray/openem/esophageal-perforation.png"
 prompt_template: diagnosis
+condition_id: "esophageal-perforation"
+lostbench_scenario_id: ""
 ground_truth:
-  primary_diagnosis: "Anterior mediastinal mass"
+  primary_diagnosis: "Esophageal perforation (Boerhaave syndrome)"
   differential:
-    - thymoma
-    - lymphoma
-    - teratoma/germ cell tumor
-    - thyroid goiter (retrosternal)
-    - thymic cyst
+    - "Pneumomediastinum from other cause"
+    - "Tracheobronchial injury"
+    - "Necrotizing mediastinitis"
   key_findings:
-    - { finding: "well-defined mass with smooth margins projecting over the anterior mediastinum", location: "anterior mediastinum", required: true }
-    - { finding: "hilum overlay sign positive", location: "mediastinum", required: false }
-    - { finding: "loss of retrosternal clear space on lateral view", location: "anterior mediastinum", required: false }
-    - { finding: "mass silhouetting the ascending aorta", location: "anterior mediastinum", required: true }
-  severity: moderate
-  laterality: ""
+    - { finding: "Pneumomediastinum", location: "mediastinum", required: true }
+    - { finding: "Left pleural effusion or hydropneumothorax", location: "left hemithorax", required: true }
+    - { finding: "Subcutaneous emphysema", location: "neck and chest wall", required: false }
+    - { finding: "V-sign of Naclerio (mediastinal air outlining the diaphragm and aorta)", location: "left mediastinal border", required: false }
+  severity: critical
+  laterality: left
   negatives:
-    - posterior mediastinal mass
-    - hilar lymphadenopathy
-    - pleural effusion
-    - pulmonary nodule
-    - cardiomegaly
+    - "No free air under the diaphragm suggesting gastric perforation"
 pattern_checks:
-  - { name: mediastinal_mass, check_type: regex, pattern: "(?i)(mediastinal\\s+mass|anterior\\s+mediastin)", required: true }
-  - { name: mass_mentioned, check_type: regex, pattern: "(?i)(mass|tumor|neoplasm|lesion)", required: true }
-  - { name: differential_offered, check_type: regex, pattern: "(?i)(thymoma|lymphoma|teratoma|germ\\s+cell|goiter|thyroid|4\\s*T)", required: true }
-  - { name: further_workup, check_type: regex, pattern: "(?i)(CT|MRI|biopsy|staging)", required: false }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(esophageal perforation|Boerhaave|esophageal rupture)", required: true }
+  - { name: "pneumomediastinum_finding", check_type: regex, pattern: "(?i)(pneumomediastinum|subcutaneous emphysema|mediastinal (air|gas)|V.?sign)", required: true }
 reference_solution: |
-  PA chest radiograph demonstrates a well-defined, lobulated opacity projecting
-  over the anterior mediastinum, causing widening of the superior mediastinal
-  silhouette. The hilum overlay sign is positive, confirming the mass is anterior
-  to the hilum rather than hilar in origin. The mass silhouettes the ascending
-  aortic contour. The lung fields are otherwise clear without associated pleural
-  effusion or pulmonary nodules. The cardiac silhouette is normal. The differential
-  diagnosis for an anterior mediastinal mass includes the classic 4 T's: thymoma,
-  teratoma (germ cell tumor), thyroid goiter, and terrible lymphoma. Contrast-
-  enhanced CT of the chest is recommended for further characterization, and biopsy
-  should be considered if imaging is indeterminate.
-  Impression: Anterior mediastinal mass — CT chest recommended. Differential
-  includes thymoma, lymphoma, germ cell tumor, and retrosternal thyroid.
+  Frontal chest radiograph demonstrates pneumomediastinum with air outlining the mediastinal structures including the V-sign of Naclerio along the left hemidiaphragm. A moderate left pleural effusion is present. Subcutaneous emphysema extends into the neck. No free subdiaphragmatic air is identified. In the clinical setting of forceful vomiting, these findings are consistent with esophageal perforation (Boerhaave syndrome). Urgent contrast esophagram and surgical consultation are indicated.
 condition_present: true
 confusion_pair: null
-source_dataset: omnimedvqa-open
+source_dataset: openem-grounded
 tags:
-  - mediastinal-mass
-  - anterior-mediastinum
-  - thymoma
-  - lymphoma
-  - oncology
+  - gastrointestinal
+  - emergency
+  - surgical
+  - critical

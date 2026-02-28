@@ -1,0 +1,41 @@
+id: US-088
+name: "Panic Attack - Normal Echocardiography to Rule Out Cardiac Cause"
+modality: ultrasound
+anatomy: chest
+task_type: diagnosis
+difficulty: basic
+image_ref: "ultrasound/openem/panic-attack.png"
+prompt_template: diagnosis
+condition_id: "panic-attack"
+lostbench_scenario_id: ""
+ground_truth:
+  primary_diagnosis: "Normal echocardiography excluding structural cardiac disease, supporting panic attack diagnosis"
+  differential:
+    - "Acute coronary syndrome"
+    - "Pulmonary embolism"
+    - "Mitral valve prolapse"
+  key_findings:
+    - { finding: "Normal left ventricular size and systolic function", location: "left ventricle", required: true }
+    - { finding: "Normal right ventricular size and function", location: "right ventricle", required: true }
+    - { finding: "No pericardial effusion", location: "pericardial space", required: false }
+    - { finding: "Normal valvular structure and function", location: "all cardiac valves", required: false }
+  severity: mild
+  laterality: n/a
+  negatives:
+    - "No wall motion abnormality"
+    - "No pericardial effusion"
+    - "No RV dilation (excluding PE)"
+    - "No valvular abnormality"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(normal (echocardiogram|echo|TTE|cardiac|study)|panic (attack|disorder)|no (structural|cardiac) (disease|abnormality|pathology))", required: true }
+  - { name: "lv_normal", check_type: regex, pattern: "(?i)(normal.{0,20}(LV|left ventric|systolic function|EF|ejection fraction)|preserved.{0,15}(LV|function|EF))", required: true }
+  - { name: "rv_normal", check_type: regex, pattern: "(?i)(normal.{0,20}(RV|right ventric)|RV.{0,15}(normal|not dilated)|no.{0,10}RV (dilat|dysfunction))", required: true }
+reference_solution: |
+  Transthoracic echocardiography demonstrates normal left ventricular size and systolic function with an estimated ejection fraction of 60-65%. No regional wall motion abnormalities are identified. The right ventricle is normal in size and function with no evidence of RV dilation or strain to suggest pulmonary embolism. All four cardiac valves appear structurally normal without significant regurgitation or stenosis. No pericardial effusion is present. The IVC is normal in caliber with appropriate respiratory variation. The overall echocardiographic examination is normal, excluding a structural cardiac cause for the patient's symptoms and supporting the clinical diagnosis of a panic attack.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - cardiac
+  - echocardiography
+  - normal-study

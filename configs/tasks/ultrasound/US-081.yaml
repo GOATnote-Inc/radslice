@@ -1,0 +1,39 @@
+id: US-081
+name: "Acute Low Back Pain Red Flags on Spinal Ultrasound"
+modality: ultrasound
+anatomy: spine
+task_type: diagnosis
+difficulty: advanced
+image_ref: "ultrasound/openem/acute-low-back-pain-red-flags.png"
+prompt_template: diagnosis
+condition_id: "acute-low-back-pain-red-flags"
+lostbench_scenario_id: ""
+ground_truth:
+  primary_diagnosis: "Epidural collection with potential spinal cord/cauda equina compromise on paravertebral ultrasound"
+  differential:
+    - "Epidural abscess"
+    - "Epidural hematoma"
+    - "Disc herniation with canal stenosis"
+  key_findings:
+    - { finding: "Hypoechoic collection in the posterior epidural space", location: "lumbar spine epidural space", required: true }
+    - { finding: "Narrowed spinal canal at the affected level", location: "lumbar spine", required: true }
+    - { finding: "Paraspinal muscle edema or abscess", location: "paraspinal muscles", required: false }
+    - { finding: "Loss of normal anechoic CSF space", location: "thecal sac", required: false }
+  severity: severe
+  laterality: midline
+  negatives:
+    - "No vertebral body fracture visualized on ultrasound"
+    - "No aortic aneurysm on abdominal screening"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(epidural (collection|abscess|hematoma)|cauda equina|spinal (canal stenosis|cord compromise|emergency))", required: true }
+  - { name: "collection_finding", check_type: regex, pattern: "(?i)(epidural (collection|fluid|abscess|mass)|hypoechoic.{0,20}(epidural|spinal)|posterior epidural)", required: true }
+  - { name: "canal_finding", check_type: regex, pattern: "(?i)(spinal canal (narrow|compress|stenosis)|thecal sac (compress|effaced)|canal compromise)", required: true }
+reference_solution: |
+  Paravertebral ultrasound of the lumbar spine demonstrates a hypoechoic collection in the posterior epidural space at the L3-L4 level, causing narrowing of the spinal canal. The normal anechoic CSF space within the thecal sac appears effaced at this level. Paraspinal muscle edema is noted in the adjacent erector spinae. On abdominal screening, the aorta measures normal at 1.8 cm, excluding AAA as a cause of back pain. In the context of acute back pain with red flag features (saddle anesthesia, urinary retention, progressive weakness), these ultrasound findings suggest an epidural collection with potential cauda equina compromise, warranting emergent MRI and neurosurgical consultation.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - spine
+  - emergency
+  - neurosurgical

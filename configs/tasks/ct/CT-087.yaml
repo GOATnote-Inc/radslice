@@ -1,0 +1,37 @@
+id: CT-087
+name: "Venous air embolism on non-contrast CT chest"
+modality: ct
+anatomy: chest
+task_type: diagnosis
+difficulty: expert
+image_ref: "ct/openem/air-embolism.png"
+prompt_template: diagnosis
+condition_id: "air-embolism"
+lostbench_scenario_id: "MTR-066"
+ground_truth:
+  primary_diagnosis: "Venous air embolism with intracardiac air"
+  differential:
+    - "Pneumomediastinum"
+    - "Artifactual air from rapid injection"
+    - "Gas-forming organism bacteremia"
+  key_findings:
+    - { finding: "Air within the right heart chambers", location: "right ventricle and right atrium", required: true }
+    - { finding: "Air within the pulmonary arteries", location: "main and lobar pulmonary arteries", required: true }
+    - { finding: "Air in the cerebral venous sinuses (paradoxical embolism)", location: "superior sagittal sinus", required: false }
+  severity: "critical"
+  laterality: "midline"
+  negatives:
+    - "No pneumothorax as source"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(air\\s*embolism|venous\\s*air|intracardiac\\s*air|gas\\s*embolism)", required: true }
+  - { name: "key_finding_air", check_type: regex, pattern: "(?i)(air.*right\\s*(heart|ventricle|atrium)|intracardiac\\s*air|air.*pulmonary\\s*arter)", required: true }
+reference_solution: |
+  Non-contrast CT of the chest demonstrates air within the right atrium, right ventricle, and main pulmonary arteries, consistent with significant venous air embolism. Air is also present in the segmental pulmonary arteries bilaterally. No pneumothorax or chest wall defect is identified as a source. The left heart chambers are free of air. In the clinical setting, findings represent a significant venous air embolism requiring immediate left lateral decubitus (Durant maneuver) positioning and consideration of hyperbaric oxygen therapy.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - vascular
+  - emergency
+  - iatrogenic
+  - critical-care

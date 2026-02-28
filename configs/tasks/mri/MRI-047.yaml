@@ -1,0 +1,38 @@
+id: MRI-047
+name: "Globe Rupture Findings on Pre-Injury Orbital MRI"
+modality: mri
+anatomy: face
+task_type: diagnosis
+difficulty: advanced
+image_ref: "mri/openem/globe-rupture.png"
+prompt_template: diagnosis
+condition_id: "globe-rupture"
+lostbench_scenario_id: ""
+ground_truth:
+  primary_diagnosis: "Globe rupture with loss of globe integrity on MRI (pre-injury or incidentally discovered)"
+  differential:
+    - "Phthisis bulbi"
+    - "Retinal detachment"
+    - "Endophthalmitis"
+  key_findings:
+    - { finding: "Irregular globe contour with scleral discontinuity", location: "Right globe anterolateral wall", required: true }
+    - { finding: "Heterogeneous intraocular signal replacing normal vitreous (vitreous hemorrhage)", location: "Right vitreous cavity", required: true }
+    - { finding: "Decreased globe volume compared to contralateral eye", location: "Right globe", required: false }
+  severity: "critical"
+  laterality: "right"
+  negatives:
+    - "No retrobulbar hemorrhage"
+    - "No intraorbital foreign body identified on MRI"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)globe\\s+rupture", required: true }
+  - { name: "globe_integrity", check_type: regex, pattern: "(?i)(scleral.*(discontinu|disrupt|defect)|globe.*(irregular|deform|integrit))", required: true }
+  - { name: "laterality", check_type: regex, pattern: "(?i)right", required: true }
+reference_solution: |
+  MRI of the orbits demonstrates irregular contour of the right globe with focal scleral discontinuity at the anterolateral aspect. The right vitreous cavity shows heterogeneous signal intensity on T1 and T2 sequences, consistent with vitreous hemorrhage replacing the normal vitreous signal. The right globe volume is decreased compared to the left. No retrobulbar hemorrhage or intraorbital foreign body (note: MRI is generally contraindicated with suspected metallic foreign body; findings here represent incidental or known non-metallic injury). Findings are consistent with globe rupture requiring emergent ophthalmologic surgical consultation.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - orbital
+  - trauma
+  - emergency

@@ -1,58 +1,38 @@
 id: MRI-015
-name: Cavernous malformation with hemosiderin rim
+name: "Spinal Cord Injury on MRI"
 modality: mri
-anatomy: head
-task_type: finding_detection
-difficulty: intermediate
-image_ref: mri/eurorad/EUR_0015.png
-prompt_template: finding_detection
+anatomy: spine
+task_type: diagnosis
+difficulty: advanced
+image_ref: "mri/openem/spinal-cord-injury.png"
+prompt_template: diagnosis
+condition_id: "spinal-cord-injury"
+lostbench_scenario_id: ""
 ground_truth:
-  primary_diagnosis: "Cerebral cavernous malformation (cavernoma)"
+  primary_diagnosis: "Acute traumatic spinal cord injury with cord edema and hemorrhage on MRI"
   differential:
-    - hemorrhagic metastasis
-    - thrombosed AVM
-    - calcified granuloma
-    - developmental venous anomaly with hemorrhage
-    - amyloid angiopathy-related microhemorrhage
+    - "Spinal cord infarction"
+    - "Transverse myelitis"
+    - "Spinal cord tumor with hemorrhage"
   key_findings:
-    - { finding: "popcorn-like lesion with mixed T1 and T2 signal (blood products of varying ages)", location: "right frontal lobe subcortical", required: true }
-    - { finding: "complete hemosiderin rim appearing as T2/SWI hypointense ring", location: "periphery of the lesion", required: true }
-    - { finding: "no surrounding edema or mass effect", location: "adjacent brain parenchyma", required: false }
-    - { finding: "no enhancement or minimal faint enhancement", location: "within and around the lesion", required: false }
-  severity: moderate
-  laterality: right
+    - { finding: "T2 hyperintense signal within the spinal cord indicating edema (cord contusion)", location: "Cervical spinal cord at C5-C6", required: true }
+    - { finding: "Focal T2 hypointensity within the cord edema suggesting intramedullary hemorrhage", location: "C5-C6 level", required: true }
+    - { finding: "Disruption of posterior ligamentous complex with T2 hyperintensity", location: "C5-C6 interspinous ligament", required: false }
+  severity: "critical"
+  laterality: "midline"
   negatives:
-    - surrounding vasogenic edema (favors tumor)
-    - associated feeding arteries or draining veins (favors AVM)
-    - significant contrast enhancement
-    - mass effect
-    - multiple lesions (if solitary)
+    - "No epidural hematoma"
+    - "No complete cord transection"
 pattern_checks:
-  - { name: cavernoma_mentioned, check_type: regex, pattern: "cavernous\\s+malformat|cavernoma|cavernous\\s+angioma|cavernous\\s+heman", required: true }
-  - { name: hemosiderin_rim, check_type: regex, pattern: "hemosiderin|T2.*hypointens.*rim|dark.*rim|blooming|SWI.*hypointens|iron", required: true }
-  - { name: mixed_signal, check_type: regex, pattern: "mixed.*signal|popcorn|heterogen.*signal|blood.*product|hemorrhag", required: true }
-  - { name: laterality_right, check_type: regex, pattern: "right", required: false }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)spinal\\s+cord\\s+(injury|contusion|damage)", required: true }
+  - { name: "cord_signal", check_type: regex, pattern: "(?i)(cord.*(edema|signal|T2|hemorrhage)|intramedullary)", required: true }
+  - { name: "level_specified", check_type: regex, pattern: "(?i)(cervical|C[4-7])", required: true }
 reference_solution: |
-  MRI of the brain demonstrates a well-circumscribed lesion in the right
-  frontal lobe subcortical white matter measuring approximately 1.8 x 1.5 cm.
-  The lesion has a characteristic popcorn-like appearance with mixed T1 and T2
-  signal intensities reflecting blood products of varying ages (methemoglobin,
-  hemosiderin, deoxyhemoglobin). A complete rim of T2 hypointense hemosiderin
-  surrounds the lesion, which blooms prominently on SWI sequences. There is no
-  significant surrounding vasogenic edema or mass effect, distinguishing this
-  from a hemorrhagic neoplasm. Minimal to no contrast enhancement is seen. No
-  associated feeding arteries or enlarged draining veins are identified to
-  suggest an arteriovenous malformation. An associated developmental venous
-  anomaly may be present in the adjacent white matter.
-  Impression: Right frontal lobe lesion with imaging characteristics typical
-  of a cerebral cavernous malformation (cavernoma), including popcorn
-  morphology, mixed-age blood products, and complete hemosiderin rim.
+  MRI of the cervical spine demonstrates T2 hyperintense signal within the spinal cord at the C5-C6 level indicating cord edema and contusion. Within the area of edema, a focal T2 hypointense focus is present consistent with intramedullary hemorrhage, which is a poor prognostic sign. There is disruption of the posterior ligamentous complex at C5-C6 with interspinous ligament hyperintensity on STIR. No epidural hematoma or complete cord transection. Findings are consistent with acute traumatic spinal cord injury with hemorrhagic contusion.
 condition_present: true
 confusion_pair: null
-source_dataset: eurorad
+source_dataset: openem-grounded
 tags:
-  - cavernoma
-  - vascular-malformation
-  - neuro
-  - hemorrhage
-  - congenital
+  - spine
+  - trauma
+  - emergency

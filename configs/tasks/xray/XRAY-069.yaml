@@ -1,40 +1,39 @@
 id: XRAY-069
-name: VQA - What is the cardiac silhouette size on this CXR?
+name: "Neutropenic Fever on Chest X-ray"
 modality: xray
 anatomy: chest
-task_type: vqa
-difficulty: basic
-image_ref: xray/vindrcxr/VDR_0069.png
-prompt_template: vqa
+task_type: diagnosis
+difficulty: intermediate
+image_ref: "xray/openem/neutropenic-fever.png"
+prompt_template: diagnosis
+condition_id: "neutropenic-fever"
+lostbench_scenario_id: ""
 ground_truth:
-  primary_diagnosis: "Cardiomegaly"
-  differential: []
+  primary_diagnosis: "Neutropenic fever with opportunistic pulmonary infection"
+  differential:
+    - "Community-acquired pneumonia"
+    - "Invasive pulmonary aspergillosis"
+    - "Drug-induced pneumonitis"
+    - "Pulmonary hemorrhage"
   key_findings:
-    - { finding: "enlarged cardiac silhouette", location: "cardiomediastinal", required: true }
-    - { finding: "cardiothoracic ratio greater than 0.5", location: "cardiomediastinal", required: true }
-  severity: moderate
-  laterality: ""
+    - { finding: "Focal or multifocal pulmonary opacities", location: "right upper lobe", required: true }
+    - { finding: "Nodular opacities with or without halo sign (aspergillosis)", location: "lung fields", required: false }
+    - { finding: "Central venous catheter in situ (oncology patient)", location: "superior vena cava", required: false }
+  severity: severe
+  laterality: right
   negatives:
-    - normal heart size
-    - pericardial effusion
+    - "No pneumothorax"
+    - "No pleural effusion (paucity of inflammatory response in neutropenia)"
 pattern_checks:
-  - { name: enlarged, check_type: regex, pattern: "(?i)(enlarg|cardiomegaly|increased.{0,20}cardiac)", required: true }
-  - { name: ctr, check_type: regex, pattern: "(?i)(cardiothoracic|CTR|ratio|greater\\s+than\\s+0\\.5|exceed)", required: true }
-  - { name: cardiac_mentioned, check_type: regex, pattern: "(?i)(cardiac|heart)", required: true }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(neutropenic (fever|patient)|opportunistic infection|aspergillosis|febrile neutropenia|immunocompromised)", required: true }
+  - { name: "opacity_finding", check_type: regex, pattern: "(?i)(opacity|infiltrate|consolidation|nodular|nodule)", required: true }
 reference_solution: |
-  The cardiac silhouette is enlarged. The cardiothoracic ratio (CTR) exceeds 0.5
-  on this PA chest radiograph, consistent with cardiomegaly. The heart is
-  predominantly enlarged to the left, suggesting left-sided chamber enlargement.
-  There is no definite pulmonary vascular congestion to suggest acute heart
-  failure at this time, though clinical correlation with symptoms and
-  echocardiography is recommended to determine the etiology of cardiomegaly
-  (valvular disease, dilated cardiomyopathy, hypertensive heart disease, etc.).
-  The lungs are otherwise clear. No pleural effusion.
+  Frontal chest radiograph demonstrates a focal area of consolidation in the right upper lobe with an associated nodular opacity. No significant pleural effusion is identified, which may reflect the impaired inflammatory response in a neutropenic patient. A left subclavian tunneled central venous catheter is in satisfactory position. In the setting of febrile neutropenia, the differential includes bacterial infection, invasive fungal disease (aspergillosis), and viral pneumonitis. CT of the chest is recommended for further characterization, as X-ray may underestimate the extent of disease in immunocompromised patients.
 condition_present: true
 confusion_pair: null
-source_dataset: vindrcxr
+source_dataset: openem-grounded
 tags:
-  - vqa
-  - cardiomegaly
-  - cardiac
-  - chest
+  - pulmonary
+  - infection
+  - oncologic
+  - immunocompromised

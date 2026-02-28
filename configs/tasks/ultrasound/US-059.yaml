@@ -1,0 +1,40 @@
+id: US-059
+name: "Crush Syndrome on Extremity Ultrasound"
+modality: ultrasound
+anatomy: extremity
+task_type: diagnosis
+difficulty: advanced
+image_ref: "ultrasound/openem/crush-syndrome-mci.png"
+prompt_template: diagnosis
+condition_id: "crush-syndrome-mci"
+lostbench_scenario_id: "MTR-056"
+ground_truth:
+  primary_diagnosis: "Crush syndrome with muscle edema, compartment swelling, and cardiac monitoring findings"
+  differential:
+    - "Compartment syndrome"
+    - "Rhabdomyolysis without crush mechanism"
+    - "Deep vein thrombosis"
+  key_findings:
+    - { finding: "Diffuse muscle edema with increased echogenicity and loss of normal fibrillar architecture", location: "affected limb musculature", required: true }
+    - { finding: "Increased compartment size with fascial bowing", location: "anterior compartment of lower leg", required: true }
+    - { finding: "Cardiac POCUS showing RV dilation (hyperkalemia effect)", location: "right ventricle", required: false }
+    - { finding: "Decreased arterial flow distal to crush site", location: "distal extremity arteries", required: false }
+  severity: critical
+  laterality: right
+  negatives:
+    - "No frank muscle necrosis visible"
+    - "No deep vein thrombosis"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(crush (syndrome|injury)|rhabdomyolysis|muscle (edema|necrosis)|compartment.{0,20}(swelling|syndrome))", required: true }
+  - { name: "muscle_finding", check_type: regex, pattern: "(?i)(muscle (edema|swelling|echogenicity)|fascial (bowing|distension)|compartment (enlarg|swell))", required: true }
+  - { name: "systemic_finding", check_type: regex, pattern: "(?i)(hyperkalemia|RV (dilat|strain)|cardiac|renal|potassium)", required: true }
+reference_solution: |
+  Extremity ultrasound of the right lower leg demonstrates diffuse swelling and increased echogenicity of the anterior and lateral compartment musculature with loss of the normal fibrillar muscle architecture, consistent with muscle edema from crush injury. The anterior compartment is markedly expanded with convex bowing of the anterior fascial boundary. Doppler assessment shows diminished but present arterial flow in the dorsalis pedis and posterior tibial arteries. Bedside echocardiography reveals mild RV dilation concerning for early hyperkalemic effects. These findings in a patient extricated from prolonged entrapment are consistent with crush syndrome and impending compartment syndrome, warranting aggressive resuscitation and monitoring for hyperkalemia and renal failure.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - trauma
+  - emergency
+  - musculoskeletal
+  - mci

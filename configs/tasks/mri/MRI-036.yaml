@@ -1,59 +1,38 @@
 id: MRI-036
-name: Epidural abscess vs disc herniation confusion pair
+name: "Acute Mastoiditis on MRI"
 modality: mri
-anatomy: spine
+anatomy: head
 task_type: diagnosis
-difficulty: advanced
-image_ref: mri/eurorad/EUR_0036.png
+difficulty: intermediate
+image_ref: "mri/openem/mastoiditis.png"
 prompt_template: diagnosis
+condition_id: "mastoiditis"
+lostbench_scenario_id: ""
 ground_truth:
-  primary_diagnosis: "Large L4-L5 disc extrusion mimicking epidural abscess"
+  primary_diagnosis: "Acute coalescent mastoiditis on MRI"
   differential:
-    - epidural abscess
-    - epidural hematoma
-    - sequestered disc fragment
-    - synovial cyst
-    - epidural tumor
+    - "Cholesteatoma"
+    - "Mastoid effusion from otitis media"
+    - "Mastoid malignancy"
   key_findings:
-    - { finding: "large disc extrusion with epidural component and peripheral enhancement (reactive granulation tissue)", location: "L4-L5 posterior epidural space", required: true }
-    - { finding: "contiguity with the parent disc demonstrating disc desiccation", location: "L4-L5 disc space", required: true }
-    - { finding: "no restricted diffusion within the epidural component on DWI", location: "epidural collection at L4-L5", required: true }
-    - { finding: "normal endplate morphology without erosion", location: "L4 and L5 endplates", required: false }
-  severity: moderate
-  laterality: ""
+    - { finding: "T2 hyperintense opacification of the mastoid air cells with loss of normal bony septations", location: "Left mastoid", required: true }
+    - { finding: "Enhancement of the mastoid mucosa and periosteum on post-gadolinium images", location: "Left mastoid and periosteal surface", required: true }
+    - { finding: "Subperiosteal abscess with rim enhancement posterior to the mastoid", location: "Left retroauricular region", required: false }
+  severity: "moderate"
+  laterality: "left"
   negatives:
-    - restricted diffusion within the epidural collection (would favor abscess)
-    - endplate erosion or destruction (would favor discitis-osteomyelitis)
-    - disc space enhancement (would favor discitis)
-    - paraspinal phlegmon
-    - fever or elevated inflammatory markers (clinical, not imaging)
+    - "No sigmoid sinus thrombosis"
+    - "No intracranial extension or epidural abscess"
 pattern_checks:
-  - { name: disc_herniation, check_type: regex, pattern: "disc.*extru|disc.*herniat|herniat.*disc|sequester|disc.*prolapse", required: true }
-  - { name: not_abscess, check_type: regex, pattern: "not.*abscess|rather\\s+than.*abscess|favor.*disc|no.*restrict.*diffusion|against.*infect", required: true }
-  - { name: peripheral_enhancement, check_type: regex, pattern: "peripheral.*enhanc|rim.*enhanc|granulation|reactive", required: true }
-  - { name: level_mentioned, check_type: regex, pattern: "L4.?L5|L4.?5", required: true }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)mastoiditis", required: true }
+  - { name: "mastoid_opacification", check_type: regex, pattern: "(?i)mastoid.*(opacif|fluid|T2|signal)", required: true }
+  - { name: "laterality", check_type: regex, pattern: "(?i)left", required: true }
 reference_solution: |
-  MRI of the lumbar spine demonstrates a large disc extrusion at L4-L5 with a
-  prominent epidural component extending posteriorly. The extruded disc
-  material is contiguous with the desiccated L4-L5 parent disc. On post-
-  gadolinium images, there is peripheral enhancement around the disc
-  extrusion representing reactive granulation tissue, which can mimic the rim
-  enhancement seen with an epidural abscess. However, the critical
-  distinguishing feature is the absence of restricted diffusion within the
-  epidural component on DWI/ADC, effectively excluding a pyogenic abscess.
-  Furthermore, the L4 and L5 endplates demonstrate normal morphology without
-  erosion or enhancement, arguing against discitis-osteomyelitis. The disc
-  extrusion compresses the traversing L5 nerve roots and causes moderate
-  spinal canal stenosis. The remaining lumbar levels are unremarkable.
-  Impression: Large L4-L5 disc extrusion with peripheral enhancement
-  (reactive granulation tissue), not epidural abscess. Absence of restricted
-  diffusion and normal endplates are key distinguishing features.
+  MRI of the temporal bones demonstrates complete opacification of the left mastoid air cells with T2 hyperintense fluid signal and loss of normal bony septations on T2-weighted images, consistent with coalescent mastoiditis. Post-gadolinium images show enhancement of the mastoid mucosa and overlying periosteum. A small rim-enhancing subperiosteal collection is noted posterior to the left mastoid. The left sigmoid sinus shows normal flow void with no evidence of thrombosis. No intracranial extension. Findings are consistent with acute coalescent mastoiditis with subperiosteal abscess.
 condition_present: true
-confusion_pair: MRI-035
-source_dataset: eurorad
+confusion_pair: null
+source_dataset: openem-grounded
 tags:
-  - disc-herniation
-  - spine
-  - lumbar
-  - confusion-pair
-  - epidural
+  - head-neck
+  - infection
+  - temporal-bone

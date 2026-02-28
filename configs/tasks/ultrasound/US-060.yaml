@@ -1,0 +1,41 @@
+id: US-060
+name: "Lateral Canthotomy Pre-procedure Ocular Ultrasound"
+modality: ultrasound
+anatomy: face
+task_type: diagnosis
+difficulty: expert
+image_ref: "ultrasound/openem/lateral-canthotomy.png"
+prompt_template: diagnosis
+condition_id: "lateral-canthotomy"
+lostbench_scenario_id: "MTR-059"
+ground_truth:
+  primary_diagnosis: "Retrobulbar hemorrhage with elevated intraocular pressure requiring lateral canthotomy"
+  differential:
+    - "Orbital cellulitis with abscess"
+    - "Orbital tumor"
+    - "Cavernous sinus thrombosis"
+  key_findings:
+    - { finding: "Increased optic nerve sheath diameter greater than 5 mm", location: "optic nerve", required: true }
+    - { finding: "Retrobulbar hypoechoic or heterogeneous collection (hemorrhage)", location: "retrobulbar space", required: true }
+    - { finding: "Proptosis with anterior displacement of the globe", location: "orbit", required: false }
+    - { finding: "Decreased or absent central retinal artery flow", location: "central retinal artery", required: false }
+  severity: critical
+  laterality: left
+  negatives:
+    - "No globe rupture"
+    - "No intraocular foreign body"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(retrobulbar hemorrhage|orbital compartment syndrome|lateral canthotomy|orbital hemorrhage)", required: true }
+  - { name: "onsd_finding", check_type: regex, pattern: "(?i)(optic nerve sheath diameter|ONSD|optic nerve.{0,20}(dilat|enlarg|>\\s*5|elevated))", required: true }
+  - { name: "retrobulbar_finding", check_type: regex, pattern: "(?i)(retrobulbar (hemorrhage|collection|hematoma)|orbital (hemorrhage|hematoma|collection))", required: true }
+reference_solution: |
+  Ocular ultrasound of the left eye demonstrates an enlarged optic nerve sheath diameter measuring 7.2 mm (normal less than 5 mm), indicating elevated intraocular or intracranial pressure. A heterogeneous retrobulbar collection is identified posterior to the globe consistent with retrobulbar hemorrhage. The globe appears anteriorly displaced (proptosis). Color Doppler demonstrates markedly diminished central retinal artery flow. The right eye appears normal with an optic nerve sheath diameter of 4.3 mm. These findings confirm orbital compartment syndrome from retrobulbar hemorrhage, representing a vision-threatening emergency requiring immediate lateral canthotomy and cantholysis.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - ophthalmologic
+  - emergency
+  - ocular-ultrasound
+  - trauma
+  - procedural

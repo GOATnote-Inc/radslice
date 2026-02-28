@@ -1,59 +1,38 @@
 id: MRI-040
-name: Transient osteoporosis confusion pair for stress fracture
+name: "Carbon Monoxide Poisoning with Globus Pallidus Lesions on MRI"
 modality: mri
-anatomy: hip
-task_type: vqa
-difficulty: intermediate
-image_ref: mri/omnimedvqa/MRI_0040.png
-prompt_template: vqa
+anatomy: head
+task_type: diagnosis
+difficulty: advanced
+image_ref: "mri/openem/carbon-monoxide-poisoning.png"
+prompt_template: diagnosis
+condition_id: "carbon-monoxide-poisoning"
+lostbench_scenario_id: ""
 ground_truth:
-  primary_diagnosis: "Transient osteoporosis of the left hip (bone marrow edema syndrome)"
+  primary_diagnosis: "Carbon monoxide poisoning with bilateral globus pallidus necrosis on MRI"
   differential:
-    - stress fracture of the femoral neck
-    - avascular necrosis of the femoral head
-    - septic arthritis with osteomyelitis
-    - occult fracture
-    - metastatic bone disease
+    - "Methanol poisoning"
+    - "Hepatic encephalopathy"
+    - "Wilson disease"
   key_findings:
-    - { finding: "diffuse bone marrow edema on STIR/T2 fat-sat without a discrete fracture line", location: "left femoral head and neck", required: true }
-    - { finding: "T1 hypointense marrow signal in the femoral head without focal geographic lesion", location: "left femoral head", required: true }
-    - { finding: "absence of a linear fracture line on all sequences", location: "left femoral neck and head", required: true }
-    - { finding: "small joint effusion", location: "left hip joint", required: false }
-  severity: moderate
-  laterality: left
+    - { finding: "Bilateral symmetric T2/FLAIR hyperintensity in the globi pallidi", location: "Bilateral globus pallidus", required: true }
+    - { finding: "Restricted diffusion in the globi pallidi on DWI", location: "Bilateral globus pallidus", required: true }
+    - { finding: "T2 hyperintensity in the periventricular white matter (delayed leukoencephalopathy)", location: "Bilateral periventricular white matter", required: false }
+  severity: "critical"
+  laterality: "bilateral"
   negatives:
-    - discrete fracture line (would indicate stress fracture)
-    - serpiginous demarcation line (would indicate AVN)
-    - destructive lesion or soft tissue mass
-    - subchondral collapse
-    - contralateral hip involvement
+    - "No hemorrhage in the basal ganglia"
+    - "No mass lesion"
 pattern_checks:
-  - { name: transient_osteoporosis, check_type: regex, pattern: "transient\\s+osteoporosis|bone\\s+marrow\\s+edema\\s+syndrome|BMES|transient.*marrow", required: true }
-  - { name: no_fracture_line, check_type: regex, pattern: "no.*fracture\\s+line|without.*fracture|no.*discrete.*line|absence.*fracture", required: true }
-  - { name: diffuse_edema, check_type: regex, pattern: "diffuse.*edema|marrow\\s+edema|extensive.*edema|bone.*edema", required: true }
-  - { name: femoral_head, check_type: regex, pattern: "femoral\\s+head|femur\\s+head", required: true }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)carbon\\s+monoxide", required: true }
+  - { name: "globus_pallidus", check_type: regex, pattern: "(?i)glob(us|i)\\s+pallid(us|i|al)", required: true }
+  - { name: "bilateral", check_type: regex, pattern: "(?i)bilateral", required: true }
 reference_solution: |
-  MRI of the left hip demonstrates diffuse bone marrow edema involving the
-  left femoral head and extending into the femoral neck. On STIR and T2
-  fat-saturated sequences, there is extensive hyperintense signal throughout
-  the femoral head and proximal neck. T1-weighted images show corresponding
-  diffuse hypointense marrow signal. Critically, no discrete linear fracture
-  line is identified on any sequence, which distinguishes this from a stress
-  fracture. Similarly, no serpiginous demarcation line or geographic zone
-  of necrosis is present to suggest avascular necrosis. A small joint
-  effusion is present. No subchondral collapse or cortical irregularity. The
-  pattern of diffuse marrow edema centered on the femoral head without a
-  fracture line or AVN morphology is characteristic of transient osteoporosis
-  of the hip (bone marrow edema syndrome), a self-limiting condition.
-  Impression: Transient osteoporosis of the left hip with diffuse femoral
-  head marrow edema and no fracture line or AVN morphology. Self-limiting;
-  follow-up MRI in 6-8 weeks recommended to confirm resolution.
+  MRI of the brain demonstrates bilateral symmetric T2/FLAIR hyperintensity involving the globi pallidi with corresponding restricted diffusion on DWI, consistent with acute necrosis from carbon monoxide poisoning. Additional patchy T2 hyperintensity is present in the bilateral periventricular white matter, suggesting early demyelination (delayed leukoencephalopathy). No hemorrhage within the basal ganglia. No mass lesion. The bilateral globus pallidus involvement is pathognomonic for carbon monoxide toxicity and reflects the vulnerability of these highly metabolically active structures to hypoxic-ischemic injury.
 condition_present: true
-confusion_pair: MRI-039
-source_dataset: omnimedvqa-open
+confusion_pair: null
+source_dataset: openem-grounded
 tags:
-  - transient-osteoporosis
-  - hip
-  - musculoskeletal
-  - bone-marrow-edema
-  - confusion-pair
+  - neuro
+  - toxicology
+  - emergency

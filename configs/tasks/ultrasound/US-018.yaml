@@ -1,55 +1,40 @@
 id: US-018
-name: Normal lower extremity venous compression ultrasound
+name: "Fat Embolism Syndrome - RV Strain on TTE"
 modality: ultrasound
-anatomy: extremity
+anatomy: chest
 task_type: diagnosis
-difficulty: basic
-image_ref: ultrasound/radimagenet/US_0018.png
+difficulty: expert
+image_ref: "ultrasound/openem/fat-embolism-syndrome.png"
 prompt_template: diagnosis
+condition_id: "fat-embolism-syndrome"
+lostbench_scenario_id: "MTR-065"
 ground_truth:
-  primary_diagnosis: "Normal lower extremity venous study"
+  primary_diagnosis: "Acute right ventricular strain secondary to fat embolism syndrome"
   differential:
-    - early non-occlusive DVT
-    - chronic post-thrombotic changes
-    - extrinsic compression not visualized
+    - "Massive pulmonary embolism"
+    - "Acute respiratory distress syndrome"
+    - "Tension pneumothorax"
   key_findings:
-    - { finding: "complete venous compressibility at all interrogated segments", location: "left lower extremity deep veins", required: true }
-    - { finding: "normal spontaneous and phasic Doppler waveforms", location: "left common femoral vein", required: true }
-    - { finding: "normal augmentation with distal compression", location: "left popliteal vein", required: false }
-  severity: mild
-  laterality: left
+    - { finding: "Dilated right ventricle with RV/LV ratio greater than 1.0", location: "right ventricle", required: true }
+    - { finding: "Right ventricular hypokinesis with apical sparing (McConnell sign)", location: "right ventricle free wall", required: true }
+    - { finding: "Flattened or bowed interventricular septum", location: "interventricular septum", required: false }
+    - { finding: "Tricuspid regurgitation with elevated RVSP", location: "tricuspid valve", required: false }
+  severity: critical
+  laterality: right
   negatives:
-    - deep vein thrombosis
-    - superficial thrombophlebitis
-    - venous insufficiency
-    - Baker cyst
-    - lymphadenopathy
-    - arterial occlusive disease
+    - "No pericardial effusion"
+    - "No left ventricular wall motion abnormality"
 pattern_checks:
-  - { name: normal_identified, check_type: regex, pattern: "normal|negative|unremarkable|no\\s+(DVT|thrombus|thromb)", required: true }
-  - { name: compressible, check_type: regex, pattern: "compress|complet.*coapt|fully.*compress|patent", required: true }
-  - { name: no_dvt, check_type: regex, pattern: "no.*(DVT|thrombus|thromb|clot)", required: true }
-  - { name: phasic_flow, check_type: regex, pattern: "phasic|respiratory.*variat|spontaneous.*flow|augment", required: false }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(fat embolism|RV (strain|dilat|overload|dysfunction)|right ventric.{0,20}(strain|dilat|dysfunc))", required: true }
+  - { name: "rv_finding", check_type: regex, pattern: "(?i)(RV (dilat|hypokinesis|dysfunction)|McConnell|right ventric.{0,20}(dilat|hypokin|dysfunc))", required: true }
+  - { name: "septal_finding", check_type: regex, pattern: "(?i)(septal (bowing|flattening|shift)|D.?sign|interventricular.{0,20}(flat|bow|shift))", required: true }
 reference_solution: |
-  Compression ultrasound of the left lower extremity demonstrates complete
-  compressibility of all interrogated deep venous segments, including the
-  common femoral vein, femoral vein (superficial femoral vein), popliteal
-  vein, and posterior tibial veins. The veins fully coapt with transducer
-  pressure. Spectral Doppler of the common femoral vein shows normal
-  spontaneous phasic flow with respiratory variation. Augmentation is
-  present in the popliteal and femoral veins with distal calf compression.
-  No intraluminal echogenic material is identified to suggest thrombus. No
-  Baker cyst or other popliteal fossa abnormality is seen. The superficial
-  venous system appears unremarkable.
-  Impression: Negative compression ultrasound of the left lower extremity.
-  No evidence of deep vein thrombosis.
-condition_present: false
-confusion_pair: US-003
-source_dataset: radimagenet
+  Transthoracic echocardiography demonstrates acute right ventricular dilation with an RV/LV ratio of 1.3 in the apical four-chamber view. There is right ventricular free wall hypokinesis with preserved apical contractility (McConnell sign), a finding associated with acute right heart strain from embolic obstruction. The interventricular septum is flattened and bows toward the left ventricle during systole (D-sign). Tricuspid regurgitation is present with an estimated RVSP of 55 mmHg. Left ventricular function is preserved. In the post-long bone fracture clinical context, these findings are consistent with fat embolism syndrome causing acute cor pulmonale.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
 tags:
-  - normal
-  - extremity
-  - vascular
-  - compression-ultrasound
-  - negative-study
-  - dvt-screening
+  - cardiac
+  - emergency
+  - echocardiography
+  - trauma

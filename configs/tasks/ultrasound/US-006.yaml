@@ -1,57 +1,40 @@
 id: US-006
-name: Acute cholecystitis with gallbladder wall thickening
+name: "Cardiac Tamponade on POCUS"
 modality: ultrasound
-anatomy: abdomen
+anatomy: chest
 task_type: diagnosis
-difficulty: intermediate
-image_ref: ultrasound/radimagenet/US_0006.png
+difficulty: advanced
+image_ref: "ultrasound/openem/cardiac-tamponade.png"
 prompt_template: diagnosis
+condition_id: "cardiac-tamponade"
+lostbench_scenario_id: ""
 ground_truth:
-  primary_diagnosis: "Acute cholecystitis"
+  primary_diagnosis: "Cardiac tamponade with large pericardial effusion and diastolic chamber collapse"
   differential:
-    - gangrenous cholecystitis
-    - gallbladder hydrops
-    - adenomyomatosis
-    - hepatitis with reactive wall edema
-    - congestive heart failure with wall edema
+    - "Large pericardial effusion without tamponade physiology"
+    - "Constrictive pericarditis"
+    - "Right ventricular infarction"
   key_findings:
-    - { finding: "gallbladder wall thickening greater than 3 mm", location: "gallbladder wall", required: true }
-    - { finding: "pericholecystic fluid", location: "gallbladder fossa", required: true }
-    - { finding: "sonographic Murphy sign positive", location: "gallbladder fundus", required: true }
-    - { finding: "hyperechoic intraluminal calculus with posterior acoustic shadowing", location: "gallbladder neck", required: false }
-  severity: moderate
-  laterality: ""
+    - { finding: "Large circumferential pericardial effusion", location: "pericardial space", required: true }
+    - { finding: "Right ventricular diastolic collapse", location: "right ventricle free wall", required: true }
+    - { finding: "Right atrial systolic inversion/collapse", location: "right atrium", required: false }
+    - { finding: "Dilated IVC without respiratory variation", location: "subxiphoid IVC view", required: false }
+  severity: critical
+  laterality: n/a
   negatives:
-    - common bile duct dilation
-    - intrahepatic biliary dilation
-    - gallbladder perforation
-    - emphysematous change
-    - hepatic abscess
+    - "No intrapericardial masses or fibrinous stranding"
+    - "No left ventricular wall motion abnormality"
 pattern_checks:
-  - { name: cholecystitis_mentioned, check_type: regex, pattern: "cholecystitis|inflam.*(gallbladder|GB)", required: true }
-  - { name: wall_thickening, check_type: regex, pattern: "wall.*(thicken|edema|>\\s*3\\s*mm)|thicken.*wall", required: true }
-  - { name: pericholecystic_fluid, check_type: regex, pattern: "pericholecystic.*fluid|fluid.*(around|surround|adjacent).*gallbladder", required: true }
-  - { name: murphy_sign, check_type: regex, pattern: "Murphy|sonographic.*Murphy|Murphy.*positive", required: false }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(cardiac tamponade|tamponade|pericardial effusion.{0,40}(collapse|tamponade))", required: true }
+  - { name: "effusion_finding", check_type: regex, pattern: "(?i)(pericardial effusion|pericardial fluid)", required: true }
+  - { name: "collapse_finding", check_type: regex, pattern: "(?i)(diastolic collapse|chamber collapse|RV (collapse|inversion)|right ventric.{0,20}collapse)", required: true }
 reference_solution: |
-  Right upper quadrant ultrasound demonstrates a distended gallbladder with
-  diffuse wall thickening measuring approximately 6 mm, exceeding the normal
-  threshold of 3 mm. A small amount of pericholecystic fluid is noted
-  surrounding the gallbladder fundus and body. A hyperechoic focus with
-  posterior acoustic shadowing is identified at the gallbladder neck, consistent
-  with an impacted calculus. The sonographic Murphy sign is positive, with focal
-  tenderness elicited upon transducer pressure over the gallbladder. The common
-  bile duct measures 4 mm and is not dilated. No intrahepatic biliary dilation
-  is present. The adjacent hepatic parenchyma is unremarkable.
-  Impression: Acute calculous cholecystitis with gallbladder wall thickening,
-  pericholecystic fluid, and positive sonographic Murphy sign. Surgical
-  consultation recommended.
+  POCUS cardiac examination reveals a large circumferential pericardial effusion measuring up to 3.0 cm posteriorly. There is right ventricular free wall diastolic collapse and right atrial systolic inversion lasting more than one-third of the cardiac cycle, findings consistent with tamponade physiology. The IVC is dilated at 2.5 cm with absent respiratory variation. The left ventricle demonstrates hyperdynamic systolic function. A swinging heart motion is noted within the pericardial fluid. These findings are diagnostic of cardiac tamponade requiring emergent pericardiocentesis.
 condition_present: true
-confusion_pair: US-001
-source_dataset: radimagenet
+confusion_pair: null
+source_dataset: openem-grounded
 tags:
-  - cholecystitis
-  - gallbladder
-  - abdomen
-  - hepatobiliary
-  - wall-thickening
+  - cardiac
   - emergency
+  - pocus
+  - pericardial

@@ -1,58 +1,38 @@
 id: MRI-027
-name: Myocardial infarction on delayed enhancement cardiac MRI
+name: "Retrobulbar Hemorrhage on Orbital MRI"
 modality: mri
-anatomy: heart
+anatomy: face
 task_type: diagnosis
-difficulty: expert
-image_ref: mri/eurorad/EUR_0027.png
+difficulty: advanced
+image_ref: "mri/openem/retrobulbar-hemorrhage.png"
 prompt_template: diagnosis
+condition_id: "retrobulbar-hemorrhage"
+lostbench_scenario_id: "MTR-075"
 ground_truth:
-  primary_diagnosis: "Subacute myocardial infarction with transmural delayed gadolinium enhancement in the LAD territory"
+  primary_diagnosis: "Retrobulbar hemorrhage with proptosis on orbital MRI"
   differential:
-    - myocarditis (non-ischemic pattern)
-    - hypertrophic cardiomyopathy with fibrosis
-    - sarcoidosis (cardiac involvement)
-    - amyloidosis (diffuse subendocardial enhancement)
-    - Takotsubo cardiomyopathy
+    - "Orbital cellulitis with abscess"
+    - "Orbital lymphoma"
+    - "Cavernous hemangioma with hemorrhage"
   key_findings:
-    - { finding: "transmural delayed gadolinium enhancement (DGE) in a coronary artery distribution", location: "anterior wall and anteroseptum of the left ventricle (LAD territory)", required: true }
-    - { finding: "regional wall motion abnormality with akinesis of the affected segments", location: "anterior and anteroseptal segments on cine images", required: true }
-    - { finding: "myocardial edema on T2-weighted/STIR images", location: "anterior wall and septum", required: false }
-    - { finding: "microvascular obstruction (dark core within enhanced myocardium on early post-gadolinium images)", location: "subendocardial anterior wall", required: false }
-  severity: severe
-  laterality: ""
+    - { finding: "T1 hyperintense retrobulbar collection consistent with hemorrhage", location: "Right retrobulbar intraconal space", required: true }
+    - { finding: "Proptosis of the affected globe", location: "Right globe", required: true }
+    - { finding: "Tenting of the posterior globe (stretched optic nerve)", location: "Right posterior globe-optic nerve junction", required: false }
+  severity: "critical"
+  laterality: "right"
   negatives:
-    - mid-wall or epicardial enhancement pattern (non-ischemic)
-    - right ventricular involvement
-    - pericardial effusion
-    - intracardiac thrombus
-    - valvular abnormality
+    - "No orbital fracture identified on MRI"
+    - "No enhancing mass lesion"
 pattern_checks:
-  - { name: infarction_mentioned, check_type: regex, pattern: "infarct|myocardial\\s+infarct|MI\\b|ischem.*necros", required: true }
-  - { name: delayed_enhancement, check_type: regex, pattern: "delayed.*enhanc|late.*gadolinium.*enhanc|DGE|LGE|scar", required: true }
-  - { name: lad_territory, check_type: regex, pattern: "LAD|anterior.*wall|anterosept|left\\s+anterior\\s+descend", required: true }
-  - { name: transmural, check_type: regex, pattern: "transmural|full.?thickness|subendocardial.*extend|wall.*enhanc", required: false }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)retrobulbar\\s+(hemorrhage|hematoma)", required: true }
+  - { name: "proptosis", check_type: regex, pattern: "(?i)proptosis", required: true }
+  - { name: "laterality", check_type: regex, pattern: "(?i)right", required: true }
 reference_solution: |
-  Cardiac MRI with delayed gadolinium enhancement demonstrates transmural
-  late gadolinium enhancement (LGE) involving the anterior wall and
-  anteroseptum of the left ventricle, corresponding to the left anterior
-  descending (LAD) coronary artery territory. The enhancement pattern is
-  subendocardial-to-transmural, characteristic of ischemic injury. On cine
-  steady-state free precession (SSFP) images, the affected segments are
-  akinetic with wall thinning. T2-weighted STIR images show myocardial
-  edema in the same distribution, suggesting a subacute time course. A small
-  area of microvascular obstruction (MVO) is noted as a dark core within the
-  enhanced myocardium on early gadolinium images. The remaining myocardial
-  segments contract normally. No intracardiac thrombus. The left ventricular
-  ejection fraction is reduced at approximately 38%. No pericardial effusion.
-  Impression: Subacute LAD territory myocardial infarction with transmural
-  LGE, myocardial edema, and microvascular obstruction. LVEF 38%.
+  MRI of the orbits demonstrates a T1 hyperintense, T2 heterogeneous collection in the right retrobulbar intraconal space, consistent with acute-to-subacute retrobulbar hemorrhage. The right globe is proptotic with mild tenting of the posterior sclera, indicating elevated intraorbital pressure. The right optic nerve is stretched and displaced. No underlying enhancing mass lesion is identified. The left orbit is normal. Findings represent retrobulbar hemorrhage with compartment syndrome physiology requiring emergent lateral canthotomy and cantholysis to preserve vision.
 condition_present: true
 confusion_pair: null
-source_dataset: eurorad
+source_dataset: openem-grounded
 tags:
-  - myocardial-infarction
-  - cardiac
-  - delayed-enhancement
-  - ischemia
+  - orbital
+  - hemorrhage
   - emergency

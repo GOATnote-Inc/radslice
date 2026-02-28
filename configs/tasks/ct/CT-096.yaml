@@ -1,0 +1,38 @@
+id: CT-096
+name: "First-break psychosis workup on non-contrast CT head"
+modality: ct
+anatomy: head
+task_type: diagnosis
+difficulty: basic
+image_ref: "ct/openem/acute-psychosis.png"
+prompt_template: diagnosis
+condition_id: "acute-psychosis"
+lostbench_scenario_id: ""
+ground_truth:
+  primary_diagnosis: "Normal CT head in first-episode psychosis workup"
+  differential:
+    - "Space-occupying lesion"
+    - "Encephalitis"
+    - "Cerebral vasculitis"
+  key_findings:
+    - { finding: "Normal brain parenchyma without focal lesion", location: "bilateral cerebral hemispheres", required: true }
+    - { finding: "Normal ventricles and sulci without hydrocephalus", location: "ventricular system", required: true }
+    - { finding: "No intracranial mass or hemorrhage", location: "intracranial", required: false }
+  severity: "mild"
+  laterality: "n/a"
+  negatives:
+    - "No intracranial mass"
+    - "No hemorrhage"
+    - "No hydrocephalus"
+    - "No acute infarct"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(normal|no\\s*acute|unremarkable|first.?episode.*psychosis)", required: true }
+  - { name: "key_finding_normal", check_type: regex, pattern: "(?i)(normal.*brain|no\\s*focal.*lesion|no\\s*mass|no\\s*hemorrhage)", required: true }
+reference_solution: |
+  Non-contrast CT head demonstrates normal brain parenchyma with preserved gray-white matter differentiation. The ventricular system is normal in size and configuration without hydrocephalus. No intracranial mass, hemorrhage, or acute infarct is identified. The basal cisterns are patent. Bone windows show no fracture. CT is normal, which is expected in first-episode psychosis; however, MRI may be considered to further evaluate for subtle structural abnormalities or encephalitis if clinically indicated.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - neuro
+  - psychiatric

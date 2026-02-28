@@ -1,0 +1,40 @@
+id: US-058
+name: "Blast Injury FAST Assessment"
+modality: ultrasound
+anatomy: abdomen
+task_type: diagnosis
+difficulty: intermediate
+image_ref: "ultrasound/openem/blast-injury.png"
+prompt_template: diagnosis
+condition_id: "blast-injury"
+lostbench_scenario_id: "MTR-053"
+ground_truth:
+  primary_diagnosis: "Blast injury with positive FAST and pneumothorax on eFAST"
+  differential:
+    - "Solid organ injury (hepatic or splenic laceration)"
+    - "Bowel perforation"
+    - "Mesenteric tear with hemorrhage"
+  key_findings:
+    - { finding: "Free intraperitoneal fluid in multiple quadrants", location: "Morison pouch and pelvis", required: true }
+    - { finding: "Absent lung sliding on eFAST (pneumothorax)", location: "left anterior chest wall", required: true }
+    - { finding: "Bilateral pleural effusions", location: "bilateral costophrenic angles", required: false }
+    - { finding: "Small pericardial effusion", location: "pericardial space", required: false }
+  severity: critical
+  laterality: bilateral
+  negatives:
+    - "No cardiac tamponade"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(blast (injury|trauma)|explosion|positive (e)?FAST|barotrauma)", required: true }
+  - { name: "fast_finding", check_type: regex, pattern: "(?i)(free (fluid|intraperitoneal)|hemoperitoneum|positive FAST|Morison)", required: true }
+  - { name: "pneumothorax_finding", check_type: regex, pattern: "(?i)(pneumothorax|absent lung sliding|barcode sign|stratosphere sign)", required: true }
+reference_solution: |
+  eFAST examination in a blast injury victim demonstrates free intraperitoneal fluid in Morison pouch, the splenorenal recess, and the pelvis, consistent with significant hemoperitoneum. Absent lung sliding is identified on the left anterior chest with a barcode sign on M-mode, consistent with a left pneumothorax. Small bilateral pleural effusions are noted. A trace pericardial effusion is present without tamponade physiology. The combination of positive abdominal FAST with pneumothorax is consistent with primary and secondary blast injury. These findings warrant emergent left chest tube placement and surgical evaluation for abdominal hemorrhage.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - trauma
+  - emergency
+  - efast
+  - mci
+  - pocus

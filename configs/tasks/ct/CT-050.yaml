@@ -1,58 +1,36 @@
 id: CT-050
-name: Sigmoid volvulus
+name: "Septic arthritis of the knee on contrast-enhanced CT"
 modality: ct
-anatomy: abdomen
-task_type: finding_detection
-difficulty: intermediate
-image_ref: ct/omnimedvqa/CT_0050.png
+anatomy: knee
+task_type: diagnosis
+difficulty: advanced
+image_ref: "ct/openem/septic-arthritis.png"
 prompt_template: diagnosis
+condition_id: "septic-arthritis"
+lostbench_scenario_id: "MTR-013"
 ground_truth:
-  primary_diagnosis: "Sigmoid volvulus"
+  primary_diagnosis: "Septic arthritis of the right knee"
   differential:
-    - cecal volvulus
-    - large bowel obstruction from tumor
-    - pseudo-obstruction (Ogilvie syndrome)
-    - toxic megacolon
+    - "Gout or pseudogout"
+    - "Reactive arthritis"
+    - "Hemarthrosis"
   key_findings:
-    - { finding: "markedly dilated sigmoid colon with whirl sign", location: "sigmoid colon/pelvis", required: true }
-    - { finding: "coffee bean sign on coronal reconstruction", location: "dilated sigmoid loop", required: false }
-    - { finding: "point of torsion at sigmoid mesentery", location: "left lower quadrant", required: true }
-    - { finding: "decompressed rectum", location: "rectum", required: false }
-  severity: moderate
-  laterality: ""
+    - { finding: "Complex joint effusion with synovial thickening and enhancement", location: "right knee joint", required: true }
+    - { finding: "Periarticular soft tissue edema and fat stranding", location: "surrounding the right knee", required: true }
+    - { finding: "Bone marrow edema pattern in adjacent bones", location: "distal femur and proximal tibia", required: false }
+  severity: "severe"
+  laterality: "right"
   negatives:
-    - cecal dilatation suggesting cecal volvulus
-    - colonic mass at transition point
-    - pneumoperitoneum
-    - bowel wall ischemia
-    - small bowel obstruction
+    - "No osteomyelitis with cortical destruction"
 pattern_checks:
-  - { name: sigmoid_volvulus, check_type: regex, pattern: "sigmoid\\s+volvulus|volvulus.*sigmoid", required: true }
-  - { name: dilated_sigmoid, check_type: regex, pattern: "dilat.*sigmoid|sigmoid.*dilat|massively.*distend", required: true }
-  - { name: whirl_or_twist, check_type: regex, pattern: "whirl|twist|torsion|rotation|coffee\\s+bean", required: true }
-  - { name: decompressed_rectum, check_type: regex, pattern: "decompressed.*rectum|rectum.*decompressed|collapsed.*rectum", required: false }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(septic\\s*arthritis|infectious\\s*arthritis|joint\\s*infection)", required: true }
+  - { name: "key_finding_effusion", check_type: regex, pattern: "(?i)(joint\\s*effusion|synovial.*thicken|synovial.*enhance|periarticular.*edema)", required: true }
 reference_solution: |
-  Contrast-enhanced CT of the abdomen and pelvis demonstrates a massively
-  dilated sigmoid colon forming an inverted-U configuration extending from
-  the pelvis into the upper abdomen, consistent with sigmoid volvulus. The
-  classic whirl sign is present at the point of mesenteric torsion in the
-  left lower quadrant, with the mesenteric vessels converging at the twist
-  point. On coronal images, the coffee bean sign is evident with the
-  dilated sigmoid loop mimicking a coffee bean shape. The rectum is
-  decompressed. The remaining colon proximal to the sigmoid is mildly
-  dilated. The sigmoid wall enhances normally without evidence of ischemia
-  or pneumatosis. No free intraperitoneal air suggesting perforation. No
-  colonic mass identified at the transition point.
-  Impression: Sigmoid volvulus with classic whirl sign and massively dilated
-  sigmoid loop without evidence of ischemia or perforation. Urgent
-  endoscopic decompression with rectal tube placement recommended as
-  initial management, with surgical consultation for definitive treatment.
+  Contrast-enhanced CT of the right knee demonstrates a complex joint effusion with diffuse synovial thickening and enhancement, concerning for septic arthritis. There is extensive periarticular soft tissue edema and fat stranding. No cortical destruction or sequestrum formation to suggest osteomyelitis is identified. No intra-articular gas is present. Findings are highly suspicious for septic arthritis requiring emergent arthrocentesis for definitive diagnosis and intravenous antibiotic therapy.
 condition_present: true
 confusion_pair: null
-source_dataset: omnimedvqa-open
+source_dataset: openem-grounded
 tags:
-  - sigmoid-volvulus
-  - abdomen
-  - gastrointestinal
-  - surgical
-  - finding-detection
+  - musculoskeletal
+  - infectious
+  - emergency

@@ -1,51 +1,37 @@
 id: CT-028
-name: Normal spine CT
+name: "Massive hemoptysis with active bleeding on CTA"
 modality: ct
-anatomy: spine
+anatomy: chest
 task_type: diagnosis
-difficulty: basic
-image_ref: ct/eurorad/EUR_0028.png
+difficulty: advanced
+image_ref: "ct/openem/massive-hemoptysis.png"
 prompt_template: diagnosis
+condition_id: "massive-hemoptysis"
+lostbench_scenario_id: "MTR-074"
 ground_truth:
-  primary_diagnosis: "Normal lumbar spine CT"
+  primary_diagnosis: "Massive hemoptysis secondary to bronchial artery hypertrophy with active extravasation"
   differential:
-    - mild degenerative disc disease below reporting threshold
-    - early facet arthrosis
-    - incidental Schmorl nodes
+    - "Pulmonary arteriovenous malformation"
+    - "Rasmussen aneurysm from cavitary tuberculosis"
+    - "Bronchogenic carcinoma with hemorrhage"
   key_findings:
-    - { finding: "normal vertebral body height and alignment", location: "L1 through L5", required: true }
-    - { finding: "no fracture or destructive lesion", location: "lumbar vertebral bodies", required: true }
-    - { finding: "patent spinal canal", location: "lumbar spinal canal", required: true }
-    - { finding: "normal intervertebral disc heights", location: "lumbar discs", required: false }
-  severity: mild
-  laterality: ""
+    - { finding: "Hypertrophied tortuous bronchial artery with active contrast extravasation", location: "right bronchial artery", required: true }
+    - { finding: "Dense consolidation representing hemorrhage within the airway", location: "right lower lobe", required: true }
+    - { finding: "Dependent blood products in the tracheobronchial tree", location: "trachea and bilateral mainstem bronchi", required: false }
+  severity: "critical"
+  laterality: "right"
   negatives:
-    - vertebral fracture
-    - disc herniation
-    - spinal stenosis
-    - spondylolisthesis
-    - lytic or blastic lesion
-    - paravertebral mass
+    - "No pulmonary artery pseudoaneurysm"
 pattern_checks:
-  - { name: normal_identified, check_type: regex, pattern: "normal|unremarkable|no\\s+acute|intact|negative", required: true }
-  - { name: no_fracture, check_type: regex, pattern: "no.{0,30}fracture|intact.*vertebra|no.*compress", required: true }
-  - { name: no_stenosis, check_type: regex, pattern: "no.{0,30}(stenosis|narrow|compromise|herniat)", required: true }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(massive\\s*hemoptysis|bronchial\\s*artery.*bleed|active.*hemorrhage.*lung)", required: true }
+  - { name: "key_finding_bronchial_artery", check_type: regex, pattern: "(?i)(bronchial\\s*artery|extravasation|hypertrophied.*artery)", required: true }
 reference_solution: |
-  CT of the lumbar spine demonstrates normal vertebral body height and
-  alignment from L1 through L5. No compression fracture or burst injury is
-  identified. The vertebral body marrow attenuation is normal without lytic
-  or blastic lesions. The intervertebral disc spaces are maintained. The
-  spinal canal is patent at all levels without stenosis. The neural foramina
-  are patent bilaterally. The pedicles and posterior elements are intact. No
-  spondylolisthesis. No paravertebral soft tissue mass. The sacrum and
-  sacroiliac joints are unremarkable.
-  Impression: Normal lumbar spine CT. No fracture, stenosis, or destructive
-  process.
-condition_present: false
+  CTA of the chest demonstrates a hypertrophied and tortuous right bronchial artery with a focus of active contrast extravasation, identified as the source of hemorrhage. Dense consolidation is present in the right lower lobe representing intrapulmonary hemorrhage. Blood products are noted within the trachea and bilateral mainstem bronchi. No pulmonary artery pseudoaneurysm is identified. Findings confirm massive hemoptysis with a bronchial arterial source amenable to emergent bronchial artery embolization.
+condition_present: true
 confusion_pair: null
-source_dataset: eurorad
+source_dataset: openem-grounded
 tags:
-  - normal
-  - spine
-  - baseline
-  - negative-study
+  - pulmonary
+  - vascular
+  - emergency
+  - cta

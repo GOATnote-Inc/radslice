@@ -1,0 +1,40 @@
+id: US-028
+name: "GI Hemorrhage on Abdominal Ultrasound"
+modality: ultrasound
+anatomy: abdomen
+task_type: diagnosis
+difficulty: advanced
+image_ref: "ultrasound/openem/gi-hemorrhage.png"
+prompt_template: diagnosis
+condition_id: "gi-hemorrhage"
+lostbench_scenario_id: "MTR-011"
+ground_truth:
+  primary_diagnosis: "GI hemorrhage with intraluminal fluid and FAST assessment for hemodynamic status"
+  differential:
+    - "Intraperitoneal hemorrhage from non-GI source"
+    - "Ascites from hepatic decompensation"
+    - "Aortic pathology with hemorrhage"
+  key_findings:
+    - { finding: "Fluid-filled distended bowel loops with heterogeneous intraluminal content", location: "bowel", required: true }
+    - { finding: "Flat IVC with complete respiratory collapse suggesting hypovolemia", location: "subxiphoid IVC view", required: true }
+    - { finding: "Normal aortic diameter excluding AAA", location: "abdominal aorta", required: false }
+    - { finding: "Small amount of free fluid in pelvis", location: "pelvis", required: false }
+  severity: severe
+  laterality: n/a
+  negatives:
+    - "No abdominal aortic aneurysm"
+    - "No solid organ injury"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(GI (hemorrhage|bleed)|gastrointestinal (hemorrhage|bleed)|upper GI bleed|lower GI bleed)", required: true }
+  - { name: "ivc_finding", check_type: regex, pattern: "(?i)(IVC (flat|collapse|small)|flat.{0,10}IVC|hypovolemia|volume (depletion|loss|status))", required: true }
+  - { name: "bowel_finding", check_type: regex, pattern: "(?i)(fluid.?filled bowel|intraluminal (fluid|content|blood)|distended bowel|bowel.{0,20}(fluid|blood))", required: true }
+reference_solution: |
+  Abdominal ultrasound reveals diffusely fluid-filled small bowel loops with heterogeneous intraluminal content, which may represent blood products in the appropriate clinical context. The IVC is flat measuring less than 1 cm with complete inspiratory collapse, indicating significant intravascular volume depletion consistent with hemorrhagic shock physiology. The abdominal aorta is normal in caliber, excluding aortic pathology as a cause. A small amount of free pelvic fluid is noted. These findings, in conjunction with the clinical presentation of melena and hemodynamic instability, support the diagnosis of significant gastrointestinal hemorrhage.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - abdominal
+  - emergency
+  - pocus
+  - gastrointestinal

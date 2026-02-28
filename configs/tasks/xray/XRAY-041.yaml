@@ -1,47 +1,39 @@
 id: XRAY-041
-name: Normal PA CXR - young adult
+name: "Septic Arthritis on Knee X-ray"
 modality: xray
-anatomy: chest
+anatomy: knee
 task_type: diagnosis
-difficulty: basic
-image_ref: xray/omnimedvqa/CXR_0041.png
+difficulty: advanced
+image_ref: "xray/openem/septic-arthritis.png"
 prompt_template: diagnosis
+condition_id: "septic-arthritis"
+lostbench_scenario_id: "MTR-013"
 ground_truth:
-  primary_diagnosis: "Normal chest radiograph"
-  differential: []
+  primary_diagnosis: "Septic arthritis of the knee"
+  differential:
+    - "Acute gout or pseudogout"
+    - "Reactive arthritis"
+    - "Hemarthrosis"
   key_findings:
-    - { finding: "clear lung fields bilaterally", location: "bilateral lungs", required: true }
-    - { finding: "normal cardiac silhouette", location: "cardiomediastinal", required: true }
-    - { finding: "sharp costophrenic angles", location: "bilateral costophrenic angles", required: true }
-    - { finding: "normal mediastinal contour", location: "mediastinum", required: false }
-  severity: mild
-  laterality: ""
+    - { finding: "Joint effusion with distension of the suprapatellar bursa", location: "knee joint", required: true }
+    - { finding: "Periarticular soft tissue swelling", location: "around the knee", required: true }
+    - { finding: "Periarticular osteopenia (if subacute)", location: "distal femur and proximal tibia", required: false }
+  severity: severe
+  laterality: left
   negatives:
-    - pneumothorax
-    - pleural effusion
-    - consolidation
-    - cardiomegaly
-    - pulmonary edema
-    - mass
-    - fracture
+    - "No fracture"
+    - "No gas in the joint space"
+    - "No osteomyelitis (early presentation)"
 pattern_checks:
-  - { name: normal_mentioned, check_type: regex, pattern: "(?i)(normal|no\\s+acute|unremarkable|negative|clear)", required: true }
-  - { name: lungs_clear, check_type: regex, pattern: "(?i)(clear|no.*opaci|no.*consolidat|no.*infiltrate)", required: true }
-  - { name: heart_normal, check_type: regex, pattern: "(?i)(normal.*heart|normal.*cardiac|heart.*normal|cardiac.*normal)", required: true }
-  - { name: no_effusion, check_type: regex, pattern: "(?i)(no.*effusion|costophrenic.*sharp|sharp.*costophrenic)", required: true }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(septic arthritis|joint effusion|infected joint|pyogenic arthritis)", required: true }
+  - { name: "effusion_finding", check_type: regex, pattern: "(?i)(joint effusion|suprapatellar (bursa|effusion|recess)|soft tissue swelling)", required: true }
 reference_solution: |
-  PA chest radiograph demonstrates no acute cardiopulmonary abnormality. Both
-  lungs are clear without focal consolidation, mass, nodule, pleural effusion,
-  or pneumothorax. The cardiac silhouette is normal in size with a cardiothoracic
-  ratio well within normal limits. The aortic arch and mediastinal contours are
-  normal. The trachea is midline. The costophrenic angles are sharp bilaterally.
-  The visualized osseous structures are intact without fracture. The soft tissues
-  are unremarkable.
-  Impression: Normal PA chest radiograph. No acute cardiopulmonary disease.
-condition_present: false
+  AP and lateral radiographs of the left knee demonstrate a large joint effusion with distension of the suprapatellar bursa. Periarticular soft tissue swelling is present. The joint space is maintained and no erosive changes or periarticular osteopenia are identified, suggesting an acute process. No fracture or gas within the joint is seen. In the clinical setting of fever and acute monoarticular arthritis, these findings are concerning for septic arthritis. Urgent joint aspiration for synovial fluid analysis is mandatory.
+condition_present: true
 confusion_pair: null
-source_dataset: omnimedvqa-open
+source_dataset: openem-grounded
 tags:
-  - normal
-  - chest
-  - baseline
+  - musculoskeletal
+  - infection
+  - emergency
+  - surgical

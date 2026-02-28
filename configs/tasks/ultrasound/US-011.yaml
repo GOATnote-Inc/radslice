@@ -1,57 +1,39 @@
 id: US-011
-name: Pericardial effusion on point-of-care cardiac ultrasound
+name: "Spontaneous Coronary Artery Dissection on Echocardiography"
 modality: ultrasound
 anatomy: chest
 task_type: diagnosis
-difficulty: advanced
-image_ref: ultrasound/omnimedvqa/US_0011.png
+difficulty: expert
+image_ref: "ultrasound/openem/spontaneous-coronary-artery-dissection.png"
 prompt_template: diagnosis
+condition_id: "spontaneous-coronary-artery-dissection"
+lostbench_scenario_id: "MTR-067"
 ground_truth:
-  primary_diagnosis: "Large pericardial effusion"
+  primary_diagnosis: "Regional wall motion abnormality suggestive of spontaneous coronary artery dissection"
   differential:
-    - cardiac tamponade
-    - pleural effusion mimicking pericardial collection
-    - epicardial fat pad
-    - pericardial cyst
-    - loculated pericardial effusion
+    - "Acute myocardial infarction from atherosclerotic disease"
+    - "Stress (Takotsubo) cardiomyopathy"
+    - "Myocarditis"
   key_findings:
-    - { finding: "circumferential anechoic pericardial fluid collection", location: "pericardial space", required: true }
-    - { finding: "right ventricular diastolic collapse", location: "right ventricle free wall", required: false }
-    - { finding: "swinging heart motion within the effusion", location: "cardiac silhouette", required: false }
+    - { finding: "Regional wall motion abnormality in a coronary territory", location: "left ventricular wall segments", required: true }
+    - { finding: "Preserved or mildly reduced overall ejection fraction", location: "left ventricle", required: true }
+    - { finding: "Absence of LV dilation", location: "left ventricle", required: false }
+    - { finding: "Normal valvular function", location: "cardiac valves", required: false }
   severity: severe
-  laterality: ""
+  laterality: n/a
   negatives:
-    - left ventricular systolic dysfunction
-    - valvular regurgitation
-    - pleural effusion
-    - aortic dissection flap
-    - pericardial thickening or calcification
+    - "No pericardial effusion"
+    - "No LV thrombus"
 pattern_checks:
-  - { name: pericardial_effusion, check_type: regex, pattern: "pericardial\\s+effusion|pericardial.*fluid|fluid.*pericardi", required: true }
-  - { name: anechoic_or_echo_free, check_type: regex, pattern: "anechoic|echo.?free|dark.*fluid|simple.*fluid", required: true }
-  - { name: circumferential, check_type: regex, pattern: "circumferential|surrounding|diffuse|large", required: true }
-  - { name: tamponade_assessment, check_type: regex, pattern: "tamponade|RV.*collaps|diastolic.*collaps|no.*tamponade", required: false }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(coronary artery dissection|SCAD|wall motion abnormality|regional (akinesis|hypokinesis))", required: true }
+  - { name: "wma_finding", check_type: regex, pattern: "(?i)(wall motion abnorm|akinesis|hypokinesis|dyskinesis|regional.{0,20}dysfunction)", required: true }
+  - { name: "territory", check_type: regex, pattern: "(?i)(anterior|lateral|inferior|apical|LAD|LCx|RCA|coronary)", required: true }
 reference_solution: |
-  Point-of-care cardiac ultrasound in the subxiphoid view demonstrates a large
-  circumferential anechoic fluid collection surrounding the heart within the
-  pericardial space, consistent with a pericardial effusion. The effusion
-  measures approximately 2.5 cm in the largest pocket posterior to the left
-  ventricle. There is early diastolic collapse of the right ventricular free
-  wall, suggesting elevated intrapericardial pressure and impending tamponade
-  physiology. The heart demonstrates a swinging motion within the fluid. Left
-  ventricular systolic function appears grossly preserved. No significant
-  pleural effusion is identified. The descending aorta is normal in caliber
-  without evidence of dissection flap. The IVC appears plethoric with
-  diminished respiratory variation, corroborating elevated right-sided pressures.
-  Impression: Large pericardial effusion with early echocardiographic signs of
-  tamponade. Emergent pericardiocentesis should be considered.
+  Transthoracic echocardiography demonstrates a regional wall motion abnormality involving the mid-anterior and anterolateral segments, consistent with the LAD/LCx territory. The affected segments show akinesis. The remaining wall segments contract normally with an overall estimated ejection fraction of 45-50%. No left ventricular thrombus is identified. The valves are structurally normal. In a young patient without traditional atherosclerotic risk factors, these findings raise concern for spontaneous coronary artery dissection, and coronary angiography is warranted for definitive diagnosis.
 condition_present: true
 confusion_pair: null
-source_dataset: omnimedvqa-open
+source_dataset: openem-grounded
 tags:
-  - pericardial-effusion
   - cardiac
-  - chest
-  - point-of-care
-  - tamponade
   - emergency
+  - echocardiography

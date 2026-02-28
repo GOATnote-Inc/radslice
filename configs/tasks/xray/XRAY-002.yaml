@@ -1,48 +1,37 @@
 id: XRAY-002
-name: Right lower lobe pneumonia
+name: "Acute Limb Ischemia on Extremity X-ray"
 modality: xray
-anatomy: chest
+anatomy: extremity
 task_type: diagnosis
-difficulty: basic
-image_ref: xray/omnimedvqa/CXR_0002.png
+difficulty: advanced
+image_ref: "xray/openem/acute-limb-ischemia.png"
 prompt_template: diagnosis
+condition_id: "acute-limb-ischemia"
+lostbench_scenario_id: "MTR-023"
 ground_truth:
-  primary_diagnosis: "Right lower lobe pneumonia"
+  primary_diagnosis: "Acute limb ischemia"
   differential:
-    - atelectasis
-    - pulmonary infarct
-    - aspiration pneumonitis
-    - lung mass with post-obstructive pneumonia
+    - "Peripheral arterial disease with chronic occlusion"
+    - "Deep vein thrombosis"
+    - "Compartment syndrome"
   key_findings:
-    - { finding: "airspace opacity", location: "right lower lobe", required: true }
-    - { finding: "air bronchograms", location: "right lower lobe", required: false }
-    - { finding: "obscuration of right hemidiaphragm", location: "right costophrenic angle", required: true }
-  severity: moderate
-  laterality: right
+    - { finding: "Absence of soft tissue gas", location: "affected extremity", required: true }
+    - { finding: "Arterial calcification", location: "peripheral vasculature", required: false }
+    - { finding: "Soft tissue swelling", location: "affected limb", required: false }
+  severity: critical
+  laterality: left
   negatives:
-    - pleural effusion
-    - pneumothorax
-    - left lung opacity
-    - cavitation
-    - lymphadenopathy
+    - "No fracture identified"
+    - "No subcutaneous emphysema to suggest gas gangrene"
 pattern_checks:
-  - { name: pneumonia_mentioned, check_type: regex, pattern: "pneumonia|consolidation|airspace\\s+(disease|opacity)", required: true }
-  - { name: laterality_right, check_type: regex, pattern: "right", required: true }
-  - { name: lower_lobe, check_type: regex, pattern: "lower\\s+lobe|basilar|base", required: true }
-  - { name: opacity_described, check_type: regex, pattern: "opaci(ty|fication)|consolidat", required: true }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(limb ischemia|arterial occlusion|vascular occlusion)", required: true }
+  - { name: "soft_tissue_assessment", check_type: regex, pattern: "(?i)(soft tissue|calcification|gas gangrene|no fracture)", required: true }
 reference_solution: |
-  PA chest radiograph demonstrates a dense airspace opacity in the right lower
-  lobe with obscuration of the right hemidiaphragm (silhouette sign positive),
-  consistent with lobar consolidation. Air bronchograms are visible within the
-  opacity, supporting the diagnosis of pneumonia rather than effusion. The right
-  costophrenic angle is blunted by the consolidation. The left lung is clear.
-  Heart size is normal. No pneumothorax.
-  Impression: Right lower lobe pneumonia.
+  Radiograph of the left lower extremity demonstrates vascular calcification along the arterial distribution. No fracture is identified. There is no subcutaneous emphysema or soft tissue gas to suggest gas gangrene. Soft tissue swelling is noted. While X-ray findings in acute limb ischemia are often nonspecific, the vascular calcification suggests underlying peripheral arterial disease; clinical correlation with pulse examination and urgent vascular imaging is recommended.
 condition_present: true
 confusion_pair: null
-source_dataset: omnimedvqa-open
+source_dataset: openem-grounded
 tags:
-  - pneumonia
-  - infection
-  - chest
-  - consolidation
+  - vascular
+  - emergency
+  - extremity

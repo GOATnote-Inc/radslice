@@ -1,59 +1,36 @@
 id: CT-023
-name: Lobar pneumonia with parapneumonic effusion
+name: "Penetrating chest trauma on contrast-enhanced CT"
 modality: ct
 anatomy: chest
 task_type: diagnosis
-difficulty: intermediate
-image_ref: ct/eurorad/EUR_0023.png
+difficulty: advanced
+image_ref: "ct/openem/penetrating-chest-trauma.png"
 prompt_template: diagnosis
+condition_id: "penetrating-chest-trauma"
+lostbench_scenario_id: ""
 ground_truth:
-  primary_diagnosis: "Right lower lobe lobar pneumonia with parapneumonic effusion"
+  primary_diagnosis: "Penetrating thoracic injury with hemopneumothorax"
   differential:
-    - lung abscess
-    - obstructive pneumonitis from endobronchial lesion
-    - pulmonary infarction
-    - organizing pneumonia
-    - empyema
+    - "Blunt thoracic injury"
+    - "Traumatic aortic injury"
+    - "Diaphragmatic rupture"
   key_findings:
-    - { finding: "dense consolidation with air bronchograms", location: "right lower lobe", required: true }
-    - { finding: "moderate right pleural effusion", location: "right pleural space", required: true }
-    - { finding: "enhancing visceral and parietal pleura", location: "right pleural surfaces", required: false }
-    - { finding: "reactive mediastinal lymph nodes", location: "subcarinal station 7", required: false }
-  severity: moderate
-  laterality: right
+    - { finding: "Wound tract traversing the chest wall into the thoracic cavity", location: "left anterolateral chest wall", required: true }
+    - { finding: "Left hemopneumothorax", location: "left pleural space", required: true }
+    - { finding: "Pulmonary laceration along the wound tract", location: "left lower lobe", required: false }
+  severity: "critical"
+  laterality: "left"
   negatives:
-    - cavitation or abscess formation
-    - endobronchial mass
-    - left lung consolidation
-    - pericardial effusion
-    - empyema with split pleura sign
+    - "No mediastinal vascular injury on CTA"
 pattern_checks:
-  - { name: pneumonia_mentioned, check_type: regex, pattern: "pneumonia|consolidat|infect", required: true }
-  - { name: right_lower_lobe, check_type: regex, pattern: "right\\s+lower\\s+lobe|RLL", required: true }
-  - { name: effusion, check_type: regex, pattern: "pleural\\s+effusion|parapneumonic|effusion", required: true }
-  - { name: air_bronchograms, check_type: regex, pattern: "air\\s+bronchogram", required: false }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(penetrating.*trauma|penetrating.*injury|stab|wound\\s*tract)", required: true }
+  - { name: "key_finding_hemopneumo", check_type: regex, pattern: "(?i)(hemopneumothorax|hemothorax|pneumothorax)", required: true }
 reference_solution: |
-  Contrast-enhanced CT of the chest demonstrates dense lobar consolidation
-  involving the entirety of the right lower lobe with patent air
-  bronchograms, consistent with lobar pneumonia. A moderate right-sided
-  pleural effusion is present, layering dependently in the posterior costophrenic
-  recess. The effusion measures approximately 3 cm in maximal depth. The
-  visceral and parietal pleura show smooth enhancement without the split
-  pleura sign, suggesting simple parapneumonic effusion rather than empyema.
-  Small reactive lymph nodes are present in the subcarinal station. No
-  cavitation or abscess formation within the consolidated lung. The
-  remaining lung parenchyma is clear. No endobronchial lesion identified.
-  No pericardial effusion. The left lung is clear.
-  Impression: Right lower lobe lobar pneumonia with moderate parapneumonic
-  pleural effusion. Clinical correlation with inflammatory markers and
-  consideration of thoracentesis if effusion does not respond to antibiotic
-  therapy.
+  Contrast-enhanced CT of the chest demonstrates a wound tract traversing the left anterolateral chest wall into the left thoracic cavity with an associated pulmonary laceration of the left lower lobe. A moderate left hemopneumothorax is present. No active contrast extravasation is identified. The mediastinal great vessels appear intact. No diaphragmatic injury is identified. Findings are consistent with penetrating thoracic injury requiring chest tube placement and surgical evaluation.
 condition_present: true
 confusion_pair: null
-source_dataset: eurorad
+source_dataset: openem-grounded
 tags:
-  - pneumonia
-  - pleural-effusion
-  - chest
-  - pulmonary
-  - infectious
+  - trauma
+  - emergency
+  - thoracic

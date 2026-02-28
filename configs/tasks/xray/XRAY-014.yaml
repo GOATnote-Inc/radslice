@@ -1,50 +1,38 @@
 id: XRAY-014
-name: Right hilar lymphadenopathy
+name: "Fat Embolism Syndrome on Chest X-ray"
 modality: xray
 anatomy: chest
 task_type: diagnosis
 difficulty: advanced
-image_ref: xray/omnimedvqa/CXR_0014.png
+image_ref: "xray/openem/fat-embolism-syndrome.png"
 prompt_template: diagnosis
+condition_id: "fat-embolism-syndrome"
+lostbench_scenario_id: "MTR-065"
 ground_truth:
-  primary_diagnosis: "Right hilar lymphadenopathy"
+  primary_diagnosis: "Fat embolism syndrome"
   differential:
-    - lung carcinoma with hilar involvement
-    - lymphoma
-    - sarcoidosis
-    - tuberculosis with hilar adenopathy
-    - metastatic disease
+    - "ARDS from other cause"
+    - "Aspiration pneumonia"
+    - "Pulmonary contusion"
+    - "Bilateral pneumonia"
   key_findings:
-    - { finding: "enlarged right hilum with lobulated contour", location: "right hilum", required: true }
-    - { finding: "increased density of the right hilum compared to the left", location: "right hilum", required: true }
-    - { finding: "preserved hilar overlay sign suggesting lymphadenopathy over vascular enlargement", location: "right hilum", required: false }
-  severity: moderate
-  laterality: right
+    - { finding: "Bilateral diffuse alveolar opacities (snowstorm pattern)", location: "bilateral lung fields", required: true }
+    - { finding: "Progressive bilateral infiltrates sparing the costophrenic angles early", location: "bilateral lung fields", required: false }
+    - { finding: "Normal cardiac silhouette", location: "cardiac silhouette", required: false }
+  severity: severe
+  laterality: bilateral
   negatives:
-    - left hilar enlargement
-    - mediastinal widening
-    - pleural effusion
-    - parenchymal mass
-    - calcified granulomas
+    - "No pneumothorax"
+    - "No cardiomegaly suggesting cardiac origin"
 pattern_checks:
-  - { name: primary_diagnosis, check_type: regex, pattern: "(?i)right\\s+hilar\\s+(lymphadenopathy|adenopathy|enlargement)", required: true }
-  - { name: hilum_description, check_type: regex, pattern: "(?i)(enlarg(ed|ement).{0,30}(right\\s+)?hil(um|ar)|hil(um|ar).{0,30}enlarg(ed|ement)|prominent.{0,30}hil(um|ar))", required: true }
-  - { name: differential_mention, check_type: regex, pattern: "(?i)(sarcoidosis|lymphoma|carcinom|malignan|tuberculosis)", required: false }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(fat embolism|ARDS|bilateral (alveolar |diffuse )?opacit)", required: true }
+  - { name: "bilateral_opacities", check_type: regex, pattern: "(?i)(bilateral|diffuse|snowstorm|alveolar opacit|infiltrate)", required: true }
 reference_solution: |
-  Frontal chest radiograph demonstrates asymmetric enlargement of the right hilum
-  with a lobulated contour, significantly denser than the contralateral left hilum.
-  The hilar overlay sign suggests true lymphadenopathy rather than pulmonary artery
-  enlargement. No definite associated parenchymal mass or consolidation. The left
-  hilum appears normal. No mediastinal widening or pleural effusion. Lung fields
-  are otherwise clear. These findings are concerning for right hilar lymphadenopathy
-  and warrant further evaluation with contrast-enhanced CT chest. Differential
-  includes primary lung malignancy, lymphoma, sarcoidosis, and granulomatous disease.
+  Frontal chest radiograph demonstrates bilateral diffuse alveolar opacities in a snowstorm pattern affecting both lung fields. The cardiac silhouette is normal in size. No pneumothorax or pleural effusion is identified. In the clinical context of a patient with recent long bone fracture, these findings are consistent with fat embolism syndrome. The bilateral distribution with normal heart size helps distinguish this from cardiogenic pulmonary edema.
 condition_present: true
 confusion_pair: null
-source_dataset: omnimedvqa-open
+source_dataset: openem-grounded
 tags:
-  - hilar-lymphadenopathy
-  - right-hilum
-  - mediastinal
-  - oncology
-  - sarcoidosis
+  - pulmonary
+  - trauma
+  - emergency

@@ -1,55 +1,38 @@
 id: XRAY-028
-name: Pneumomediastinum
+name: "Acute Appendicitis on Abdominal X-ray"
 modality: xray
-anatomy: chest
+anatomy: abdomen
 task_type: diagnosis
 difficulty: advanced
-image_ref: xray/omnimedvqa/CXR_0028.png
+image_ref: "xray/openem/acute-appendicitis.png"
 prompt_template: diagnosis
+condition_id: "acute-appendicitis"
+lostbench_scenario_id: "MTR-021"
 ground_truth:
-  primary_diagnosis: "Pneumomediastinum"
+  primary_diagnosis: "Acute appendicitis"
   differential:
-    - pneumothorax
-    - subcutaneous emphysema alone
-    - esophageal rupture (Boerhaave syndrome)
-    - pneumopericardium
+    - "Mesenteric lymphadenitis"
+    - "Right-sided diverticulitis"
+    - "Small bowel obstruction"
   key_findings:
-    - { finding: "linear gas lucencies outlining the mediastinal structures", location: "mediastinum", required: true }
-    - { finding: "continuous diaphragm sign", location: "inferior mediastinum/diaphragm", required: false }
-    - { finding: "subcutaneous emphysema in the neck", location: "cervical soft tissues", required: false }
-    - { finding: "air outlining the left heart border", location: "left cardiac border", required: true }
+    - { finding: "Appendicolith (calcified fecalith) in the right lower quadrant", location: "right lower quadrant", required: true }
+    - { finding: "Sentinel loop (focal ileus) in the right lower quadrant", location: "right lower quadrant", required: false }
+    - { finding: "Loss of right psoas shadow", location: "right psoas", required: false }
+    - { finding: "Scoliosis concave to the right (guarding)", location: "lumbar spine", required: false }
   severity: moderate
-  laterality: ""
+  laterality: right
   negatives:
-    - large pneumothorax
-    - pleural effusion
-    - focal consolidation
-    - rib fractures
-    - mediastinal widening
+    - "No free air under the diaphragm"
+    - "No diffuse bowel dilatation"
 pattern_checks:
-  - { name: pneumomediastinum_mentioned, check_type: regex, pattern: "(?i)pneumomediastinum", required: true }
-  - { name: mediastinal_air, check_type: regex, pattern: "(?i)(mediastinal\\s+(air|gas|free\\s+air)|air.{0,30}mediastin)", required: true }
-  - { name: linear_lucency, check_type: regex, pattern: "(?i)(linear.{0,20}(lucen|gas|air)|gas.{0,20}(outlin|streak|lucen))", required: true }
-  - { name: diaphragm_sign, check_type: regex, pattern: "(?i)(continuous\\s+diaphragm|diaphragm\\s+sign|spinnaker)", required: false }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(appendicitis|appendicolith|fecalith)", required: true }
+  - { name: "rlq_finding", check_type: regex, pattern: "(?i)(right lower quadrant|appendicolith|sentinel loop|psoas shadow)", required: true }
 reference_solution: |
-  PA chest radiograph demonstrates pneumomediastinum with linear gas lucencies
-  outlining the mediastinal structures, including air tracking along the left
-  cardiac border and around the aortic arch. The continuous diaphragm sign is
-  present, with air visible across the inferior mediastinum connecting both
-  hemidiaphragms. Subcutaneous emphysema is noted in the lower cervical soft
-  tissues. No large pneumothorax is identified, though a small left apical
-  component cannot be entirely excluded. The lung parenchyma is otherwise clear.
-  No pleural effusion. In the appropriate clinical context, esophageal rupture
-  (Boerhaave syndrome) should be excluded, and CT chest with oral contrast is
-  recommended for further evaluation.
-  Impression: Pneumomediastinum with subcutaneous emphysema — exclude esophageal
-  rupture.
+  Abdominal radiograph demonstrates a calcified appendicolith in the right lower quadrant. A sentinel loop of focally dilated ileum is noted in the right lower quadrant, consistent with localized ileus. The right psoas shadow is indistinct. No free intraperitoneal air is identified. While the abdominal X-ray has limited sensitivity for appendicitis, the combination of an appendicolith and localized ileus is suggestive. CT or ultrasound is recommended for definitive evaluation.
 condition_present: true
 confusion_pair: null
-source_dataset: omnimedvqa-open
+source_dataset: openem-grounded
 tags:
-  - pneumomediastinum
-  - mediastinal-air
-  - subcutaneous-emphysema
-  - chest
+  - gastrointestinal
   - emergency
+  - surgical

@@ -1,0 +1,39 @@
+id: US-038
+name: "Postpartum Hemorrhage on Pelvic Ultrasound"
+modality: ultrasound
+anatomy: pelvis
+task_type: diagnosis
+difficulty: advanced
+image_ref: "ultrasound/openem/postpartum-hemorrhage.png"
+prompt_template: diagnosis
+condition_id: "postpartum-hemorrhage"
+lostbench_scenario_id: "MTR-017"
+ground_truth:
+  primary_diagnosis: "Postpartum hemorrhage with retained products of conception"
+  differential:
+    - "Uterine atony without retained products"
+    - "Endometritis"
+    - "Uterine arteriovenous malformation"
+  key_findings:
+    - { finding: "Echogenic material within the endometrial cavity (retained products)", location: "uterine cavity", required: true }
+    - { finding: "Increased vascularity on color Doppler at the implantation site", location: "uterine wall/endometrium", required: true }
+    - { finding: "Distended uterine cavity with blood products", location: "uterine cavity", required: false }
+    - { finding: "Subinvolution of the uterus", location: "uterus", required: false }
+  severity: severe
+  laterality: n/a
+  negatives:
+    - "No uterine rupture"
+    - "No arteriovenous malformation"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(postpartum hemorrhage|PPH|retained products|retained (placental|tissue|products))", required: true }
+  - { name: "retained_products", check_type: regex, pattern: "(?i)(retained (products|placental|tissue)|echogenic (material|mass|tissue).{0,30}(endometri|uter|cavity))", required: true }
+  - { name: "vascularity_finding", check_type: regex, pattern: "(?i)(increased vascularity|hypervascul|Doppler (flow|signal).{0,20}(endometri|implant|uter))", required: true }
+reference_solution: |
+  Pelvic ultrasound in a postpartum patient with ongoing hemorrhage demonstrates heterogeneous echogenic material within the endometrial cavity measuring approximately 4 x 3 cm, consistent with retained products of conception. Color Doppler demonstrates increased vascularity at the placental implantation site along the anterior uterine wall. The uterus appears subinvoluted. The endometrial cavity is distended with echogenic fluid consistent with blood products. No focal arteriovenous malformation is identified. These findings indicate retained products of conception as the likely etiology of the postpartum hemorrhage, warranting uterine evacuation.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - obstetric
+  - emergency
+  - gynecologic

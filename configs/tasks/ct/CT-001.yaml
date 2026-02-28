@@ -1,55 +1,36 @@
 id: CT-001
-name: Acute subdural hematoma
+name: "Acute limb ischemia on CTA"
 modality: ct
-anatomy: head
+anatomy: extremity
 task_type: diagnosis
 difficulty: advanced
-image_ref: ct/omnimedvqa/CT_0001.png
+image_ref: "ct/openem/acute-limb-ischemia.png"
 prompt_template: diagnosis
+condition_id: "acute-limb-ischemia"
+lostbench_scenario_id: "MTR-023"
 ground_truth:
-  primary_diagnosis: "Acute subdural hematoma"
+  primary_diagnosis: "Acute arterial occlusion of the lower extremity"
   differential:
-    - epidural hematoma
-    - subarachnoid hemorrhage
-    - subdural hygroma
-    - chronic subdural hematoma with acute component
+    - "Thromboembolism"
+    - "In-situ thrombosis"
+    - "Aortic saddle embolus"
   key_findings:
-    - { finding: "hyperdense crescent-shaped extra-axial collection", location: "right frontoparietal convexity", required: true }
-    - { finding: "midline shift", location: "leftward displacement of falx cerebri", required: true }
-    - { finding: "effacement of right lateral ventricle", location: "right lateral ventricle", required: false }
-    - { finding: "uncal herniation", location: "right temporal lobe", required: false }
-  severity: severe
-  laterality: right
+    - { finding: "Abrupt cutoff of contrast opacification in the arterial lumen", location: "superficial femoral artery", required: true }
+    - { finding: "Absent distal runoff vessels", location: "popliteal and tibial arteries", required: true }
+    - { finding: "Reduced enhancement of the affected limb musculature", location: "lower extremity", required: false }
+  severity: "critical"
+  laterality: "left"
   negatives:
-    - skull fracture
-    - epidural hematoma lenticular morphology
-    - intraparenchymal hemorrhage
-    - pneumocephalus
-    - hydrocephalus
+    - "No aneurysmal dilatation of the abdominal aorta"
 pattern_checks:
-  - { name: subdural_mentioned, check_type: regex, pattern: "subdural", required: true }
-  - { name: hematoma_type, check_type: regex, pattern: "hematoma|haematoma|hemorrhage|haemorrhage", required: true }
-  - { name: acute_acuity, check_type: regex, pattern: "acute|hyperdense", required: true }
-  - { name: midline_shift, check_type: regex, pattern: "midline\\s+shift|mass\\s+effect|falx\\s+(cerebri\\s+)?deviation", required: true }
-  - { name: crescent_shape, check_type: regex, pattern: "crescent|crescentic|concavo-?convex", required: true }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(acute\\s*(limb|arterial)\\s*(ischemia|occlusion)|arterial\\s*cutoff)", required: true }
+  - { name: "key_finding_cutoff", check_type: regex, pattern: "(?i)(cutoff|occlusion|filling\\s*defect)", required: true }
 reference_solution: |
-  Non-contrast CT of the head demonstrates a hyperdense crescent-shaped
-  extra-axial collection along the right frontoparietal convexity, consistent
-  with an acute subdural hematoma. The collection measures approximately 12 mm
-  in maximal thickness. There is associated leftward midline shift of
-  approximately 8 mm with effacement of the right lateral ventricle and early
-  uncal herniation. No skull fracture is identified. No epidural component
-  (lenticular morphology absent). No intraparenchymal hemorrhage or
-  pneumocephalus.
-  Impression: Large acute right-sided subdural hematoma with significant
-  midline shift and early uncal herniation, requiring urgent neurosurgical
-  evaluation.
+  CTA of the left lower extremity demonstrates abrupt cutoff of contrast opacification within the left superficial femoral artery with absence of distal runoff in the popliteal and tibial vessels. There is reduced enhancement of the distal limb musculature consistent with ischemia. No abdominal aortic aneurysm identified. Findings are consistent with acute arterial occlusion, likely embolic in etiology.
 condition_present: true
 confusion_pair: null
-source_dataset: omnimedvqa-open
+source_dataset: openem-grounded
 tags:
-  - subdural-hematoma
-  - traumatic-brain-injury
+  - vascular
   - emergency
-  - head
-  - neurosurgery
+  - cta

@@ -1,56 +1,38 @@
 id: MRI-017
-name: Cerebral atrophy confusion pair for NPH
+name: "Acute Appendicitis on MRI in Pregnancy"
 modality: mri
-anatomy: head
+anatomy: abdomen
 task_type: diagnosis
 difficulty: advanced
-image_ref: mri/omnimedvqa/MRI_0017.png
+image_ref: "mri/openem/acute-appendicitis.png"
 prompt_template: diagnosis
+condition_id: "acute-appendicitis"
+lostbench_scenario_id: "MTR-021"
 ground_truth:
-  primary_diagnosis: "Diffuse cerebral atrophy with ex vacuo ventriculomegaly"
+  primary_diagnosis: "Acute appendicitis on MRI in a pregnant patient"
   differential:
-    - normal pressure hydrocephalus
-    - Alzheimer disease
-    - frontotemporal dementia
-    - chronic alcohol-related brain atrophy
+    - "Right ovarian torsion"
+    - "Cecal diverticulitis"
+    - "Round ligament pain"
   key_findings:
-    - { finding: "ventriculomegaly proportionate to sulcal enlargement", location: "bilateral lateral ventricles and cerebral sulci", required: true }
-    - { finding: "diffuse widening of cortical sulci including the high convexity", location: "bilateral cerebral hemispheres including vertex", required: true }
-    - { finding: "proportionately enlarged sylvian fissures matching overall sulcal pattern", location: "bilateral sylvian fissures", required: false }
-    - { finding: "callosal angle greater than 100 degrees on coronal images", location: "corpus callosum", required: false }
-  severity: moderate
-  laterality: ""
+    - { finding: "Dilated fluid-filled appendix greater than 7 mm with wall thickening and T2 hyperintense surrounding fat stranding", location: "Right lower quadrant", required: true }
+    - { finding: "Restricted diffusion of the appendiceal wall on DWI", location: "Appendix", required: false }
+    - { finding: "Periappendiceal inflammatory changes with T2 hyperintense fat stranding", location: "Periappendiceal mesentery", required: true }
+  severity: "moderate"
+  laterality: "right"
   negatives:
-    - tight high-convexity sulci (DESH pattern, favors NPH)
-    - disproportionate sylvian fissure enlargement
-    - transependymal CSF flow
-    - obstructing mass lesion
+    - "No appendiceal perforation or abscess"
+    - "No free fluid in the pelvis"
 pattern_checks:
-  - { name: atrophy_mentioned, check_type: regex, pattern: "atrophy|atroph|volume\\s+loss|involut|ex\\s+vacuo", required: true }
-  - { name: proportionate, check_type: regex, pattern: "proportionat|diffuse|generalized|sulcal.*widen|global", required: true }
-  - { name: ventriculomegaly_noted, check_type: regex, pattern: "ventriculomegal|ventricle.*enlarg|ventricle.*dilat", required: true }
-  - { name: not_nph, check_type: not_contains, pattern: "normal pressure hydrocephalus", required: false }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(acute\\s+)?appendicitis", required: true }
+  - { name: "appendix_finding", check_type: regex, pattern: "(?i)appendix.*(dilat|enlarg|thick|inflam)", required: true }
+  - { name: "laterality", check_type: regex, pattern: "(?i)right", required: true }
 reference_solution: |
-  MRI of the brain demonstrates diffuse cerebral volume loss affecting both
-  hemispheres. The lateral ventricles are enlarged but in proportion to the
-  degree of sulcal widening, consistent with ex vacuo ventriculomegaly rather
-  than hydrocephalus. Cortical sulci are diffusely widened including at the
-  high convexity, a pattern that distinguishes atrophy from normal pressure
-  hydrocephalus (NPH), which characteristically shows tight high-convexity
-  sulci with disproportionately enlarged sylvian fissures (DESH). The callosal
-  angle measures approximately 115 degrees, well above the NPH threshold of
-  90 degrees. No focal parenchymal lesion or abnormal enhancement. No
-  restricted diffusion. No transependymal CSF migration.
-  Impression: Diffuse cerebral atrophy with ex vacuo ventriculomegaly,
-  distinguishable from normal pressure hydrocephalus by the proportionate
-  sulcal and ventricular enlargement pattern. Clinical correlation with
-  neurodegenerative history recommended.
+  MRI of the abdomen without contrast (performed for suspected appendicitis in pregnancy) demonstrates a dilated, fluid-filled appendix measuring 10 mm in diameter with wall thickening and enhancement-equivalent T2 hyperintensity. Periappendiceal T2 hyperintense fat stranding indicates surrounding inflammation. DWI shows restricted diffusion in the appendiceal wall. No evidence of perforation or periappendiceal abscess. The gravid uterus is displaced superiorly. Findings are consistent with acute uncomplicated appendicitis.
 condition_present: true
-confusion_pair: MRI-016
-source_dataset: omnimedvqa-open
+confusion_pair: null
+source_dataset: openem-grounded
 tags:
-  - atrophy
-  - neuro
-  - dementia
-  - confusion-pair
-  - ventriculomegaly
+  - abdominal
+  - obstetric
+  - emergency

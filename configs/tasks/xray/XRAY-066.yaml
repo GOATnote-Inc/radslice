@@ -1,48 +1,37 @@
 id: XRAY-066
-name: Hair braid artifact mimicking lung mass
+name: "Crush Syndrome on Extremity X-ray"
 modality: xray
-anatomy: chest
+anatomy: extremity
 task_type: diagnosis
-difficulty: basic
-image_ref: xray/mediconfusion/MCF_0066.png
+difficulty: advanced
+image_ref: "xray/openem/crush-syndrome-mci.png"
 prompt_template: diagnosis
+condition_id: "crush-syndrome-mci"
+lostbench_scenario_id: "MTR-056"
 ground_truth:
-  primary_diagnosis: "Hair braid artifact mimicking lung opacity"
+  primary_diagnosis: "Crush injury with concern for crush syndrome"
   differential:
-    - lung mass or nodule
-    - pleural-based mass
-    - rib lesion
+    - "Simple fracture"
+    - "Compartment syndrome"
+    - "Rhabdomyolysis from other cause"
   key_findings:
-    - { finding: "braided linear opacity overlying the lung field", location: "right upper zone", required: true }
-    - { finding: "opacity extends beyond the thoracic cage", location: "right chest wall", required: true }
-    - { finding: "characteristic woven/braided pattern", location: "right upper zone", required: false }
-  severity: mild
-  laterality: right
+    - { finding: "Comminuted fractures of the extremity", location: "lower extremity long bones", required: true }
+    - { finding: "Extensive soft tissue swelling and loss of fascial planes", location: "affected extremity", required: true }
+    - { finding: "Possible calcification within damaged muscle (late finding)", location: "soft tissues", required: false }
+  severity: critical
+  laterality: bilateral
   negatives:
-    - true lung mass
-    - pneumothorax
-    - pleural effusion
-    - rib lesion
+    - "No gas in soft tissues suggesting necrotizing infection"
 pattern_checks:
-  - { name: artifact_mentioned, check_type: regex, pattern: "(?i)(artifact|hair\\s+braid|external|extrinsic|overlay)", required: true }
-  - { name: not_lung_lesion, check_type: regex, pattern: "(?i)(not.{0,20}(lung|pulmonary).{0,20}(mass|lesion|nodule)|artifact.{0,20}not)", required: true }
-  - { name: extends_beyond, check_type: regex, pattern: "(?i)(extend.{0,20}beyond|outside.{0,20}(thorax|chest)|extrinsic|external)", required: true }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(crush (syndrome|injury)|rhabdomyolysis|comminuted fracture)", required: true }
+  - { name: "injury_finding", check_type: regex, pattern: "(?i)(comminuted fracture|soft tissue swelling|fascial plane|extensive (soft tissue|swelling|edema))", required: true }
 reference_solution: |
-  PA chest radiograph demonstrates a linear opacity with a woven or braided
-  pattern overlying the right upper lung zone. This opacity extends beyond the
-  thoracic cage margins, confirming it is external to the patient and represents
-  a hair braid artifact. No true pulmonary parenchymal abnormality is identified
-  once the artifact is recognized. The lungs are clear bilaterally. No pleural
-  effusion, pneumothorax, or true mass. The cardiac silhouette is normal. A
-  repeat radiograph with the hair repositioned away from the chest can be obtained
-  if there is clinical concern, though the artifact pattern is characteristic.
-  Impression: Hair braid artifact — no true pulmonary abnormality.
+  Radiographs of the bilateral lower extremities demonstrate comminuted fractures of the right femur and left tibia with extensive surrounding soft tissue swelling and loss of normal fascial plane definition. No subcutaneous gas is identified. In the setting of prolonged entrapment (mass casualty or structural collapse), these findings indicate crush injury with high risk for crush syndrome upon release. Aggressive fluid resuscitation and monitoring for hyperkalemia, metabolic acidosis, and acute kidney injury from rhabdomyolysis are critical prior to and during extrication.
 condition_present: true
-confusion_pair: XRAY-008
-source_dataset: mediconfusion
+confusion_pair: null
+source_dataset: openem-grounded
 tags:
-  - hair-braid-artifact
-  - mass-mimic
-  - artifact
-  - confusion-pair
-  - chest
+  - trauma
+  - emergency
+  - mass-casualty
+  - critical

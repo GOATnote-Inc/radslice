@@ -1,43 +1,39 @@
 id: XRAY-071
-name: VQA - Are there any rib fractures visible?
+name: "Pediatric Acute Otitis Media on Mastoid X-ray"
 modality: xray
-anatomy: chest
-task_type: vqa
-difficulty: intermediate
-image_ref: xray/vindrcxr/VDR_0071.png
-prompt_template: vqa
+anatomy: head
+task_type: diagnosis
+difficulty: basic
+image_ref: "xray/openem/pediatric-acute-otitis-media.png"
+prompt_template: diagnosis
+condition_id: "pediatric-acute-otitis-media"
+lostbench_scenario_id: "DEF-005"
 ground_truth:
-  primary_diagnosis: "Right posterior rib fractures (8th and 9th ribs)"
-  differential: []
+  primary_diagnosis: "Acute otitis media with mastoiditis"
+  differential:
+    - "Chronic otitis media"
+    - "Cholesteatoma"
+    - "Mastoid effusion without infection"
   key_findings:
-    - { finding: "fracture lines involving right 8th and 9th posterior ribs", location: "right posterior ribs", required: true }
-    - { finding: "cortical disruption", location: "right 8th and 9th ribs", required: true }
-  severity: moderate
+    - { finding: "Opacification of mastoid air cells", location: "mastoid process", required: true }
+    - { finding: "Loss of normal mastoid air cell trabecular pattern", location: "mastoid process", required: false }
+    - { finding: "Middle ear opacification", location: "middle ear cavity", required: false }
+  severity: mild
   laterality: right
   negatives:
-    - left rib fractures
-    - flail segment
-    - pneumothorax
-    - hemothorax
+    - "No bony destruction of mastoid cortex (no coalescent mastoiditis)"
+    - "No intracranial air"
 pattern_checks:
-  - { name: yes_fractures, check_type: regex, pattern: "(?i)(yes|present|identified|there\\s+(is|are)|fracture)", required: true }
-  - { name: rib_fracture, check_type: regex, pattern: "(?i)rib\\s+fracture", required: true }
-  - { name: right_sided, check_type: regex, pattern: "(?i)right", required: true }
-  - { name: rib_numbers, check_type: regex, pattern: "(?i)(8th|9th|eighth|ninth|posterior)", required: false }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(otitis media|mastoiditis|mastoid opacification|middle ear)", required: true }
+  - { name: "mastoid_finding", check_type: regex, pattern: "(?i)(mastoid (opacification|air cell|clouding|effusion)|middle ear (opacification|effusion|fluid))", required: true }
 reference_solution: |
-  Yes, there are rib fractures visible on this chest radiograph. Fracture lines
-  are identified involving the right 8th and 9th posterior ribs with cortical
-  disruption and minimal displacement. No flail segment is present as these are
-  single fracture sites. There is no associated pneumothorax or pleural effusion
-  to suggest hemothorax. The lungs are otherwise clear. No pulmonary contusion
-  adjacent to the fracture sites. Clinical management should focus on adequate
-  pain control and incentive spirometry to prevent atelectasis and pneumonia.
+  Towne and lateral mastoid views demonstrate opacification of the right mastoid air cells with loss of the normal trabecular pattern compared to the well-aerated left mastoid. The right middle ear cavity also shows opacification. No erosion of the mastoid cortex is identified to suggest coalescent mastoiditis. These findings are consistent with acute otitis media with associated mastoid effusion. While mastoid radiographs have been largely replaced by CT for complicated cases, these findings in an uncomplicated clinical presentation support the diagnosis of acute otitis media.
 condition_present: true
 confusion_pair: null
-source_dataset: vindrcxr
+source_dataset: openem-grounded
 tags:
-  - vqa
-  - rib-fracture
-  - trauma
-  - right
-  - chest
+  - head-neck
+  - pediatric
+  - infection
+  - common
+  - defer

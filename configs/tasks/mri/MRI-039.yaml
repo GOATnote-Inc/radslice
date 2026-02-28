@@ -1,59 +1,38 @@
 id: MRI-039
-name: Stress fracture of the femoral neck
+name: "Pheochromocytoma on Abdominal MRI"
 modality: mri
-anatomy: hip
-task_type: vqa
-difficulty: intermediate
-image_ref: mri/omnimedvqa/MRI_0039.png
-prompt_template: vqa
+anatomy: abdomen
+task_type: diagnosis
+difficulty: advanced
+image_ref: "mri/openem/pheochromocytoma-crisis.png"
+prompt_template: diagnosis
+condition_id: "pheochromocytoma-crisis"
+lostbench_scenario_id: "MTR-071"
 ground_truth:
-  primary_diagnosis: "Stress fracture of the left femoral neck"
+  primary_diagnosis: "Pheochromocytoma (adrenal mass) on MRI"
   differential:
-    - avascular necrosis of the femoral head
-    - transient osteoporosis of the hip
-    - bone marrow edema syndrome
-    - occult fracture (insufficiency type)
-    - osteoid osteoma
+    - "Adrenal cortical carcinoma"
+    - "Adrenal metastasis"
+    - "Adrenal adenoma (lipid-poor)"
   key_findings:
-    - { finding: "linear T1 hypointense fracture line in the femoral neck", location: "medial compression side of the left femoral neck", required: true }
-    - { finding: "surrounding bone marrow edema on STIR/T2 fat-saturated sequences", location: "left femoral neck and intertrochanteric region", required: true }
-    - { finding: "no cortical step-off or displacement", location: "left femoral neck cortex", required: false }
-    - { finding: "periosteal and endosteal edema surrounding the fracture", location: "left femoral neck", required: false }
-  severity: moderate
-  laterality: left
+    - { finding: "T2 hyperintense adrenal mass ('lightbulb sign')", location: "Right adrenal gland", required: true }
+    - { finding: "Avid enhancement on post-gadolinium images with delayed washout", location: "Right adrenal mass", required: true }
+    - { finding: "No signal drop on opposed-phase T1 (no intracellular lipid, excludes adenoma)", location: "Right adrenal mass", required: false }
+  severity: "severe"
+  laterality: "right"
   negatives:
-    - complete fracture with displacement
-    - avascular necrosis (no serpiginous line or double-line sign)
-    - pathologic fracture from lytic lesion
-    - cortical disruption
-    - femoral head articular surface involvement
+    - "No local invasion of adjacent structures"
+    - "No contralateral adrenal lesion"
 pattern_checks:
-  - { name: stress_fracture, check_type: regex, pattern: "stress\\s+fracture|fatigue\\s+fracture|insufficiency\\s+fracture|occult.*fracture", required: true }
-  - { name: femoral_neck, check_type: regex, pattern: "femoral\\s+neck|femur\\s+neck|neck.*femur", required: true }
-  - { name: bone_marrow_edema, check_type: regex, pattern: "marrow\\s+edema|bone.*edema|STIR.*hyperintens|T2.*hyperintens.*marrow", required: true }
-  - { name: fracture_line, check_type: regex, pattern: "fracture\\s+line|linear.*hypointens|T1.*hypointens.*line|low.*signal.*line", required: true }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)pheochromocytoma", required: true }
+  - { name: "t2_bright", check_type: regex, pattern: "(?i)(T2.*(hyperinten|bright|signal)|lightbulb)", required: true }
+  - { name: "adrenal_location", check_type: regex, pattern: "(?i)adrenal", required: true }
 reference_solution: |
-  MRI of the left hip demonstrates a stress fracture of the left femoral neck.
-  On T1-weighted coronal images, a linear hypointense fracture line is
-  identified in the medial compression side of the femoral neck, oriented
-  perpendicular to the femoral neck axis. Surrounding bone marrow edema is
-  present on STIR and T2-weighted fat-saturated sequences, manifesting as
-  hyperintense signal in the femoral neck and extending into the
-  intertrochanteric region. The fracture line is non-displaced with no
-  cortical step-off on any sequence. The medial compression-side location is
-  favorable for conservative management. No features of avascular necrosis
-  (no serpiginous demarcation line or double-line sign). No lytic or
-  destructive lesion to suggest pathologic fracture. The articular cartilage
-  and femoral head are normal.
-  Impression: Non-displaced stress fracture of the left femoral neck
-  (compression side). Protected weight-bearing and orthopedic follow-up
-  recommended.
+  MRI of the abdomen demonstrates a well-circumscribed T2 markedly hyperintense mass arising from the right adrenal gland, measuring approximately 4.5 cm, demonstrating the characteristic "lightbulb sign." The mass shows avid arterial phase enhancement with delayed washout on dynamic post-gadolinium imaging. No signal drop on opposed-phase T1 images, excluding a lipid-rich adenoma. No local invasion of the inferior vena cava or adjacent structures. The left adrenal gland is normal. Findings are characteristic of pheochromocytoma, and biochemical confirmation with plasma metanephrines is recommended prior to any surgical intervention.
 condition_present: true
 confusion_pair: null
-source_dataset: omnimedvqa-open
+source_dataset: openem-grounded
 tags:
-  - stress-fracture
-  - hip
-  - musculoskeletal
-  - femoral-neck
-  - sports-injury
+  - abdominal
+  - endocrine
+  - adrenal

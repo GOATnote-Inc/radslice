@@ -1,0 +1,39 @@
+id: US-037
+name: "Placental Abruption on Obstetric Ultrasound"
+modality: ultrasound
+anatomy: pelvis
+task_type: diagnosis
+difficulty: advanced
+image_ref: "ultrasound/openem/placental-abruption.png"
+prompt_template: diagnosis
+condition_id: "placental-abruption"
+lostbench_scenario_id: "MTR-041"
+ground_truth:
+  primary_diagnosis: "Placental abruption with retroplacental hematoma"
+  differential:
+    - "Placenta previa with hemorrhage"
+    - "Marginal sinus hemorrhage"
+    - "Circumvallate placenta"
+  key_findings:
+    - { finding: "Retroplacental hypoechoic or mixed echogenicity collection", location: "between placenta and uterine wall", required: true }
+    - { finding: "Fetal tachycardia or bradycardia indicating distress", location: "fetal heart", required: true }
+    - { finding: "Thickened or heterogeneous placenta", location: "placenta", required: false }
+    - { finding: "Subchorionic hemorrhage", location: "subchorionic space", required: false }
+  severity: critical
+  laterality: n/a
+  negatives:
+    - "No placenta previa"
+    - "No fetal demise"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(placental abruption|abruption|retroplacental (hematoma|hemorrhage|clot))", required: true }
+  - { name: "hematoma_finding", check_type: regex, pattern: "(?i)(retroplacental (hematoma|collection|hemorrhage|clot)|collection.{0,20}placenta|placenta.{0,20}(hematoma|collection|separated))", required: true }
+  - { name: "fetal_status", check_type: regex, pattern: "(?i)(fetal (tachycardia|bradycardia|distress|heart rate)|non.?reassuring|FHR)", required: true }
+reference_solution: |
+  Obstetric ultrasound demonstrates a posterior placenta with a large retroplacental hypoechoic collection measuring approximately 8 x 4 cm consistent with acute retroplacental hematoma. The placenta appears partially separated from the uterine wall in the involved region. The fetal heart rate is tachycardic at 180 bpm. The amniotic fluid volume is normal. No placenta previa is identified. The cervical length appears normal. These findings are consistent with significant placental abruption with evidence of fetal distress requiring emergent obstetric evaluation and likely urgent delivery.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - obstetric
+  - emergency
+  - fetal

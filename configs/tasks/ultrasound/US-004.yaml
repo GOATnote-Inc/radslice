@@ -1,52 +1,41 @@
 id: US-004
-name: Normal gallbladder ultrasound
+name: "Aortic Dissection on Transesophageal Echocardiography"
 modality: ultrasound
-anatomy: abdomen
+anatomy: chest
 task_type: diagnosis
-difficulty: basic
-image_ref: ultrasound/radimagenet/US_0004.png
+difficulty: expert
+image_ref: "ultrasound/openem/aortic-dissection.png"
 prompt_template: diagnosis
+condition_id: "aortic-dissection"
+lostbench_scenario_id: "MTR-015"
 ground_truth:
-  primary_diagnosis: "Normal gallbladder"
+  primary_diagnosis: "Type A aortic dissection with intimal flap"
   differential:
-    - early cholelithiasis with non-shadowing sludge
-    - gallbladder polyp below resolution threshold
-    - adenomyomatosis
+    - "Aortic intramural hematoma"
+    - "Penetrating aortic ulcer"
+    - "Aortic aneurysm with mural thrombus"
   key_findings:
-    - { finding: "thin-walled anechoic gallbladder", location: "gallbladder fossa", required: true }
-    - { finding: "normal wall thickness less than 3 mm", location: "gallbladder wall", required: true }
-    - { finding: "no intraluminal echogenicity", location: "gallbladder lumen", required: false }
-  severity: mild
-  laterality: ""
+    - { finding: "Intimal flap with true and false lumen", location: "ascending aorta", required: true }
+    - { finding: "Oscillating intimal flap on M-mode", location: "aortic root", required: true }
+    - { finding: "Aortic regurgitation", location: "aortic valve", required: false }
+    - { finding: "Pericardial effusion", location: "pericardial space", required: false }
+  severity: critical
+  laterality: n/a
   negatives:
-    - gallstones
-    - gallbladder wall thickening
-    - pericholecystic fluid
-    - common bile duct dilation
-    - intraluminal sludge
-    - gallbladder polyp
+    - "No evidence of cardiac tamponade"
+    - "No wall motion abnormality suggesting coronary involvement"
 pattern_checks:
-  - { name: normal_identified, check_type: regex, pattern: "normal|unremarkable|no\\s+(abnormal|pathol|significant)", required: true }
-  - { name: no_stones, check_type: regex, pattern: "no.*(stone|calcul|lithiasis|cholelithiasis)", required: true }
-  - { name: wall_normal, check_type: regex, pattern: "(wall|mural).*(normal|thin|within.*limit|(<|less)\\s*3\\s*mm)", required: true }
-  - { name: anechoic_bile, check_type: regex, pattern: "anechoic|echo.?free|clear\\s+bile|homogeneous\\s+bile", required: true }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(aortic dissection|intimal (flap|tear)|dissection flap|Stanford (type )?A)", required: true }
+  - { name: "flap_finding", check_type: regex, pattern: "(?i)(intimal flap|true (and|&) false lumen|dissection flap|double.?barrel)", required: true }
+  - { name: "location_noted", check_type: regex, pattern: "(?i)(ascending aort|aortic root|proximal aort)", required: true }
 reference_solution: |
-  Right upper quadrant ultrasound demonstrates a normal-appearing gallbladder.
-  The gallbladder is well-distended and contains anechoic, echo-free bile without
-  intraluminal calculi, sludge, or polyps. The gallbladder wall is thin and
-  smooth, measuring less than 3 mm in thickness, with no mural edema or
-  hyperemia. There is no pericholecystic fluid collection. The common bile duct
-  measures within normal limits and is not dilated. The adjacent liver parenchyma
-  appears homogeneous without focal lesion. No sonographic Murphy sign was
-  elicited.
-  Impression: Normal gallbladder sonogram. No cholelithiasis, cholecystitis,
-  or biliary obstruction.
-condition_present: false
+  Transesophageal echocardiography demonstrates a well-defined intimal flap within the ascending aorta creating distinct true and false lumens. The intimal flap is mobile and oscillates with the cardiac cycle. Color Doppler reveals flow in both lumens with the true lumen demonstrating higher velocity systolic flow. Moderate aortic regurgitation is noted. A small pericardial effusion is present without echocardiographic evidence of tamponade. These findings are diagnostic of Stanford Type A aortic dissection requiring emergent surgical repair.
+condition_present: true
 confusion_pair: null
-source_dataset: radimagenet
+source_dataset: openem-grounded
 tags:
-  - normal
-  - gallbladder
-  - abdomen
-  - hepatobiliary
-  - negative-study
+  - cardiac
+  - emergency
+  - echocardiography
+  - tee
+  - aortic

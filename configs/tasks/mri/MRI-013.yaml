@@ -1,59 +1,38 @@
 id: MRI-013
-name: Chiari I malformation with syringomyelia
+name: "Subdural Hematoma on Brain MRI"
 modality: mri
 anatomy: head
-task_type: finding_detection
+task_type: diagnosis
 difficulty: intermediate
-image_ref: mri/omnimedvqa/MRI_0013.png
-prompt_template: finding_detection
+image_ref: "mri/openem/subdural-hematoma.png"
+prompt_template: diagnosis
+condition_id: "subdural-hematoma"
+lostbench_scenario_id: ""
 ground_truth:
-  primary_diagnosis: "Chiari I malformation with associated cervical syringomyelia"
+  primary_diagnosis: "Subdural hematoma on brain MRI"
   differential:
-    - Chiari I malformation without syrinx
-    - acquired tonsillar ectopia (from intracranial hypotension)
-    - Chiari 1.5 malformation (tonsils plus brainstem descent)
-    - posterior fossa arachnoid cyst
+    - "Subdural hygroma"
+    - "Epidural hematoma"
+    - "Subdural empyema"
   key_findings:
-    - { finding: "cerebellar tonsillar descent greater than 5 mm below the foramen magnum", location: "craniocervical junction", required: true }
-    - { finding: "peg-like morphology of the cerebellar tonsils", location: "inferior cerebellar tonsils", required: true }
-    - { finding: "intramedullary T2 hyperintense cavity consistent with syringomyelia", location: "cervical spinal cord C3-C6", required: true }
-    - { finding: "crowding of the posterior fossa with effacement of the retrocerebellar CSF spaces", location: "posterior fossa", required: false }
-  severity: moderate
-  laterality: ""
+    - { finding: "Crescent-shaped extra-axial collection with T1 hyperintense signal (subacute blood)", location: "Right frontoparietal convexity", required: true }
+    - { finding: "Mass effect with sulcal effacement and midline shift", location: "Right cerebral hemisphere", required: true }
+    - { finding: "Intact dural enhancement deep to the collection", location: "Right convexity dura", required: false }
+  severity: "severe"
+  laterality: "right"
   negatives:
-    - brainstem descent below the foramen magnum
-    - myelomalacia
-    - hydrocephalus
-    - spinal cord tumor causing secondary syrinx
-    - tethered cord
+    - "No underlying parenchymal contusion"
+    - "No uncal herniation"
 pattern_checks:
-  - { name: chiari_mentioned, check_type: regex, pattern: "Chiari|tonsillar.*ectop|tonsillar.*hernia|tonsillar.*descent", required: true }
-  - { name: syrinx_mentioned, check_type: regex, pattern: "syrinx|syringomyelia|intramedullary.*cav|cord.*cav", required: true }
-  - { name: foramen_magnum, check_type: regex, pattern: "foramen\\s+magnum|craniocervical|5\\s*mm", required: true }
-  - { name: cervical_location, check_type: regex, pattern: "cervical|C[3-6]", required: false }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)subdural\\s+(hematoma|hemorrhage)", required: true }
+  - { name: "extra_axial", check_type: regex, pattern: "(?i)(extra.?axial|crescent|subdural)", required: true }
+  - { name: "laterality", check_type: regex, pattern: "(?i)right", required: true }
 reference_solution: |
-  Sagittal T1 and T2-weighted MRI of the craniocervical junction demonstrates
-  peg-like cerebellar tonsils extending approximately 12 mm below the foramen
-  magnum, consistent with a Chiari I malformation. The posterior fossa is
-  crowded with effacement of the retrocerebellar CSF spaces and narrowing of
-  the foramen magnum. There is an associated intramedullary T2 hyperintense
-  cavity within the cervical spinal cord extending from C3 through C6,
-  measuring up to 8 mm in anteroposterior diameter, consistent with
-  syringomyelia. The spinal cord is expanded at the level of the syrinx. No
-  abnormal enhancement is seen to suggest an underlying spinal cord neoplasm.
-  The brainstem is normally positioned without descent. No hydrocephalus.
-  CSF flow study, if performed, would be expected to show diminished flow at
-  the craniocervical junction.
-  Impression: Chiari I malformation with tonsillar descent of 12 mm and
-  associated cervical syringomyelia (C3-C6). Neurosurgical consultation
-  recommended for consideration of posterior fossa decompression.
+  MRI of the brain demonstrates a crescent-shaped extra-axial collection along the right frontoparietal convexity, displaying T1 hyperintensity and T2 mixed signal consistent with a subacute subdural hematoma. The collection measures approximately 12 mm in maximal thickness with mass effect causing sulcal effacement and 6 mm of leftward midline shift. No uncal herniation. No underlying parenchymal contusion or enhancing lesion. Findings are consistent with a subacute subdural hematoma warranting neurosurgical evaluation.
 condition_present: true
 confusion_pair: null
-source_dataset: omnimedvqa-open
+source_dataset: openem-grounded
 tags:
-  - chiari
-  - syringomyelia
   - neuro
-  - congenital
-  - craniocervical
-  - posterior-fossa
+  - trauma
+  - hemorrhage

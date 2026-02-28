@@ -1,0 +1,40 @@
+id: US-074
+name: "Hip Fracture on POCUS"
+modality: ultrasound
+anatomy: hip
+task_type: diagnosis
+difficulty: advanced
+image_ref: "ultrasound/openem/hip-fracture.png"
+prompt_template: diagnosis
+condition_id: "hip-fracture"
+lostbench_scenario_id: ""
+ground_truth:
+  primary_diagnosis: "Hip fracture with intracapsular effusion (hemarthrosis)"
+  differential:
+    - "Hip joint effusion from septic arthritis"
+    - "Transient synovitis"
+    - "Avascular necrosis"
+  key_findings:
+    - { finding: "Anterior intracapsular fluid collection (hemarthrosis)", location: "hip joint capsule", required: true }
+    - { finding: "Cortical irregularity or step-off of the femoral neck", location: "femoral neck", required: true }
+    - { finding: "Asymmetric capsular distension compared to contralateral hip", location: "affected hip joint", required: false }
+    - { finding: "Periosteal hematoma", location: "femoral neck", required: false }
+  severity: moderate
+  laterality: left
+  negatives:
+    - "No abscess or complex fluid collection suggesting infection"
+    - "Normal contralateral hip"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(hip fracture|femoral (neck|head) fracture|intracapsular (fracture|effusion)|hemarthrosis.{0,20}hip)", required: true }
+  - { name: "effusion_finding", check_type: regex, pattern: "(?i)((hip|joint) effusion|hemarthrosis|intracapsular fluid|capsular distension)", required: true }
+  - { name: "cortical_finding", check_type: regex, pattern: "(?i)(cortical (irregularity|disruption|step.?off|discontinuity)|fracture (line|site)|femoral neck.{0,20}(irregular|disrupt|fracture))", required: true }
+reference_solution: |
+  Point-of-care ultrasound of the left hip demonstrates anterior intracapsular fluid collection measuring 8 mm of capsular distension, compared to 3 mm on the normal contralateral right hip, consistent with hemarthrosis. Along the anterior femoral neck, a cortical irregularity with step-off is identified, suggesting a fracture line. The contralateral right hip demonstrates normal capsular appearance and smooth cortical surface. In the clinical context of a fall with hip pain and shortened externally rotated extremity, these ultrasound findings support the diagnosis of a left femoral neck fracture. Radiographic and/or CT confirmation is recommended.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - musculoskeletal
+  - emergency
+  - pocus
+  - orthopedic

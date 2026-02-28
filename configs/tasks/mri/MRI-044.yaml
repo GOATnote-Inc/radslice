@@ -1,0 +1,39 @@
+id: MRI-044
+name: "Inborn Errors of Metabolism with Metabolic Crisis on Brain MRI"
+modality: mri
+anatomy: head
+task_type: diagnosis
+difficulty: expert
+image_ref: "mri/openem/inborn-errors-metabolic-crisis.png"
+prompt_template: diagnosis
+condition_id: "inborn-errors-metabolic-crisis"
+lostbench_scenario_id: "MTR-070"
+ground_truth:
+  primary_diagnosis: "Acute metabolic crisis from inborn error of metabolism with characteristic brain MRI findings"
+  differential:
+    - "Hypoxic-ischemic encephalopathy"
+    - "Mitochondrial encephalopathy"
+    - "Acute disseminated encephalomyelitis (ADEM)"
+  key_findings:
+    - { finding: "Bilateral symmetric T2/FLAIR hyperintensity in the basal ganglia (globi pallidi and putamina)", location: "Bilateral basal ganglia", required: true }
+    - { finding: "Restricted diffusion in the affected deep gray nuclei on DWI", location: "Bilateral basal ganglia and thalami", required: true }
+    - { finding: "White matter signal abnormality with periventricular predominance", location: "Bilateral periventricular white matter", required: false }
+  severity: "critical"
+  laterality: "bilateral"
+  negatives:
+    - "No mass lesion"
+    - "No cortical restricted diffusion to suggest ischemic stroke"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(inborn\\s+error|metabolic\\s+(crisis|encephalopathy|disease)|organic\\s+acid)", required: true }
+  - { name: "basal_ganglia", check_type: regex, pattern: "(?i)basal\\s+ganglia", required: true }
+  - { name: "bilateral_symmetric", check_type: regex, pattern: "(?i)bilateral.*(symmetric|signal|T2)", required: true }
+reference_solution: |
+  MRI of the brain demonstrates bilateral symmetric T2/FLAIR hyperintensity in the globi pallidi, putamina, and thalami with restricted diffusion on DWI in the deep gray nuclei bilaterally. Additional periventricular white matter T2 hyperintensity is noted with a centripetal pattern. The cortex and brainstem are relatively spared. No mass lesion or hemorrhage. The pattern of bilateral symmetric deep gray matter injury with restricted diffusion in the acute setting is characteristic of an inborn error of metabolism (organic acidemia or urea cycle disorder) presenting in metabolic crisis, requiring emergent metabolic stabilization.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - neuro
+  - pediatric
+  - metabolic
+  - emergency

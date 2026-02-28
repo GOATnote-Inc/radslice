@@ -1,0 +1,36 @@
+id: CT-095
+name: "Tumor lysis syndrome with nephropathy on contrast-enhanced CT abdomen"
+modality: ct
+anatomy: abdomen
+task_type: diagnosis
+difficulty: advanced
+image_ref: "ct/openem/tumor-lysis-syndrome.png"
+prompt_template: diagnosis
+condition_id: "tumor-lysis-syndrome"
+lostbench_scenario_id: ""
+ground_truth:
+  primary_diagnosis: "Tumor lysis syndrome with urate nephropathy and bulky lymphadenopathy"
+  differential:
+    - "Lymphoma with obstructive uropathy"
+    - "Uric acid nephrolithiasis"
+    - "Renal vein thrombosis"
+  key_findings:
+    - { finding: "Bilateral nephromegaly with striated or delayed nephrogram", location: "bilateral kidneys", required: true }
+    - { finding: "Bulky retroperitoneal lymphadenopathy (underlying malignancy)", location: "retroperitoneum", required: true }
+    - { finding: "Bilateral hydroureteronephrosis from uric acid precipitation", location: "bilateral collecting systems", required: false }
+  severity: "severe"
+  laterality: "bilateral"
+  negatives:
+    - "No renal vein thrombosis"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(tumor\\s*lysis|TLS|urate\\s*nephropathy|uric\\s*acid\\s*nephropathy)", required: true }
+  - { name: "key_finding_kidneys", check_type: regex, pattern: "(?i)(nephromegaly|striated\\s*nephrogram|delayed.*enhance|bulky.*lymphadenopath)", required: true }
+reference_solution: |
+  Contrast-enhanced CT of the abdomen demonstrates bilateral nephromegaly with a striated nephrogram pattern consistent with urate nephropathy. Bulky retroperitoneal and mesenteric lymphadenopathy is present, representing the underlying high-grade malignancy. Bilateral mild hydroureteronephrosis is noted, likely from uric acid crystal precipitation in the collecting ducts. No renal vein thrombosis is identified. In the clinical setting of hyperuricemia, hyperkalemia, and acute kidney injury following chemotherapy initiation, findings are consistent with tumor lysis syndrome requiring emergent rasburicase and aggressive hydration.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - oncology
+  - emergency
+  - renal

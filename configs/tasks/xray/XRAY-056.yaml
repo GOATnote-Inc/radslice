@@ -1,54 +1,38 @@
 id: XRAY-056
-name: Pericardial fat pad mimicking cardiomegaly
+name: "Air Embolism on Chest X-ray"
 modality: xray
 anatomy: chest
 task_type: diagnosis
-difficulty: intermediate
-image_ref: xray/mediconfusion/MCF_0056.png
+difficulty: expert
+image_ref: "xray/openem/air-embolism.png"
 prompt_template: diagnosis
+condition_id: "air-embolism"
+lostbench_scenario_id: "MTR-066"
 ground_truth:
-  primary_diagnosis: "Prominent pericardial fat pad"
+  primary_diagnosis: "Venous air embolism"
   differential:
-    - true cardiomegaly
-    - pericardial effusion
-    - pericardial cyst
-    - cardiac tumor
+    - "Pneumomediastinum"
+    - "Pneumopericardium"
+    - "Artifact"
   key_findings:
-    - { finding: "radiolucent area along the cardiac border", location: "left cardiophrenic angle", required: true }
-    - { finding: "apparent widening of cardiac silhouette with fat-density opacity", location: "cardiophrenic angle", required: true }
-    - { finding: "normal cardiac silhouette on careful measurement", location: "cardiomediastinal", required: false }
-  severity: mild
-  laterality: left
+    - { finding: "Air in the right heart chambers or pulmonary vasculature", location: "right ventricle or pulmonary arteries", required: true }
+    - { finding: "Air outlining the intracardiac structures", location: "cardiac silhouette", required: false }
+    - { finding: "Central venous catheter in situ if iatrogenic", location: "superior vena cava or subclavian vein", required: false }
+  severity: critical
+  laterality: midline
   negatives:
-    - true cardiomegaly
-    - pericardial effusion
-    - pulmonary edema
-    - pleural effusion
-    - cardiac decompensation
+    - "No pneumothorax"
+    - "No pneumomediastinum extending beyond the heart"
 pattern_checks:
-  - { name: fat_pad, check_type: regex, pattern: "(?i)(fat\\s+pad|pericardial\\s+fat|epicardial\\s+fat)", required: true }
-  - { name: not_cardiomegaly, check_type: regex, pattern: "(?i)(not.{0,20}cardiomegaly|rather\\s+than.{0,20}cardiomegaly|pseudocardiomegaly|apparent)", required: true }
-  - { name: cardiophrenic, check_type: regex, pattern: "(?i)cardiophrenic", required: true }
-  - { name: fat_density, check_type: regex, pattern: "(?i)(fat.{0,15}density|radiolucen|lucen)", required: false }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(air embolism|venous air embolism|intracardiac air|air in.*heart)", required: true }
+  - { name: "air_finding", check_type: regex, pattern: "(?i)(air (in|within|outlining).*(heart|cardiac|pulmonary|right ventricle)|intravascular air)", required: true }
 reference_solution: |
-  PA chest radiograph demonstrates apparent prominence of the cardiac silhouette,
-  particularly at the left cardiophrenic angle. On closer inspection, there is a
-  radiolucent (fat-density) opacity at the left cardiophrenic angle representing
-  a prominent pericardial fat pad. When this fat pad contribution is accounted
-  for, the true cardiac silhouette has a cardiothoracic ratio within normal limits.
-  The lung fields are clear without pulmonary vascular congestion or edema, further
-  supporting that the cardiac size is not truly enlarged. No pleural effusion or
-  pneumothorax. This is a common mimic of cardiomegaly on chest radiographs. If
-  clinical concern persists, echocardiography can confirm normal cardiac chamber
-  sizes.
-  Impression: Prominent pericardial fat pad mimicking cardiomegaly — no true
-  cardiac enlargement.
+  Frontal chest radiograph demonstrates lucency within the right heart chambers, consistent with intracardiac air. Air is also visible within the main pulmonary artery. A central venous catheter is in situ with tip in the superior vena cava. No pneumomediastinum or pneumothorax is identified. These findings are consistent with venous air embolism, likely iatrogenic related to the central venous catheter. Immediate positioning in left lateral decubitus with head down (Durant maneuver) and attempted aspiration of air through the central line are indicated.
 condition_present: true
-confusion_pair: XRAY-004
-source_dataset: mediconfusion
+confusion_pair: null
+source_dataset: openem-grounded
 tags:
-  - pericardial-fat-pad
-  - cardiomegaly-mimic
-  - confusion-pair
-  - chest
-  - cardiophrenic
+  - vascular
+  - emergency
+  - critical
+  - iatrogenic

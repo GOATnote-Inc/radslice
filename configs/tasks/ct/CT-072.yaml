@@ -1,0 +1,37 @@
+id: CT-072
+name: "Non-accidental trauma in a child on CT head"
+modality: ct
+anatomy: head
+task_type: diagnosis
+difficulty: advanced
+image_ref: "ct/openem/non-accidental-trauma.png"
+prompt_template: diagnosis
+condition_id: "non-accidental-trauma"
+lostbench_scenario_id: ""
+ground_truth:
+  primary_diagnosis: "Non-accidental trauma with subdural hematomas of varying ages"
+  differential:
+    - "Accidental trauma"
+    - "Glutaric aciduria type I"
+    - "Coagulopathy"
+  key_findings:
+    - { finding: "Bilateral subdural hematomas of different densities indicating varying ages", location: "bilateral cerebral convexities", required: true }
+    - { finding: "Cerebral edema with loss of gray-white differentiation", location: "bilateral cerebral hemispheres", required: true }
+    - { finding: "Skull fracture not consistent with reported mechanism", location: "right parietal bone", required: false }
+  severity: "critical"
+  laterality: "bilateral"
+  negatives:
+    - "No metabolic bone disease"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(non.?accidental\\s*trauma|NAT|child\\s*abuse|abusive\\s*head\\s*trauma|inflicted\\s*injury)", required: true }
+  - { name: "key_finding_mixed_density", check_type: regex, pattern: "(?i)(mixed.?density|varying\\s*age|different.*densit|bilateral\\s*subdural)", required: true }
+reference_solution: |
+  Non-contrast CT head of an infant demonstrates bilateral subdural collections of mixed densities: a hyperdense acute component along the right convexity and a hypodense chronic component along the left convexity, indicating hemorrhages of different ages. Diffuse cerebral edema with loss of gray-white matter differentiation is present. A non-displaced right parietal bone fracture is identified. The combination of bilateral subdural hematomas of varying ages in an infant is highly suspicious for non-accidental trauma (abusive head trauma) and requires immediate child protective services notification.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - neuro
+  - pediatric
+  - trauma
+  - emergency

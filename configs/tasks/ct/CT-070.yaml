@@ -1,0 +1,37 @@
+id: CT-070
+name: "Spinal epidural abscess on contrast-enhanced CT spine"
+modality: ct
+anatomy: spine
+task_type: diagnosis
+difficulty: advanced
+image_ref: "ct/openem/spinal-epidural-abscess.png"
+prompt_template: diagnosis
+condition_id: "spinal-epidural-abscess"
+lostbench_scenario_id: "MTR-014"
+ground_truth:
+  primary_diagnosis: "Spinal epidural abscess with cord compression"
+  differential:
+    - "Epidural hematoma"
+    - "Epidural metastasis"
+    - "Disc herniation"
+  key_findings:
+    - { finding: "Rim-enhancing epidural collection with mass effect on the thecal sac", location: "posterior epidural space at T9-T11", required: true }
+    - { finding: "Associated vertebral body osteomyelitis/discitis", location: "T10-T11 disc space and endplates", required: true }
+    - { finding: "Spinal cord compression", location: "T10 level", required: false }
+  severity: "critical"
+  laterality: "midline"
+  negatives:
+    - "No paraspinal abscess extension"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(epidural\\s*abscess|spinal.*abscess|epidural.*collection.*infection)", required: true }
+  - { name: "key_finding_epidural", check_type: regex, pattern: "(?i)(epidural.*collection|rim.?enhancing.*epidural|osteomyelitis|discitis)", required: true }
+reference_solution: |
+  Contrast-enhanced CT of the thoracic spine demonstrates a rim-enhancing fluid collection in the posterior epidural space from T9 to T11, causing anterior displacement and compression of the thecal sac and spinal cord. Endplate irregularity and disc space narrowing at T10-T11 are consistent with associated vertebral osteomyelitis/discitis. No paraspinal abscess extension is identified. Findings are consistent with a spinal epidural abscess complicating vertebral osteomyelitis, requiring emergent MRI for further characterization and surgical decompression.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - spine
+  - infectious
+  - emergency
+  - neurosurgical

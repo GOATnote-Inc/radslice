@@ -1,0 +1,39 @@
+id: US-051
+name: "Temporal Arteritis with Halo Sign on Ultrasound"
+modality: ultrasound
+anatomy: head
+task_type: diagnosis
+difficulty: advanced
+image_ref: "ultrasound/openem/temporal-arteritis.png"
+prompt_template: diagnosis
+condition_id: "temporal-arteritis"
+lostbench_scenario_id: ""
+ground_truth:
+  primary_diagnosis: "Giant cell (temporal) arteritis with halo sign"
+  differential:
+    - "Atherosclerotic temporal artery disease"
+    - "Other large vessel vasculitis (Takayasu)"
+    - "Temporal artery calcification"
+  key_findings:
+    - { finding: "Halo sign (hypoechoic circumferential wall thickening around the lumen)", location: "superficial temporal artery", required: true }
+    - { finding: "Non-compressible temporal artery with the halo sign", location: "superficial temporal artery", required: true }
+    - { finding: "Stenosis or occlusion of the temporal artery on Doppler", location: "superficial temporal artery", required: false }
+    - { finding: "Bilateral halo signs", location: "bilateral temporal arteries", required: false }
+  severity: severe
+  laterality: bilateral
+  negatives:
+    - "No temporal artery aneurysm"
+    - "No calcified atherosclerotic plaque"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(temporal arteritis|giant cell arteritis|GCA|cranial arteritis)", required: true }
+  - { name: "halo_finding", check_type: regex, pattern: "(?i)(halo sign|circumferential (wall )?thickening|hypoechoic.{0,20}(wall|rim|halo)|arterial wall (edema|thicken))", required: true }
+  - { name: "artery_identified", check_type: regex, pattern: "(?i)(temporal artery|superficial temporal)", required: true }
+reference_solution: |
+  High-frequency linear ultrasound of the bilateral superficial temporal arteries demonstrates the halo sign bilaterally, characterized by hypoechoic circumferential wall thickening surrounding the vessel lumen. The halo measures approximately 0.7 mm in thickness. The temporal arteries are non-compressible with the compression sign positive bilaterally. Doppler interrogation reveals turbulent flow with mildly elevated peak systolic velocities but no complete occlusion. The axillary arteries show no involvement. These findings have a high positive predictive value for giant cell arteritis and, in the appropriate clinical context, support initiation of high-dose corticosteroids without delay.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - vascular
+  - rheumatologic
+  - emergency

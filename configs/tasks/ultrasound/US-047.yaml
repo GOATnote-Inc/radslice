@@ -1,0 +1,40 @@
+id: US-047
+name: "Acute Angle-Closure Glaucoma on Ocular Ultrasound"
+modality: ultrasound
+anatomy: face
+task_type: diagnosis
+difficulty: expert
+image_ref: "ultrasound/openem/acute-angle-closure-glaucoma.png"
+prompt_template: diagnosis
+condition_id: "acute-angle-closure-glaucoma"
+lostbench_scenario_id: "MTR-029"
+ground_truth:
+  primary_diagnosis: "Acute angle-closure glaucoma with shallow anterior chamber"
+  differential:
+    - "Lens subluxation/dislocation"
+    - "Anterior uveitis"
+    - "Phacomorphic glaucoma"
+  key_findings:
+    - { finding: "Shallow anterior chamber depth", location: "anterior chamber", required: true }
+    - { finding: "Forward displacement of the iris-lens diaphragm", location: "anterior segment", required: true }
+    - { finding: "Dilated optic nerve sheath diameter (> 5 mm) if elevated IOP is significant", location: "optic nerve", required: false }
+    - { finding: "Normal vitreous without hemorrhage or detachment", location: "vitreous body", required: false }
+  severity: severe
+  laterality: right
+  negatives:
+    - "No retinal detachment"
+    - "No vitreous hemorrhage"
+    - "No lens dislocation"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(angle.?closure glaucoma|acute glaucoma|closed.?angle|narrow angle)", required: true }
+  - { name: "anterior_chamber", check_type: regex, pattern: "(?i)(shallow anterior chamber|narrow.{0,15}(angle|chamber)|anterior chamber (depth|shallow|narrow))", required: true }
+  - { name: "laterality", check_type: regex, pattern: "(?i)(right|OD|unilateral)", required: true }
+reference_solution: |
+  Ocular ultrasound of the right eye demonstrates a shallow anterior chamber with forward displacement of the iris-lens diaphragm. The anterior chamber depth measures approximately 1.5 mm, significantly less than the normal 3 mm. The lens is in normal position without subluxation. The vitreous is clear without hemorrhage. No retinal detachment is identified. The optic nerve sheath diameter measures 6.2 mm, which may be elevated in the setting of markedly increased intraocular pressure. The contralateral left eye demonstrates a normal anterior chamber depth. These findings support the diagnosis of acute angle-closure glaucoma in the right eye.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - ophthalmologic
+  - emergency
+  - ocular-ultrasound

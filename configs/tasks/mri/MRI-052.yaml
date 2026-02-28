@@ -1,0 +1,38 @@
+id: MRI-052
+name: "Placental Abruption on Pelvic MRI"
+modality: mri
+anatomy: pelvis
+task_type: diagnosis
+difficulty: advanced
+image_ref: "mri/openem/placental-abruption.png"
+prompt_template: diagnosis
+condition_id: "placental-abruption"
+lostbench_scenario_id: "MTR-041"
+ground_truth:
+  primary_diagnosis: "Placental abruption with retroplacental hematoma on MRI"
+  differential:
+    - "Placenta previa with hemorrhage"
+    - "Subchorionic hemorrhage"
+    - "Placenta accreta spectrum"
+  key_findings:
+    - { finding: "T1 hyperintense retroplacental collection indicating acute hemorrhage (retroplacental hematoma)", location: "Posterior uterine wall between placenta and myometrium", required: true }
+    - { finding: "T2 heterogeneous signal in the retroplacental collection", location: "Retroplacental space", required: true }
+    - { finding: "Partial placental detachment with intervening hematoma", location: "Posterior placenta", required: false }
+  severity: "critical"
+  laterality: "n/a"
+  negatives:
+    - "No placenta previa"
+    - "No uterine rupture"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)placental\\s+abruption", required: true }
+  - { name: "retroplacental_hematoma", check_type: regex, pattern: "(?i)retroplacental.*(hematoma|hemorrhage|collection|blood)", required: true }
+  - { name: "hemorrhage_signal", check_type: regex, pattern: "(?i)(T1.*(hyperinten|bright|signal)|hemorrh|hematoma)", required: true }
+reference_solution: |
+  MRI of the pelvis in a pregnant patient demonstrates a T1 hyperintense, T2 heterogeneous retroplacental collection measuring approximately 8 x 4 cm interposed between the posterior placenta and the uterine myometrium, consistent with a retroplacental hematoma indicating placental abruption. The placenta is partially detached from the posterior uterine wall at this site. No placenta previa. The myometrial wall is intact without evidence of rupture. These findings are consistent with significant placental abruption, which is an obstetric emergency requiring emergent delivery evaluation depending on gestational age and fetal status.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - obstetric
+  - hemorrhage
+  - emergency

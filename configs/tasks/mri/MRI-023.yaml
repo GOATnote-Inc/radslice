@@ -1,56 +1,38 @@
 id: MRI-023
-name: Avascular necrosis of the femoral head
+name: "Eclampsia with Posterior Reversible Encephalopathy Syndrome (PRES) on MRI"
 modality: mri
-anatomy: hip
-task_type: finding_detection
-difficulty: intermediate
-image_ref: mri/omnimedvqa/MRI_0023.png
-prompt_template: finding_detection
+anatomy: head
+task_type: diagnosis
+difficulty: advanced
+image_ref: "mri/openem/eclampsia.png"
+prompt_template: diagnosis
+condition_id: "eclampsia"
+lostbench_scenario_id: "MTR-045"
 ground_truth:
-  primary_diagnosis: "Avascular necrosis (osteonecrosis) of the left femoral head"
+  primary_diagnosis: "Posterior reversible encephalopathy syndrome (PRES) in the setting of eclampsia"
   differential:
-    - transient osteoporosis of the hip
-    - subchondral insufficiency fracture
-    - septic arthritis with osteomyelitis
-    - bone marrow edema syndrome
+    - "Cerebral venous sinus thrombosis"
+    - "Bilateral posterior cerebral artery infarcts"
+    - "Progressive multifocal leukoencephalopathy"
   key_findings:
-    - { finding: "serpiginous T1 hypointense and T2 hyperintense line (double-line sign) in the femoral head", location: "anterosuperior left femoral head", required: true }
-    - { finding: "geographic area of altered marrow signal in the femoral head", location: "left femoral head", required: true }
-    - { finding: "subchondral crescent sign indicating subchondral fracture", location: "anterosuperior femoral head articular surface", required: false }
-    - { finding: "surrounding bone marrow edema on STIR/T2 fat-sat", location: "left femoral head and neck", required: false }
-  severity: moderate
-  laterality: left
+    - { finding: "Bilateral symmetric T2/FLAIR hyperintensity in the parieto-occipital white matter and cortex", location: "Bilateral parieto-occipital lobes", required: true }
+    - { finding: "No restricted diffusion on DWI (vasogenic edema, not cytotoxic)", location: "Bilateral parieto-occipital lobes", required: true }
+    - { finding: "Involvement of the posterior frontal and temporal lobes", location: "Bilateral posterior watershed zones", required: false }
+  severity: "severe"
+  laterality: "bilateral"
   negatives:
-    - joint effusion with synovial enhancement (favors septic arthritis)
-    - diffuse marrow edema without demarcation line (favors transient osteoporosis)
-    - femoral head collapse
-    - contralateral femoral head involvement
+    - "No hemorrhage"
+    - "No enhancing mass"
 pattern_checks:
-  - { name: avn_mentioned, check_type: regex, pattern: "avascular\\s+necros|osteonecrosis|AVN|ischemic\\s+necros|bone\\s+infarct", required: true }
-  - { name: femoral_head, check_type: regex, pattern: "femoral\\s+head|femur\\s+head", required: true }
-  - { name: double_line, check_type: regex, pattern: "double.?line|serpiginous|demarcation|geographic|crescen", required: true }
-  - { name: laterality_left, check_type: regex, pattern: "left", required: true }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(PRES|posterior\\s+reversible\\s+encephalopathy)", required: true }
+  - { name: "parieto_occipital", check_type: regex, pattern: "(?i)(parieto.?occipital|occipital|posterior)", required: true }
+  - { name: "vasogenic_edema", check_type: regex, pattern: "(?i)(vasogenic|no.*(restricted|cytotoxic)|T2.*FLAIR.*(hyperinten|signal))", required: true }
 reference_solution: |
-  MRI of the left hip demonstrates findings of avascular necrosis (osteonecrosis)
-  of the left femoral head. On T1-weighted images, there is a serpiginous
-  hypointense line in the anterosuperior femoral head demarcating the necrotic
-  segment. On T2-weighted images, this line demonstrates the characteristic
-  double-line sign with an outer hypointense line (sclerosis) and inner
-  hyperintense line (granulation tissue). The necrotic segment involves
-  approximately 30% of the weight-bearing surface of the femoral head. There
-  is surrounding bone marrow edema on STIR sequences in the femoral head and
-  proximal femoral neck. No definite subchondral collapse or crescent sign is
-  identified at this stage. The articular cartilage appears preserved. The
-  contralateral femoral head is normal.
-  Impression: Left femoral head avascular necrosis with double-line sign,
-  Ficat stage II. Orthopedic consultation recommended for staging and
-  management, including consideration of core decompression.
+  MRI of the brain demonstrates bilateral symmetric T2 and FLAIR hyperintensity involving the subcortical white matter and cortex of the parieto-occipital lobes, consistent with posterior reversible encephalopathy syndrome (PRES). DWI shows no restricted diffusion, confirming vasogenic rather than cytotoxic edema. Additional foci of T2/FLAIR signal abnormality involve the posterior frontal watershed zones bilaterally. No hemorrhage or enhancing mass lesion. In the clinical context of eclampsia, findings are characteristic of PRES, which is expected to be reversible with appropriate blood pressure management and delivery.
 condition_present: true
 confusion_pair: null
-source_dataset: omnimedvqa-open
+source_dataset: openem-grounded
 tags:
-  - avn
-  - hip
-  - musculoskeletal
-  - osteonecrosis
-  - femoral-head
+  - neuro
+  - obstetric
+  - emergency

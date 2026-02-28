@@ -1,61 +1,39 @@
 id: MRI-008
-name: Acute ischemic stroke with diffusion restriction
+name: "Cavernous Sinus Thrombosis on MR Venography"
 modality: mri
 anatomy: head
 task_type: diagnosis
-difficulty: advanced
-image_ref: mri/omnimedvqa/MRI_0008.png
+difficulty: expert
+image_ref: "mri/openem/cavernous-sinus-thrombosis.png"
 prompt_template: diagnosis
+condition_id: "cavernous-sinus-thrombosis"
+lostbench_scenario_id: "MTR-073"
 ground_truth:
-  primary_diagnosis: "Acute left middle cerebral artery territory ischemic stroke"
+  primary_diagnosis: "Cavernous sinus thrombosis on MR venography and contrast-enhanced MRI"
   differential:
-    - seizure-related diffusion restriction (postictal)
-    - hypoglycemic injury
-    - encephalitis (especially herpes)
-    - toxic/metabolic leukoencephalopathy
-    - venous infarction from dural sinus thrombosis
+    - "Cavernous sinus meningioma"
+    - "Tolosa-Hunt syndrome"
+    - "Carotid-cavernous fistula"
   key_findings:
-    - { finding: "high signal on DWI with corresponding low ADC values (true restricted diffusion)", location: "left MCA territory including insular cortex and frontoparietal operculum", required: true }
-    - { finding: "loss of normal cortical gray-white matter differentiation on FLAIR", location: "left insular ribbon and frontal operculum", required: true }
-    - { finding: "absent flow void in the left middle cerebral artery", location: "left MCA M1 segment", required: false }
-    - { finding: "DWI-FLAIR mismatch suggesting onset within 4.5 hours", location: "left MCA territory", required: false }
-  severity: severe
-  laterality: left
+    - { finding: "Expansion and abnormal signal within the cavernous sinus with filling defect on MRV", location: "Right cavernous sinus", required: true }
+    - { finding: "Convexity of lateral wall of the cavernous sinus", location: "Right cavernous sinus", required: true }
+    - { finding: "Proptosis and engorgement of the superior ophthalmic vein", location: "Right orbit", required: false }
+  severity: "critical"
+  laterality: "right"
   negatives:
-    - hemorrhagic transformation
-    - midline herniation
-    - posterior circulation involvement
-    - bilateral diffusion restriction
-    - leptomeningeal enhancement suggesting collateral flow
+    - "No dural venous sinus thrombosis extension to sigmoid or transverse sinuses"
+    - "No adjacent parenchymal infarction"
 pattern_checks:
-  - { name: stroke_mentioned, check_type: regex, pattern: "stroke|infarct|ischem", required: true }
-  - { name: diffusion_restriction, check_type: regex, pattern: "restrict.*diffusion|DWI.*hyperintens|diffusion.*restrict|ADC.*low|ADC.*decrease", required: true }
-  - { name: mca_territory, check_type: regex, pattern: "MCA|middle\\s+cerebral|insular|frontoparietal", required: true }
-  - { name: laterality_left, check_type: regex, pattern: "left", required: true }
-  - { name: acute_timing, check_type: regex, pattern: "acute|hyperacute|early|recent", required: true }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)cavernous\\s+sinus\\s+thrombosis", required: true }
+  - { name: "filling_defect", check_type: regex, pattern: "(?i)(filling\\s+defect|thrombus|non.?enhancing)", required: true }
+  - { name: "laterality", check_type: regex, pattern: "(?i)right", required: true }
 reference_solution: |
-  MRI of the brain demonstrates findings of an acute left middle cerebral
-  artery territory ischemic infarction. DWI shows confluent high signal
-  involving the left insular cortex, frontal operculum, and adjacent
-  frontoparietal cortex, with corresponding low signal on the ADC map
-  confirming true restricted diffusion (cytotoxic edema). On FLAIR, there
-  is subtle loss of gray-white matter differentiation in the left insular
-  ribbon, though the FLAIR changes are less extensive than the DWI
-  abnormality, suggesting a DWI-FLAIR mismatch consistent with symptom
-  onset within approximately 4.5 hours. MR angiography, if available,
-  should be correlated for left MCA occlusion. No hemorrhagic
-  transformation on susceptibility-weighted imaging. No midline shift at
-  this stage. The posterior circulation and right hemisphere appear normal.
-  No evidence of dural venous sinus thrombosis.
-  Impression: Acute left MCA territory infarction with restricted diffusion
-  and DWI-FLAIR mismatch suggesting a potentially treatable time window.
+  MRI of the brain with MR venography demonstrates expansion of the right cavernous sinus with abnormal T1 and T2 signal and a filling defect on contrast-enhanced MRV, consistent with cavernous sinus thrombosis. The lateral wall of the right cavernous sinus is convex. The right superior ophthalmic vein is engorged, and there is mild right-sided proptosis. No extension of thrombus into the transverse or sigmoid sinuses is identified. No adjacent parenchymal signal abnormality to suggest venous infarction.
 condition_present: true
 confusion_pair: null
-source_dataset: omnimedvqa-open
+source_dataset: openem-grounded
 tags:
-  - stroke
-  - ischemia
   - neuro
+  - vascular
+  - mrv
   - emergency
-  - diffusion
-  - mca

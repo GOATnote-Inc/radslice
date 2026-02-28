@@ -1,0 +1,40 @@
+id: US-036
+name: "Ovarian Torsion on Pelvic Doppler Ultrasound"
+modality: ultrasound
+anatomy: pelvis
+task_type: diagnosis
+difficulty: advanced
+image_ref: "ultrasound/openem/ovarian-torsion.png"
+prompt_template: diagnosis
+condition_id: "ovarian-torsion"
+lostbench_scenario_id: "MTR-026"
+ground_truth:
+  primary_diagnosis: "Right ovarian torsion with absent arterial and venous flow"
+  differential:
+    - "Ruptured ovarian cyst"
+    - "Tubo-ovarian abscess"
+    - "Ectopic pregnancy"
+  key_findings:
+    - { finding: "Enlarged edematous ovary with peripheral follicles", location: "right ovary", required: true }
+    - { finding: "Absent or diminished arterial and venous flow on color Doppler", location: "right ovary", required: true }
+    - { finding: "Whirlpool sign in the adnexal pedicle", location: "right adnexal pedicle", required: false }
+    - { finding: "Free fluid in the pelvis", location: "cul-de-sac", required: false }
+  severity: severe
+  laterality: right
+  negatives:
+    - "No adnexal mass other than the enlarged ovary"
+    - "Normal contralateral left ovary with normal Doppler flow"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(ovarian torsion|torsion.{0,20}ovar|adnexal torsion)", required: true }
+  - { name: "doppler_finding", check_type: regex, pattern: "(?i)(absent (flow|Doppler|arterial|venous)|diminished (flow|Doppler)|no (flow|vascularity))", required: true }
+  - { name: "laterality", check_type: regex, pattern: "(?i)(right)", required: true }
+reference_solution: |
+  Transvaginal ultrasound demonstrates a markedly enlarged right ovary measuring 6.5 x 4.2 cm with a heterogeneous echotexture and peripheral displacement of follicles along the cortex. Color and spectral Doppler reveal absent arterial and venous flow within the right ovary. The twisted vascular pedicle is visualized with a whirlpool sign on the right. A small amount of free fluid is present in the cul-de-sac. The left ovary appears normal in size and morphology with normal Doppler flow. These findings are consistent with right ovarian torsion with complete vascular compromise requiring emergent surgical intervention.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - gynecologic
+  - emergency
+  - doppler
+  - transvaginal

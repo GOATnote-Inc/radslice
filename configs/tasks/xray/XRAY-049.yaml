@@ -1,49 +1,38 @@
 id: XRAY-049
-name: Normal CXR with dextrocardia
+name: "Croup on Lateral and AP Neck X-ray"
 modality: xray
-anatomy: chest
+anatomy: neck
 task_type: diagnosis
-difficulty: intermediate
-image_ref: xray/omnimedvqa/CXR_0049.png
+difficulty: basic
+image_ref: "xray/openem/croup.png"
 prompt_template: diagnosis
+condition_id: "croup"
+lostbench_scenario_id: ""
 ground_truth:
-  primary_diagnosis: "Dextrocardia with otherwise normal chest radiograph"
-  differential: []
+  primary_diagnosis: "Croup (laryngotracheobronchitis)"
+  differential:
+    - "Epiglottitis"
+    - "Bacterial tracheitis"
+    - "Foreign body aspiration"
   key_findings:
-    - { finding: "cardiac apex pointing to the right", location: "right hemithorax", required: true }
-    - { finding: "right-sided aortic arch (situs inversus)", location: "right mediastinum", required: false }
-    - { finding: "clear lung fields bilaterally", location: "bilateral lungs", required: true }
-    - { finding: "gastric bubble on the right", location: "right subdiaphragmatic", required: false }
+    - { finding: "Steeple sign (subglottic narrowing) on AP view", location: "subglottic airway", required: true }
+    - { finding: "Distended hypopharynx during inspiration", location: "hypopharynx", required: false }
+    - { finding: "Normal epiglottis on lateral view", location: "epiglottis", required: false }
   severity: mild
-  laterality: right
+  laterality: midline
   negatives:
-    - cardiomegaly
-    - pleural effusion
-    - consolidation
-    - pneumothorax
-    - congenital heart disease
+    - "No epiglottic swelling (thumbprint sign absent)"
+    - "No retropharyngeal widening"
 pattern_checks:
-  - { name: dextrocardia, check_type: regex, pattern: "(?i)(dextrocardia|right.?sided\\s+heart|cardiac\\s+apex.{0,20}right)", required: true }
-  - { name: no_acute_disease, check_type: regex, pattern: "(?i)(no\\s+acute|normal|unremarkable|no.{0,20}significant)", required: true }
-  - { name: lungs_clear, check_type: regex, pattern: "(?i)(clear|no.*opaci|no.*consolidat)", required: true }
-  - { name: situs, check_type: regex, pattern: "(?i)(situs\\s+inversus|mirror|reversed|right.?sided\\s+aort)", required: false }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(croup|steeple sign|subglottic narrowing|laryngotracheobronchitis)", required: true }
+  - { name: "steeple_finding", check_type: regex, pattern: "(?i)(steeple sign|subglottic (narrowing|stenosis)|symmetric narrowing|tracheal narrowing)", required: true }
 reference_solution: |
-  PA chest radiograph demonstrates dextrocardia with the cardiac apex directed
-  toward the right hemithorax. The gastric air bubble is seen on the right side,
-  and the aortic arch is right-sided, consistent with situs inversus totalis.
-  The lungs are clear bilaterally without focal consolidation, pleural effusion,
-  or pneumothorax. The cardiac silhouette is normal in size with a cardiothoracic
-  ratio within normal limits. The mediastinal contours are mirror-image normal.
-  The costophrenic angles are sharp. No osseous abnormality. This is a normal
-  anatomic variant when associated with complete situs inversus.
-  Impression: Dextrocardia with situs inversus totalis. No acute cardiopulmonary
-  disease.
-condition_present: false
+  AP soft tissue neck radiograph demonstrates symmetric subglottic narrowing of the trachea producing the classic steeple sign. The lateral view shows a normal epiglottis and normal prevertebral soft tissues. No irregular mucosal thickening is identified to suggest bacterial tracheitis. These findings, in the clinical context of a young child with barking cough and stridor, are consistent with croup (viral laryngotracheobronchitis).
+condition_present: true
 confusion_pair: null
-source_dataset: omnimedvqa-open
+source_dataset: openem-grounded
 tags:
-  - normal
-  - dextrocardia
-  - situs-inversus
-  - anatomic-variant
-  - chest
+  - airway
+  - pediatric
+  - infection
+  - common

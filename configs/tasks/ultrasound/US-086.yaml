@@ -1,0 +1,41 @@
+id: US-086
+name: "Fournier Gangrene on Perineal Ultrasound"
+modality: ultrasound
+anatomy: pelvis
+task_type: diagnosis
+difficulty: advanced
+image_ref: "ultrasound/openem/fourniers-gangrene.png"
+prompt_template: diagnosis
+condition_id: "fourniers-gangrene"
+lostbench_scenario_id: ""
+ground_truth:
+  primary_diagnosis: "Fournier gangrene with subcutaneous gas and fascial necrosis in the perineum"
+  differential:
+    - "Perineal abscess without necrotizing component"
+    - "Scrotal cellulitis"
+    - "Epididymo-orchitis with scrotal edema"
+  key_findings:
+    - { finding: "Subcutaneous gas with dirty acoustic shadowing in the perineum/scrotum", location: "perineal and scrotal subcutaneous tissue", required: true }
+    - { finding: "Thickened and edematous scrotal wall with fluid dissection along fascial planes", location: "scrotal wall and perineum", required: true }
+    - { finding: "Testicular blood flow preserved (ruling out torsion)", location: "bilateral testes", required: false }
+    - { finding: "Echogenic fluid collection in the perineal soft tissue", location: "perineal space", required: false }
+  severity: critical
+  laterality: bilateral
+  negatives:
+    - "No testicular torsion"
+    - "No testicular abscess"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(Fournier.?s? gangrene|necrotizing fasciitis.{0,20}(perine|scrot)|perineal (necrotizing|gangrene))", required: true }
+  - { name: "gas_finding", check_type: regex, pattern: "(?i)(subcutaneous (gas|air|emphysema)|dirty shadow|crepitus|gas.{0,20}(perine|scrot))", required: true }
+  - { name: "fascial_finding", check_type: regex, pattern: "(?i)(fascial (thicken|necrosis|fluid|involvement)|scrotal wall (thicken|edema)|perineal.{0,20}(edema|fluid|fasci))", required: true }
+reference_solution: |
+  Perineal and scrotal ultrasound demonstrates extensive subcutaneous gas within the perineal and scrotal soft tissues, manifested as echogenic foci with dirty posterior acoustic shadowing. The scrotal wall is markedly thickened and edematous with fluid tracking along the fascial planes extending from the perineum to the anterior abdominal wall. Despite the extensive soft tissue changes, both testes demonstrate preserved intratesticular blood flow on color Doppler, excluding testicular torsion. Complex fluid collections are identified in the perineal space. These findings are diagnostic of Fournier gangrene, a life-threatening necrotizing soft tissue infection requiring emergent wide surgical debridement and broad-spectrum antibiotics.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - soft-tissue
+  - emergency
+  - infectious
+  - surgical
+  - urologic

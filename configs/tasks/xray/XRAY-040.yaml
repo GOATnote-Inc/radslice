@@ -1,54 +1,37 @@
 id: XRAY-040
-name: Flail chest with multiple bilateral rib fractures
+name: "Open Fracture on Extremity X-ray"
 modality: xray
-anatomy: chest
-task_type: finding_detection
-difficulty: advanced
-image_ref: xray/omnimedvqa/CXR_0040.png
+anatomy: extremity
+task_type: diagnosis
+difficulty: intermediate
+image_ref: "xray/openem/open-fracture.png"
 prompt_template: diagnosis
+condition_id: "open-fracture"
+lostbench_scenario_id: ""
 ground_truth:
-  primary_diagnosis: "Flail chest with multiple bilateral rib fractures"
+  primary_diagnosis: "Open fracture of the forearm"
   differential:
-    - simple rib fractures without flail
-    - pathologic fractures from metastatic disease
-    - sternal fracture
+    - "Closed fracture"
+    - "Pathologic fracture"
+    - "Fracture with gas gangrene"
   key_findings:
-    - { finding: "multiple rib fractures with two or more fracture sites per rib", location: "left 4th through 7th ribs with segmental fractures", required: true }
-    - { finding: "flail segment involving left lateral chest wall", location: "left lateral ribs", required: true }
-    - { finding: "pulmonary contusion adjacent to fractures", location: "left lower zone", required: false }
-    - { finding: "subcutaneous emphysema", location: "left chest wall", required: false }
+    - { finding: "Displaced comminuted fracture of the radius and ulna", location: "forearm", required: true }
+    - { finding: "Subcutaneous air or gas tracking along soft tissues", location: "soft tissues adjacent to fracture", required: true }
+    - { finding: "Significant soft tissue disruption", location: "overlying soft tissues", required: false }
   severity: severe
   laterality: left
   negatives:
-    - pneumothorax
-    - hemothorax
-    - aortic injury
-    - sternal fracture
+    - "No foreign body"
 pattern_checks:
-  - { name: rib_fractures, check_type: regex, pattern: "(?i)(multiple.{0,20}rib\\s+fracture|rib\\s+fracture.{0,20}multiple)", required: true }
-  - { name: flail_mentioned, check_type: regex, pattern: "(?i)flail", required: true }
-  - { name: segmental, check_type: regex, pattern: "(?i)(segmental|two.{0,20}fracture.{0,20}(per|same)\\s+rib|double.{0,20}fracture)", required: true }
-  - { name: contusion_mentioned, check_type: regex, pattern: "(?i)(contusion|opaci.{0,20}adjacent.{0,20}fracture)", required: false }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(open fracture|compound fracture|comminuted fracture)", required: true }
+  - { name: "soft_tissue_gas", check_type: regex, pattern: "(?i)(subcutaneous (air|gas|emphysema)|gas tracking|soft tissue (gas|air|disruption))", required: true }
 reference_solution: |
-  PA chest radiograph demonstrates multiple rib fractures involving the left 4th
-  through 7th ribs, with segmental (two fracture sites per rib) fractures of the
-  5th and 6th ribs, creating a flail segment along the left lateral chest wall.
-  There is associated hazy opacification in the left lower zone adjacent to the
-  fracture sites, consistent with pulmonary contusion. Subtle subcutaneous
-  emphysema is noted along the left lateral chest wall soft tissues. No definite
-  pneumothorax or large hemothorax is identified, though a small component
-  cannot be excluded. The right lung is clear. The mediastinum is midline.
-  Clinical management should include pain control and monitoring for
-  respiratory compromise related to the flail physiology.
-  Impression: Flail chest with multiple left-sided rib fractures and associated
-  pulmonary contusion.
+  AP and lateral radiographs of the left forearm demonstrate displaced comminuted fractures of both the radius and ulna at the mid-diaphysis. Subcutaneous air is identified within the soft tissues adjacent to the fracture site, indicating communication with the external environment and confirming an open fracture. No radiopaque foreign body is identified. Urgent surgical consultation for debridement and fixation is required, along with tetanus prophylaxis and antibiotic administration.
 condition_present: true
 confusion_pair: null
-source_dataset: omnimedvqa-open
+source_dataset: openem-grounded
 tags:
-  - flail-chest
-  - rib-fracture
+  - musculoskeletal
   - trauma
-  - pulmonary-contusion
+  - surgical
   - emergency
-  - chest

@@ -1,50 +1,40 @@
 id: US-001
-name: Gallstones with acoustic shadowing
+name: "Acute Heart Failure on Transthoracic Echocardiography"
 modality: ultrasound
-anatomy: abdomen
+anatomy: chest
 task_type: diagnosis
-difficulty: basic
-image_ref: ultrasound/radimagenet/US_0001.png
+difficulty: intermediate
+image_ref: "ultrasound/openem/acute-heart-failure.png"
 prompt_template: diagnosis
+condition_id: "acute-heart-failure"
+lostbench_scenario_id: ""
 ground_truth:
-  primary_diagnosis: "Cholelithiasis"
+  primary_diagnosis: "Acute decompensated heart failure with reduced ejection fraction"
   differential:
-    - gallbladder polyp
-    - gallbladder sludge
-    - porcelain gallbladder
-    - bowel gas artifact
+    - "Septic cardiomyopathy"
+    - "Stress (Takotsubo) cardiomyopathy"
+    - "Acute valvular regurgitation"
   key_findings:
-    - { finding: "hyperechoic intraluminal focus", location: "gallbladder lumen", required: true }
-    - { finding: "posterior acoustic shadowing", location: "deep to calculus", required: true }
-    - { finding: "gravity-dependent mobility", location: "gallbladder fundus", required: false }
-  severity: mild
-  laterality: ""
+    - { finding: "Globally reduced left ventricular systolic function with EF < 30%", location: "left ventricle", required: true }
+    - { finding: "Diffuse B-lines on lung ultrasound bilaterally", location: "bilateral lung fields", required: true }
+    - { finding: "Dilated IVC with absent respiratory variation", location: "subxiphoid IVC view", required: false }
+    - { finding: "LV chamber dilation", location: "left ventricle", required: false }
+  severity: severe
+  laterality: bilateral
   negatives:
-    - gallbladder wall thickening
-    - pericholecystic fluid
-    - common bile duct dilation
-    - sonographic Murphy sign
-    - intrahepatic biliary dilation
+    - "No pericardial effusion"
+    - "No regional wall motion abnormality to suggest acute MI"
 pattern_checks:
-  - { name: gallstone_mentioned, check_type: regex, pattern: "gallstone|cholelithiasis|calcul(us|i)", required: true }
-  - { name: hyperechoic, check_type: regex, pattern: "hyperechoic|echogenic", required: true }
-  - { name: acoustic_shadow, check_type: regex, pattern: "acoustic\\s+shadow|posterior\\s+shadow|clean\\s+shadow", required: true }
-  - { name: no_cholecystitis, check_type: regex, pattern: "no.*(wall\\s+thicken|cholecystitis|pericholecystic)", required: true }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(heart failure|reduced (ejection fraction|EF)|systolic dysfunction|cardiomyopathy|decompensated)", required: true }
+  - { name: "ef_finding", check_type: regex, pattern: "(?i)(ejection fraction|EF|systolic function|hyperdynamic|hypokinesis|reduced)", required: true }
+  - { name: "b_lines_or_edema", check_type: regex, pattern: "(?i)(B[- ]?lines|pulmonary edema|interstitial syndrome|lung (ultrasound|US))", required: true }
 reference_solution: |
-  Right upper quadrant ultrasound demonstrates a hyperechoic intraluminal focus
-  within the gallbladder lumen, consistent with a gallstone. The calculus produces
-  clean posterior acoustic shadowing, confirming its calcified composition. The
-  stone is gravity-dependent, lying in the gallbladder fundus. The gallbladder
-  wall measures within normal limits with no thickening or edema. There is no
-  pericholecystic fluid collection. The common bile duct is not dilated. No
-  sonographic Murphy sign was elicited.
-  Impression: Cholelithiasis without evidence of acute cholecystitis.
+  Bedside transthoracic echocardiography demonstrates a dilated left ventricle with globally reduced systolic function and an estimated ejection fraction of less than 30%. The IVC is dilated at 2.4 cm with less than 50% inspiratory collapse, consistent with elevated right atrial pressure. Lung ultrasound reveals diffuse bilateral B-lines in three or more zones bilaterally, indicating pulmonary interstitial edema. These findings are consistent with acute decompensated heart failure.
 condition_present: true
 confusion_pair: null
-source_dataset: radimagenet
+source_dataset: openem-grounded
 tags:
-  - cholelithiasis
-  - gallstone
-  - abdomen
-  - hepatobiliary
-  - acoustic-shadowing
+  - cardiac
+  - emergency
+  - pocus
+  - echocardiography

@@ -1,0 +1,37 @@
+id: CT-105
+name: "Hypertrophic pyloric stenosis on CT abdomen"
+modality: ct
+anatomy: abdomen
+task_type: diagnosis
+difficulty: advanced
+image_ref: "ct/openem/pyloric-stenosis.png"
+prompt_template: diagnosis
+condition_id: "pyloric-stenosis"
+lostbench_scenario_id: "MTR-032"
+ground_truth:
+  primary_diagnosis: "Hypertrophic pyloric stenosis"
+  differential:
+    - "Pylorospasm"
+    - "Gastric outlet obstruction from web or mass"
+    - "Malrotation with midgut volvulus"
+  key_findings:
+    - { finding: "Elongated and thickened pyloric muscle", location: "pylorus", required: true }
+    - { finding: "Pyloric muscle thickness greater than 3 mm and channel length greater than 15 mm", location: "pylorus", required: true }
+    - { finding: "Gastric distension with retained fluid", location: "stomach", required: false }
+  severity: "moderate"
+  laterality: "midline"
+  negatives:
+    - "No gastric mass"
+    - "No malrotation"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(pyloric\\s*stenosis|hypertrophic\\s*pylor|pyloric.*thicken)", required: true }
+  - { name: "key_finding_pylorus", check_type: regex, pattern: "(?i)(pyloric\\s*muscle.*thicken|pylor.*elongat|pylor.*channel|muscle.*thickness)", required: true }
+reference_solution: |
+  CT of the abdomen demonstrates an elongated and thickened pyloric muscle with muscle thickness measuring approximately 4 mm and channel length of 18 mm, exceeding the diagnostic thresholds for hypertrophic pyloric stenosis. The stomach is distended with retained fluid content. No gastric mass or evidence of malrotation is identified. The proximal small bowel is decompressed. Findings are consistent with hypertrophic pyloric stenosis in this infant presenting with projectile non-bilious vomiting, requiring pyloromyotomy.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - abdominal
+  - pediatric
+  - surgical

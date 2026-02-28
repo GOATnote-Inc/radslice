@@ -1,54 +1,38 @@
 id: MRI-002
-name: Lumbar disc herniation L4-L5
+name: "Infective Endocarditis Vegetation on Cardiac MRI"
 modality: mri
-anatomy: spine
+anatomy: chest
 task_type: diagnosis
-difficulty: intermediate
-image_ref: mri/omnimedvqa/MRI_0002.png
+difficulty: expert
+image_ref: "mri/openem/infective-endocarditis.png"
 prompt_template: diagnosis
+condition_id: "infective-endocarditis"
+lostbench_scenario_id: ""
 ground_truth:
-  primary_diagnosis: "Left paracentral disc herniation at L4-L5"
+  primary_diagnosis: "Infective endocarditis with valvular vegetation on cardiac MRI"
   differential:
-    - disc bulge without herniation
-    - synovial cyst arising from facet joint
-    - epidural abscess
-    - sequestered free disc fragment
+    - "Non-bacterial thrombotic endocarditis"
+    - "Papillary fibroelastoma"
+    - "Myxomatous valve degeneration"
   key_findings:
-    - { finding: "focal disc extrusion with T2 hyperintense material extending beyond disc margin", location: "L4-L5 level, left paracentral", required: true }
-    - { finding: "compression and displacement of the traversing left L5 nerve root", location: "left lateral recess at L4-L5", required: true }
-    - { finding: "loss of normal T2 signal intensity of the L4-L5 disc", location: "L4-L5 disc space", required: false }
-    - { finding: "mild narrowing of the left neural foramen", location: "L4-L5 left neural foramen", required: false }
-  severity: moderate
-  laterality: left
+    - { finding: "Irregular mobile mass attached to valve leaflet on cine SSFP", location: "Mitral valve", required: true }
+    - { finding: "Late gadolinium enhancement in periannular region suggesting abscess", location: "Mitral annulus", required: false }
+    - { finding: "Associated valvular regurgitation on cine imaging", location: "Mitral valve", required: true }
+  severity: "critical"
+  laterality: "n/a"
   negatives:
-    - cauda equina compression
-    - spinal cord signal abnormality
-    - vertebral body fracture
-    - spondylolisthesis
-    - epidural abscess
+    - "No myocardial abscess extending to septum"
+    - "No pericardial effusion"
 pattern_checks:
-  - { name: disc_herniation_mentioned, check_type: regex, pattern: "herniat|extru|prolapse", required: true }
-  - { name: level_mentioned, check_type: regex, pattern: "L4.?L5|L4.?5", required: true }
-  - { name: nerve_root_compression, check_type: regex, pattern: "nerve\\s+root|radiculopathy|compress|impinge|L5\\s+nerve", required: true }
-  - { name: paracentral_location, check_type: regex, pattern: "paracentral|left.?sided|left\\s+lateral", required: true }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(infective|bacterial)\\s+endocarditis", required: true }
+  - { name: "vegetation_identified", check_type: regex, pattern: "(?i)vegetation", required: true }
+  - { name: "valve_specified", check_type: regex, pattern: "(?i)(mitral|aortic|tricuspid)\\s+valve", required: true }
 reference_solution: |
-  MRI of the lumbar spine demonstrates a left paracentral disc extrusion at
-  the L4-L5 level. On T2-weighted sagittal and axial images, hyperintense disc
-  material extends beyond the posterior disc margin into the left lateral
-  recess. The herniated material compresses and displaces the traversing left
-  L5 nerve root posteriorly. The L4-L5 disc demonstrates loss of normal T2
-  signal intensity consistent with desiccation. Mild narrowing of the left
-  L4-L5 neural foramen is noted. The remaining lumbar discs show normal signal
-  and morphology. No evidence of spondylolisthesis. The conus medullaris
-  terminates at a normal level with normal signal. No cauda equina compression.
-  Impression: Left paracentral L4-L5 disc herniation with left L5 nerve root
-  compression.
+  Cardiac MRI with cine SSFP sequences demonstrates an irregular, mobile mass attached to the anterior leaflet of the mitral valve, consistent with a vegetation. Associated moderate mitral regurgitation is noted on cine imaging. Late gadolinium enhancement images show subtle periannular enhancement at the mitral annulus raising concern for early abscess formation. No pericardial effusion. Findings are consistent with infective endocarditis.
 condition_present: true
 confusion_pair: null
-source_dataset: omnimedvqa-open
+source_dataset: openem-grounded
 tags:
-  - disc-herniation
-  - spine
-  - lumbar
-  - nerve-root
-  - degenerative
+  - cardiac
+  - infection
+  - cardiac-mri

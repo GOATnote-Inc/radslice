@@ -1,59 +1,38 @@
 id: MRI-018
-name: Spinal cord compression from metastasis
+name: "Acute Pancreatitis on MRCP"
 modality: mri
-anatomy: spine
+anatomy: abdomen
 task_type: diagnosis
 difficulty: advanced
-image_ref: mri/eurorad/EUR_0018.png
+image_ref: "mri/openem/acute-pancreatitis.png"
 prompt_template: diagnosis
+condition_id: "acute-pancreatitis"
+lostbench_scenario_id: "MTR-024"
 ground_truth:
-  primary_diagnosis: "Thoracic spinal cord compression from vertebral metastasis"
+  primary_diagnosis: "Acute pancreatitis with peripancreatic fluid collections on MRCP/MRI"
   differential:
-    - multiple myeloma with cord compression
-    - primary vertebral body tumor (chordoma, giant cell tumor)
-    - epidural abscess with cord compression
-    - burst fracture with retropulsed fragment
-    - epidural hematoma
+    - "Pancreatic malignancy"
+    - "Autoimmune pancreatitis"
+    - "Groove pancreatitis"
   key_findings:
-    - { finding: "T1 hypointense and T2 hyperintense marrow-replacing lesion in a vertebral body with pathologic compression fracture", location: "T7 vertebral body", required: true }
-    - { finding: "epidural soft tissue extension causing severe spinal cord compression", location: "posterior T7 vertebral body with epidural extension", required: true }
-    - { finding: "abnormal T2 hyperintense signal within the compressed spinal cord", location: "spinal cord at the T7 level", required: false }
-    - { finding: "additional vertebral body lesions with abnormal marrow signal", location: "scattered thoracolumbar vertebrae", required: false }
-  severity: severe
-  laterality: ""
+    - { finding: "Enlarged edematous pancreas with T2 hyperintense peripancreatic fluid", location: "Pancreatic body and tail with peripancreatic spaces", required: true }
+    - { finding: "Heterogeneous pancreatic parenchymal signal with T1 hypointensity on fat-sat sequences", location: "Pancreatic body", required: true }
+    - { finding: "Gallstones visible on MRCP as filling defects in the gallbladder", location: "Gallbladder", required: false }
+  severity: "severe"
+  laterality: "midline"
   negatives:
-    - normal vertebral body marrow signal
-    - preserved spinal canal caliber
-    - epidural abscess (no rim enhancement)
-    - intradural extramedullary mass
+    - "No pancreatic necrosis (preserved enhancement)"
+    - "No main pancreatic duct disruption on MRCP"
 pattern_checks:
-  - { name: cord_compression, check_type: regex, pattern: "cord.*compress|compress.*cord|spinal\\s+cord.*comprom|stenosis.*cord", required: true }
-  - { name: metastasis_mentioned, check_type: regex, pattern: "metastas|metastatic|secondary|malignan", required: true }
-  - { name: vertebral_involvement, check_type: regex, pattern: "vertebr|T7|thoracic", required: true }
-  - { name: marrow_signal, check_type: regex, pattern: "marrow.*replac|T1.*hypointens|abnormal.*marrow|pathologic.*fracture", required: true }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(acute\\s+)?pancreatitis", required: true }
+  - { name: "peripancreatic_fluid", check_type: regex, pattern: "(?i)peripancreatic.*(fluid|collection|stranding)", required: true }
+  - { name: "pancreas_edema", check_type: regex, pattern: "(?i)pancrea.*(edema|enlarg|swollen|T2|signal)", required: true }
 reference_solution: |
-  MRI of the thoracic spine demonstrates a pathologic compression fracture of
-  the T7 vertebral body with diffuse T1 hypointense and T2 hyperintense
-  marrow-replacing signal, consistent with metastatic involvement. There is
-  retropulsion of the posterior vertebral body cortex and associated epidural
-  soft tissue mass causing severe compression of the thoracic spinal cord at
-  this level. The compressed spinal cord demonstrates abnormal intramedullary
-  T2 hyperintense signal, which may represent edema or early myelopathy.
-  Post-gadolinium images show avid enhancement of the vertebral body lesion
-  and epidural component. Additional smaller vertebral body lesions with
-  similar marrow signal are identified at T4, T10, and L2, consistent with
-  multifocal osseous metastatic disease. The posterior elements at T7 appear
-  involved. No paraspinal mass.
-  Impression: Metastatic T7 vertebral body compression fracture with epidural
-  extension causing severe spinal cord compression and cord signal abnormality.
-  Urgent neurosurgical or radiation oncology consultation recommended.
+  MRI of the abdomen with MRCP demonstrates an enlarged, edematous pancreas with loss of normal T1 hyperintense signal on fat-saturated sequences, consistent with acute pancreatitis. T2-weighted images show peripancreatic fluid collections surrounding the body and tail of the pancreas. MRCP images reveal gallstones within the gallbladder as low-signal filling defects, suggesting a biliary etiology. No definite pancreatic necrosis or main pancreatic duct disruption is identified. Findings are consistent with acute interstitial edematous pancreatitis, likely of gallstone etiology.
 condition_present: true
 confusion_pair: null
-source_dataset: eurorad
+source_dataset: openem-grounded
 tags:
-  - metastasis
-  - spine
-  - cord-compression
-  - oncology
+  - abdominal
+  - mrcp
   - emergency
-  - thoracic

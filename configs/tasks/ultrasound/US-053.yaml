@@ -1,0 +1,40 @@
+id: US-053
+name: "Deep Vein Thrombosis on Compression Ultrasound"
+modality: ultrasound
+anatomy: extremity
+task_type: diagnosis
+difficulty: intermediate
+image_ref: "ultrasound/openem/deep-vein-thrombosis.png"
+prompt_template: diagnosis
+condition_id: "deep-vein-thrombosis"
+lostbench_scenario_id: ""
+ground_truth:
+  primary_diagnosis: "Acute proximal deep vein thrombosis of the lower extremity"
+  differential:
+    - "Superficial thrombophlebitis"
+    - "Baker cyst rupture"
+    - "Cellulitis with soft tissue edema"
+  key_findings:
+    - { finding: "Non-compressible common femoral vein with intraluminal echogenic thrombus", location: "common femoral vein", required: true }
+    - { finding: "Absent augmentation on distal compression", location: "common femoral vein", required: true }
+    - { finding: "Distended vein with expanded diameter", location: "femoral and popliteal veins", required: false }
+    - { finding: "Absent color Doppler flow in thrombosed segment", location: "femoral vein", required: false }
+  severity: severe
+  laterality: right
+  negatives:
+    - "No superficial venous thrombosis"
+    - "No Baker cyst"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(deep vein thrombosis|DVT|venous thrombosis|femoral (vein )?thrombosis)", required: true }
+  - { name: "compression_finding", check_type: regex, pattern: "(?i)(non.?compress|incompress|absent compressibility|not (fully )?compressible)", required: true }
+  - { name: "laterality", check_type: regex, pattern: "(?i)(right)", required: true }
+reference_solution: |
+  Compression ultrasound of the right lower extremity demonstrates a non-compressible right common femoral vein with echogenic intraluminal thrombus. The vein remains distended and does not coapt with transducer compression. Absent augmentation is noted on distal calf compression. The thrombus extends into the femoral vein in the mid-thigh. Color Doppler confirms absent flow in the thrombosed segments. The right popliteal vein is also non-compressible with intraluminal thrombus. The left lower extremity veins compress normally. These findings are consistent with extensive acute right lower extremity deep vein thrombosis involving the common femoral, femoral, and popliteal veins.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - vascular
+  - emergency
+  - dvt
+  - compression-ultrasound

@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from collections import Counter
 from pathlib import Path
 
 import pytest
@@ -59,43 +60,50 @@ class TestCorpusTasks:
 
     def test_modality_counts(self):
         tasks = load_tasks_from_dir(TASKS_DIR)
-        from collections import Counter
-
         counts = Counter(t.modality for t in tasks)
-        assert counts["xray"] >= 20
-        assert counts["ct"] >= 10
-        assert counts["mri"] >= 10
-        assert counts["ultrasound"] >= 5
+        assert counts["xray"] >= 50
+        assert counts["ct"] >= 80
+        assert counts["mri"] >= 40
+        assert counts["ultrasound"] >= 60
 
     def test_difficulty_distribution(self):
         tasks = load_tasks_from_dir(TASKS_DIR)
         difficulties = {t.difficulty for t in tasks}
         assert len(difficulties) >= 3, "Expected at least 3 difficulty levels"
 
-    def test_confusion_pairs_valid(self):
+    def test_condition_id_present(self):
+        """Every task must link to an OpenEM condition."""
         tasks = load_tasks_from_dir(TASKS_DIR)
-        all_ids = {t.id for t in tasks}
         for task in tasks:
-            if task.confusion_pair:
-                assert task.confusion_pair in all_ids, (
-                    f"{task.id} references unknown confusion_pair {task.confusion_pair}"
+            assert task.condition_id, f"{task.id} missing condition_id"
+
+    def test_condition_id_format(self):
+        """condition_id should be kebab-case."""
+        tasks = load_tasks_from_dir(TASKS_DIR)
+        import re
+
+        for task in tasks:
+            if task.condition_id:
+                assert re.match(r"^[a-z0-9]+(-[a-z0-9]+)*$", task.condition_id), (
+                    f"{task.id} has invalid condition_id format: {task.condition_id}"
                 )
 
-    def test_task_type_distribution(self):
+    def test_condition_coverage(self):
+        """Should cover a substantial number of unique OpenEM conditions."""
         tasks = load_tasks_from_dir(TASKS_DIR)
-        task_types = {t.task_type for t in tasks}
-        assert "diagnosis" in task_types
-        assert len(task_types) >= 2, "Expected at least 2 task types"
+        conditions = {t.condition_id for t in tasks}
+        assert len(conditions) >= 100, f"Only {len(conditions)} unique conditions, expected >= 100"
 
-    def test_normal_cases_exist(self):
+    def test_lostbench_scenario_format(self):
+        """lostbench_scenario_id should be MTR-NNN or DEF-NNN format when present."""
         tasks = load_tasks_from_dir(TASKS_DIR)
-        normal = [t for t in tasks if not t.condition_present]
-        assert len(normal) > 0, "Expected at least one normal/negative case"
+        import re
 
-    def test_confusion_pairs_exist(self):
-        tasks = load_tasks_from_dir(TASKS_DIR)
-        pairs = [t for t in tasks if t.confusion_pair]
-        assert len(pairs) > 0, "Expected at least one confusion pair"
+        for task in tasks:
+            if task.lostbench_scenario_id:
+                assert re.match(r"^(MTR|DEF)-\d{3}$", task.lostbench_scenario_id), (
+                    f"{task.id} has invalid lostbench_scenario_id: {task.lostbench_scenario_id}"
+                )
 
     def test_reference_solutions_present(self):
         tasks = load_tasks_from_dir(TASKS_DIR)

@@ -1,61 +1,38 @@
 id: MRI-003
-name: Brain glioblastoma multiforme
+name: "Pericarditis-Myocarditis on Cardiac MRI"
 modality: mri
-anatomy: head
+anatomy: chest
 task_type: diagnosis
 difficulty: advanced
-image_ref: mri/omnimedvqa/MRI_0003.png
+image_ref: "mri/openem/pericarditis-myocarditis.png"
 prompt_template: diagnosis
+condition_id: "pericarditis-myocarditis"
+lostbench_scenario_id: ""
 ground_truth:
-  primary_diagnosis: "Glioblastoma multiforme (WHO grade IV astrocytoma)"
+  primary_diagnosis: "Acute myocarditis with pericardial involvement on cardiac MRI"
   differential:
-    - brain metastasis
-    - primary CNS lymphoma
-    - high-grade oligodendroglioma
-    - brain abscess
-    - tumefactive demyelination
+    - "Acute myocardial infarction"
+    - "Stress cardiomyopathy (Takotsubo)"
+    - "Cardiac sarcoidosis"
   key_findings:
-    - { finding: "large heterogeneously enhancing mass with irregular thick ring enhancement", location: "right temporoparietal lobe", required: true }
-    - { finding: "central necrosis with T1 hypointense and T2/FLAIR hyperintense signal", location: "core of the mass", required: true }
-    - { finding: "surrounding vasogenic edema with T2/FLAIR hyperintensity", location: "right cerebral hemisphere white matter", required: true }
-    - { finding: "mass effect with midline shift", location: "midline structures shifted to the left", required: false }
-    - { finding: "restricted diffusion at enhancing tumor margin on DWI/ADC", location: "peripheral enhancing rim", required: false }
-  severity: severe
-  laterality: right
+    - { finding: "Patchy mid-wall and epicardial late gadolinium enhancement in non-coronary distribution", location: "Lateral and inferolateral left ventricular wall", required: true }
+    - { finding: "Myocardial edema on T2-weighted/T2 mapping sequences", location: "Left ventricular free wall", required: true }
+    - { finding: "Pericardial effusion with pericardial enhancement", location: "Pericardium", required: false }
+  severity: "severe"
+  laterality: "n/a"
   negatives:
-    - multiple lesions suggesting metastatic disease
-    - corpus callosum crossing (butterfly pattern)
-    - hemorrhage
-    - calcification
-    - leptomeningeal enhancement
+    - "No subendocardial enhancement pattern to suggest ischemic injury"
+    - "No left ventricular thrombus"
 pattern_checks:
-  - { name: glioblastoma_mentioned, check_type: regex, pattern: "glioblastoma|GBM|high.?grade\\s+glioma|grade\\s+(IV|4)\\s+(astrocytoma|glioma)", required: true }
-  - { name: ring_enhancement, check_type: regex, pattern: "ring.?enhanc|peripheral.*enhanc|irregular.*enhanc|heterogeneous.*enhanc", required: true }
-  - { name: necrosis_mentioned, check_type: regex, pattern: "necro|central.*hypo|non.?enhanc.*core", required: true }
-  - { name: edema_mentioned, check_type: regex, pattern: "edema|perilesional|FLAIR.*hyperintens|surrounding.*signal", required: true }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)myocarditis", required: true }
+  - { name: "lge_pattern", check_type: regex, pattern: "(?i)(late gadolinium enhancement|LGE)", required: true }
+  - { name: "edema_finding", check_type: regex, pattern: "(?i)(T2.*(hyperinten|edema|signal)|edema.*T2|myocardial edema)", required: true }
 reference_solution: |
-  MRI of the brain demonstrates a large heterogeneously enhancing mass
-  centered in the right temporoparietal lobe measuring approximately 5.2 x
-  4.8 x 4.3 cm. The mass demonstrates thick, irregular peripheral ring
-  enhancement on post-gadolinium T1-weighted images with central non-enhancing
-  necrosis. The necrotic core is T1 hypointense and T2/FLAIR hyperintense.
-  Extensive surrounding vasogenic edema extends through the right cerebral
-  hemisphere white matter on T2 and FLAIR sequences. There is mass effect
-  with approximately 8 mm leftward midline shift and effacement of the right
-  lateral ventricle. DWI shows restricted diffusion along the enhancing
-  tumor margin consistent with high cellularity. No definite additional
-  enhancing lesions are identified. No leptomeningeal enhancement. MR
-  spectroscopy, if performed, would be expected to show elevated choline,
-  reduced NAA, and a lactate/lipid peak.
-  Impression: Large right temporoparietal enhancing mass with central necrosis
-  and surrounding edema, most consistent with glioblastoma multiforme (WHO
-  grade IV).
+  Cardiac MRI demonstrates patchy mid-wall and epicardial late gadolinium enhancement involving the lateral and inferolateral walls of the left ventricle in a non-coronary distribution, characteristic of myocarditis. T2-weighted sequences show increased signal in the left ventricular free wall consistent with myocardial edema. A small pericardial effusion is present with mild pericardial enhancement, indicating concurrent pericarditis. No subendocardial enhancement pattern to suggest ischemic etiology.
 condition_present: true
 confusion_pair: null
-source_dataset: omnimedvqa-open
+source_dataset: openem-grounded
 tags:
-  - glioblastoma
-  - brain-tumor
-  - neuro-oncology
-  - neuro
-  - high-grade
+  - cardiac
+  - inflammatory
+  - cardiac-mri

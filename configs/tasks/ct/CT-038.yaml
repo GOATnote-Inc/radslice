@@ -1,59 +1,37 @@
 id: CT-038
-name: Aortic dissection type B
+name: "Small bowel obstruction on CT abdomen"
 modality: ct
-anatomy: chest
+anatomy: abdomen
 task_type: diagnosis
-difficulty: expert
-image_ref: ct/eurorad/EUR_0038.png
+difficulty: intermediate
+image_ref: "ct/openem/bowel-obstruction.png"
 prompt_template: diagnosis
+condition_id: "bowel-obstruction"
+lostbench_scenario_id: ""
 ground_truth:
-  primary_diagnosis: "Stanford type B aortic dissection"
+  primary_diagnosis: "High-grade small bowel obstruction with transition point"
   differential:
-    - type A aortic dissection
-    - intramural hematoma
-    - penetrating aortic ulcer
-    - aortic aneurysm with mural thrombus
-    - artifact mimicking intimal flap
+    - "Paralytic ileus"
+    - "Closed-loop obstruction"
+    - "Large bowel obstruction"
   key_findings:
-    - { finding: "intimal flap beginning distal to left subclavian artery", location: "proximal descending thoracic aorta", required: true }
-    - { finding: "true and false lumen with differential enhancement", location: "descending thoracic aorta", required: true }
-    - { finding: "extension into abdominal aorta", location: "abdominal aorta", required: false }
-    - { finding: "patent ascending aorta without flap", location: "ascending aorta and arch", required: true }
-  severity: severe
-  laterality: ""
+    - { finding: "Dilated proximal small bowel loops greater than 3 cm in diameter", location: "jejunum and proximal ileum", required: true }
+    - { finding: "Transition point with decompressed distal bowel", location: "distal ileum", required: true }
+    - { finding: "Small bowel feces sign at the transition point", location: "distal ileum", required: false }
+  severity: "moderate"
+  laterality: "n/a"
   negatives:
-    - ascending aorta involvement (type A)
-    - aortic rupture
-    - pericardial effusion
-    - branch vessel occlusion with end-organ ischemia
-    - coronary involvement
+    - "No signs of bowel ischemia or strangulation"
+    - "No pneumatosis intestinalis"
 pattern_checks:
-  - { name: dissection_mentioned, check_type: regex, pattern: "dissection", required: true }
-  - { name: type_b_stanford, check_type: regex, pattern: "type\\s*B|Stanford\\s*B|DeBakey\\s*III|descending", required: true }
-  - { name: intimal_flap, check_type: regex, pattern: "intimal\\s+flap|dissection\\s+flap|flap", required: true }
-  - { name: no_ascending, check_type: regex, pattern: "sparing.*ascending|ascending.*normal|ascending.*intact|distal\\s+to.*subclavian|below.*subclavian", required: true }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(bowel\\s*obstruction|SBO|small\\s*bowel\\s*obstruct)", required: true }
+  - { name: "key_finding_dilated", check_type: regex, pattern: "(?i)(dilated.*bowel|transition\\s*point|small\\s*bowel.*dilat)", required: true }
 reference_solution: |
-  CT aortography demonstrates an intimal flap originating just distal to
-  the left subclavian artery origin, with creation of true and false lumens
-  extending through the descending thoracic aorta, consistent with Stanford
-  type B aortic dissection. The ascending aorta and aortic arch are normal
-  without intimal flap, confirming type B classification. The false lumen is
-  larger than the true lumen. The dissection extends into the abdominal
-  aorta to the level of the renal arteries. The celiac and superior
-  mesenteric arteries arise from the true lumen. The bilateral renal
-  arteries appear patent. No end-organ malperfusion. No aortic rupture or
-  periaortic hematoma. No pericardial effusion.
-  Impression: Stanford type B aortic dissection originating distal to the
-  left subclavian artery extending to the renal arteries. No end-organ
-  malperfusion. Medical management with blood pressure optimization is
-  first-line therapy. Vascular surgery consultation recommended.
+  CT of the abdomen and pelvis demonstrates dilated fluid-filled proximal small bowel loops measuring up to 4.5 cm in diameter with a discrete transition point in the distal ileum. The distal small bowel and colon are decompressed. A small bowel feces sign is noted near the transition point, suggesting a mechanical obstruction. There is no bowel wall thickening, reduced enhancement, or pneumatosis intestinalis to suggest strangulation. Findings are consistent with high-grade small bowel obstruction, likely from an adhesive band.
 condition_present: true
-confusion_pair: CT-006
-source_dataset: eurorad
+confusion_pair: null
+source_dataset: openem-grounded
 tags:
-  - aortic-dissection
-  - type-b
+  - abdominal
+  - surgical
   - emergency
-  - chest
-  - vascular
-  - confusion-pair

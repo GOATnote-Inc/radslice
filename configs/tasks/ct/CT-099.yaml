@@ -1,0 +1,36 @@
+id: CT-099
+name: "Acute heart failure with pulmonary edema on CT chest"
+modality: ct
+anatomy: chest
+task_type: diagnosis
+difficulty: intermediate
+image_ref: "ct/openem/acute-heart-failure.png"
+prompt_template: diagnosis
+condition_id: "acute-heart-failure"
+lostbench_scenario_id: ""
+ground_truth:
+  primary_diagnosis: "Acute decompensated heart failure with pulmonary edema"
+  differential:
+    - "ARDS"
+    - "Fluid overload from renal failure"
+    - "Bilateral pneumonia"
+  key_findings:
+    - { finding: "Bilateral ground-glass opacities with smooth interlobular septal thickening (crazy paving)", location: "bilateral lung fields", required: true }
+    - { finding: "Cardiomegaly", location: "heart", required: true }
+    - { finding: "Bilateral pleural effusions", location: "bilateral pleural spaces", required: false }
+  severity: "severe"
+  laterality: "bilateral"
+  negatives:
+    - "No focal consolidation to suggest pneumonia"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(heart\\s*failure|pulmonary\\s*edema|cardiogenic.*edema|CHF|decompensated)", required: true }
+  - { name: "key_finding_edema", check_type: regex, pattern: "(?i)(pulmonary\\s*edema|septal\\s*thicken|cardiomegaly|ground.?glass.*bilateral)", required: true }
+reference_solution: |
+  CT of the chest demonstrates bilateral ground-glass opacities with smooth interlobular septal thickening in a gravity-dependent and perihilar distribution, consistent with cardiogenic pulmonary edema. Cardiomegaly is present with a cardiothoracic ratio exceeding 0.5. Bilateral pleural effusions are noted, larger on the right. A dilated IVC and hepatic veins indicate elevated right-sided pressures. No focal consolidation to suggest pneumonia. Findings are consistent with acute decompensated heart failure with pulmonary edema.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - cardiac
+  - pulmonary
+  - emergency

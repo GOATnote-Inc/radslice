@@ -1,53 +1,38 @@
 id: MRI-034
-name: Normal liver MRI
+name: "Retropharyngeal Abscess on Neck MRI"
 modality: mri
-anatomy: abdomen
+anatomy: neck
 task_type: diagnosis
-difficulty: basic
-image_ref: mri/omnimedvqa/MRI_0034.png
+difficulty: advanced
+image_ref: "mri/openem/retropharyngeal-abscess.png"
 prompt_template: diagnosis
+condition_id: "retropharyngeal-abscess"
+lostbench_scenario_id: ""
 ground_truth:
-  primary_diagnosis: "Normal liver MRI"
+  primary_diagnosis: "Retropharyngeal abscess on contrast-enhanced neck MRI"
   differential:
-    - incidental hepatic cyst
-    - incidental hemangioma (too small to characterize)
-    - focal fat deposition or sparing
+    - "Retropharyngeal effusion (suppurative lymph node)"
+    - "Retropharyngeal hematoma"
+    - "Prevertebral space tumor"
   key_findings:
-    - { finding: "normal hepatic parenchymal signal on all sequences without focal lesion", location: "liver parenchyma", required: true }
-    - { finding: "no abnormal enhancement on dynamic post-gadolinium phases", location: "liver", required: true }
-    - { finding: "normal hepatic contour without nodularity", location: "liver surface", required: false }
-    - { finding: "patent portal vein, hepatic veins, and IVC", location: "hepatic vasculature", required: false }
-  severity: mild
-  laterality: ""
+    - { finding: "Rim-enhancing T2 hyperintense fluid collection in the retropharyngeal space", location: "Retropharyngeal space from C2 to C5", required: true }
+    - { finding: "Restricted diffusion within the collection on DWI (indicating pus)", location: "Retropharyngeal collection", required: true }
+    - { finding: "Mass effect on the posterior pharyngeal wall with narrowing of the oropharyngeal airway", location: "Oropharynx", required: false }
+  severity: "severe"
+  laterality: "midline"
   negatives:
-    - focal hepatic lesion
-    - cirrhotic morphology
-    - steatosis (hepatic fat)
-    - portal vein thrombosis
-    - biliary dilatation
-    - ascites
+    - "No extension into the mediastinum (danger space)"
+    - "No prevertebral osteomyelitis"
 pattern_checks:
-  - { name: normal_mentioned, check_type: regex, pattern: "normal|unremarkable|no.*abnormal|negative|no.*lesion", required: true }
-  - { name: no_focal_lesion, check_type: regex, pattern: "no.*focal|no.*mass|no.*lesion|without.*mass|without.*lesion", required: true }
-  - { name: no_cirrhosis, check_type: regex, pattern: "no.*cirrho|normal.*contour|smooth.*contour|no.*nodular", required: true }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)retropharyngeal\\s+(abscess|collection)", required: true }
+  - { name: "rim_enhancement", check_type: regex, pattern: "(?i)(rim.?enhanc|peripheral.?enhanc|ring.?enhanc)", required: true }
+  - { name: "airway_compromise", check_type: regex, pattern: "(?i)(airway|pharyn).*(narrow|compress|displace|mass\\s+effect)", required: true }
 reference_solution: |
-  MRI of the abdomen with liver protocol demonstrates normal hepatic findings.
-  The liver is normal in size and morphology with smooth contour without
-  nodularity. The hepatic parenchyma demonstrates homogeneous signal on
-  T1-weighted, T2-weighted, and diffusion-weighted sequences without focal
-  lesion. On in-phase and opposed-phase chemical shift imaging, there is no
-  signal loss to suggest hepatic steatosis. Dynamic post-gadolinium imaging
-  shows normal hepatic perfusion without focal enhancement abnormality. The
-  portal vein, hepatic veins, and IVC are patent with normal flow. No biliary
-  dilatation. The gallbladder is unremarkable. No ascites. The spleen is
-  normal in size.
-  Impression: Normal liver MRI without focal hepatic lesion, steatosis, or
-  cirrhotic morphology.
-condition_present: false
+  MRI of the neck with gadolinium demonstrates a rim-enhancing T2 hyperintense fluid collection in the retropharyngeal space extending from C2 to C5. DWI shows restricted diffusion within the collection, confirming purulent content consistent with abscess rather than reactive effusion. The collection causes anterior displacement of the posterior pharyngeal wall with moderate narrowing of the oropharyngeal airway. No extension into the danger space or superior mediastinum. No prevertebral disc space or vertebral body signal abnormality to suggest osteomyelitis. Urgent surgical drainage and airway management are indicated.
+condition_present: true
 confusion_pair: null
-source_dataset: omnimedvqa-open
+source_dataset: openem-grounded
 tags:
-  - normal
-  - liver
-  - abdominal
-  - negative-case
+  - head-neck
+  - infection
+  - emergency

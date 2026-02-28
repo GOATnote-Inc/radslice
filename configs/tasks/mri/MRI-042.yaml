@@ -1,0 +1,38 @@
+id: MRI-042
+name: "Orbital Compartment Syndrome on MRI (Pre-Canthotomy Evaluation)"
+modality: mri
+anatomy: face
+task_type: diagnosis
+difficulty: advanced
+image_ref: "mri/openem/lateral-canthotomy.png"
+prompt_template: diagnosis
+condition_id: "lateral-canthotomy"
+lostbench_scenario_id: "MTR-059"
+ground_truth:
+  primary_diagnosis: "Orbital compartment syndrome requiring lateral canthotomy"
+  differential:
+    - "Orbital cellulitis with abscess"
+    - "Orbital tumor"
+    - "Carotid-cavernous fistula"
+  key_findings:
+    - { finding: "Tense proptosis with retrobulbar hemorrhage or edema causing optic nerve stretch", location: "Left orbit", required: true }
+    - { finding: "Tenting of the posterior globe at the optic nerve insertion", location: "Left posterior globe", required: true }
+    - { finding: "Engorgement of the extraocular muscles", location: "Left orbit", required: false }
+  severity: "critical"
+  laterality: "left"
+  negatives:
+    - "No orbital fracture clearly delineated on MRI"
+    - "No intracranial hemorrhage"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(orbital\\s+compartment\\s+syndrome|lateral\\s+canthotomy)", required: true }
+  - { name: "proptosis", check_type: regex, pattern: "(?i)proptosis", required: true }
+  - { name: "globe_tenting", check_type: regex, pattern: "(?i)(tent|stretch).*(globe|posterior|optic)", required: true }
+reference_solution: |
+  MRI of the orbits demonstrates left-sided proptosis with a retrobulbar T1 hyperintense collection consistent with hemorrhage in the intraconal space. There is tenting of the posterior globe at the optic nerve insertion, indicating elevated intraorbital pressure and optic nerve stretch. The left extraocular muscles appear engorged and displaced. The left optic nerve is stretched and taut. No intracranial hemorrhage. The right orbit is normal. Findings are consistent with orbital compartment syndrome requiring emergent lateral canthotomy and cantholysis to relieve intraorbital pressure and prevent irreversible vision loss.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - orbital
+  - emergency
+  - surgical

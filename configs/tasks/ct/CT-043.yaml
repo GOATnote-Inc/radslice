@@ -1,57 +1,36 @@
 id: CT-043
-name: Cholecystitis with gallstones
+name: "Acute gout with monosodium urate deposits on dual-energy CT"
 modality: ct
-anatomy: abdomen
-task_type: vqa
-difficulty: intermediate
-image_ref: ct/omnimedvqa/CT_0043.png
-prompt_template: vqa
+anatomy: foot
+task_type: diagnosis
+difficulty: advanced
+image_ref: "ct/openem/acute-gout.png"
+prompt_template: diagnosis
+condition_id: "acute-gout"
+lostbench_scenario_id: ""
 ground_truth:
-  primary_diagnosis: "Acute calculous cholecystitis"
+  primary_diagnosis: "Acute gouty arthritis with monosodium urate crystal deposition"
   differential:
-    - acalculous cholecystitis
-    - gallbladder carcinoma
-    - gallbladder polyp
-    - pericholecystic hepatitis
-    - Mirizzi syndrome
+    - "Septic arthritis"
+    - "Calcium pyrophosphate deposition disease (pseudogout)"
+    - "Psoriatic arthritis"
   key_findings:
-    - { finding: "gallbladder distension with wall thickening greater than 3 mm", location: "gallbladder", required: true }
-    - { finding: "hyperdense gallstones", location: "gallbladder neck", required: true }
-    - { finding: "pericholecystic fat stranding and fluid", location: "gallbladder fossa", required: true }
-    - { finding: "gallbladder wall hyperenhancement", location: "gallbladder wall", required: false }
-  severity: moderate
-  laterality: right
+    - { finding: "Color-coded monosodium urate deposits on dual-energy CT (green coding)", location: "first metatarsophalangeal joint", required: true }
+    - { finding: "Periarticular soft tissue swelling", location: "first MTP joint", required: true }
+    - { finding: "Erosive changes at the joint margin", location: "first metatarsal head", required: false }
+  severity: "moderate"
+  laterality: "right"
   negatives:
-    - common bile duct dilatation
-    - gallbladder perforation
-    - emphysematous cholecystitis (no gas)
-    - porcelain gallbladder
-    - hepatic abscess
+    - "No calcium pyrophosphate deposits"
 pattern_checks:
-  - { name: cholecystitis_mentioned, check_type: regex, pattern: "cholecystitis", required: true }
-  - { name: gallstones, check_type: regex, pattern: "gallstone|cholelithiasis|calcul.*gallbladder|stone.*gallbladder", required: true }
-  - { name: wall_thickening, check_type: regex, pattern: "wall\\s+thicken|thicken.*wall|distend|inflam.*gallbladder", required: true }
-  - { name: pericholecystic, check_type: regex, pattern: "pericholecystic|fat\\s+strand|surrounding.*inflam|gallbladder.*fossa.*fluid", required: false }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(gout|gouty|monosodium\\s*urate|urate\\s*deposit|tophaceous)", required: true }
+  - { name: "key_finding_urate", check_type: regex, pattern: "(?i)(urate|MSU|dual.?energy|DECT|crystal\\s*deposit)", required: true }
 reference_solution: |
-  Contrast-enhanced CT of the abdomen demonstrates a distended gallbladder
-  with diffuse wall thickening measuring up to 5 mm with mural
-  hyperenhancement. Multiple hyperdense gallstones are present, with the
-  largest impacted at the gallbladder neck measuring 12 mm. There is
-  pericholecystic fat stranding and a thin rim of pericholecystic fluid in
-  the gallbladder fossa. The common bile duct measures 5 mm without
-  dilatation and no intraductal stones are identified. The intrahepatic bile
-  ducts are not dilated. No gallbladder perforation or emphysematous change
-  (no intramural gas). No hepatic abscess. A positive sonographic Murphy
-  sign equivalent is suspected given the degree of local inflammation.
-  Impression: Acute calculous cholecystitis with impacted gallstone at the
-  gallbladder neck, gallbladder wall thickening, and pericholecystic
-  inflammation. Surgical consultation for cholecystectomy recommended.
+  Dual-energy CT of the right foot demonstrates color-coded monosodium urate (MSU) crystal deposits at the first metatarsophalangeal joint with periarticular soft tissue swelling. Small erosive changes are present at the first metatarsal head margin with overhanging edges, characteristic of tophaceous gout. No calcium pyrophosphate deposits are identified. DECT material decomposition confirms urate composition. Findings are consistent with acute gouty arthritis with MSU crystal deposition.
 condition_present: true
 confusion_pair: null
-source_dataset: omnimedvqa-open
+source_dataset: openem-grounded
 tags:
-  - cholecystitis
-  - gallstones
-  - abdomen
-  - surgical
-  - vqa
+  - musculoskeletal
+  - rheumatologic
+  - dect

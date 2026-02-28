@@ -1,0 +1,40 @@
+id: US-032
+name: "Amniotic Fluid Embolism on Echocardiography"
+modality: ultrasound
+anatomy: chest
+task_type: diagnosis
+difficulty: expert
+image_ref: "ultrasound/openem/amniotic-fluid-embolism.png"
+prompt_template: diagnosis
+condition_id: "amniotic-fluid-embolism"
+lostbench_scenario_id: ""
+ground_truth:
+  primary_diagnosis: "Acute right ventricular failure secondary to amniotic fluid embolism"
+  differential:
+    - "Massive pulmonary embolism"
+    - "Peripartum cardiomyopathy"
+    - "Anaphylaxis with cardiovascular collapse"
+  key_findings:
+    - { finding: "Acute right ventricular dilation and dysfunction", location: "right ventricle", required: true }
+    - { finding: "Severely reduced left ventricular function", location: "left ventricle", required: true }
+    - { finding: "Septal bowing toward the left ventricle", location: "interventricular septum", required: false }
+    - { finding: "Severe tricuspid regurgitation", location: "tricuspid valve", required: false }
+  severity: critical
+  laterality: n/a
+  negatives:
+    - "No intracardiac thrombus"
+    - "No pericardial effusion"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(amniotic fluid embolism|AFE|biventricular (failure|dysfunction)|acute (RV|right ventric).{0,20}(failure|dysfunction))", required: true }
+  - { name: "rv_finding", check_type: regex, pattern: "(?i)(RV (dilat|dysfunc|failure)|right ventric.{0,20}(dilat|dysfunc|failure))", required: true }
+  - { name: "lv_finding", check_type: regex, pattern: "(?i)(LV (dysfunc|failure|reduced)|left ventric.{0,20}(dysfunc|failure|reduced)|biventricular)", required: true }
+reference_solution: |
+  Emergent transthoracic echocardiography in a peripartum patient with acute cardiovascular collapse demonstrates severe biventricular dysfunction. The right ventricle is markedly dilated with an RV/LV ratio of 1.5 and severely reduced systolic function. The left ventricle also demonstrates globally reduced systolic function with an estimated ejection fraction of 20%. The interventricular septum bows toward the left ventricle. Severe tricuspid regurgitation is present. No intracardiac thrombus is identified. These findings of acute biventricular failure in the peripartum setting, without evidence of thromboembolism, are consistent with amniotic fluid embolism.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - cardiac
+  - emergency
+  - echocardiography
+  - obstetric

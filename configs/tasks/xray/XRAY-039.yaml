@@ -1,51 +1,38 @@
 id: XRAY-039
-name: Right middle lobe pneumonia
+name: "Major Joint Dislocation on Shoulder X-ray"
 modality: xray
-anatomy: chest
-task_type: report_generation
-difficulty: basic
-image_ref: xray/vindrcxr/VDR_0039.png
-prompt_template: report_generation
+anatomy: shoulder
+task_type: diagnosis
+difficulty: intermediate
+image_ref: "xray/openem/major-joint-dislocation.png"
+prompt_template: diagnosis
+condition_id: "major-joint-dislocation"
+lostbench_scenario_id: ""
 ground_truth:
-  primary_diagnosis: "Right middle lobe pneumonia"
+  primary_diagnosis: "Anterior glenohumeral joint dislocation"
   differential:
-    - right middle lobe atelectasis
-    - pulmonary infarct
-    - organizing pneumonia
+    - "Posterior shoulder dislocation"
+    - "Proximal humerus fracture"
+    - "Acromioclavicular joint separation"
   key_findings:
-    - { finding: "airspace opacity with loss of right heart border clarity", location: "right middle lobe", required: true }
-    - { finding: "air bronchograms within the opacity", location: "right middle lobe", required: false }
-    - { finding: "preserved right hemidiaphragm (positive silhouette sign for right heart border, not diaphragm)", location: "right hemidiaphragm", required: true }
+    - { finding: "Humeral head displaced anteriorly and inferiorly relative to glenoid", location: "glenohumeral joint", required: true }
+    - { finding: "Loss of normal glenohumeral joint congruence", location: "glenohumeral joint", required: true }
+    - { finding: "Hill-Sachs deformity (compression fracture of posterolateral humeral head)", location: "humeral head", required: false }
+    - { finding: "Bankart lesion (glenoid rim fracture) if present", location: "inferior glenoid", required: false }
   severity: moderate
   laterality: right
   negatives:
-    - pleural effusion
-    - pneumothorax
-    - left lung opacity
-    - cavitation
-    - cardiomegaly
+    - "No associated greater tuberosity fracture"
+    - "No acromioclavicular joint widening"
 pattern_checks:
-  - { name: rml_pneumonia, check_type: regex, pattern: "(?i)right\\s+middle\\s+lobe.{0,40}(pneumonia|consolidat|opaci)", required: true }
-  - { name: silhouette_sign, check_type: regex, pattern: "(?i)(silhouette.{0,30}(right\\s+heart|cardiac)|obscur.{0,30}right\\s+heart)", required: true }
-  - { name: impression_section, check_type: regex, pattern: "(?i)impression", required: true }
-  - { name: findings_section, check_type: regex, pattern: "(?i)(findings|technique|comparison|indication)", required: false }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(dislocation|dislocated|glenohumeral|shoulder dislocation)", required: true }
+  - { name: "displacement_finding", check_type: regex, pattern: "(?i)(anterior|inferior|displaced|subcoracoid|loss of congruence)", required: true }
 reference_solution: |
-  FINDINGS: PA chest radiograph demonstrates an airspace opacity projecting over
-  the right lower zone with obscuration of the right heart border, representing a
-  positive silhouette sign localizing the pathology to the right middle lobe. Air
-  bronchograms are seen within the consolidation. The right hemidiaphragm remains
-  sharply defined, confirming the opacity is not in the right lower lobe. The left
-  lung is clear. No pleural effusion or pneumothorax. The cardiac silhouette is
-  normal in size. The mediastinum is unremarkable.
-  IMPRESSION: Right middle lobe consolidation, most likely community-acquired
-  pneumonia. Clinical correlation and follow-up radiograph after treatment
-  recommended to ensure resolution and exclude underlying endobronchial lesion.
+  AP radiograph of the right shoulder demonstrates anterior and inferior displacement of the humeral head relative to the glenoid fossa, consistent with an anterior glenohumeral dislocation. The humeral head is positioned subcoracoid. A subtle Hill-Sachs impaction deformity is noted along the posterolateral humeral head. No associated greater tuberosity fracture is identified. Post-reduction films are recommended to confirm joint congruence and exclude fracture.
 condition_present: true
 confusion_pair: null
-source_dataset: vindrcxr
+source_dataset: openem-grounded
 tags:
-  - pneumonia
-  - right-middle-lobe
-  - silhouette-sign
-  - report-generation
-  - chest
+  - musculoskeletal
+  - emergency
+  - orthopedic

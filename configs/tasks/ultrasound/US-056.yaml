@@ -1,0 +1,40 @@
+id: US-056
+name: "Pheochromocytoma Crisis on Adrenal Ultrasound"
+modality: ultrasound
+anatomy: abdomen
+task_type: diagnosis
+difficulty: advanced
+image_ref: "ultrasound/openem/pheochromocytoma-crisis.png"
+prompt_template: diagnosis
+condition_id: "pheochromocytoma-crisis"
+lostbench_scenario_id: "MTR-071"
+ground_truth:
+  primary_diagnosis: "Adrenal mass consistent with pheochromocytoma"
+  differential:
+    - "Adrenal cortical adenoma"
+    - "Adrenal metastasis"
+    - "Adrenocortical carcinoma"
+  key_findings:
+    - { finding: "Well-defined solid adrenal mass with mixed echogenicity", location: "right adrenal gland", required: true }
+    - { finding: "Increased vascularity within the mass on color Doppler", location: "right adrenal mass", required: true }
+    - { finding: "Internal cystic or necrotic areas within the mass", location: "adrenal mass", required: false }
+    - { finding: "Normal contralateral adrenal gland", location: "left adrenal gland", required: false }
+  severity: severe
+  laterality: right
+  negatives:
+    - "No invasion of the IVC or renal vein"
+    - "No hepatic or lymph node metastases"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(pheochromocytoma|adrenal (mass|tumor|neoplasm)|paraganglioma|catecholamine)", required: true }
+  - { name: "adrenal_finding", check_type: regex, pattern: "(?i)(adrenal (mass|lesion|tumor|nodule)|suprarenal mass)", required: true }
+  - { name: "vascularity_finding", check_type: regex, pattern: "(?i)(hypervascul|increased vascularity|Doppler (flow|signal).{0,20}(mass|adrenal)|vascular.{0,10}mass)", required: true }
+reference_solution: |
+  Abdominal ultrasound demonstrates a well-defined solid mass in the right adrenal gland measuring approximately 5.2 x 4.0 cm with mixed echogenicity and internal hypoechoic areas suggesting cystic degeneration or hemorrhage. Color Doppler reveals prominent internal vascularity. No invasion of the inferior vena cava or right renal vein is identified. The left adrenal gland appears normal. No hepatic metastases are seen. In the clinical context of paroxysmal hypertension with biochemical evidence of catecholamine excess, this adrenal mass is consistent with pheochromocytoma. Cross-sectional imaging with CT or MRI is recommended for further characterization.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - abdominal
+  - emergency
+  - endocrine
+  - adrenal

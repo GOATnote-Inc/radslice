@@ -1,0 +1,36 @@
+id: CT-074
+name: "Deep vein thrombosis on CT venography"
+modality: ct
+anatomy: extremity
+task_type: diagnosis
+difficulty: advanced
+image_ref: "ct/openem/deep-vein-thrombosis.png"
+prompt_template: diagnosis
+condition_id: "deep-vein-thrombosis"
+lostbench_scenario_id: ""
+ground_truth:
+  primary_diagnosis: "Acute iliofemoral deep vein thrombosis"
+  differential:
+    - "May-Thurner syndrome with DVT"
+    - "Extrinsic venous compression from pelvic mass"
+    - "Superficial thrombophlebitis"
+  key_findings:
+    - { finding: "Filling defect within the vein representing thrombus", location: "left common femoral vein and external iliac vein", required: true }
+    - { finding: "Distension of the thrombosed vein", location: "left iliofemoral venous system", required: true }
+    - { finding: "Perivenous soft tissue edema", location: "left thigh", required: false }
+  severity: "severe"
+  laterality: "left"
+  negatives:
+    - "No pelvic mass causing extrinsic compression"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(deep\\s*vein\\s*thrombosis|DVT|iliofemoral.*thrombosis|venous\\s*thrombosis)", required: true }
+  - { name: "key_finding_thrombus", check_type: regex, pattern: "(?i)(filling\\s*defect|thrombus|thrombosis|non.?opacif)", required: true }
+reference_solution: |
+  CT venography of the lower extremities and pelvis demonstrates a filling defect within the left common femoral vein extending into the left external iliac vein, consistent with acute iliofemoral deep vein thrombosis. The thrombosed segments are distended. Perivenous soft tissue edema is present in the left thigh. No pelvic mass causing extrinsic venous compression is identified. The right venous system is patent. Findings represent acute left iliofemoral DVT requiring anticoagulation and consideration of catheter-directed therapy.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - vascular
+  - emergency
+  - ct-venography

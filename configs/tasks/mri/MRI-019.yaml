@@ -1,56 +1,39 @@
 id: MRI-019
-name: Liver hemangioma on MRI
+name: "Ascending Cholangitis on MRCP"
 modality: mri
 anatomy: abdomen
 task_type: diagnosis
-difficulty: intermediate
-image_ref: mri/omnimedvqa/MRI_0019.png
+difficulty: advanced
+image_ref: "mri/openem/ascending-cholangitis.png"
 prompt_template: diagnosis
+condition_id: "ascending-cholangitis"
+lostbench_scenario_id: "MTR-028"
 ground_truth:
-  primary_diagnosis: "Hepatic hemangioma with characteristic peripheral nodular enhancement"
+  primary_diagnosis: "Ascending cholangitis with biliary obstruction on MRCP"
   differential:
-    - hepatic metastasis (especially hypervascular)
-    - hepatocellular carcinoma
-    - focal nodular hyperplasia
-    - hepatic adenoma
-    - hepatic angiosarcoma
+    - "Cholangiocarcinoma"
+    - "Primary sclerosing cholangitis"
+    - "Choledocholithiasis without cholangitis"
   key_findings:
-    - { finding: "well-defined homogeneously T2 hyperintense lesion (light bulb sign)", location: "right hepatic lobe segment VII", required: true }
-    - { finding: "peripheral nodular discontinuous enhancement on arterial phase with progressive centripetal fill-in", location: "hepatic mass", required: true }
-    - { finding: "T1 hypointense signal relative to hepatic parenchyma", location: "right hepatic lobe mass", required: false }
-    - { finding: "near-complete or complete fill-in on delayed phase images", location: "hepatic mass", required: false }
-  severity: mild
-  laterality: right
+    - { finding: "Dilated intrahepatic and extrahepatic bile ducts on T2-weighted MRCP", location: "Intrahepatic biliary tree and common bile duct", required: true }
+    - { finding: "Low-signal filling defect in the distal common bile duct (obstructing stone)", location: "Distal common bile duct", required: true }
+    - { finding: "Periductal T2 hyperintensity and enhancement indicating bile duct wall inflammation", location: "Common bile duct wall", required: false }
+  severity: "severe"
+  laterality: "n/a"
   negatives:
-    - washout on portal venous or delayed phases
-    - restricted diffusion
-    - central scar
-    - arterial phase hyperenhancement (flash-filling pattern)
-    - capsular retraction
+    - "No intrahepatic abscess"
+    - "No portal vein thrombosis"
 pattern_checks:
-  - { name: hemangioma_mentioned, check_type: regex, pattern: "hemangioma|haemangioma|cavernous\\s+hemangioma", required: true }
-  - { name: t2_bright, check_type: regex, pattern: "T2.*hyperintens|T2.*bright|light\\s+bulb|markedly.*T2", required: true }
-  - { name: enhancement_pattern, check_type: regex, pattern: "peripheral.*nodular|nodular.*enhanc|centripetal|progressive.*fill|discontinuous.*enhanc", required: true }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(ascending\\s+)?cholangitis", required: true }
+  - { name: "biliary_dilation", check_type: regex, pattern: "(?i)(dilat|ectasia).*(bile|biliary|duct)", required: true }
+  - { name: "stone_identified", check_type: regex, pattern: "(?i)(choledocholithiasis|stone|calcul|filling\\s+defect)", required: true }
 reference_solution: |
-  MRI of the abdomen demonstrates a well-circumscribed lesion in the right
-  hepatic lobe segment VII measuring 3.5 x 3.0 cm. The lesion is markedly T2
-  hyperintense, approaching CSF signal intensity (light bulb sign), and T1
-  hypointense relative to hepatic parenchyma. Dynamic post-gadolinium imaging
-  shows characteristic peripheral nodular discontinuous enhancement on the
-  arterial phase, with progressive centripetal fill-in on the portal venous
-  and delayed phases. On 5-minute delayed images, the lesion demonstrates
-  near-complete fill-in with enhancement isointense to the blood pool. There
-  is no washout appearance. No restricted diffusion on DWI/ADC. These imaging
-  features are diagnostic for a hepatic hemangioma and no further workup is
-  necessary. The remaining hepatic parenchyma is unremarkable.
-  Impression: Hepatic hemangioma in segment VII with classic peripheral nodular
-  enhancement and progressive fill-in pattern. Benign, no follow-up required.
+  MRCP demonstrates marked dilatation of the intrahepatic and extrahepatic bile ducts with a low-signal filling defect in the distal common bile duct, consistent with an obstructing choledocholithiasis. Periductal T2 hyperintensity and wall thickening of the common bile duct indicate acute inflammatory changes. No intrahepatic abscess or portal vein thrombosis. In the clinical context of Charcot triad (fever, jaundice, right upper quadrant pain), findings are diagnostic of ascending cholangitis secondary to biliary stone obstruction requiring urgent biliary decompression.
 condition_present: true
 confusion_pair: null
-source_dataset: omnimedvqa-open
+source_dataset: openem-grounded
 tags:
-  - hemangioma
-  - liver
   - abdominal
-  - benign
-  - vascular
+  - mrcp
+  - biliary
+  - emergency

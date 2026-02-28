@@ -1,59 +1,40 @@
 id: US-016
-name: Carotid artery stenosis with plaque and turbulent flow
+name: "Hemorrhagic Stroke on Transcranial Doppler"
 modality: ultrasound
-anatomy: neck
-task_type: finding_detection
-difficulty: advanced
-image_ref: ultrasound/radimagenet/US_0016.png
-prompt_template: finding_detection
+anatomy: head
+task_type: diagnosis
+difficulty: expert
+image_ref: "ultrasound/openem/hemorrhagic-stroke.png"
+prompt_template: diagnosis
+condition_id: "hemorrhagic-stroke"
+lostbench_scenario_id: "MTR-068"
 ground_truth:
-  primary_diagnosis: "Severe right internal carotid artery stenosis (70-99%)"
+  primary_diagnosis: "Elevated intracranial pressure with abnormal transcranial Doppler waveform pattern"
   differential:
-    - carotid artery occlusion
-    - carotid dissection
-    - fibromuscular dysplasia
-    - moderate stenosis overestimated by Doppler angle
-    - external carotid artery stenosis
+    - "Vasospasm from subarachnoid hemorrhage"
+    - "Cerebral venous thrombosis with elevated ICP"
+    - "Acute hydrocephalus"
   key_findings:
-    - { finding: "echogenic atherosclerotic plaque with luminal narrowing", location: "right internal carotid artery origin", required: true }
-    - { finding: "elevated peak systolic velocity exceeding 230 cm/s", location: "right internal carotid artery", required: true }
-    - { finding: "turbulent flow with spectral broadening and aliasing on color Doppler", location: "right internal carotid artery at the stenosis", required: false }
-  severity: severe
+    - { finding: "High pulsatility index greater than 1.4 in middle cerebral artery", location: "middle cerebral artery", required: true }
+    - { finding: "Decreased diastolic flow velocity", location: "middle cerebral artery", required: true }
+    - { finding: "Asymmetric flow velocities between hemispheres", location: "bilateral MCAs", required: false }
+    - { finding: "Sharp systolic peak with rapid diastolic decay", location: "MCA spectral waveform", required: false }
+  severity: critical
   laterality: right
   negatives:
-    - complete carotid occlusion
-    - carotid dissection flap
-    - contralateral carotid stenosis
-    - vertebral artery stenosis
-    - intraluminal thrombus
+    - "No evidence of midline shift detectable by TCD"
+    - "No reverberating flow pattern suggesting brain death"
 pattern_checks:
-  - { name: stenosis_mentioned, check_type: regex, pattern: "stenosis|narrowing|stenos", required: true }
-  - { name: carotid_identified, check_type: regex, pattern: "carotid|ICA|internal\\s+carotid", required: true }
-  - { name: velocity_elevated, check_type: regex, pattern: "peak\\s+systolic|PSV|veloc.*(elevat|increas|>)|>\\s*2[0-9]{2}", required: true }
-  - { name: plaque_described, check_type: regex, pattern: "plaque|atherosclero|calcif.*plaque|echogenic.*plaque", required: true }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(hemorrhagic stroke|intracranial (hemorrhage|pressure)|ICH|elevated ICP|intracerebral)", required: true }
+  - { name: "tcd_finding", check_type: regex, pattern: "(?i)(pulsatility index|PI|diastolic (flow|velocity)|transcranial Doppler|TCD|MCA)", required: true }
+  - { name: "laterality", check_type: regex, pattern: "(?i)(right|asymmetric|unilateral)", required: true }
 reference_solution: |
-  Duplex ultrasound of the carotid arteries demonstrates a heterogeneous
-  echogenic atherosclerotic plaque at the origin of the right internal carotid
-  artery causing significant luminal narrowing. The plaque contains both
-  calcified and soft tissue components. Peak systolic velocity (PSV) in the
-  right ICA measures 340 cm/s with an end-diastolic velocity (EDV) of 120 cm/s,
-  and an ICA/CCA PSV ratio of 4.2, consistent with severe stenosis in the
-  70-99% range by Society of Radiologists in Ultrasound consensus criteria.
-  Color Doppler demonstrates aliasing and turbulent flow at the stenotic
-  segment. The right common carotid artery and external carotid artery are
-  patent. The left carotid system demonstrates mild intimal thickening without
-  hemodynamically significant stenosis. Bilateral vertebral arteries show
-  antegrade flow.
-  Impression: Severe right internal carotid artery stenosis (70-99%) secondary
-  to atherosclerotic plaque. Vascular surgery or interventional consultation
-  recommended.
+  Transcranial Doppler examination demonstrates markedly elevated pulsatility index of 2.1 in the right middle cerebral artery with diminished end-diastolic flow velocities. The right MCA mean flow velocity is reduced compared to the left (35 cm/s vs 62 cm/s), suggesting ipsilateral increased resistance from mass effect. The waveform morphology shows sharp systolic upstroke with rapid diastolic runoff consistent with elevated intracranial pressure. The contralateral left MCA demonstrates mildly elevated pulsatility. These findings are consistent with a space-occupying intracranial process on the right, correlating with a hemorrhagic stroke causing elevated intracranial pressure.
 condition_present: true
 confusion_pair: null
-source_dataset: radimagenet
+source_dataset: openem-grounded
 tags:
-  - carotid-stenosis
-  - neck
-  - vascular
+  - neurovascular
+  - emergency
   - doppler
-  - atherosclerosis
-  - plaque
+  - transcranial

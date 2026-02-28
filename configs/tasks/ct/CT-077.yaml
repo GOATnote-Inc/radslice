@@ -1,0 +1,36 @@
+id: CT-077
+name: "Carbon monoxide poisoning with cerebral edema on non-contrast CT head"
+modality: ct
+anatomy: head
+task_type: diagnosis
+difficulty: advanced
+image_ref: "ct/openem/carbon-monoxide-poisoning.png"
+prompt_template: diagnosis
+condition_id: "carbon-monoxide-poisoning"
+lostbench_scenario_id: ""
+ground_truth:
+  primary_diagnosis: "Carbon monoxide poisoning with bilateral globus pallidus necrosis"
+  differential:
+    - "Hypoxic-ischemic encephalopathy"
+    - "Methanol poisoning"
+    - "Wilson disease"
+  key_findings:
+    - { finding: "Bilateral symmetric hypodensity of the globus pallidus", location: "bilateral globi pallidi", required: true }
+    - { finding: "Diffuse cerebral white matter hypodensity", location: "bilateral cerebral white matter", required: true }
+    - { finding: "Subtle diffuse cerebral edema", location: "bilateral cerebral hemispheres", required: false }
+  severity: "severe"
+  laterality: "bilateral"
+  negatives:
+    - "No intracranial hemorrhage"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(carbon\\s*monoxide|CO\\s*poisoning|globus\\s*pallidus\\s*necrosis)", required: true }
+  - { name: "key_finding_globus_pallidus", check_type: regex, pattern: "(?i)(globus\\s*pallid|basal\\s*ganglia.*hypodensity|pallidal\\s*necrosis)", required: true }
+reference_solution: |
+  Non-contrast CT head demonstrates bilateral symmetric hypodensity of the globi pallidi, which is the classic CT finding of carbon monoxide poisoning. Diffuse white matter hypodensity is present in both cerebral hemispheres, suggesting demyelination. Subtle diffuse cerebral edema is noted. No intracranial hemorrhage is identified. In the appropriate clinical context, these findings are characteristic of carbon monoxide poisoning requiring hyperbaric oxygen therapy.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - neuro
+  - toxicology
+  - emergency

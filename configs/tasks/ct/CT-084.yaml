@@ -1,0 +1,36 @@
+id: CT-084
+name: "Caustic ingestion with esophageal and gastric injury on contrast-enhanced CT"
+modality: ct
+anatomy: chest
+task_type: diagnosis
+difficulty: advanced
+image_ref: "ct/openem/caustic-ingestion.png"
+prompt_template: diagnosis
+condition_id: "caustic-ingestion"
+lostbench_scenario_id: ""
+ground_truth:
+  primary_diagnosis: "Caustic ingestion with transmural esophageal and gastric injury"
+  differential:
+    - "Esophageal perforation from other cause"
+    - "Severe esophagitis"
+    - "Gastric ulcer with perforation"
+  key_findings:
+    - { finding: "Circumferential esophageal wall thickening with decreased mucosal enhancement", location: "distal esophagus", required: true }
+    - { finding: "Gastric wall thickening with reduced enhancement", location: "gastric body and antrum", required: true }
+    - { finding: "Periesophageal and perigastric fat stranding", location: "mediastinum and upper abdomen", required: false }
+  severity: "critical"
+  laterality: "midline"
+  negatives:
+    - "No free perforation or pneumoperitoneum"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(caustic\\s*ingestion|caustic.*injury|corrosive.*ingestion|alkali.*ingestion|acid.*ingestion)", required: true }
+  - { name: "key_finding_wall", check_type: regex, pattern: "(?i)(esophageal\\s*wall\\s*thicken|gastric\\s*wall\\s*thicken|transmural|mucosal.*non.?enhance)", required: true }
+reference_solution: |
+  Contrast-enhanced CT of the chest and abdomen demonstrates circumferential wall thickening of the distal esophagus and gastric body with decreased mucosal enhancement, suggesting transmural injury (Zargar grade IIIa-IIIb). Periesophageal and perigastric fat stranding is present. No pneumomediastinum or pneumoperitoneum to suggest free perforation. The small bowel appears spared. Findings are consistent with severe caustic injury to the esophagus and stomach requiring ICU monitoring, endoscopic evaluation, and surgical consultation.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - toxicology
+  - emergency
+  - surgical

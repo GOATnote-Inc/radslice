@@ -1,0 +1,36 @@
+id: CT-094
+name: "Toxic shock syndrome with multiorgan findings on contrast-enhanced CT"
+modality: ct
+anatomy: abdomen
+task_type: diagnosis
+difficulty: advanced
+image_ref: "ct/openem/toxic-shock-syndrome.png"
+prompt_template: diagnosis
+condition_id: "toxic-shock-syndrome"
+lostbench_scenario_id: "MTR-072"
+ground_truth:
+  primary_diagnosis: "Toxic shock syndrome with diffuse capillary leak and multiorgan involvement"
+  differential:
+    - "Septic shock from other cause"
+    - "Anaphylaxis"
+    - "Hemophagocytic lymphohistiocytosis"
+  key_findings:
+    - { finding: "Diffuse subcutaneous and mesenteric edema", location: "abdominal wall and mesentery", required: true }
+    - { finding: "Bilateral pleural effusions and ascites from capillary leak", location: "pleural and peritoneal spaces", required: true }
+    - { finding: "Diffuse bowel wall thickening", location: "small bowel", required: false }
+  severity: "critical"
+  laterality: "bilateral"
+  negatives:
+    - "No focal abscess"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(toxic\\s*shock|TSS|capillary\\s*leak|diffuse.*edema)", required: true }
+  - { name: "key_finding_capillary_leak", check_type: regex, pattern: "(?i)(capillary\\s*leak|subcutaneous.*edema|ascites|pleural\\s*effusion|diffuse.*edema)", required: true }
+reference_solution: |
+  Contrast-enhanced CT of the abdomen demonstrates diffuse subcutaneous edema, mesenteric edema, and diffuse bowel wall thickening consistent with capillary leak syndrome. Bilateral pleural effusions and moderate ascites are present. No focal abscess or source of infection is identified on imaging. The IVC is collapsed, consistent with distributive shock and intravascular depletion. In the setting of erythroderma, fever, and hypotension, findings are consistent with toxic shock syndrome with diffuse third-spacing requiring aggressive fluid resuscitation and source-directed antibiotics.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - infectious
+  - emergency
+  - critical-care

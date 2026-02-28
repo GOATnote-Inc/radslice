@@ -1,0 +1,36 @@
+id: CT-073
+name: "Acute mastoiditis on CT temporal bone"
+modality: ct
+anatomy: head
+task_type: diagnosis
+difficulty: intermediate
+image_ref: "ct/openem/mastoiditis.png"
+prompt_template: diagnosis
+condition_id: "mastoiditis"
+lostbench_scenario_id: ""
+ground_truth:
+  primary_diagnosis: "Acute coalescent mastoiditis"
+  differential:
+    - "Simple middle ear effusion"
+    - "Cholesteatoma"
+    - "Petrous apicitis"
+  key_findings:
+    - { finding: "Opacification of the mastoid air cells with bony septal erosion", location: "right mastoid", required: true }
+    - { finding: "Erosion of the mastoid cortex", location: "right mastoid cortex", required: true }
+    - { finding: "Subperiosteal abscess", location: "right postauricular region", required: false }
+  severity: "moderate"
+  laterality: "right"
+  negatives:
+    - "No intracranial complication (epidural abscess or sigmoid sinus thrombosis)"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(mastoiditis|coalescent\\s*mastoid|mastoid.*infection)", required: true }
+  - { name: "key_finding_mastoid", check_type: regex, pattern: "(?i)(mastoid.*opacif|mastoid.*erosion|septal\\s*erosion|coalescent)", required: true }
+reference_solution: |
+  CT of the temporal bones demonstrates complete opacification of the right mastoid air cells with erosion of the bony septa between air cells, consistent with coalescent mastoiditis. There is cortical erosion of the posterolateral mastoid with a small subperiosteal soft tissue collection. The sigmoid sinus plate is intact and no intracranial complication is identified. The left mastoid is normally pneumatized. Findings are consistent with acute coalescent mastoiditis requiring IV antibiotics and likely mastoidectomy.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - ent
+  - infectious
+  - pediatric

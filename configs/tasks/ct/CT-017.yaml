@@ -1,55 +1,37 @@
 id: CT-017
-name: Pneumothorax with tension physiology
+name: "Acute subdural hematoma on non-contrast CT head"
 modality: ct
-anatomy: chest
-task_type: finding_detection
-difficulty: advanced
-image_ref: ct/omnimedvqa/CT_0017.png
+anatomy: head
+task_type: diagnosis
+difficulty: intermediate
+image_ref: "ct/openem/subdural-hematoma.png"
 prompt_template: diagnosis
+condition_id: "subdural-hematoma"
+lostbench_scenario_id: ""
 ground_truth:
-  primary_diagnosis: "Left tension pneumothorax"
+  primary_diagnosis: "Acute subdural hematoma"
   differential:
-    - simple pneumothorax
-    - large bullae mimicking pneumothorax
-    - skin fold artifact
-    - pneumomediastinum
+    - "Epidural hematoma"
+    - "Subdural hygroma"
+    - "Chronic subdural hematoma with acute rebleeding"
   key_findings:
-    - { finding: "large left pneumothorax with complete lung collapse", location: "left hemithorax", required: true }
-    - { finding: "contralateral mediastinal shift", location: "mediastinum shifted to right", required: true }
-    - { finding: "flattening of left hemidiaphragm", location: "left hemidiaphragm", required: false }
-    - { finding: "compressed right lung", location: "right lung", required: false }
-  severity: severe
-  laterality: left
+    - { finding: "Hyperdense crescentic extra-axial collection", location: "right frontoparietal convexity", required: true }
+    - { finding: "Midline shift away from the collection", location: "midline structures", required: true }
+    - { finding: "Effacement of the right lateral ventricle", location: "right lateral ventricle", required: false }
+  severity: "critical"
+  laterality: "right"
   negatives:
-    - rib fractures
-    - pleural effusion
-    - pulmonary contusion
-    - subcutaneous emphysema
-    - hemothorax
+    - "No underlying skull fracture"
 pattern_checks:
-  - { name: pneumothorax_mentioned, check_type: regex, pattern: "pneumothorax|PTX\\b", required: true }
-  - { name: tension_physiology, check_type: regex, pattern: "tension|mediastinal\\s+shift|contralateral.*shift|shift.*contralateral", required: true }
-  - { name: laterality_left, check_type: regex, pattern: "left", required: true }
-  - { name: lung_collapse, check_type: regex, pattern: "collaps|complete.*collaps|total.*collaps", required: false }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(subdural\\s*hematoma|SDH)", required: true }
+  - { name: "key_finding_crescentic", check_type: regex, pattern: "(?i)(crescentic|extra.?axial.*collection|subdural.*collection)", required: true }
 reference_solution: |
-  CT of the chest demonstrates a large left pneumothorax with near-complete
-  collapse of the left lung. There is significant rightward mediastinal
-  shift with deviation of the trachea and heart to the right, consistent
-  with tension physiology. The left hemidiaphragm is flattened and inverted.
-  The right lung is partially compressed secondary to the mediastinal shift.
-  No rib fractures identified. No pleural effusion or hemothorax component.
-  No subcutaneous emphysema. No pneumomediastinum. The collapsed left lung
-  shows no underlying mass or consolidation.
-  Impression: Large left tension pneumothorax with mediastinal shift and
-  complete left lung collapse. This is a medical emergency requiring
-  immediate needle decompression followed by chest tube placement.
+  Non-contrast CT head demonstrates a hyperdense crescentic extra-axial collection along the right frontoparietal convexity measuring up to 12 mm in maximal thickness, consistent with acute subdural hematoma. There is approximately 8 mm of leftward midline shift with effacement of the right lateral ventricle and subfalcine herniation. No underlying skull fracture is identified. Findings represent an acute subdural hematoma with significant mass effect requiring emergent neurosurgical evaluation.
 condition_present: true
 confusion_pair: null
-source_dataset: omnimedvqa-open
+source_dataset: openem-grounded
 tags:
-  - pneumothorax
-  - tension
+  - neuro
+  - trauma
+  - hemorrhage
   - emergency
-  - chest
-  - life-threatening
-  - finding-detection

@@ -1,0 +1,41 @@
+id: US-023
+name: "Pulmonary Embolism - RV Dilation and DVT on Ultrasound"
+modality: ultrasound
+anatomy: chest
+task_type: diagnosis
+difficulty: advanced
+image_ref: "ultrasound/openem/pulmonary-embolism.png"
+prompt_template: diagnosis
+condition_id: "pulmonary-embolism"
+lostbench_scenario_id: "MTR-010"
+ground_truth:
+  primary_diagnosis: "Acute pulmonary embolism with right ventricular dilation and lower extremity DVT"
+  differential:
+    - "Acute right ventricular myocardial infarction"
+    - "Pulmonary hypertension (chronic)"
+    - "Acute respiratory distress syndrome"
+  key_findings:
+    - { finding: "Dilated right ventricle with RV/LV ratio greater than 1.0", location: "right ventricle", required: true }
+    - { finding: "Non-compressible femoral or popliteal vein with intraluminal thrombus", location: "lower extremity deep veins", required: true }
+    - { finding: "McConnell sign (RV free wall hypokinesis with apical sparing)", location: "right ventricle", required: false }
+    - { finding: "Tricuspid regurgitation with elevated RVSP", location: "tricuspid valve", required: false }
+  severity: critical
+  laterality: right
+  negatives:
+    - "No pericardial effusion"
+    - "No left ventricular dysfunction"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(pulmonary embol|PE|DVT|deep vein thrombosis|RV (strain|dilat|overload))", required: true }
+  - { name: "rv_finding", check_type: regex, pattern: "(?i)(RV (dilat|strain|overload|dysfunction)|right ventric.{0,20}(dilat|strain|dysfunc)|McConnell)", required: true }
+  - { name: "dvt_finding", check_type: regex, pattern: "(?i)(DVT|deep vein thromb|non.?compress|intraluminal (thrombus|clot)|femoral.{0,20}thrombus)", required: true }
+reference_solution: |
+  Bedside echocardiography demonstrates acute right ventricular dilation with an RV/LV ratio of 1.4 in the apical four-chamber view. McConnell sign is present with free wall hypokinesis and preserved apical contractility. Moderate tricuspid regurgitation is identified with an estimated RVSP of 50 mmHg. The interventricular septum bows toward the left ventricle. Compression ultrasound of the right lower extremity reveals a non-compressible right common femoral vein with echogenic intraluminal thrombus. These combined findings of RV strain pattern and proximal DVT are highly consistent with acute pulmonary embolism.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - cardiac
+  - vascular
+  - emergency
+  - echocardiography
+  - dvt

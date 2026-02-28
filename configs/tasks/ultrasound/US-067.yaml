@@ -1,0 +1,40 @@
+id: US-067
+name: "Kawasaki Disease with Coronary Aneurysms on Echocardiography"
+modality: ultrasound
+anatomy: chest
+task_type: diagnosis
+difficulty: advanced
+image_ref: "ultrasound/openem/kawasaki-disease.png"
+prompt_template: diagnosis
+condition_id: "kawasaki-disease"
+lostbench_scenario_id: "MTR-022"
+ground_truth:
+  primary_diagnosis: "Kawasaki disease with coronary artery aneurysms"
+  differential:
+    - "Anomalous coronary artery origin"
+    - "Congenital coronary fistula"
+    - "Inflammatory coronary dilation from other vasculitis"
+  key_findings:
+    - { finding: "Dilation of the left main coronary artery with aneurysm formation (Z-score > 2.5)", location: "left main coronary artery", required: true }
+    - { finding: "Perivascular brightness/echogenicity of coronary artery walls", location: "coronary artery walls", required: true }
+    - { finding: "Right coronary artery dilation or aneurysm", location: "right coronary artery", required: false }
+    - { finding: "Mild mitral regurgitation", location: "mitral valve", required: false }
+  severity: severe
+  laterality: bilateral
+  negatives:
+    - "No pericardial effusion"
+    - "No left ventricular dysfunction"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(Kawasaki|coronary (artery )?aneurysm|coronary (dilation|ectasia))", required: true }
+  - { name: "coronary_finding", check_type: regex, pattern: "(?i)(coronary (artery )?(aneurysm|dilat|ectasia)|LMCA|left main|RCA.{0,20}(dilat|aneurysm))", required: true }
+  - { name: "measurement", check_type: regex, pattern: "(?i)(Z.?score|mm|dilat|aneurysm|>\\s*2\\.5|above normal)", required: true }
+reference_solution: |
+  Transthoracic echocardiography in a febrile pediatric patient demonstrates dilation of the left main coronary artery with a focal aneurysm measuring 5 mm (Z-score 3.8). The coronary artery walls appear echobright, suggesting inflammation. The proximal right coronary artery is also dilated measuring 4 mm (Z-score 2.7). Mild mitral regurgitation is noted. Left ventricular systolic function is preserved with an estimated ejection fraction of 60%. No pericardial effusion is identified. These echocardiographic findings of coronary artery aneurysms, in the clinical context of prolonged fever with mucocutaneous features, are diagnostic of Kawasaki disease and indicate need for immediate IVIG therapy and aspirin.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - cardiac
+  - pediatric
+  - echocardiography
+  - vasculitis

@@ -1,61 +1,36 @@
 id: CT-058
-name: Pelvic fracture with hematoma
+name: "Obstructing ureteral calculus on non-contrast CT abdomen"
 modality: ct
 anatomy: abdomen
-task_type: finding_detection
-difficulty: advanced
-image_ref: ct/omnimedvqa/CT_0058.png
+task_type: diagnosis
+difficulty: intermediate
+image_ref: "ct/openem/urolithiasis.png"
 prompt_template: diagnosis
+condition_id: "urolithiasis"
+lostbench_scenario_id: ""
 ground_truth:
-  primary_diagnosis: "Unstable pelvic ring fracture (APC type II) with retroperitoneal hematoma"
+  primary_diagnosis: "Obstructing left ureteral calculus with hydronephrosis"
   differential:
-    - lateral compression pelvic fracture
-    - isolated pubic ramus fracture
-    - acetabular fracture
-    - sacral insufficiency fracture
-    - pelvic metastasis with pathologic fracture
+    - "Phlebolith"
+    - "Appendicolith"
+    - "Ureteral tumor"
   key_findings:
-    - { finding: "diastasis of pubic symphysis greater than 2.5 cm", location: "pubic symphysis", required: true }
-    - { finding: "disruption of anterior sacroiliac ligament", location: "left sacroiliac joint", required: true }
-    - { finding: "large retroperitoneal and presacral hematoma", location: "retroperitoneum and presacral space", required: true }
-    - { finding: "active contrast extravasation", location: "left internal iliac artery territory", required: false }
-  severity: severe
-  laterality: left
+    - { finding: "Hyperdense calculus within the distal ureter", location: "left distal ureter at the ureterovesical junction", required: true }
+    - { finding: "Hydroureteronephrosis proximal to the stone", location: "left ureter and renal pelvis", required: true }
+    - { finding: "Periureteral stranding (tissue rim sign)", location: "around the left distal ureter", required: false }
+  severity: "moderate"
+  laterality: "left"
   negatives:
-    - acetabular fracture
-    - femoral head dislocation
-    - bladder rupture (needs cystogram)
-    - urethral injury
-    - lumbar spine fracture
+    - "No renal parenchymal abnormality"
 pattern_checks:
-  - { name: pelvic_fracture, check_type: regex, pattern: "pelvic.*fracture|fracture.*pelvis|pelvic\\s+ring|symphys.*diastasis|pubic.*symphys", required: true }
-  - { name: unstable, check_type: regex, pattern: "unstable|APC|open\\s+book|diastasis|disrupt", required: true }
-  - { name: hematoma, check_type: regex, pattern: "hematoma|haematoma|hemorrhage|retroperitoneal.*blood|presacral.*blood", required: true }
-  - { name: extravasation, check_type: regex, pattern: "extravasa|active.*bleed|active.*hemorrh|contrast.*leak", required: false }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(urolithiasis|ureteral\\s*(calculus|stone)|kidney\\s*stone|renal\\s*colic)", required: true }
+  - { name: "key_finding_stone", check_type: regex, pattern: "(?i)(calculus|stone|hydrouret|hydronephrosis)", required: true }
 reference_solution: |
-  Contrast-enhanced trauma CT of the pelvis demonstrates widening of the
-  pubic symphysis measuring 4.2 cm (normal less than 1 cm), consistent with
-  an open-book (APC type II) pelvic ring injury. There is disruption of the
-  left anterior sacroiliac ligament with widening of the left SI joint.
-  Bilateral superior and inferior pubic rami fractures are present. A large
-  retroperitoneal and presacral hematoma is identified, measuring
-  approximately 12 x 8 cm, displacing the bladder anteriorly. A focus of
-  active contrast extravasation is noted in the left hemipelvis, likely
-  arising from a branch of the left internal iliac artery. No acetabular
-  fracture or femoral head dislocation. The bladder wall appears intact,
-  though a formal cystogram is recommended. No lumbar spine fracture.
-  Impression: Unstable APC type II pelvic ring fracture with significant
-  retroperitoneal hematoma and active arterial extravasation. Emergent
-  interventional radiology for pelvic angioembolization and orthopedic
-  trauma consultation for external fixation. Massive transfusion protocol
-  should be activated.
+  Non-contrast CT of the abdomen and pelvis demonstrates a 7 mm hyperdense calculus at the left ureterovesical junction with surrounding periureteral stranding (tissue rim sign). There is moderate left hydroureteronephrosis proximal to the obstructing stone. No additional calculi are identified. The right kidney and collecting system are normal. Findings are consistent with an obstructing left distal ureteral calculus causing acute left renal colic.
 condition_present: true
 confusion_pair: null
-source_dataset: omnimedvqa-open
+source_dataset: openem-grounded
 tags:
-  - pelvic-fracture
-  - trauma
+  - urologic
   - emergency
-  - abdomen
-  - active-hemorrhage
-  - finding-detection
+  - abdominal

@@ -1,0 +1,37 @@
+id: CT-082
+name: "Blast injury with blast lung on CT chest"
+modality: ct
+anatomy: chest
+task_type: diagnosis
+difficulty: advanced
+image_ref: "ct/openem/blast-injury.png"
+prompt_template: diagnosis
+condition_id: "blast-injury"
+lostbench_scenario_id: "MTR-053"
+ground_truth:
+  primary_diagnosis: "Primary blast lung injury"
+  differential:
+    - "Pulmonary contusion from blunt trauma"
+    - "ARDS"
+    - "Fat embolism"
+  key_findings:
+    - { finding: "Bilateral perihilar and basal ground-glass opacities and consolidation (butterfly pattern)", location: "bilateral lung fields", required: true }
+    - { finding: "Pneumothorax or pneumomediastinum from barotrauma", location: "bilateral pleural spaces", required: true }
+    - { finding: "Tympanic membrane perforation or middle ear hemorrhage", location: "middle ear (if included)", required: false }
+  severity: "critical"
+  laterality: "bilateral"
+  negatives:
+    - "No aortic injury"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(blast\\s*(lung|injury)|primary\\s*blast|barotrauma)", required: true }
+  - { name: "key_finding_blast_lung", check_type: regex, pattern: "(?i)(butterfly\\s*pattern|bilateral.*consolidation|barotrauma|blast.*lung)", required: true }
+reference_solution: |
+  CT of the chest demonstrates bilateral perihilar and basal ground-glass opacities and consolidation in a butterfly pattern, characteristic of primary blast lung injury from overpressure wave. Bilateral pneumothoraces and pneumomediastinum are present, consistent with barotrauma. Multiple rib fractures are noted from secondary blast injury. No aortic injury is identified. Findings represent primary blast lung injury requiring careful ventilatory management with low tidal volumes to avoid further barotrauma.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - trauma
+  - emergency
+  - mass-casualty
+  - pulmonary

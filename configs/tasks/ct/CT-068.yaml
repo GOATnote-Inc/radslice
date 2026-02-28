@@ -1,0 +1,36 @@
+id: CT-068
+name: "Peritonsillar abscess on contrast-enhanced CT neck"
+modality: ct
+anatomy: neck
+task_type: diagnosis
+difficulty: intermediate
+image_ref: "ct/openem/peritonsillar-abscess.png"
+prompt_template: diagnosis
+condition_id: "peritonsillar-abscess"
+lostbench_scenario_id: ""
+ground_truth:
+  primary_diagnosis: "Left peritonsillar abscess"
+  differential:
+    - "Tonsillar cellulitis/phlegmon"
+    - "Parapharyngeal abscess"
+    - "Tonsillar lymphoma"
+  key_findings:
+    - { finding: "Rim-enhancing hypodense collection in the peritonsillar space", location: "left peritonsillar space", required: true }
+    - { finding: "Displacement of the palatine tonsil medially and the internal carotid artery laterally", location: "left oropharynx", required: true }
+    - { finding: "Uvular deviation to the contralateral side", location: "uvula", required: false }
+  severity: "moderate"
+  laterality: "left"
+  negatives:
+    - "No extension into the parapharyngeal space"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(peritonsillar\\s*abscess|quinsy|PTA)", required: true }
+  - { name: "key_finding_collection", check_type: regex, pattern: "(?i)(rim.?enhancing|peritonsillar.*collection|abscess.*tonsil)", required: true }
+reference_solution: |
+  Contrast-enhanced CT of the neck demonstrates a rim-enhancing hypodense collection within the left peritonsillar space measuring approximately 2.5 x 2 cm, consistent with a peritonsillar abscess. The left palatine tonsil is displaced medially with narrowing of the oropharyngeal airway. The uvula is deviated to the right. No extension into the parapharyngeal or retropharyngeal space is identified. The internal carotid artery is displaced laterally but patent. Findings are consistent with left peritonsillar abscess amenable to needle aspiration or incision and drainage.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - ent
+  - infectious
+  - emergency

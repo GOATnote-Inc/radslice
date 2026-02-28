@@ -1,53 +1,37 @@
 id: XRAY-055
-name: Bilateral lower lobe atelectasis mimicking pleural effusions
+name: "Submersion Injury (Drowning) on Chest X-ray"
 modality: xray
 anatomy: chest
 task_type: diagnosis
 difficulty: intermediate
-image_ref: xray/mediconfusion/MCF_0055.png
+image_ref: "xray/openem/submersion-injury.png"
 prompt_template: diagnosis
+condition_id: "submersion-injury"
+lostbench_scenario_id: ""
 ground_truth:
-  primary_diagnosis: "Bilateral lower lobe atelectasis"
+  primary_diagnosis: "Submersion injury with pulmonary edema"
   differential:
-    - bilateral pleural effusions
-    - bilateral lower lobe pneumonia
-    - bilateral aspiration
+    - "Aspiration pneumonia"
+    - "ARDS from other cause"
+    - "Cardiogenic pulmonary edema"
   key_findings:
-    - { finding: "bilateral basilar opacities with volume loss signs", location: "bilateral lower zones", required: true }
-    - { finding: "elevated hemidiaphragms or crowded lower lobe vessels", location: "bilateral bases", required: true }
-    - { finding: "linear or plate-like opacities", location: "bilateral lower zones", required: false }
-    - { finding: "absence of meniscus sign", location: "bilateral costophrenic angles", required: false }
-  severity: mild
+    - { finding: "Bilateral diffuse pulmonary edema (non-cardiogenic)", location: "bilateral lung fields", required: true }
+    - { finding: "Normal cardiac silhouette", location: "cardiac silhouette", required: false }
+    - { finding: "Perihilar and peripheral alveolar opacities", location: "bilateral lung fields", required: false }
+  severity: severe
   laterality: bilateral
   negatives:
-    - pleural effusion
-    - meniscus sign
-    - pneumothorax
-    - cardiomegaly
-    - upper lobe opacity
+    - "No pneumothorax"
+    - "No cardiomegaly"
 pattern_checks:
-  - { name: atelectasis_mentioned, check_type: regex, pattern: "(?i)(atelectasis|collapse|volume\\s+loss)", required: true }
-  - { name: bilateral_basal, check_type: regex, pattern: "(?i)(bilateral.{0,30}(bas(al|e)|lower)|both.{0,20}(bas|lower))", required: true }
-  - { name: not_effusion, check_type: regex, pattern: "(?i)(rather\\s+than\\s+effusion|not.{0,20}effusion|atelectasis.{0,30}not.{0,30}effusion)", required: true }
-  - { name: volume_loss, check_type: regex, pattern: "(?i)(volume\\s+loss|elevat.{0,20}diaphragm|crowding|linear.{0,20}opaci)", required: false }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(submersion|drowning|near.?drowning|pulmonary edema|aspiration)", required: true }
+  - { name: "edema_finding", check_type: regex, pattern: "(?i)(pulmonary edema|bilateral (opacit|infiltrate|edema)|ARDS|alveolar)", required: true }
 reference_solution: |
-  PA chest radiograph demonstrates bilateral basilar opacities that could be
-  initially mistaken for bilateral pleural effusions. However, the findings are
-  more consistent with bilateral lower lobe atelectasis based on the presence of
-  volume loss signs including mildly elevated hemidiaphragms, crowding of lower
-  lobe vasculature, and linear (plate-like) opacities at the lung bases. A true
-  pleural effusion would demonstrate a meniscus sign and layering fluid, which
-  are absent here. The cardiac silhouette is normal. No pneumothorax. The upper
-  lung fields are clear. Lateral decubitus views or ultrasound may be performed
-  if clinical uncertainty persists regarding effusion versus atelectasis.
-  Impression: Bilateral lower lobe atelectasis — not pleural effusions. Correlate
-  with post-operative or immobility status.
+  Frontal chest radiograph demonstrates bilateral diffuse alveolar opacities consistent with non-cardiogenic pulmonary edema. The cardiac silhouette is normal in size, supporting a non-cardiogenic etiology. No pneumothorax is identified. In the clinical context of submersion injury, these findings represent a combination of aspirated fluid and surfactant disruption leading to pulmonary edema. Serial imaging is recommended, as ARDS may develop over the subsequent 24-48 hours.
 condition_present: true
-confusion_pair: XRAY-003
-source_dataset: mediconfusion
+confusion_pair: null
+source_dataset: openem-grounded
 tags:
-  - atelectasis
-  - effusion-mimic
-  - bilateral
-  - confusion-pair
-  - chest
+  - pulmonary
+  - environmental
+  - emergency

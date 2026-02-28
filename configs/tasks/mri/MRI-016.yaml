@@ -1,55 +1,39 @@
 id: MRI-016
-name: Normal pressure hydrocephalus
+name: "Traumatic Brain Injury on MRI"
 modality: mri
 anatomy: head
 task_type: diagnosis
 difficulty: advanced
-image_ref: mri/omnimedvqa/MRI_0016.png
+image_ref: "mri/openem/traumatic-brain-injury.png"
 prompt_template: diagnosis
+condition_id: "traumatic-brain-injury"
+lostbench_scenario_id: ""
 ground_truth:
-  primary_diagnosis: "Normal pressure hydrocephalus (NPH)"
+  primary_diagnosis: "Traumatic brain injury with diffuse axonal injury on MRI"
   differential:
-    - cerebral atrophy (ex vacuo ventriculomegaly)
-    - obstructive hydrocephalus
-    - Alzheimer disease with secondary ventriculomegaly
-    - aqueductal stenosis
+    - "Fat embolism syndrome"
+    - "Multiple embolic infarcts"
+    - "Cerebral vasculitis"
   key_findings:
-    - { finding: "ventriculomegaly out of proportion to sulcal enlargement (Evans index >0.3)", location: "lateral ventricles bilaterally", required: true }
-    - { finding: "tight high-convexity sulci with disproportionately enlarged sylvian fissures (DESH pattern)", location: "cerebral convexity and sylvian fissures", required: true }
-    - { finding: "callosal angle less than 90 degrees on coronal images", location: "corpus callosum at the level of the posterior commissure", required: false }
-    - { finding: "aqueductal flow void on T2-weighted images", location: "cerebral aqueduct", required: false }
-  severity: moderate
-  laterality: ""
+    - { finding: "Multiple foci of restricted diffusion at the gray-white matter junction on DWI", location: "Bilateral frontoparietal lobes", required: true }
+    - { finding: "Susceptibility foci (microhemorrhages) on SWI at the gray-white junction and corpus callosum", location: "Corpus callosum splenium and bilateral subcortical white matter", required: true }
+    - { finding: "Small hemorrhagic contusion with surrounding edema", location: "Right temporal pole", required: false }
+  severity: "severe"
+  laterality: "bilateral"
   negatives:
-    - periventricular signal abnormality suggesting transependymal CSF flow
-    - obstructing mass at the aqueduct
-    - generalized cerebral atrophy with proportionate sulcal enlargement
-    - focal parenchymal lesion
+    - "No large epidural or subdural hematoma"
+    - "No midline shift"
 pattern_checks:
-  - { name: nph_mentioned, check_type: regex, pattern: "normal\\s+pressure\\s+hydrocephalus|NPH|communicating\\s+hydrocephalus", required: true }
-  - { name: ventriculomegaly, check_type: regex, pattern: "ventriculomegal|dilat.*ventricle|ventricle.*enlarg|Evans.*index", required: true }
-  - { name: desh_or_disproportion, check_type: regex, pattern: "DESH|disproportion|tight.*sulc|high.?convexity|sylvian.*fissure.*enlarg", required: true }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(diffuse\\s+axonal\\s+injury|DAI|traumatic\\s+brain\\s+injury|TBI)", required: true }
+  - { name: "swi_microhemorrhage", check_type: regex, pattern: "(?i)(susceptibility|SWI|GRE|microhemorrhage)", required: true }
+  - { name: "corpus_callosum", check_type: regex, pattern: "(?i)corpus\\s+callosum", required: true }
 reference_solution: |
-  MRI of the brain demonstrates disproportionate ventriculomegaly affecting all
-  four ventricles. The Evans index exceeds 0.3, confirming ventriculomegaly.
-  Notably, there is a disproportionately enlarged subarachnoid space
-  hydrocephalus (DESH) pattern with widened sylvian fissures and tight
-  high-convexity sulci, distinguishing this from generalized cerebral atrophy.
-  The callosal angle measures approximately 70 degrees on coronal images at the
-  level of the posterior commissure. The cerebral aqueduct is patent with a
-  prominent flow void on T2-weighted images, suggesting increased CSF pulsatile
-  flow. No obstructing lesion is identified. Mild periventricular T2/FLAIR
-  signal may represent transependymal CSF migration. The clinical triad of gait
-  disturbance, cognitive decline, and urinary incontinence should be correlated.
-  Impression: Imaging findings consistent with normal pressure hydrocephalus
-  (NPH) with DESH pattern. CSF tap test and neurosurgical shunt evaluation
-  recommended.
+  MRI of the brain demonstrates multiple foci of restricted diffusion at the gray-white matter junction bilaterally on DWI, with corresponding microhemorrhagic foci on SWI sequences involving the corpus callosum splenium and bilateral subcortical white matter, consistent with diffuse axonal injury (DAI grade II-III). A small hemorrhagic contusion is noted at the right temporal pole. No large extra-axial hematoma or significant midline shift. The pattern of injury is characteristic of rotational acceleration-deceleration traumatic brain injury.
 condition_present: true
 confusion_pair: null
-source_dataset: omnimedvqa-open
+source_dataset: openem-grounded
 tags:
-  - hydrocephalus
-  - nph
   - neuro
-  - dementia
-  - csf-dynamics
+  - trauma
+  - dwi
+  - swi

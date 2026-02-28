@@ -1,46 +1,37 @@
 id: XRAY-011
-name: Right middle lobe atelectasis
+name: "Unstable Bradycardia Chest X-ray Findings"
 modality: xray
 anatomy: chest
 task_type: diagnosis
 difficulty: intermediate
-image_ref: xray/omnimedvqa/CXR_0011.png
+image_ref: "xray/openem/unstable-bradycardia.png"
 prompt_template: diagnosis
+condition_id: "unstable-bradycardia"
+lostbench_scenario_id: ""
 ground_truth:
-  primary_diagnosis: "Right middle lobe atelectasis"
+  primary_diagnosis: "Unstable bradycardia with pulmonary congestion"
   differential:
-    - right middle lobe pneumonia
-    - mucous plugging
-    - endobronchial lesion
-    - post-obstructive atelectasis
+    - "Acute heart failure"
+    - "Pacemaker malfunction"
+    - "Hyperkalemia-related cardiac dysfunction"
   key_findings:
-    - { finding: "obscuration of the right heart border", location: "right middle lobe", required: true }
-    - { finding: "wedge-shaped opacity at the right hilum", location: "right hilum", required: true }
-    - { finding: "volume loss with inferior displacement of the minor fissure", location: "right hemithorax", required: false }
-  severity: moderate
-  laterality: right
+    - { finding: "Cardiomegaly", location: "cardiac silhouette", required: true }
+    - { finding: "Pulmonary vascular congestion", location: "bilateral lung fields", required: false }
+    - { finding: "Cardiac pacemaker or lead position if present", location: "right heart", required: false }
+  severity: severe
+  laterality: midline
   negatives:
-    - pleural effusion
-    - pneumothorax
-    - left lung opacity
-    - cardiomegaly
+    - "No pneumothorax"
+    - "No focal consolidation"
 pattern_checks:
-  - { name: primary_diagnosis, check_type: regex, pattern: "(?i)right\\s+middle\\s+lobe\\s+(atelectasis|collapse)", required: true }
-  - { name: silhouette_sign, check_type: regex, pattern: "(?i)(silhouette\\s+sign|obscur(ed|ation)\\s+.{0,30}right\\s+heart\\s+border)", required: true }
-  - { name: volume_loss, check_type: regex, pattern: "(?i)(volume\\s+loss|fissure\\s+(displacement|shift))", required: false }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(bradycardia|cardiomegaly|heart block|conduction|pacemaker)", required: true }
+  - { name: "cardiac_finding", check_type: regex, pattern: "(?i)(cardiomegaly|cardiac silhouette|pulmonary congestion|pacemaker)", required: true }
 reference_solution: |
-  Frontal chest radiograph demonstrates a wedge-shaped opacity projecting over the right
-  lower zone with obscuration of the right heart border, consistent with the silhouette
-  sign. There is subtle inferior displacement of the minor fissure indicating volume loss.
-  These findings are characteristic of right middle lobe atelectasis. The left lung is
-  clear. No pleural effusion or pneumothorax. Heart size is within normal limits.
-  Recommend correlation with clinical history and consideration of CT chest if an
-  endobronchial lesion is suspected.
+  Frontal chest radiograph demonstrates cardiomegaly with mild pulmonary vascular congestion. No focal consolidation or pleural effusion is identified. If a pacemaker is present, the lead positions should be evaluated for appropriate placement. In the clinical context of unstable bradycardia, these findings suggest hemodynamic compromise with early pulmonary congestion. Electrocardiographic correlation is essential.
 condition_present: true
 confusion_pair: null
-source_dataset: omnimedvqa-open
+source_dataset: openem-grounded
 tags:
-  - atelectasis
-  - silhouette-sign
-  - right-middle-lobe
-  - volume-loss
+  - cardiac
+  - arrhythmia
+  - emergency

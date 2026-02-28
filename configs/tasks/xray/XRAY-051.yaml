@@ -1,47 +1,39 @@
 id: XRAY-051
-name: Normal CXR with cervical rib variant
+name: "Necrotizing Enterocolitis on Abdominal X-ray"
 modality: xray
-anatomy: chest
+anatomy: abdomen
 task_type: diagnosis
-difficulty: basic
-image_ref: xray/vindrcxr/VDR_0051.png
+difficulty: advanced
+image_ref: "xray/openem/necrotizing-enterocolitis.png"
 prompt_template: diagnosis
+condition_id: "necrotizing-enterocolitis"
+lostbench_scenario_id: "MTR-069"
 ground_truth:
-  primary_diagnosis: "Normal chest radiograph with bilateral cervical ribs"
-  differential: []
+  primary_diagnosis: "Necrotizing enterocolitis (NEC)"
+  differential:
+    - "Neonatal sepsis with ileus"
+    - "Spontaneous intestinal perforation"
+    - "Hirschsprung-associated enterocolitis"
   key_findings:
-    - { finding: "bilateral cervical ribs arising from C7", location: "bilateral C7 transverse processes", required: true }
-    - { finding: "clear lung fields", location: "bilateral lungs", required: true }
-    - { finding: "normal cardiac silhouette", location: "cardiomediastinal", required: true }
-  severity: mild
-  laterality: bilateral
+    - { finding: "Pneumatosis intestinalis (intramural gas)", location: "bowel wall", required: true }
+    - { finding: "Dilated bowel loops", location: "abdomen", required: true }
+    - { finding: "Portal venous gas (branching lucencies over the liver)", location: "liver", required: false }
+    - { finding: "Pneumoperitoneum if perforation (football sign)", location: "abdomen", required: false }
+  severity: critical
+  laterality: n/a
   negatives:
-    - pneumothorax
-    - pleural effusion
-    - consolidation
-    - thoracic outlet syndrome on imaging
-    - rib fracture
+    - "Assessment for serial changes is critical"
 pattern_checks:
-  - { name: cervical_rib, check_type: regex, pattern: "(?i)(cervical\\s+rib|C7\\s+rib|accessory\\s+rib)", required: true }
-  - { name: normal_or_variant, check_type: regex, pattern: "(?i)(normal|variant|incidental|anatomic|no\\s+acute)", required: true }
-  - { name: lungs_clear, check_type: regex, pattern: "(?i)(clear|no.*opaci|no.*consolidat)", required: true }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(necrotizing enterocolitis|NEC|pneumatosis intestinalis)", required: true }
+  - { name: "pneumatosis_finding", check_type: regex, pattern: "(?i)(pneumatosis|intramural (gas|air)|portal venous gas|bowel wall gas)", required: true }
 reference_solution: |
-  PA chest radiograph demonstrates bilateral cervical ribs arising from the C7
-  transverse processes, which is an anatomic variant present in approximately
-  0.5-1% of the population. The lungs are clear bilaterally without focal
-  consolidation, pleural effusion, or pneumothorax. The cardiac silhouette is
-  normal in size. The mediastinal contours are unremarkable. The costophrenic
-  angles are sharp. The remaining visualized osseous structures are intact.
-  Cervical ribs are usually asymptomatic but may be associated with thoracic
-  outlet syndrome if clinically relevant symptoms are present.
-  Impression: Bilateral cervical ribs — anatomic variant. No acute cardiopulmonary
-  disease.
-condition_present: false
+  Abdominal radiograph of a premature neonate demonstrates multiple dilated loops of bowel with pneumatosis intestinalis, seen as linear and bubbly lucencies within the bowel wall, most prominent in the right lower quadrant. Branching linear lucencies are present over the liver consistent with portal venous gas. No pneumoperitoneum is identified. These findings are consistent with necrotizing enterocolitis (NEC), classified as modified Bell stage IIB. Serial radiographs and surgical consultation are recommended.
+condition_present: true
 confusion_pair: null
-source_dataset: vindrcxr
+source_dataset: openem-grounded
 tags:
-  - normal
-  - cervical-rib
-  - anatomic-variant
-  - chest
-  - baseline
+  - gastrointestinal
+  - pediatric
+  - neonatal
+  - emergency
+  - critical

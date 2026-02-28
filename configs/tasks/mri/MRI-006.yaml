@@ -1,61 +1,39 @@
 id: MRI-006
-name: Multiple sclerosis with periventricular plaques
+name: "Acute Vertigo with Posterior Fossa MRI Findings"
 modality: mri
 anatomy: head
 task_type: diagnosis
 difficulty: advanced
-image_ref: mri/omnimedvqa/MRI_0006.png
+image_ref: "mri/openem/acute-vertigo.png"
 prompt_template: diagnosis
+condition_id: "acute-vertigo"
+lostbench_scenario_id: ""
 ground_truth:
-  primary_diagnosis: "Multiple sclerosis with dissemination in space"
+  primary_diagnosis: "Acute cerebellar infarction presenting as vertigo on MRI"
   differential:
-    - neuromyelitis optica spectrum disorder
-    - acute disseminated encephalomyelitis (ADEM)
-    - CNS vasculitis
-    - small vessel ischemic disease
-    - neurosarcoidosis
+    - "Vestibular neuritis"
+    - "Posterior fossa mass"
+    - "Vertebral artery dissection"
   key_findings:
-    - { finding: "multiple ovoid T2/FLAIR hyperintense lesions oriented perpendicular to the ventricles (Dawson fingers)", location: "periventricular white matter bilaterally", required: true }
-    - { finding: "T2/FLAIR hyperintense lesions in juxtacortical white matter", location: "bilateral frontal and parietal lobes", required: true }
-    - { finding: "at least one lesion with incomplete ring enhancement (open-ring sign)", location: "right periventricular white matter", required: false }
-    - { finding: "T1 hypointense lesions (black holes)", location: "periventricular white matter", required: false }
-    - { finding: "lesions in the infratentorial compartment", location: "cerebellar peduncle or brainstem", required: false }
-  severity: moderate
-  laterality: bilateral
+    - { finding: "Restricted diffusion in the cerebellar hemisphere on DWI", location: "Right cerebellar hemisphere (PICA territory)", required: true }
+    - { finding: "FLAIR hyperintensity in the corresponding cerebellar region", location: "Right cerebellar hemisphere", required: true }
+    - { finding: "No brainstem signal abnormality", location: "Brainstem", required: false }
+  severity: "severe"
+  laterality: "right"
   negatives:
-    - mass lesion or tumor
-    - acute large territory infarction
-    - hemorrhage
-    - leptomeningeal enhancement
-    - basal ganglia involvement (atypical for MS)
+    - "No mass lesion in the posterior fossa"
+    - "No hydrocephalus"
 pattern_checks:
-  - { name: ms_mentioned, check_type: regex, pattern: "multiple\\s+sclerosis|MS|demyelinat", required: true }
-  - { name: periventricular, check_type: regex, pattern: "periventricular|Dawson|perpendicular.*ventricle", required: true }
-  - { name: flair_lesions, check_type: regex, pattern: "FLAIR.*hyperintens|T2.*hyperintens|white\\s+matter.*lesion|plaque", required: true }
-  - { name: dissemination_in_space, check_type: regex, pattern: "juxtacortical|infratentorial|disseminat|multiple.*location|spinal", required: true }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(cerebellar\\s+infarct|posterior\\s+fossa\\s+stroke|cerebellar\\s+stroke)", required: true }
+  - { name: "restricted_diffusion", check_type: regex, pattern: "(?i)restricted\\s+diffusion", required: true }
+  - { name: "laterality", check_type: regex, pattern: "(?i)right", required: true }
 reference_solution: |
-  MRI of the brain with and without gadolinium demonstrates multiple ovoid
-  T2 and FLAIR hyperintense lesions in the periventricular white matter
-  bilaterally, oriented perpendicular to the lateral ventricles (Dawson
-  fingers pattern). Additional T2/FLAIR hyperintense lesions are identified
-  in the juxtacortical white matter of the bilateral frontal and parietal
-  lobes. A lesion in the right middle cerebellar peduncle provides evidence
-  of infratentorial involvement. On post-gadolinium T1-weighted images, at
-  least one periventricular lesion demonstrates incomplete ring enhancement
-  (open-ring sign), suggesting an active demyelinating plaque. Several
-  periventricular lesions appear as T1 hypointense black holes, indicating
-  chronic axonal loss. The distribution of lesions satisfies dissemination
-  in space criteria (periventricular, juxtacortical, and infratentorial).
-  No mass effect or midline shift. No hemorrhage.
-  Impression: Multiple white matter lesions in a pattern characteristic of
-  multiple sclerosis, with at least one actively enhancing lesion suggesting
-  dissemination in time.
+  MRI of the brain demonstrates restricted diffusion on DWI with corresponding low ADC values in the right cerebellar hemisphere within the posterior inferior cerebellar artery (PICA) territory, consistent with acute cerebellar infarction. FLAIR images show corresponding hyperintensity. The brainstem is normal in signal. No mass effect, hydrocephalus, or hemorrhagic transformation is identified. Clinical correlation with acute vertigo presentation suggests a central etiology requiring urgent vascular evaluation.
 condition_present: true
 confusion_pair: null
-source_dataset: omnimedvqa-open
+source_dataset: openem-grounded
 tags:
-  - multiple-sclerosis
-  - demyelination
   - neuro
-  - white-matter
-  - autoimmune
+  - posterior-fossa
+  - stroke
+  - emergency

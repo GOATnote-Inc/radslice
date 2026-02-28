@@ -1,54 +1,39 @@
 id: XRAY-067
-name: Calcified granuloma mimicking solitary pulmonary nodule
+name: "Fournier's Gangrene on Pelvic X-ray"
 modality: xray
-anatomy: chest
+anatomy: pelvis
 task_type: diagnosis
-difficulty: intermediate
-image_ref: xray/mediconfusion/MCF_0067.png
+difficulty: advanced
+image_ref: "xray/openem/fourniers-gangrene.png"
 prompt_template: diagnosis
+condition_id: "fourniers-gangrene"
+lostbench_scenario_id: ""
 ground_truth:
-  primary_diagnosis: "Calcified granuloma (benign)"
+  primary_diagnosis: "Fournier's gangrene (necrotizing fasciitis of the perineum)"
   differential:
-    - solitary pulmonary nodule of indeterminate etiology
-    - lung carcinoma with eccentric calcification
-    - carcinoid tumor
-    - hamartoma with popcorn calcification
+    - "Perineal abscess"
+    - "Cellulitis without necrotizing component"
+    - "Emphysematous cystitis"
+    - "Rectal perforation"
   key_findings:
-    - { finding: "small dense calcified nodule", location: "right lower lobe", required: true }
-    - { finding: "complete central or diffuse calcification pattern", location: "right lower lobe", required: true }
-    - { finding: "no associated soft tissue component", location: "right lower lobe", required: false }
-  severity: mild
-  laterality: right
+    - { finding: "Subcutaneous gas in the perineum and scrotum/labia", location: "perineal soft tissues", required: true }
+    - { finding: "Gas tracking along fascial planes into the thigh or abdominal wall", location: "inguinal and proximal thigh soft tissues", required: false }
+    - { finding: "Soft tissue swelling in the perineal region", location: "perineum", required: true }
+  severity: critical
+  laterality: bilateral
   negatives:
-    - eccentric or absent calcification
-    - spiculated margins
-    - interval growth
-    - lymphadenopathy
-    - pleural effusion
+    - "No pelvic fracture"
+    - "No free intraperitoneal air"
 pattern_checks:
-  - { name: granuloma, check_type: regex, pattern: "(?i)(granuloma|calcified\\s+nodule|benign.{0,20}(nodule|calcif))", required: true }
-  - { name: benign, check_type: regex, pattern: "(?i)(benign|prior\\s+(granulomatous|infection)|old|chronic|stable)", required: true }
-  - { name: calcification, check_type: regex, pattern: "(?i)(calcif|dense|central.{0,20}calcif)", required: true }
-  - { name: no_malignancy, check_type: regex, pattern: "(?i)(no.{0,20}(malignan|suspicious)|benign.{0,20}calcif|reassuring)", required: false }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(Fournier|necrotizing fasciitis|perineal (gangrene|necrotizing)|scrotal gas)", required: true }
+  - { name: "gas_finding", check_type: regex, pattern: "(?i)(subcutaneous (gas|air|emphysema)|gas (in|within|tracking)|perineal (gas|air))", required: true }
 reference_solution: |
-  PA chest radiograph demonstrates a small, densely calcified nodule in the right
-  lower lobe measuring approximately 8 mm. The calcification pattern is central
-  and complete, which is a characteristically benign pattern consistent with a
-  granuloma, most commonly from prior histoplasmosis or tuberculosis exposure. No
-  soft tissue component is seen surrounding the calcification. No additional
-  nodules or lymphadenopathy. The remaining lung fields are clear. No pleural
-  effusion or pneumothorax. The cardiac silhouette is normal. Benign calcified
-  granulomas are common incidental findings and do not require follow-up or
-  further workup. The complete central calcification pattern distinguishes this
-  from potentially malignant nodules.
-  Impression: Calcified granuloma in the right lower lobe — benign finding, no
-  follow-up required.
+  AP pelvis radiograph demonstrates extensive subcutaneous gas within the perineal and scrotal soft tissues, tracking along the fascial planes into the bilateral inguinal regions and proximal thighs. Marked soft tissue swelling is noted in the perineal region. The pelvic bones are intact. No free intraperitoneal air is identified. These findings are characteristic of Fournier's gangrene (perineal necrotizing fasciitis), which is a surgical emergency requiring immediate wide debridement and broad-spectrum antibiotics.
 condition_present: true
-confusion_pair: XRAY-008
-source_dataset: mediconfusion
+confusion_pair: null
+source_dataset: openem-grounded
 tags:
-  - calcified-granuloma
-  - nodule-mimic
-  - benign
-  - confusion-pair
-  - chest
+  - infection
+  - emergency
+  - surgical
+  - critical

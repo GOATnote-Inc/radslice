@@ -1,57 +1,37 @@
 id: CT-009
-name: Lung adenocarcinoma right upper lobe
+name: "Unstable bradycardia workup on contrast-enhanced CT chest"
 modality: ct
 anatomy: chest
 task_type: diagnosis
-difficulty: intermediate
-image_ref: ct/omnimedvqa/CT_0009.png
+difficulty: advanced
+image_ref: "ct/openem/unstable-bradycardia.png"
 prompt_template: diagnosis
+condition_id: "unstable-bradycardia"
+lostbench_scenario_id: ""
 ground_truth:
-  primary_diagnosis: "Right upper lobe pulmonary mass suspicious for lung adenocarcinoma"
+  primary_diagnosis: "Cardiomegaly with pulmonary edema in setting of unstable bradycardia"
   differential:
-    - squamous cell carcinoma
-    - pulmonary metastasis
-    - lung abscess
-    - organizing pneumonia
-    - granulomatosis with polyangiitis
+    - "Acute myocardial infarction with cardiogenic shock"
+    - "Myocarditis"
+    - "Infiltrative cardiomyopathy"
   key_findings:
-    - { finding: "spiculated soft tissue mass", location: "right upper lobe", required: true }
-    - { finding: "irregular margins with pleural retraction", location: "right upper lobe periphery", required: true }
-    - { finding: "mediastinal lymphadenopathy", location: "right paratracheal station 4R", required: false }
-    - { finding: "air bronchograms within mass", location: "right upper lobe mass", required: false }
-  severity: severe
-  laterality: right
+    - { finding: "Cardiomegaly with four-chamber dilatation", location: "heart", required: true }
+    - { finding: "Bilateral pulmonary edema with ground-glass opacities and septal thickening", location: "bilateral lung fields", required: true }
+    - { finding: "Bilateral pleural effusions", location: "bilateral pleural spaces", required: false }
+  severity: "severe"
+  laterality: "bilateral"
   negatives:
-    - cavitation
-    - chest wall invasion
-    - pericardial effusion
-    - pleural effusion
-    - contralateral lung nodules
-    - osseous metastases
+    - "No pericardial effusion"
+    - "No aortic dissection"
 pattern_checks:
-  - { name: malignancy_mentioned, check_type: regex, pattern: "adenocarcinoma|malign|carcinoma|neoplasm|cancer|primary\\s+lung", required: true }
-  - { name: mass_identified, check_type: regex, pattern: "mass|lesion|nodule|tumor|tumour", required: true }
-  - { name: right_upper_lobe, check_type: regex, pattern: "right\\s+upper\\s+lobe|RUL", required: true }
-  - { name: spiculated, check_type: regex, pattern: "spiculat|irregular.{0,15}margin|stellate|corona\\s+radiata", required: true }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(cardiomegaly|heart\\s*failure|pulmonary\\s*edema|bradycardia)", required: true }
+  - { name: "key_finding_edema", check_type: regex, pattern: "(?i)(pulmonary\\s*edema|ground.?glass|septal\\s*thickening|interstitial\\s*edema)", required: true }
 reference_solution: |
-  Contrast-enhanced CT of the chest demonstrates a 3.2 cm spiculated soft
-  tissue mass in the right upper lobe with irregular margins and associated
-  pleural retraction. Internal air bronchograms are present within the mass,
-  a feature commonly associated with adenocarcinoma subtype. A 1.2 cm right
-  paratracheal lymph node (station 4R) is noted, suspicious for nodal
-  involvement. No cavitation within the mass. No chest wall invasion. No
-  pleural or pericardial effusion. No contralateral lung nodules. Visualized
-  osseous structures show no lytic or blastic lesions.
-  Impression: Spiculated right upper lobe mass highly suspicious for primary
-  lung malignancy, likely adenocarcinoma given morphology and air
-  bronchograms. Suspicious right paratracheal lymphadenopathy. Tissue
-  sampling and PET/CT staging recommended.
+  Contrast-enhanced CT of the chest demonstrates marked cardiomegaly with four-chamber dilatation. There is diffuse bilateral pulmonary edema manifesting as ground-glass opacification and smooth interlobular septal thickening. Small bilateral pleural effusions are noted. No pericardial effusion or aortic dissection identified. In the setting of hemodynamically unstable bradycardia, findings are consistent with cardiogenic pulmonary edema secondary to low cardiac output.
 condition_present: true
 confusion_pair: null
-source_dataset: omnimedvqa-open
+source_dataset: openem-grounded
 tags:
-  - lung-cancer
-  - adenocarcinoma
-  - oncology
-  - chest
-  - pulmonary-mass
+  - cardiac
+  - emergency
+  - pulmonary-edema

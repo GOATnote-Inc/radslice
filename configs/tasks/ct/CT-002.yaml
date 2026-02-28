@@ -1,55 +1,37 @@
 id: CT-002
-name: Pulmonary embolism
+name: "Aortic dissection on CTA"
 modality: ct
 anatomy: chest
 task_type: diagnosis
 difficulty: advanced
-image_ref: ct/omnimedvqa/CT_0002.png
+image_ref: "ct/openem/aortic-dissection.png"
 prompt_template: diagnosis
+condition_id: "aortic-dissection"
+lostbench_scenario_id: "MTR-015"
 ground_truth:
-  primary_diagnosis: "Acute pulmonary embolism"
+  primary_diagnosis: "Stanford type A aortic dissection"
   differential:
-    - pulmonary artery sarcoma
-    - in-situ pulmonary artery thrombosis
-    - mucoid impaction mimicking filling defect
-    - flow artifact
+    - "Aortic intramural hematoma"
+    - "Penetrating atherosclerotic ulcer"
+    - "Aortic aneurysm with mural thrombus"
   key_findings:
-    - { finding: "intraluminal filling defect", location: "right main pulmonary artery", required: true }
-    - { finding: "intraluminal filling defect", location: "right lower lobe segmental arteries", required: true }
-    - { finding: "RV/LV ratio greater than 1", location: "heart", required: false }
-    - { finding: "interventricular septal bowing", location: "interventricular septum", required: false }
-  severity: severe
-  laterality: right
+    - { finding: "Intimal flap separating true and false lumens", location: "ascending aorta extending into the descending aorta", required: true }
+    - { finding: "Differential contrast opacification between true and false lumens", location: "aortic arch", required: true }
+    - { finding: "Dilatation of the ascending aorta", location: "ascending aorta", required: false }
+  severity: "critical"
+  laterality: "midline"
   negatives:
-    - left-sided pulmonary embolism
-    - aortic dissection
-    - pericardial effusion
-    - pulmonary infarction
-    - pleural effusion
+    - "No pericardial effusion to suggest tamponade"
 pattern_checks:
-  - { name: pe_mentioned, check_type: regex, pattern: "pulmonary\\s+emboli(sm|us)|PE\\b", required: true }
-  - { name: filling_defect, check_type: regex, pattern: "filling\\s+defect|thrombus|clot|embol", required: true }
-  - { name: location_pulmonary_artery, check_type: regex, pattern: "pulmonary\\s+arter|main\\s+PA|lobar|segmental", required: true }
-  - { name: rv_strain, check_type: regex, pattern: "RV.*strain|right\\s+ventricl|RV.{0,10}LV|ventricular\\s+enlarg", required: false }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(aortic\\s*dissection|intimal\\s*flap)", required: true }
+  - { name: "key_finding_flap", check_type: regex, pattern: "(?i)(intimal\\s*flap|true.*false\\s*lumen|false.*true\\s*lumen|dissection\\s*flap)", required: true }
 reference_solution: |
-  CT pulmonary angiography demonstrates acute filling defects within the
-  right main pulmonary artery extending into the right lower lobe segmental
-  branches, consistent with acute pulmonary embolism. The thrombus is
-  partially occlusive in the right main pulmonary artery and near-occlusive
-  in the segmental branches. The RV/LV diameter ratio is approximately 1.3,
-  suggesting right heart strain. There is mild bowing of the interventricular
-  septum toward the left ventricle. No left-sided pulmonary embolism is
-  identified. No pleural effusion or pulmonary infarction. No aortic
-  dissection.
-  Impression: Acute right-sided pulmonary embolism with evidence of right
-  heart strain. Findings suggest submassive PE warranting consideration of
-  escalated therapy.
+  CTA of the chest demonstrates an intimal flap within the ascending aorta extending through the aortic arch and into the descending thoracic aorta, separating true and false lumens with differential contrast opacification. The ascending aorta is mildly dilated. No pericardial effusion is identified. Findings are consistent with Stanford type A aortic dissection requiring emergent surgical consultation.
 condition_present: true
 confusion_pair: null
-source_dataset: omnimedvqa-open
+source_dataset: openem-grounded
 tags:
-  - pulmonary-embolism
-  - emergency
-  - chest
   - vascular
-  - ctpa
+  - emergency
+  - cta
+  - cardiothoracic

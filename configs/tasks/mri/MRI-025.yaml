@@ -1,59 +1,37 @@
 id: MRI-025
-name: Renal cell carcinoma on MRI
+name: "Acute Urinary Retention on Pelvic MRI"
 modality: mri
-anatomy: abdomen
-task_type: report_generation
-difficulty: advanced
-image_ref: mri/eurorad/EUR_0025.png
-prompt_template: report_generation
+anatomy: pelvis
+task_type: diagnosis
+difficulty: intermediate
+image_ref: "mri/openem/acute-urinary-retention.png"
+prompt_template: diagnosis
+condition_id: "acute-urinary-retention"
+lostbench_scenario_id: ""
 ground_truth:
-  primary_diagnosis: "Clear cell renal cell carcinoma of the left kidney"
+  primary_diagnosis: "Acute urinary retention with markedly distended bladder and obstructing pelvic mass"
   differential:
-    - oncocytoma
-    - fat-poor angiomyolipoma
-    - papillary renal cell carcinoma
-    - chromophobe renal cell carcinoma
-    - renal abscess
+    - "Neurogenic bladder"
+    - "Benign prostatic hyperplasia with retention"
+    - "Bladder outlet obstruction from urethral stricture"
   key_findings:
-    - { finding: "heterogeneous solid renal mass with avid arterial phase enhancement and washout", location: "left kidney, upper pole", required: true }
-    - { finding: "loss of signal on opposed-phase compared to in-phase T1 images (intracellular lipid)", location: "within the renal mass", required: true }
-    - { finding: "areas of T2 hyperintensity within the mass", location: "left renal mass", required: false }
-    - { finding: "tumor thrombus in the left renal vein", location: "left renal vein", required: false }
-  severity: severe
-  laterality: left
+    - { finding: "Markedly distended urinary bladder with thin wall", location: "Pelvis", required: true }
+    - { finding: "Bilateral hydronephrosis and hydroureter", location: "Bilateral kidneys and ureters", required: false }
+    - { finding: "Large pelvic mass causing extrinsic compression of the bladder outlet", location: "Retrovesical space", required: true }
+  severity: "moderate"
+  laterality: "midline"
   negatives:
-    - macroscopic fat (would suggest angiomyolipoma)
-    - calcification
-    - bilateral renal masses
-    - invasion of the IVC
-    - adrenal mass
+    - "No bladder wall invasion by the mass"
+    - "No free fluid in the pelvis"
 pattern_checks:
-  - { name: rcc_mentioned, check_type: regex, pattern: "renal\\s+cell\\s+carcinoma|RCC|renal.*carcinoma|clear\\s+cell", required: true }
-  - { name: enhancement_described, check_type: regex, pattern: "enhanc|hypervascu|avid.*uptake|contrast.*uptake", required: true }
-  - { name: laterality_left, check_type: regex, pattern: "left", required: true }
-  - { name: renal_mass, check_type: regex, pattern: "renal.*mass|kidney.*mass|renal.*lesion|kidney.*tumor", required: true }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(urinary\\s+retention|bladder.*(distend|retenti))", required: true }
+  - { name: "bladder_distension", check_type: regex, pattern: "(?i)(distend|enlarg|full).*(bladder|vesic)", required: true }
+  - { name: "obstruction", check_type: regex, pattern: "(?i)(obstruct|compress|mass)", required: true }
 reference_solution: |
-  MRI of the abdomen demonstrates a heterogeneous solid mass arising from the
-  upper pole of the left kidney measuring 5.8 x 4.5 x 5.2 cm. The mass is
-  predominantly T1 isointense and T2 heterogeneously hyperintense. On chemical
-  shift imaging, there is signal loss on opposed-phase relative to in-phase
-  images within portions of the mass, indicating intracellular lipid content
-  characteristic of clear cell renal cell carcinoma. Dynamic post-gadolinium
-  imaging shows avid heterogeneous arterial phase enhancement with washout on
-  delayed phases, consistent with a hypervascular renal neoplasm. There is
-  extension of tumor thrombus into the left renal vein, which does not extend
-  to the IVC. No macroscopic fat is identified to suggest angiomyolipoma. The
-  right kidney is normal. No retroperitoneal lymphadenopathy. The ipsilateral
-  adrenal gland is normal.
-  Impression: Left renal mass with imaging features consistent with clear cell
-  renal cell carcinoma with left renal vein tumor thrombus. Surgical
-  consultation recommended. Staging chest CT indicated.
+  MRI of the pelvis demonstrates a markedly distended urinary bladder with thinning of the bladder wall, consistent with acute urinary retention. A large heterogeneous pelvic mass in the retrovesical space is causing extrinsic compression of the bladder outlet. Mild bilateral hydroureteronephrosis is present secondary to the outlet obstruction. No evidence of direct bladder wall invasion by the mass. The findings indicate urinary retention secondary to pelvic mass effect requiring urgent catheterization and further evaluation of the pelvic mass.
 condition_present: true
 confusion_pair: null
-source_dataset: eurorad
+source_dataset: openem-grounded
 tags:
-  - rcc
-  - kidney
-  - oncology
-  - abdominal
-  - genitourinary
+  - pelvic
+  - urologic

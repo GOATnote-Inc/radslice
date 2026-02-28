@@ -1,54 +1,36 @@
 id: CT-003
-name: Acute appendicitis
+name: "Cardiac tamponade on contrast-enhanced CT"
 modality: ct
-anatomy: abdomen
+anatomy: chest
 task_type: diagnosis
-difficulty: intermediate
-image_ref: ct/omnimedvqa/CT_0003.png
+difficulty: advanced
+image_ref: "ct/openem/cardiac-tamponade.png"
 prompt_template: diagnosis
+condition_id: "cardiac-tamponade"
+lostbench_scenario_id: ""
 ground_truth:
-  primary_diagnosis: "Acute appendicitis"
+  primary_diagnosis: "Large pericardial effusion with signs of cardiac tamponade"
   differential:
-    - mesenteric lymphadenitis
-    - right ovarian pathology
-    - cecal diverticulitis
-    - Crohn disease terminal ileitis
-    - epiploic appendagitis
+    - "Constrictive pericarditis"
+    - "Pericardial effusion without tamponade physiology"
+    - "Mediastinal mass compressing the heart"
   key_findings:
-    - { finding: "dilated fluid-filled appendix greater than 6 mm", location: "right lower quadrant", required: true }
-    - { finding: "periappendiceal fat stranding", location: "surrounding appendix", required: true }
-    - { finding: "appendicolith", location: "appendiceal base", required: false }
-    - { finding: "appendiceal wall enhancement", location: "appendiceal wall", required: false }
-  severity: moderate
-  laterality: right
+    - { finding: "Large circumferential pericardial effusion", location: "pericardium", required: true }
+    - { finding: "Compression and bowing of the right ventricular free wall", location: "right ventricle", required: true }
+    - { finding: "Distension of the IVC and hepatic veins", location: "IVC and hepatic veins", required: false }
+  severity: "critical"
+  laterality: "midline"
   negatives:
-    - free intraperitoneal air
-    - appendiceal perforation
-    - abscess
-    - small bowel obstruction
-    - right ovarian mass
+    - "No pericardial calcification to suggest constrictive pericarditis"
 pattern_checks:
-  - { name: appendicitis_mentioned, check_type: regex, pattern: "appendicitis", required: true }
-  - { name: appendix_dilated, check_type: regex, pattern: "dilat|enlarg|distend|thicken|swollen|>\\s*6\\s*mm|greater\\s+than\\s+6", required: true }
-  - { name: fat_stranding, check_type: regex, pattern: "fat\\s+strand|periappendiceal.*inflam|surrounding.*inflam|inflammatory\\s+change", required: true }
-  - { name: location_rlq, check_type: regex, pattern: "right\\s+lower\\s+quadrant|RLQ|right\\s+iliac\\s+fossa|RIF", required: true }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(cardiac\\s*tamponade|pericardial\\s*effusion.*tamponade|tamponade)", required: true }
+  - { name: "key_finding_effusion", check_type: regex, pattern: "(?i)(pericardial\\s*effusion|pericardial\\s*fluid)", required: true }
 reference_solution: |
-  Contrast-enhanced CT of the abdomen and pelvis demonstrates a dilated,
-  fluid-filled appendix measuring approximately 10 mm in diameter in the
-  right lower quadrant. There is surrounding periappendiceal fat stranding
-  indicating acute inflammation. A small appendicolith is noted at the
-  appendiceal base. The appendiceal wall demonstrates circumferential
-  enhancement. There is no evidence of perforation, free air, or
-  periappendiceal abscess formation. No small bowel obstruction. The
-  remaining visualized bowel appears unremarkable.
-  Impression: Acute uncomplicated appendicitis with appendicolith. Surgical
-  consultation recommended.
+  Contrast-enhanced CT of the chest demonstrates a large circumferential pericardial effusion with compression and bowing of the right ventricular free wall, consistent with tamponade physiology. The IVC and hepatic veins are distended, suggesting elevated right-sided pressures. No pericardial calcification is identified. Findings are consistent with cardiac tamponade requiring emergent pericardiocentesis.
 condition_present: true
 confusion_pair: null
-source_dataset: omnimedvqa-open
+source_dataset: openem-grounded
 tags:
-  - appendicitis
-  - abdominal-pain
-  - abdomen
-  - surgical
-  - gastrointestinal
+  - cardiac
+  - emergency
+  - pericardial

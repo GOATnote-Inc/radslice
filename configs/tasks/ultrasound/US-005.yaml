@@ -1,55 +1,39 @@
 id: US-005
-name: Pleural effusion on thoracic ultrasound
+name: "Atrial Fibrillation with RVR on Echocardiography"
 modality: ultrasound
 anatomy: chest
 task_type: diagnosis
 difficulty: intermediate
-image_ref: ultrasound/radimagenet/US_0005.png
+image_ref: "ultrasound/openem/atrial-fibrillation-rvr.png"
 prompt_template: diagnosis
+condition_id: "atrial-fibrillation-rvr"
+lostbench_scenario_id: ""
 ground_truth:
-  primary_diagnosis: "Right-sided pleural effusion"
+  primary_diagnosis: "Atrial fibrillation with rapid ventricular response and left atrial enlargement"
   differential:
-    - hemothorax
-    - empyema
-    - subpulmonic effusion
-    - ascites above the diaphragm (subdiaphragmatic collection)
+    - "Multifocal atrial tachycardia"
+    - "Atrial flutter with variable block"
+    - "Frequent premature atrial contractions"
   key_findings:
-    - { finding: "anechoic fluid collection in the dependent pleural space", location: "right costophrenic recess", required: true }
-    - { finding: "spine sign positive", location: "posterior thorax above the diaphragm", required: true }
-    - { finding: "diaphragm visualized with supradiaphragmatic fluid", location: "right hemidiaphragm", required: false }
+    - { finding: "Irregularly irregular ventricular rhythm on M-mode", location: "left ventricle", required: true }
+    - { finding: "Dilated left atrium", location: "left atrium", required: true }
+    - { finding: "Absent organized atrial contraction on mitral inflow Doppler", location: "mitral valve", required: false }
+    - { finding: "Variable E-wave amplitude on pulsed-wave Doppler", location: "mitral valve inflow", required: false }
   severity: moderate
-  laterality: right
+  laterality: n/a
   negatives:
-    - left-sided pleural effusion
-    - internal septations or loculations
-    - pleural thickening or nodularity
-    - lung consolidation
-    - pericardial effusion
+    - "No left atrial appendage thrombus identified on TTE"
+    - "No significant valvular disease"
 pattern_checks:
-  - { name: effusion_mentioned, check_type: regex, pattern: "pleural\\s+effusion|fluid.*pleural|pleural.*fluid|effusion", required: true }
-  - { name: laterality_right, check_type: regex, pattern: "right", required: true }
-  - { name: anechoic_or_simple, check_type: regex, pattern: "anechoic|simple|echo.?free|homogeneous.*fluid", required: true }
-  - { name: spine_sign_or_diaphragm, check_type: regex, pattern: "spine\\s+sign|above.*diaphragm|supra.?diaphragm|costophrenic", required: true }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(atrial fibrillation|a[- ]?fib|AF|AFib|rapid ventricular response|RVR)", required: true }
+  - { name: "rhythm_finding", check_type: regex, pattern: "(?i)(irregularly irregular|irregular rhythm|variable R-R|absent A wave)", required: true }
+  - { name: "la_dilation", check_type: regex, pattern: "(?i)(left atri(al|um) (dilat|enlarg)|LA (dilat|enlarg))", required: true }
 reference_solution: |
-  Thoracic ultrasound of the right hemithorax demonstrates an anechoic fluid
-  collection in the dependent right costophrenic recess, consistent with a
-  simple pleural effusion. The spine sign is positive, with vertebral bodies
-  visible above the diaphragm through the effusion, confirming the presence of
-  supradiaphragmatic fluid. The right hemidiaphragm is clearly delineated with
-  fluid layering above it. The effusion appears simple and anechoic without
-  internal septations, loculations, or echogenic debris to suggest empyema or
-  complicated effusion. No associated pleural thickening or nodularity is seen.
-  The underlying lung, where visualized, shows a normal sliding sign without
-  consolidation. The left hemithorax was not evaluated.
-  Impression: Moderate right-sided simple pleural effusion. No features of
-  complicated collection. Thoracentesis may be performed under ultrasound
-  guidance if clinically indicated.
+  Transthoracic echocardiography demonstrates an irregularly irregular ventricular rhythm consistent with atrial fibrillation. The left atrium is dilated measuring 4.8 cm in the parasternal long axis view. Mitral inflow Doppler shows variable E-wave velocities with absent A-waves, confirming loss of organized atrial contraction. Left ventricular systolic function is preserved with an estimated EF of 50-55%. No significant valvular pathology is identified. These findings are consistent with atrial fibrillation with evidence of chronicity given the left atrial enlargement.
 condition_present: true
 confusion_pair: null
-source_dataset: radimagenet
+source_dataset: openem-grounded
 tags:
-  - pleural-effusion
-  - chest
-  - thoracic
-  - point-of-care
-  - spine-sign
+  - cardiac
+  - echocardiography
+  - arrhythmia

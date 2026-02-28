@@ -1,49 +1,38 @@
 id: XRAY-016
-name: Pneumoperitoneum - free air under diaphragm
+name: "Pelvic Fracture on X-ray"
 modality: xray
-anatomy: abdomen
+anatomy: pelvis
 task_type: diagnosis
-difficulty: advanced
-image_ref: xray/omnimedvqa/CXR_0016.png
+difficulty: intermediate
+image_ref: "xray/openem/pelvic-fracture.png"
 prompt_template: diagnosis
+condition_id: "pelvic-fracture"
+lostbench_scenario_id: ""
 ground_truth:
-  primary_diagnosis: "Pneumoperitoneum"
+  primary_diagnosis: "Unstable pelvic fracture"
   differential:
-    - perforated hollow viscus
-    - post-surgical free air
-    - perforated peptic ulcer
-    - perforated diverticulitis
-    - Chilaiditi syndrome (colonic interposition)
+    - "Acetabular fracture"
+    - "Sacral fracture"
+    - "Hip dislocation"
   key_findings:
-    - { finding: "curvilinear lucency beneath the right hemidiaphragm", location: "right subdiaphragmatic region", required: true }
-    - { finding: "visualization of both sides of the diaphragm (Rigler sign)", location: "diaphragm", required: false }
-    - { finding: "free intraperitoneal air", location: "subdiaphragmatic", required: true }
+    - { finding: "Pubic rami fractures", location: "anterior pelvic ring", required: true }
+    - { finding: "Sacroiliac joint widening or disruption", location: "posterior pelvic ring", required: true }
+    - { finding: "Symphysis pubis diastasis", location: "pubic symphysis", required: false }
+    - { finding: "Leg length discrepancy or rotational asymmetry", location: "bilateral lower extremities", required: false }
   severity: severe
-  laterality: right
+  laterality: left
   negatives:
-    - Chilaiditi sign
-    - subpulmonic effusion
-    - pneumothorax
-    - bowel obstruction
+    - "No hip dislocation"
+    - "No acetabular fracture identified on this view"
 pattern_checks:
-  - { name: primary_diagnosis, check_type: regex, pattern: "(?i)(pneumoperitoneum|free\\s+(intraperitoneal\\s+)?air)", required: true }
-  - { name: subdiaphragmatic, check_type: regex, pattern: "(?i)(sub(diaphragmatic|phrenic)|under.{0,15}diaphragm|beneath.{0,15}diaphragm)", required: true }
-  - { name: perforation_concern, check_type: regex, pattern: "(?i)(perforat|hollow\\s+viscus|surgical\\s+(emergency|consultation)|urgent)", required: false }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(pelvic fracture|pubic rami|sacroiliac|pelvic ring)", required: true }
+  - { name: "fracture_finding", check_type: regex, pattern: "(?i)(fracture|diastasis|disruption|widening)", required: true }
 reference_solution: |
-  Upright chest/abdominal radiograph demonstrates a curvilinear lucency beneath the
-  right hemidiaphragm consistent with free intraperitoneal air (pneumoperitoneum).
-  Both sides of the right hemidiaphragm are visible, representing the Rigler sign.
-  This finding does not have the haustral markings that would suggest Chilaiditi
-  syndrome (colonic interposition). In the appropriate clinical context, this is
-  highly suspicious for perforated hollow viscus and constitutes a surgical emergency.
-  Recommend urgent surgical consultation and consideration of CT abdomen/pelvis
-  with contrast for further evaluation.
+  AP pelvis radiograph demonstrates fractures through the left superior and inferior pubic rami with displacement, disrupting the anterior pelvic ring. There is widening of the left sacroiliac joint consistent with posterior pelvic ring injury. This represents an unstable pelvic ring disruption (Tile B or C pattern). Pelvic binding and CT evaluation are recommended to assess for associated vascular injury and hemorrhage.
 condition_present: true
 confusion_pair: null
-source_dataset: omnimedvqa-open
+source_dataset: openem-grounded
 tags:
-  - pneumoperitoneum
-  - free-air
-  - surgical-emergency
-  - perforation
-  - abdomen
+  - trauma
+  - orthopedic
+  - emergency

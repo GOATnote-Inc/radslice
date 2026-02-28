@@ -1,57 +1,37 @@
 id: CT-014
-name: Acute pancreatitis with necrosis
+name: "Hemorrhagic stroke on non-contrast CT head"
 modality: ct
-anatomy: abdomen
+anatomy: head
 task_type: diagnosis
-difficulty: advanced
-image_ref: ct/eurorad/EUR_0014.png
+difficulty: intermediate
+image_ref: "ct/openem/hemorrhagic-stroke.png"
 prompt_template: diagnosis
+condition_id: "hemorrhagic-stroke"
+lostbench_scenario_id: "MTR-068"
 ground_truth:
-  primary_diagnosis: "Acute necrotizing pancreatitis"
+  primary_diagnosis: "Acute hypertensive intracerebral hemorrhage"
   differential:
-    - acute interstitial edematous pancreatitis
-    - pancreatic pseudocyst
-    - pancreatic ductal adenocarcinoma with obstruction
-    - pancreatic abscess
-    - walled-off necrosis
+    - "Hemorrhagic transformation of ischemic stroke"
+    - "Underlying vascular malformation with hemorrhage"
+    - "Hemorrhagic neoplasm"
   key_findings:
-    - { finding: "diffusely enlarged pancreas with heterogeneous enhancement", location: "pancreatic body and tail", required: true }
-    - { finding: "non-enhancing areas of pancreatic parenchyma", location: "pancreatic body", required: true }
-    - { finding: "peripancreatic fat stranding and fluid", location: "anterior pararenal space", required: true }
-    - { finding: "peripancreatic fluid collection", location: "lesser sac", required: false }
-  severity: severe
-  laterality: ""
+    - { finding: "Hyperdense intraparenchymal hematoma", location: "right basal ganglia and thalamus", required: true }
+    - { finding: "Surrounding hypodense vasogenic edema", location: "right cerebral hemisphere", required: true }
+    - { finding: "Intraventricular hemorrhage extension", location: "right lateral ventricle", required: false }
+  severity: "critical"
+  laterality: "right"
   negatives:
-    - pancreatic mass with upstream ductal dilatation
-    - portal vein thrombosis
-    - pseudoaneurysm
-    - biliary obstruction
-    - free intraperitoneal air
+    - "No subarachnoid hemorrhage"
 pattern_checks:
-  - { name: pancreatitis_mentioned, check_type: regex, pattern: "pancreatitis", required: true }
-  - { name: necrosis_identified, check_type: regex, pattern: "necro[st]|non.?enhanc|devasculariz|necrotic", required: true }
-  - { name: pancreas_enlarged, check_type: regex, pattern: "enlarg|edematous|swollen|bulky|inflam", required: true }
-  - { name: peripancreatic, check_type: regex, pattern: "peripancreatic|surrounding.*fluid|fat\\s+strand|inflammatory\\s+change", required: false }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(intracerebral\\s*hemorrhage|intraparenchymal\\s*hemorrhage|ICH|hemorrhagic\\s*stroke)", required: true }
+  - { name: "key_finding_hyperdense", check_type: regex, pattern: "(?i)(hyperdense.*hematoma|intraparenchymal.*hematoma|basal\\s*ganglia.*hemorrhage)", required: true }
 reference_solution: |
-  Contrast-enhanced CT of the abdomen demonstrates a diffusely enlarged
-  pancreas with heterogeneous enhancement. A large area of non-enhancement
-  involving approximately 50% of the pancreatic body is identified,
-  consistent with pancreatic parenchymal necrosis. There is extensive
-  peripancreatic fat stranding and fluid tracking into the anterior pararenal
-  space bilaterally. An acute peripancreatic fluid collection is present in
-  the lesser sac measuring approximately 6 x 4 cm. No evidence of
-  pseudoaneurysm or active hemorrhage. The portal and splenic veins remain
-  patent. No biliary obstruction. CT severity index (Balthazar) is estimated
-  at 8, indicating severe disease.
-  Impression: Acute necrotizing pancreatitis with approximately 50%
-  parenchymal necrosis and peripancreatic fluid collections. ICU admission
-  and close monitoring recommended.
+  Non-contrast CT head demonstrates a hyperdense intraparenchymal hematoma centered in the right basal ganglia and thalamus measuring approximately 4 x 3 cm with surrounding vasogenic edema. There is extension of hemorrhage into the right lateral ventricle. Mild leftward midline shift of approximately 5 mm is noted. No subarachnoid hemorrhage identified. Findings are consistent with acute hypertensive intracerebral hemorrhage.
 condition_present: true
 confusion_pair: null
-source_dataset: eurorad
+source_dataset: openem-grounded
 tags:
-  - pancreatitis
-  - necrotizing
+  - neuro
+  - stroke
+  - hemorrhage
   - emergency
-  - abdomen
-  - gastrointestinal

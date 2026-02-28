@@ -1,51 +1,37 @@
 id: XRAY-003
-name: Bilateral pleural effusions
+name: "Acute Valvular Emergency on Chest X-ray"
 modality: xray
 anatomy: chest
 task_type: diagnosis
-difficulty: intermediate
-image_ref: xray/omnimedvqa/CXR_0003.png
+difficulty: advanced
+image_ref: "xray/openem/acute-valvular-emergency.png"
 prompt_template: diagnosis
+condition_id: "acute-valvular-emergency"
+lostbench_scenario_id: ""
 ground_truth:
-  primary_diagnosis: "Bilateral pleural effusions"
+  primary_diagnosis: "Acute valvular regurgitation with pulmonary edema"
   differential:
-    - bilateral lower lobe consolidation
-    - bilateral atelectasis
-    - empyema
-    - hemothorax
+    - "Acute decompensated heart failure"
+    - "ARDS"
+    - "Mitral stenosis with acute decompensation"
   key_findings:
-    - { finding: "meniscus sign", location: "bilateral costophrenic angles", required: true }
-    - { finding: "blunting of costophrenic angles", location: "bilateral", required: true }
-    - { finding: "homogeneous opacification", location: "bilateral lower zones", required: true }
-    - { finding: "preserved upper lobe vascularity", location: "bilateral upper zones", required: false }
-  severity: moderate
+    - { finding: "Acute pulmonary edema", location: "bilateral lung fields", required: true }
+    - { finding: "Cardiomegaly or normal heart size with flash edema", location: "cardiac silhouette", required: true }
+    - { finding: "Prosthetic valve hardware if present", location: "cardiac silhouette", required: false }
+  severity: critical
   laterality: bilateral
   negatives:
-    - pneumothorax
-    - consolidation in upper lobes
-    - mediastinal mass
-    - cardiomegaly
-    - loculated effusion
+    - "No pneumothorax"
+    - "No focal consolidation to suggest pneumonia"
 pattern_checks:
-  - { name: effusion_mentioned, check_type: regex, pattern: "effusion", required: true }
-  - { name: bilateral, check_type: regex, pattern: "bilateral|both", required: true }
-  - { name: costophrenic, check_type: regex, pattern: "costophrenic|meniscus", required: true }
-  - { name: pleural, check_type: regex, pattern: "pleural", required: true }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(valvular|regurgitation|valve|flash pulmonary edema)", required: true }
+  - { name: "edema_finding", check_type: regex, pattern: "(?i)(pulmonary edema|alveolar edema|interstitial edema|vascular congestion)", required: true }
 reference_solution: |
-  PA chest radiograph demonstrates bilateral pleural effusions. There is
-  homogeneous opacification in both lower zones with characteristic meniscus
-  signs at the bilateral costophrenic angles, which are blunted. The effusions
-  appear moderate in size, tracking up the lateral chest walls bilaterally. The
-  upper lung zones remain clear with preserved vascular markings. The cardiac
-  silhouette is partially obscured by the effusions but does not appear overtly
-  enlarged on the visible portion. No pneumothorax is identified. No focal
-  consolidation is seen in the visible lung parenchyma.
-  Impression: Moderate bilateral pleural effusions.
+  Frontal chest radiograph demonstrates acute bilateral alveolar and interstitial pulmonary edema with a normal or only mildly enlarged cardiac silhouette, suggesting flash pulmonary edema. This pattern, particularly with a non-dilated heart, raises concern for acute valvular regurgitation such as acute mitral regurgitation from chordal rupture or papillary muscle dysfunction. Urgent echocardiography is recommended for definitive evaluation.
 condition_present: true
 confusion_pair: null
-source_dataset: omnimedvqa-open
+source_dataset: openem-grounded
 tags:
-  - pleural-effusion
-  - chest
-  - bilateral
-  - fluid
+  - cardiac
+  - emergency
+  - valvular

@@ -1,58 +1,38 @@
 id: MRI-007
-name: Right rotator cuff tear
+name: "Cauda Equina Syndrome on Lumbar MRI"
 modality: mri
-anatomy: shoulder
+anatomy: spine
 task_type: diagnosis
-difficulty: intermediate
-image_ref: mri/omnimedvqa/MRI_0007.png
+difficulty: advanced
+image_ref: "mri/openem/cauda-equina-syndrome.png"
 prompt_template: diagnosis
+condition_id: "cauda-equina-syndrome"
+lostbench_scenario_id: "MTR-020"
 ground_truth:
-  primary_diagnosis: "Full-thickness tear of the right supraspinatus tendon"
+  primary_diagnosis: "Cauda equina syndrome due to large central disc herniation"
   differential:
-    - partial-thickness articular-sided rotator cuff tear
-    - partial-thickness bursal-sided rotator cuff tear
-    - rotator cuff tendinopathy without tear
-    - calcific tendinitis
-    - subacromial bursitis mimicking tear
+    - "Spinal epidural abscess"
+    - "Spinal epidural hematoma"
+    - "Lumbosacral tumor (schwannoma, ependymoma)"
   key_findings:
-    - { finding: "complete discontinuity of the supraspinatus tendon with fluid-signal gap on T2-weighted images", location: "supraspinatus tendon insertion on the greater tuberosity", required: true }
-    - { finding: "tendon retraction with wavy morphology of the proximal stump", location: "supraspinatus muscle-tendon junction", required: true }
-    - { finding: "fluid in the subacromial-subdeltoid bursa", location: "subacromial space", required: false }
-    - { finding: "superior migration of the humeral head", location: "glenohumeral joint", required: false }
-  severity: moderate
-  laterality: right
+    - { finding: "Large central disc extrusion compressing the cauda equina nerve roots", location: "L4-L5 level", required: true }
+    - { finding: "Crowding and displacement of cauda equina nerve roots within the thecal sac", location: "Lumbar thecal sac below L4", required: true }
+    - { finding: "T2 hyperintense disc material extending into spinal canal", location: "L4-L5 central canal", required: false }
+  severity: "critical"
+  laterality: "midline"
   negatives:
-    - infraspinatus tendon tear
-    - subscapularis tendon tear
-    - labral tear
-    - glenohumeral dislocation
-    - fatty infiltration of the supraspinatus muscle (Goutallier grade 3-4)
+    - "No abnormal enhancement to suggest infection or tumor"
+    - "No conus medullaris signal abnormality"
 pattern_checks:
-  - { name: rotator_cuff_tear, check_type: regex, pattern: "rotator\\s+cuff.*tear|supraspinatus.*tear|tear.*supraspinatus|cuff.*rupture", required: true }
-  - { name: full_thickness, check_type: regex, pattern: "full.?thickness|complete.*tear|complete.*disrupt", required: true }
-  - { name: laterality_right, check_type: regex, pattern: "right", required: true }
-  - { name: tendon_gap, check_type: regex, pattern: "discontinu|gap|retract|fluid.*signal.*defect", required: true }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)cauda\\s+equina", required: true }
+  - { name: "disc_finding", check_type: regex, pattern: "(?i)(disc|disk).*(herniat|extru|protru|sequester)", required: true }
+  - { name: "compression", check_type: regex, pattern: "(?i)(compress|displace|crowd).*(nerve|root|cauda)", required: true }
 reference_solution: |
-  MRI of the right shoulder demonstrates a full-thickness tear of the
-  supraspinatus tendon. On T2-weighted fat-saturated coronal and sagittal
-  images, there is complete discontinuity of the supraspinatus tendon at its
-  insertion on the greater tuberosity with a fluid-signal gap. The proximal
-  tendon stump is retracted medially approximately 1.5 cm with wavy
-  morphology. Fluid is present in the subacromial-subdeltoid bursa,
-  communicating with the glenohumeral joint through the tendon defect. The
-  supraspinatus muscle belly shows mild fatty infiltration (Goutallier
-  grade 1-2). The infraspinatus and subscapularis tendons are intact. The
-  long head of the biceps tendon is in normal position within the bicipital
-  groove. The glenoid labrum is intact. No glenohumeral dislocation. Mild
-  acromioclavicular joint arthrosis is noted.
-  Impression: Full-thickness right supraspinatus tendon tear with 1.5 cm
-  retraction and mild muscle atrophy.
+  MRI of the lumbar spine demonstrates a large central disc extrusion at L4-L5, causing severe narrowing of the central spinal canal with compression and crowding of the cauda equina nerve roots. The extruded disc material is T2 hyperintense and extends posteriorly into the central canal. The cauda equina roots are displaced posteriorly and laterally. No abnormal enhancement is seen to suggest infection or neoplasm. The conus medullaris terminates normally at L1 with normal signal. Findings are consistent with cauda equina syndrome requiring emergent surgical decompression.
 condition_present: true
 confusion_pair: null
-source_dataset: omnimedvqa-open
+source_dataset: openem-grounded
 tags:
-  - rotator-cuff
-  - shoulder
-  - musculoskeletal
-  - tendon
-  - orthopedic
+  - spine
+  - emergency
+  - surgical

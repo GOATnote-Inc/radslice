@@ -1,53 +1,39 @@
 id: MRI-005
-name: Normal brain MRI
+name: "Acute Ischemic Stroke on DWI MRI"
 modality: mri
 anatomy: head
 task_type: diagnosis
-difficulty: basic
-image_ref: mri/omnimedvqa/MRI_0005.png
+difficulty: advanced
+image_ref: "mri/openem/acute-ischemic-stroke.png"
 prompt_template: diagnosis
+condition_id: "acute-ischemic-stroke"
+lostbench_scenario_id: "MTR-012"
 ground_truth:
-  primary_diagnosis: "Normal brain MRI"
+  primary_diagnosis: "Acute ischemic stroke with restricted diffusion on DWI"
   differential:
-    - early small vessel ischemic disease
-    - incidental arachnoid cyst
-    - incidental pineal cyst
-    - normal variant perivascular spaces
+    - "Seizure-related restricted diffusion"
+    - "Hypoglycemic brain injury"
+    - "Encephalitis with restricted diffusion"
   key_findings:
-    - { finding: "normal brain parenchymal signal on all sequences", location: "bilateral cerebral hemispheres", required: true }
-    - { finding: "no abnormal enhancement", location: "brain parenchyma and meninges", required: true }
-    - { finding: "normal ventricular size and morphology", location: "lateral, third, and fourth ventricles", required: false }
-  severity: mild
-  laterality: ""
+    - { finding: "Focal area of restricted diffusion (high DWI signal with corresponding low ADC)", location: "Left middle cerebral artery territory", required: true }
+    - { finding: "FLAIR signal abnormality in corresponding territory", location: "Left frontoparietal cortex and insular ribbon", required: false }
+    - { finding: "Loss of normal flow void in left MCA on MRA", location: "Left middle cerebral artery", required: false }
+  severity: "critical"
+  laterality: "left"
   negatives:
-    - mass or space-occupying lesion
-    - acute infarction
-    - hemorrhage
-    - abnormal enhancement
-    - hydrocephalus
-    - white matter disease
-    - midline shift
+    - "No hemorrhagic transformation"
+    - "No midline shift"
 pattern_checks:
-  - { name: normal_mentioned, check_type: regex, pattern: "normal|unremarkable|no.*abnormal|negative|no.*acute", required: true }
-  - { name: no_mass, check_type: regex, pattern: "no.*mass|no.*lesion|no.*enhancing|without.*mass", required: true }
-  - { name: no_infarct, check_type: regex, pattern: "no.*infarc|no.*restrict|no.*ischem|no.*stroke|no.*diffusion", required: true }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(acute\\s+ischemic\\s+stroke|acute\\s+infarct|cerebral\\s+infarction)", required: true }
+  - { name: "restricted_diffusion", check_type: regex, pattern: "(?i)restricted\\s+diffusion", required: true }
+  - { name: "laterality", check_type: regex, pattern: "(?i)left", required: true }
 reference_solution: |
-  MRI of the brain performed with and without intravenous gadolinium
-  demonstrates normal findings. The brain parenchyma shows normal signal
-  intensity on T1-weighted, T2-weighted, FLAIR, and diffusion-weighted
-  sequences bilaterally. No abnormal parenchymal or meningeal enhancement
-  is identified on post-contrast images. The ventricular system is normal
-  in size and configuration including the lateral, third, and fourth
-  ventricles. No midline shift. The basal cisterns are patent. The major
-  intracranial vascular flow voids are preserved. The orbits, paranasal
-  sinuses, and mastoid air cells are unremarkable. No restricted diffusion
-  to suggest acute infarction. No intracranial hemorrhage. No mass lesion.
-  Impression: Normal brain MRI.
-condition_present: false
+  MRI of the brain with diffusion-weighted imaging demonstrates a focal area of restricted diffusion involving the left middle cerebral artery territory, with high signal on DWI and corresponding low signal on the ADC map, consistent with acute ischemic infarction. FLAIR images show early cortical swelling with subtle hyperintensity in the left insular ribbon and frontoparietal cortex. No hemorrhagic transformation or midline shift is present. MRA of the circle of Willis shows loss of normal flow void in the left M1 segment.
+condition_present: true
 confusion_pair: null
-source_dataset: omnimedvqa-open
+source_dataset: openem-grounded
 tags:
-  - normal
-  - brain
   - neuro
-  - negative-case
+  - stroke
+  - dwi
+  - emergency

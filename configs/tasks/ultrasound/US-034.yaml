@@ -1,0 +1,40 @@
+id: US-034
+name: "Ectopic Pregnancy on Transvaginal Ultrasound"
+modality: ultrasound
+anatomy: pelvis
+task_type: diagnosis
+difficulty: intermediate
+image_ref: "ultrasound/openem/ectopic-pregnancy.png"
+prompt_template: diagnosis
+condition_id: "ectopic-pregnancy"
+lostbench_scenario_id: "MTR-009"
+ground_truth:
+  primary_diagnosis: "Ectopic pregnancy in the right adnexa with free pelvic fluid"
+  differential:
+    - "Ruptured ovarian cyst"
+    - "Tubo-ovarian abscess"
+    - "Heterotopic pregnancy"
+  key_findings:
+    - { finding: "Extrauterine adnexal mass with tubal ring sign", location: "right adnexa", required: true }
+    - { finding: "Empty uterus with thickened endometrium (decidual reaction)", location: "uterus", required: true }
+    - { finding: "Free fluid in the cul-de-sac", location: "pouch of Douglas", required: false }
+    - { finding: "Ring of fire sign on color Doppler around the ectopic mass", location: "right adnexa", required: false }
+  severity: severe
+  laterality: right
+  negatives:
+    - "No intrauterine gestational sac"
+    - "No evidence of heterotopic pregnancy"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(ectopic pregnancy|tubal pregnancy|adnexal (mass|pregnancy)|extrauterine pregnancy)", required: true }
+  - { name: "adnexal_finding", check_type: regex, pattern: "(?i)(adnexal mass|tubal ring|extrauterine (mass|gestational)|ectopic mass)", required: true }
+  - { name: "empty_uterus", check_type: regex, pattern: "(?i)(empty uterus|no intrauterine (gestational sac|pregnancy|IUP)|absent IUP)", required: true }
+reference_solution: |
+  Transvaginal ultrasound demonstrates an empty uterine cavity with a thickened decidualized endometrium and no intrauterine gestational sac identified. In the right adnexa, separate from the ovary, there is a 2.5 cm complex mass with a hyperechoic ring (tubal ring sign) and a small yolk sac visible within, consistent with a live ectopic pregnancy. Color Doppler demonstrates the ring of fire sign with circumferential peritrophoblastic flow. Moderate free fluid is present in the cul-de-sac. The left adnexa and ovary appear normal. These findings are diagnostic of a right tubal ectopic pregnancy.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - obstetric
+  - emergency
+  - transvaginal
+  - gynecologic

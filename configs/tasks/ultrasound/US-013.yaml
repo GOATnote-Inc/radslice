@@ -1,51 +1,40 @@
 id: US-013
-name: Normal pelvic ultrasound
+name: "Unstable Angina on Echocardiography"
 modality: ultrasound
-anatomy: pelvis
-task_type: vqa
-difficulty: basic
-image_ref: ultrasound/omnimedvqa/US_0013.png
-prompt_template: vqa
+anatomy: chest
+task_type: diagnosis
+difficulty: advanced
+image_ref: "ultrasound/openem/unstable-angina.png"
+prompt_template: diagnosis
+condition_id: "unstable-angina"
+lostbench_scenario_id: ""
 ground_truth:
-  primary_diagnosis: "Normal pelvic ultrasound"
+  primary_diagnosis: "Stress-induced regional wall motion abnormality suggestive of unstable angina"
   differential:
-    - small functional follicular cyst (physiologic)
-    - early intrauterine pregnancy below detection threshold
-    - nabothian cyst (normal variant)
+    - "Non-ST elevation myocardial infarction"
+    - "Variant (Prinzmetal) angina"
+    - "Demand ischemia"
   key_findings:
-    - { finding: "normal anteverted uterus with homogeneous myometrium", location: "uterus", required: true }
-    - { finding: "normal endometrial stripe appropriate for menstrual phase", location: "endometrial cavity", required: true }
-    - { finding: "bilateral ovaries with physiologic follicles", location: "bilateral adnexa", required: false }
-  severity: mild
-  laterality: ""
+    - { finding: "Subtle regional hypokinesis during symptomatic episode", location: "inferolateral wall of left ventricle", required: true }
+    - { finding: "Preserved overall left ventricular systolic function", location: "left ventricle", required: true }
+    - { finding: "Normal wall thickness without thinning", location: "left ventricular walls", required: false }
+  severity: severe
+  laterality: n/a
   negatives:
-    - adnexal mass or cyst
-    - ovarian torsion
-    - ectopic pregnancy
-    - uterine fibroid
-    - endometrial thickening
-    - free pelvic fluid (non-physiologic)
+    - "No pericardial effusion"
+    - "No valvular abnormalities"
+    - "No LV thrombus"
 pattern_checks:
-  - { name: normal_identified, check_type: regex, pattern: "normal|unremarkable|no\\s+(abnormal|pathol|significant)", required: true }
-  - { name: no_adnexal_pathology, check_type: regex, pattern: "no.*(mass|cyst|adnexal|ectopic|torsion)", required: true }
-  - { name: uterus_normal, check_type: regex, pattern: "(uter|myometri).*(normal|unremarkable|homogeneous)|normal.*uter", required: true }
-  - { name: ovaries_normal, check_type: regex, pattern: "(ovar|adnex).*(normal|unremarkable|physiologic)|normal.*ovar", required: false }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(unstable angina|ischemia|ischemic|wall motion abnorm|ACS|acute coronary)", required: true }
+  - { name: "wma_finding", check_type: regex, pattern: "(?i)(hypokinesis|wall motion abnorm|regional dysfunction|ischemic changes)", required: true }
+  - { name: "preserved_function", check_type: regex, pattern: "(?i)(preserved|normal.{0,15}(function|EF)|mildly reduced)", required: true }
 reference_solution: |
-  Transvaginal pelvic ultrasound demonstrates a normal anteverted uterus
-  measuring 7.5 x 4.2 x 3.8 cm. The myometrium is homogeneous without focal
-  lesion or fibroid. The endometrial stripe is thin and regular, measuring
-  5 mm, appropriate for the early proliferative phase. No endometrial mass or
-  fluid collection is identified. The right ovary measures 3.0 x 2.0 x 1.8 cm
-  and the left ovary measures 2.8 x 1.9 x 1.7 cm, both containing several
-  small physiologic follicles. No adnexal mass, complex cyst, or free pelvic
-  fluid is identified. The cul-de-sac is clear.
-  Impression: Normal pelvic ultrasound. No uterine or adnexal abnormality.
-condition_present: false
+  Transthoracic echocardiography demonstrates subtle hypokinesis of the inferolateral wall segments during the symptomatic episode. The overall left ventricular systolic function is preserved with an estimated ejection fraction of 50-55%. The myocardial wall thickness is normal without evidence of chronic thinning or remodeling. No significant valvular abnormalities are detected. In the context of acute chest pain with dynamic ECG changes and elevated troponin trend, these echocardiographic findings support the diagnosis of an acute coronary syndrome and warrant further evaluation with coronary angiography.
+condition_present: true
 confusion_pair: null
-source_dataset: omnimedvqa-open
+source_dataset: openem-grounded
 tags:
-  - normal
-  - pelvis
-  - ob-gyn
-  - negative-study
-  - uterus
+  - cardiac
+  - emergency
+  - echocardiography
+  - acs

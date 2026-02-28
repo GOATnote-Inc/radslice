@@ -1,0 +1,37 @@
+id: CT-104
+name: "Pediatric acute otitis media with complications on CT temporal bone"
+modality: ct
+anatomy: head
+task_type: diagnosis
+difficulty: intermediate
+image_ref: "ct/openem/pediatric-acute-otitis-media.png"
+prompt_template: diagnosis
+condition_id: "pediatric-acute-otitis-media"
+lostbench_scenario_id: "DEF-005"
+ground_truth:
+  primary_diagnosis: "Acute otitis media complicated by coalescent mastoiditis"
+  differential:
+    - "Cholesteatoma"
+    - "Petrous apicitis (Gradenigo syndrome)"
+    - "Temporal bone osteomyelitis"
+  key_findings:
+    - { finding: "Complete opacification of the middle ear cavity and mastoid air cells", location: "right middle ear and mastoid", required: true }
+    - { finding: "Partial dehiscence of the mastoid bony septa suggesting coalescence", location: "right mastoid", required: true }
+    - { finding: "Intact tegmen tympani and sigmoid sinus plate", location: "right temporal bone", required: false }
+  severity: "moderate"
+  laterality: "right"
+  negatives:
+    - "No intracranial complication"
+    - "No epidural abscess"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(otitis\\s*media|mastoiditis|middle\\s*ear.*opacif)", required: true }
+  - { name: "key_finding_opacification", check_type: regex, pattern: "(?i)(middle\\s*ear.*opacif|mastoid.*opacif|coalescent|septal.*erosion)", required: true }
+reference_solution: |
+  CT of the temporal bones demonstrates complete opacification of the right middle ear cavity and mastoid air cells. Partial dehiscence of the mastoid bony septa is present, consistent with early coalescent mastoiditis. The tegmen tympani and sigmoid sinus plate are intact without intracranial extension. The left temporal bone is normally pneumatized. Findings represent acute otitis media complicated by early coalescent mastoiditis requiring IV antibiotics and ENT consultation for possible mastoidectomy.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - ent
+  - pediatric
+  - infectious

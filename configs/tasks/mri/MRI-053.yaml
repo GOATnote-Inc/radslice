@@ -1,0 +1,39 @@
+id: MRI-053
+name: "Postpartum Hemorrhage Evaluation on Pelvic MRI"
+modality: mri
+anatomy: pelvis
+task_type: diagnosis
+difficulty: advanced
+image_ref: "mri/openem/postpartum-hemorrhage.png"
+prompt_template: diagnosis
+condition_id: "postpartum-hemorrhage"
+lostbench_scenario_id: "MTR-017"
+ground_truth:
+  primary_diagnosis: "Postpartum hemorrhage with retained products and uterine artery pseudoaneurysm on MRI"
+  differential:
+    - "Uterine atony (diagnosis of exclusion on imaging)"
+    - "Uterine rupture"
+    - "Placenta accreta spectrum"
+  key_findings:
+    - { finding: "Heterogeneous intrauterine material with T2 hyperintensity representing retained products of conception and blood", location: "Uterine cavity", required: true }
+    - { finding: "Focal enhancing vascular structure in the myometrium (pseudoaneurysm) on dynamic post-gadolinium images", location: "Left uterine wall", required: true }
+    - { finding: "Enlarged postpartum uterus with heterogeneous myometrial signal", location: "Uterus", required: false }
+  severity: "critical"
+  laterality: "n/a"
+  negatives:
+    - "No myometrial disruption to suggest uterine rupture"
+    - "No extrauterine hematoma"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)postpartum\\s+hemorrhage", required: true }
+  - { name: "retained_products", check_type: regex, pattern: "(?i)(retained\\s+products|intrauterine.*(material|content|tissue|blood))", required: true }
+  - { name: "vascular_finding", check_type: regex, pattern: "(?i)(pseudoaneurysm|vascular.*(enhanc|malform|lesion))", required: true }
+reference_solution: |
+  MRI of the pelvis demonstrates an enlarged postpartum uterus with heterogeneous intrauterine material showing mixed T1 and T2 signal, consistent with retained products of conception and organized blood products. Dynamic post-gadolinium images reveal a focal avidly enhancing vascular structure within the left myometrium measuring 1.5 cm, consistent with a uterine artery pseudoaneurysm as a source of ongoing hemorrhage. No myometrial discontinuity to suggest uterine rupture. No extrauterine or retroperitoneal hematoma. Findings identify retained products and pseudoaneurysm as treatable causes of postpartum hemorrhage, amenable to uterine artery embolization.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - obstetric
+  - hemorrhage
+  - vascular
+  - emergency

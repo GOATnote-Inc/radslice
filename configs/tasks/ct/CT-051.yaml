@@ -1,61 +1,37 @@
 id: CT-051
-name: Pancreatic ductal adenocarcinoma
+name: "Eclampsia with cerebral edema on non-contrast CT head"
 modality: ct
-anatomy: abdomen
-task_type: report_generation
-difficulty: expert
-image_ref: ct/eurorad/EUR_0051.png
-prompt_template: report_generation
+anatomy: head
+task_type: diagnosis
+difficulty: advanced
+image_ref: "ct/openem/eclampsia.png"
+prompt_template: diagnosis
+condition_id: "eclampsia"
+lostbench_scenario_id: "MTR-045"
 ground_truth:
-  primary_diagnosis: "Pancreatic head ductal adenocarcinoma with biliary obstruction"
+  primary_diagnosis: "PRES/eclampsia with bilateral posterior cerebral edema"
   differential:
-    - chronic pancreatitis with focal mass
-    - pancreatic neuroendocrine tumor
-    - autoimmune pancreatitis (IgG4)
-    - ampullary carcinoma
-    - cholangiocarcinoma
+    - "Cerebral venous sinus thrombosis"
+    - "Hypertensive encephalopathy"
+    - "Acute ischemic stroke"
   key_findings:
-    - { finding: "hypoattenuating mass in pancreatic head", location: "pancreatic head", required: true }
-    - { finding: "double duct sign with dilated CBD and pancreatic duct", location: "common bile duct and main pancreatic duct", required: true }
-    - { finding: "upstream intrahepatic biliary dilatation", location: "intrahepatic bile ducts", required: false }
-    - { finding: "superior mesenteric vein abutment", location: "SMV at pancreatic head", required: false }
-  severity: severe
-  laterality: ""
+    - { finding: "Bilateral symmetric hypodensity in the parieto-occipital white matter", location: "bilateral parieto-occipital lobes", required: true }
+    - { finding: "Cortical and subcortical edema without hemorrhage", location: "posterior cerebral hemispheres", required: true }
+    - { finding: "No midline shift or mass effect", location: "midline structures", required: false }
+  severity: "severe"
+  laterality: "bilateral"
   negatives:
-    - SMA encasement greater than 180 degrees
-    - hepatic metastases
-    - peritoneal carcinomatosis
-    - ascites
-    - celiac trunk involvement
+    - "No intracranial hemorrhage"
+    - "No dural venous sinus thrombosis"
 pattern_checks:
-  - { name: pdac_mentioned, check_type: regex, pattern: "adenocarcinoma|pancreatic.*carcinoma|pancreatic.*cancer|PDAC", required: true }
-  - { name: pancreatic_head, check_type: regex, pattern: "pancreatic\\s+head|head\\s+of\\s+(the\\s+)?pancreas", required: true }
-  - { name: double_duct, check_type: regex, pattern: "double\\s+duct|dilat.*bile.*duct.*pancreatic|biliary.*dilat", required: true }
-  - { name: vascular_assessment, check_type: regex, pattern: "SMA|SMV|superior\\s+mesenteric|celiac|resect|border", required: false }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(eclampsia|PRES|posterior\\s*reversible\\s*encephalopathy)", required: true }
+  - { name: "key_finding_posterior_edema", check_type: regex, pattern: "(?i)(parieto.?occipital|posterior.*edema|vasogenic\\s*edema|white\\s*matter.*hypodensity)", required: true }
 reference_solution: |
-  Multiphase contrast-enhanced CT of the abdomen demonstrates a 3.0 x 2.8 cm
-  hypoattenuating mass in the pancreatic head, best seen on the pancreatic
-  parenchymal phase where the mass fails to enhance compared to the
-  surrounding normal pancreas. There is a double duct sign with dilatation of
-  both the common bile duct (12 mm) and the main pancreatic duct (5 mm)
-  upstream of the mass. The intrahepatic bile ducts are dilated. The
-  gallbladder is distended (Courvoisier sign). The mass abuts the superior
-  mesenteric vein along less than 180 degrees of its circumference without
-  vessel occlusion or deformity. The superior mesenteric artery and celiac
-  trunk are free of tumor contact. No hepatic metastases. No peritoneal
-  carcinomatosis or ascites. No distant lymphadenopathy.
-  Impression: Pancreatic head mass consistent with ductal adenocarcinoma with
-  biliary obstruction (double duct sign). The mass appears borderline
-  resectable given SMV abutment. Multidisciplinary oncology consultation
-  recommended for staging and treatment planning. EUS with FNA for tissue
-  confirmation.
+  Non-contrast CT head demonstrates bilateral symmetric hypodensity involving the parieto-occipital white matter and cortex, consistent with vasogenic edema. No intracranial hemorrhage, midline shift, or hydrocephalus is identified. The dural venous sinuses appear patent. In a pregnant or postpartum patient with hypertension and seizures, findings are consistent with posterior reversible encephalopathy syndrome (PRES) in the setting of eclampsia. MRI is recommended for further characterization.
 condition_present: true
 confusion_pair: null
-source_dataset: eurorad
+source_dataset: openem-grounded
 tags:
-  - pancreatic-cancer
-  - adenocarcinoma
-  - oncology
-  - abdomen
-  - biliary-obstruction
-  - report-generation
+  - neuro
+  - obstetric
+  - emergency

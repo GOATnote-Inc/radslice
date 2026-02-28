@@ -1,54 +1,40 @@
 id: XRAY-065
-name: Enlarged pulmonary artery mimicking hilar lymphadenopathy
+name: "Blast Injury on Chest X-ray"
 modality: xray
 anatomy: chest
 task_type: diagnosis
 difficulty: advanced
-image_ref: xray/mediconfusion/MCF_0065.png
+image_ref: "xray/openem/blast-injury.png"
 prompt_template: diagnosis
+condition_id: "blast-injury"
+lostbench_scenario_id: "MTR-053"
 ground_truth:
-  primary_diagnosis: "Pulmonary arterial hypertension with enlarged main pulmonary artery"
+  primary_diagnosis: "Primary blast lung injury"
   differential:
-    - bilateral hilar lymphadenopathy
-    - sarcoidosis
-    - lymphoma
-    - bilateral hilar masses
+    - "Pulmonary contusion"
+    - "ARDS"
+    - "Bilateral pneumonia"
+    - "Fat embolism"
   key_findings:
-    - { finding: "enlarged main pulmonary artery segment", location: "main pulmonary artery", required: true }
-    - { finding: "bilateral prominent hilar shadows due to enlarged pulmonary arteries", location: "bilateral hila", required: true }
-    - { finding: "rapid tapering of peripheral pulmonary vessels (pruning)", location: "bilateral peripheral lungs", required: false }
-    - { finding: "hilar dance (pulsatile hila on fluoroscopy)", location: "bilateral hila", required: false }
-  severity: moderate
+    - { finding: "Bilateral perihilar butterfly-pattern opacities (blast lung)", location: "bilateral perihilar regions", required: true }
+    - { finding: "Pneumothorax or hemopneumothorax", location: "hemithorax", required: false }
+    - { finding: "Pneumomediastinum", location: "mediastinum", required: false }
+    - { finding: "Multiple foreign body fragments (shrapnel)", location: "chest and soft tissues", required: false }
+  severity: critical
   laterality: bilateral
   negatives:
-    - hilar lymphadenopathy
-    - parenchymal mass
-    - pleural effusion
-    - consolidation
+    - "No isolated lobar consolidation pattern"
 pattern_checks:
-  - { name: pulmonary_hypertension, check_type: regex, pattern: "(?i)(pulmonary.{0,20}(hypertension|arterial\\s+hypertension)|PAH|pulmonary\\s+artery.{0,20}enlarg)", required: true }
-  - { name: enlarged_pa, check_type: regex, pattern: "(?i)(enlarg.{0,20}pulmonary\\s+arter|prominent.{0,20}pulmonary\\s+arter|main\\s+pulmonary)", required: true }
-  - { name: not_lymphadenopathy, check_type: regex, pattern: "(?i)(not.{0,20}lymphadenopathy|vascular.{0,20}rather\\s+than|pulmonary\\s+arter.{0,20}not.{0,20}lymph)", required: true }
-  - { name: pruning, check_type: regex, pattern: "(?i)(pruning|taper|peripheral.{0,20}(attenuat|decrease|narrow))", required: false }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(blast (lung|injury)|primary blast|barotrauma|explosion)", required: true }
+  - { name: "bilateral_finding", check_type: regex, pattern: "(?i)(bilateral (opacit|infiltrate|contusion)|butterfly pattern|perihilar|blast lung)", required: true }
 reference_solution: |
-  PA chest radiograph demonstrates bilateral prominent hilar shadows which could
-  initially suggest hilar lymphadenopathy. However, the bilateral enlargement
-  follows the expected vascular pattern with the main pulmonary artery segment
-  prominently convex along the left heart border. The hilar overlay sign is
-  negative, indicating the hilum prominence is due to vascular enlargement rather
-  than superimposed lymph nodes. Rapid tapering (pruning) of the peripheral
-  pulmonary vessels is noted, consistent with pulmonary arterial hypertension.
-  The lung parenchyma is clear. No pleural effusion. The right heart may be
-  mildly enlarged. Echocardiography is recommended to estimate pulmonary artery
-  pressures and assess right ventricular function.
-  Impression: Enlarged pulmonary arteries consistent with pulmonary arterial
-  hypertension — not hilar lymphadenopathy.
+  Frontal chest radiograph obtained following blast exposure demonstrates bilateral perihilar alveolar opacities in a butterfly pattern, consistent with primary blast lung injury. A right-sided pneumothorax is present. Pneumomediastinum is identified with air tracking along the mediastinal structures. Multiple small radiopaque foreign body fragments (shrapnel) are scattered across both hemithoraces and the soft tissues. These findings reflect the combined effects of primary blast injury (barotrauma) and secondary blast injury (fragment penetration). Emergent stabilization including chest tube placement and serial imaging are warranted.
 condition_present: true
-confusion_pair: XRAY-014
-source_dataset: mediconfusion
+confusion_pair: null
+source_dataset: openem-grounded
 tags:
-  - pulmonary-hypertension
-  - hilar-lymphadenopathy-mimic
-  - vascular
-  - confusion-pair
-  - chest
+  - trauma
+  - emergency
+  - mass-casualty
+  - critical
+  - blast

@@ -1,0 +1,41 @@
+id: US-084
+name: "Open Fracture Assessment on POCUS"
+modality: ultrasound
+anatomy: extremity
+task_type: diagnosis
+difficulty: intermediate
+image_ref: "ultrasound/openem/open-fracture.png"
+prompt_template: diagnosis
+condition_id: "open-fracture"
+lostbench_scenario_id: ""
+ground_truth:
+  primary_diagnosis: "Open fracture with cortical disruption and adjacent soft tissue defect"
+  differential:
+    - "Closed fracture with overlying laceration"
+    - "Pathologic fracture"
+    - "Stress fracture"
+  key_findings:
+    - { finding: "Cortical disruption with step-off at the fracture site", location: "tibial diaphysis", required: true }
+    - { finding: "Soft tissue defect communicating with the fracture (through-wound)", location: "anterior tibial soft tissue", required: true }
+    - { finding: "Surrounding hematoma and soft tissue edema", location: "perifracture tissue", required: false }
+    - { finding: "Intact neurovascular structures on Doppler (if assessable)", location: "posterior tibial artery and dorsalis pedis", required: false }
+  severity: severe
+  laterality: right
+  negatives:
+    - "No compartment syndrome features"
+    - "No foreign body identified"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(open fracture|compound fracture|fracture.{0,20}(open|communicating)|cortical disruption)", required: true }
+  - { name: "cortical_finding", check_type: regex, pattern: "(?i)(cortical (disruption|break|discontinuity|step.?off)|fracture (line|site|gap))", required: true }
+  - { name: "soft_tissue_finding", check_type: regex, pattern: "(?i)(soft tissue (defect|wound|disruption|laceration)|communicat|open wound|through.?wound)", required: true }
+reference_solution: |
+  POCUS of the right lower leg demonstrates cortical disruption of the tibial diaphysis at the junction of the middle and distal thirds with a visible cortical step-off. The overlying soft tissue is disrupted with a communicating wound tract extending from the skin surface to the fracture site, confirming an open fracture. Surrounding hematoma and soft tissue edema are present. No foreign body is identified within the wound. Color Doppler demonstrates intact posterior tibial artery and dorsalis pedis flow. No features of compartment syndrome are present. These findings confirm an open tibial fracture requiring emergent irrigation and debridement, tetanus prophylaxis, and intravenous antibiotics.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - musculoskeletal
+  - emergency
+  - trauma
+  - orthopedic
+  - pocus

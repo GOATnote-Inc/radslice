@@ -1,58 +1,41 @@
 id: US-012
-name: Ectopic pregnancy with adnexal mass and free fluid
+name: "STEMI with Wall Motion Abnormality on Echocardiography"
 modality: ultrasound
-anatomy: pelvis
+anatomy: chest
 task_type: diagnosis
-difficulty: expert
-image_ref: ultrasound/radimagenet/US_0012.png
+difficulty: advanced
+image_ref: "ultrasound/openem/stemi.png"
 prompt_template: diagnosis
+condition_id: "stemi"
+lostbench_scenario_id: "MTR-008"
 ground_truth:
-  primary_diagnosis: "Ectopic pregnancy"
+  primary_diagnosis: "Acute anterior STEMI with apical and anterior wall akinesis"
   differential:
-    - ruptured ovarian cyst
-    - tubo-ovarian abscess
-    - hemorrhagic corpus luteum cyst
-    - ovarian torsion
-    - heterotopic pregnancy
+    - "Stress (Takotsubo) cardiomyopathy"
+    - "Prior myocardial infarction with chronic wall motion abnormality"
+    - "Myocarditis with regional involvement"
   key_findings:
-    - { finding: "extrauterine adnexal mass with echogenic ring (tubal ring sign)", location: "right adnexa", required: true }
-    - { finding: "empty uterus with thickened endometrium (pseudogestational sac)", location: "uterine cavity", required: true }
-    - { finding: "free fluid in the cul-de-sac", location: "posterior cul-de-sac (pouch of Douglas)", required: true }
-    - { finding: "peripheral vascularity on color Doppler (ring of fire)", location: "adnexal mass", required: false }
-  severity: severe
-  laterality: right
+    - { finding: "Akinesis of the anterior wall and apex", location: "anterior wall and apex of left ventricle", required: true }
+    - { finding: "Reduced left ventricular ejection fraction", location: "left ventricle", required: true }
+    - { finding: "Compensatory hyperkinesis of remote segments", location: "inferior and posterior walls", required: false }
+    - { finding: "No myocardial thinning suggesting acute rather than chronic event", location: "anterior wall", required: false }
+  severity: critical
+  laterality: n/a
   negatives:
-    - intrauterine pregnancy
-    - ovarian torsion
-    - uterine fibroid
-    - intrauterine device
-    - normal ovarian follicle
+    - "No pericardial effusion"
+    - "No LV thrombus"
+    - "No mechanical complication such as VSD or papillary muscle rupture"
 pattern_checks:
-  - { name: ectopic_mentioned, check_type: regex, pattern: "ectopic|extrauterine|tubal\\s+pregnancy", required: true }
-  - { name: adnexal_mass, check_type: regex, pattern: "adnexal.*mass|tubal.*ring|ring.*sign|adnexal.*ring", required: true }
-  - { name: empty_uterus, check_type: regex, pattern: "empty.*uter|no.*(intrauterine|IUP)|absent.*gestational\\s+sac", required: true }
-  - { name: free_fluid, check_type: regex, pattern: "free\\s+fluid|fluid.*cul.?de.?sac|fluid.*pelvi|hemoperitoneum", required: true }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(STEMI|ST.?elevation|myocardial infarction|acute MI|anterior (MI|infarct))", required: true }
+  - { name: "wma_finding", check_type: regex, pattern: "(?i)(akinesis|wall motion abnormal|hypokinesis|dyskinesis|regional.{0,20}dysfunction)", required: true }
+  - { name: "anterior_territory", check_type: regex, pattern: "(?i)(anterior|apical|apex|LAD)", required: true }
 reference_solution: |
-  Transvaginal pelvic ultrasound demonstrates an empty uterine cavity with
-  thickened decidualized endometrium but no intrauterine gestational sac or
-  fetal pole. A pseudogestational sac of fluid is noted centrally within the
-  endometrial cavity. In the right adnexa, there is an extraovarian mass
-  measuring 2.3 x 1.8 cm demonstrating a hyperechoic ring (tubal ring sign)
-  surrounding an anechoic center. Color Doppler shows prominent peripheral
-  vascularity around this adnexal mass, consistent with a ring-of-fire pattern.
-  A moderate amount of complex free fluid with low-level echoes is present in
-  the posterior cul-de-sac, concerning for hemoperitoneum. The right ovary is
-  identified separately from the adnexal mass. The left ovary is unremarkable.
-  Impression: Right ectopic pregnancy with adnexal mass, empty uterus, and
-  cul-de-sac free fluid suggesting rupture. Emergent gynecologic consultation
-  is indicated.
+  Transthoracic echocardiography demonstrates akinesis of the mid to distal anterior septum, anterior wall, and apex of the left ventricle consistent with the LAD coronary artery territory. The remaining myocardial segments demonstrate normal or compensatory hyperkinesis. The overall left ventricular ejection fraction is estimated at 35%. No acute mechanical complications are identified, specifically no ventricular septal defect, free wall rupture, or papillary muscle dysfunction. No LV apical thrombus is seen. These findings are consistent with an acute anterior STEMI and support emergent reperfusion therapy.
 condition_present: true
 confusion_pair: null
-source_dataset: radimagenet
+source_dataset: openem-grounded
 tags:
-  - ectopic-pregnancy
-  - pelvis
-  - ob-gyn
-  - adnexal-mass
+  - cardiac
   - emergency
-  - doppler
+  - echocardiography
+  - acs

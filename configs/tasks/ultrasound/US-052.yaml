@@ -1,0 +1,40 @@
+id: US-052
+name: "Peritonsillar Abscess on Intraoral Ultrasound"
+modality: ultrasound
+anatomy: neck
+task_type: diagnosis
+difficulty: advanced
+image_ref: "ultrasound/openem/peritonsillar-abscess.png"
+prompt_template: diagnosis
+condition_id: "peritonsillar-abscess"
+lostbench_scenario_id: ""
+ground_truth:
+  primary_diagnosis: "Peritonsillar abscess with drainable fluid collection"
+  differential:
+    - "Peritonsillar cellulitis (phlegmon)"
+    - "Parapharyngeal abscess"
+    - "Tonsillar neoplasm"
+  key_findings:
+    - { finding: "Hypoechoic or anechoic fluid collection adjacent to the tonsillar fossa", location: "peritonsillar space", required: true }
+    - { finding: "Internal carotid artery identified and its relationship to the collection", location: "deep to the abscess", required: true }
+    - { finding: "Surrounding inflammatory changes with increased echogenicity", location: "peritonsillar soft tissue", required: false }
+    - { finding: "Medial displacement of the tonsil", location: "palatine tonsil", required: false }
+  severity: moderate
+  laterality: left
+  negatives:
+    - "No involvement of the parapharyngeal space"
+    - "No airway compromise"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(peritonsillar abscess|PTA|tonsillar abscess|quinsy)", required: true }
+  - { name: "collection_finding", check_type: regex, pattern: "(?i)((hypoechoic|anechoic|fluid) collection|abscess (cavity|collection)|drainable (collection|abscess))", required: true }
+  - { name: "carotid_identified", check_type: regex, pattern: "(?i)(carotid artery|ICA|internal carotid|vascular.{0,20}(identified|relationship|deep))", required: true }
+reference_solution: |
+  Intraoral point-of-care ultrasound using a high-frequency endocavitary transducer demonstrates a well-defined hypoechoic collection measuring 2.5 x 1.8 cm in the left peritonsillar space, consistent with an abscess. The collection is located superficial and medial to the internal carotid artery, which is identified pulsating approximately 2 cm deep to the abscess wall, confirming safe distance for aspiration. The surrounding soft tissues demonstrate increased echogenicity consistent with inflammatory changes. The contralateral right side appears normal. These findings confirm a left peritonsillar abscess amenable to needle aspiration or incision and drainage.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - head-neck
+  - emergency
+  - soft-tissue
+  - infectious

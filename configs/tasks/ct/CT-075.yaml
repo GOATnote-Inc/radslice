@@ -1,0 +1,36 @@
+id: CT-075
+name: "Sickle cell crisis with splenic infarction on contrast-enhanced CT"
+modality: ct
+anatomy: abdomen
+task_type: diagnosis
+difficulty: advanced
+image_ref: "ct/openem/sickle-cell-crisis.png"
+prompt_template: diagnosis
+condition_id: "sickle-cell-crisis"
+lostbench_scenario_id: ""
+ground_truth:
+  primary_diagnosis: "Sickle cell crisis with splenic infarction and autosplenectomy"
+  differential:
+    - "Splenic artery thrombosis"
+    - "Splenic abscess"
+    - "Splenic lymphoma"
+  key_findings:
+    - { finding: "Small calcified autosplenectomy spleen with peripheral wedge-shaped infarcts", location: "spleen", required: true }
+    - { finding: "Bone marrow reconversion with diffuse medullary expansion", location: "vertebral bodies and pelvis", required: true }
+    - { finding: "Cholelithiasis (pigmented gallstones)", location: "gallbladder", required: false }
+  severity: "severe"
+  laterality: "n/a"
+  negatives:
+    - "No acute chest syndrome"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(sickle\\s*cell|splenic\\s*infarct|autosplenectomy|vaso.?occlusive)", required: true }
+  - { name: "key_finding_spleen", check_type: regex, pattern: "(?i)(splenic\\s*infarct|autosplenectomy|small.*calcified.*spleen|medullary\\s*expansion)", required: true }
+reference_solution: |
+  Contrast-enhanced CT of the abdomen demonstrates a small, densely calcified spleen consistent with autosplenectomy from chronic sickle cell disease with superimposed peripheral wedge-shaped hypodense areas representing acute splenic infarcts. Diffuse medullary expansion of the axial skeleton with decreased marrow attenuation reflects extramedullary hematopoiesis. Pigmented gallstones are present. No findings of acute chest syndrome are identified. Findings are consistent with acute sickle cell crisis complicated by splenic infarction.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - hematologic
+  - emergency
+  - abdominal

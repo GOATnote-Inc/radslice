@@ -1,0 +1,38 @@
+id: MRI-045
+name: "Acute Muscle Strain on Extremity MRI"
+modality: mri
+anatomy: extremity
+task_type: diagnosis
+difficulty: basic
+image_ref: "mri/openem/acute-muscle-strain.png"
+prompt_template: diagnosis
+condition_id: "acute-muscle-strain"
+lostbench_scenario_id: "DEF-008"
+ground_truth:
+  primary_diagnosis: "Acute muscle strain (grade II partial tear) on MRI"
+  differential:
+    - "Muscle contusion"
+    - "Myositis"
+    - "Delayed onset muscle soreness (DOMS)"
+  key_findings:
+    - { finding: "T2/STIR hyperintense intramuscular edema with partial fiber disruption", location: "Right hamstring (biceps femoris) musculotendinous junction", required: true }
+    - { finding: "Feathery pattern of edema within the muscle belly on fluid-sensitive sequences", location: "Right posterior thigh", required: true }
+    - { finding: "Small intramuscular hematoma at the site of fiber disruption", location: "Right biceps femoris musculotendinous junction", required: false }
+  severity: "mild"
+  laterality: "right"
+  negatives:
+    - "No complete muscle tear or retraction"
+    - "No fracture"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(muscle\\s+strain|muscle\\s+tear|musculotendinous.*(injury|strain|tear))", required: true }
+  - { name: "edema_finding", check_type: regex, pattern: "(?i)(edema|STIR|T2).*(hyperinten|signal|bright)", required: true }
+  - { name: "laterality", check_type: regex, pattern: "(?i)right", required: true }
+reference_solution: |
+  MRI of the right thigh demonstrates T2/STIR hyperintense edema within the biceps femoris muscle at the musculotendinous junction, with a feathery intramuscular pattern consistent with grade II muscle strain (partial tear). A small intramuscular hematoma is noted at the site of partial fiber disruption. The tendon origin is intact. No complete muscle fiber discontinuity or retraction. No osseous injury. Findings are consistent with an acute partial hamstring strain at the musculotendinous junction.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - musculoskeletal
+  - sports
+  - defer

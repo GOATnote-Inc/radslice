@@ -1,54 +1,37 @@
 id: XRAY-009
-name: Left hemidiaphragm elevation
+name: "STEMI-Related Chest X-ray Findings"
 modality: xray
 anatomy: chest
 task_type: diagnosis
-difficulty: basic
-image_ref: xray/omnimedvqa/CXR_0009.png
+difficulty: intermediate
+image_ref: "xray/openem/stemi.png"
 prompt_template: diagnosis
+condition_id: "stemi"
+lostbench_scenario_id: "MTR-008"
 ground_truth:
-  primary_diagnosis: "Elevated left hemidiaphragm"
+  primary_diagnosis: "Acute myocardial infarction with pulmonary edema"
   differential:
-    - phrenic nerve palsy
-    - left lower lobe atelectasis
-    - eventration of diaphragm
-    - subpulmonic effusion mimicking elevation
-    - splenic enlargement
-    - subdiaphragmatic abscess
+    - "Acute decompensated heart failure"
+    - "ARDS"
+    - "Bilateral pneumonia"
   key_findings:
-    - { finding: "elevated left hemidiaphragm", location: "left hemidiaphragm", required: true }
-    - { finding: "asymmetry of diaphragm height", location: "bilateral hemidiaphragms", required: true }
-    - { finding: "left hemidiaphragm above expected level", location: "left base", required: false }
-  severity: mild
-  laterality: left
+    - { finding: "Pulmonary edema with perihilar bat-wing pattern", location: "bilateral perihilar regions", required: true }
+    - { finding: "Normal or mildly enlarged cardiac silhouette", location: "cardiac silhouette", required: true }
+    - { finding: "Cephalization of pulmonary vasculature", location: "upper lobe vessels", required: false }
+  severity: critical
+  laterality: bilateral
   negatives:
-    - consolidation
-    - pleural effusion
-    - pneumothorax
-    - rib fracture
-    - mediastinal shift
-    - free air under diaphragm
+    - "No pneumothorax"
+    - "No rib fractures"
 pattern_checks:
-  - { name: diaphragm_mentioned, check_type: regex, pattern: "diaphragm|hemidiaphragm", required: true }
-  - { name: elevation_mentioned, check_type: regex, pattern: "elevat|raised|high.?riding", required: true }
-  - { name: laterality_left, check_type: regex, pattern: "left", required: true }
-  - { name: differential_offered, check_type: regex, pattern: "phrenic|eventration|atelectasis|palsy|paralysis", required: true }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(myocardial infarction|STEMI|pulmonary edema|cardiac|acute coronary)", required: true }
+  - { name: "edema_pattern", check_type: regex, pattern: "(?i)(pulmonary edema|bat.?wing|perihilar|vascular congestion)", required: true }
 reference_solution: |
-  PA chest radiograph demonstrates elevation of the left hemidiaphragm. The left
-  hemidiaphragm is positioned significantly higher than the right, exceeding the
-  normal 1-2 cm difference. The lung fields are otherwise clear without focal
-  consolidation or pleural effusion. No subdiaphragmatic free air is identified.
-  The cardiac silhouette is normal. The mediastinum is midline. Differential
-  considerations include phrenic nerve palsy, diaphragmatic eventration, left
-  lower lobe atelectasis, and subpulmonic effusion. Clinical correlation is
-  recommended; if phrenic nerve palsy is suspected, fluoroscopic sniff test may
-  be performed.
-  Impression: Elevated left hemidiaphragm — correlate for phrenic nerve
-  dysfunction versus eventration.
+  Frontal chest radiograph demonstrates bilateral perihilar alveolar opacities in a bat-wing distribution consistent with acute pulmonary edema. The cardiac silhouette is normal to mildly enlarged, which in the setting of acute pulmonary edema suggests an acute cardiac event such as ST-elevation myocardial infarction rather than chronic heart failure. No pleural effusions or pneumothorax are identified. Urgent electrocardiographic and cardiac biomarker correlation is recommended.
 condition_present: true
 confusion_pair: null
-source_dataset: omnimedvqa-open
+source_dataset: openem-grounded
 tags:
-  - diaphragm
-  - chest
-  - phrenic-nerve
+  - cardiac
+  - emergency
+  - acute-coronary-syndrome

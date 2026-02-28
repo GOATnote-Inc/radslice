@@ -1,0 +1,36 @@
+id: CT-088
+name: "Cellulitis with soft tissue abscess on contrast-enhanced CT"
+modality: ct
+anatomy: extremity
+task_type: diagnosis
+difficulty: intermediate
+image_ref: "ct/openem/cellulitis-abscess.png"
+prompt_template: diagnosis
+condition_id: "cellulitis-abscess"
+lostbench_scenario_id: ""
+ground_truth:
+  primary_diagnosis: "Cellulitis with subcutaneous abscess"
+  differential:
+    - "Necrotizing fasciitis"
+    - "Deep vein thrombosis with cellulitis"
+    - "Foreign body with surrounding infection"
+  key_findings:
+    - { finding: "Rim-enhancing subcutaneous fluid collection", location: "right medial thigh", required: true }
+    - { finding: "Diffuse subcutaneous fat stranding and skin thickening", location: "right thigh", required: true }
+    - { finding: "No deep fascial involvement or gas", location: "deep fascial planes", required: false }
+  severity: "moderate"
+  laterality: "right"
+  negatives:
+    - "No gas in the soft tissues"
+    - "No fascial non-enhancement (excluding necrotizing fasciitis)"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(cellulitis|abscess|subcutaneous.*collection)", required: true }
+  - { name: "key_finding_collection", check_type: regex, pattern: "(?i)(rim.?enhancing|abscess|subcutaneous.*fluid|fat\\s*stranding)", required: true }
+reference_solution: |
+  Contrast-enhanced CT of the right thigh demonstrates a rim-enhancing subcutaneous fluid collection in the right medial thigh measuring approximately 4 x 3 cm, consistent with an abscess. Surrounding diffuse subcutaneous fat stranding and skin thickening indicate cellulitis. The deep fascial planes are intact with normal enhancement, and no subcutaneous gas is present, making necrotizing fasciitis unlikely. Findings are consistent with cellulitis with a drainable subcutaneous abscess requiring incision and drainage.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - infectious
+  - surgical

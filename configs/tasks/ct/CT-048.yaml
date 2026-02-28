@@ -1,61 +1,37 @@
 id: CT-048
-name: Renal cell carcinoma
+name: "Open fracture with soft tissue disruption on CT"
 modality: ct
-anatomy: abdomen
-task_type: report_generation
-difficulty: advanced
-image_ref: ct/eurorad/EUR_0048.png
-prompt_template: report_generation
+anatomy: extremity
+task_type: diagnosis
+difficulty: intermediate
+image_ref: "ct/openem/open-fracture.png"
+prompt_template: diagnosis
+condition_id: "open-fracture"
+lostbench_scenario_id: ""
 ground_truth:
-  primary_diagnosis: "Left renal cell carcinoma with renal vein extension"
+  primary_diagnosis: "Open comminuted tibial shaft fracture (Gustilo type IIIA)"
   differential:
-    - renal oncocytoma
-    - angiomyolipoma (fat-poor variant)
-    - urothelial carcinoma of renal pelvis
-    - renal abscess
-    - complex cystic nephroma
+    - "Closed fracture with soft tissue swelling"
+    - "Pathologic fracture"
+    - "Stress fracture"
   key_findings:
-    - { finding: "heterogeneously enhancing solid renal mass", location: "left kidney upper pole", required: true }
-    - { finding: "tumor thrombus in left renal vein", location: "left renal vein extending toward IVC", required: true }
-    - { finding: "necrotic areas within mass", location: "central portion of mass", required: false }
-    - { finding: "no macroscopic fat within mass", location: "mass interior", required: false }
-  severity: severe
-  laterality: left
+    - { finding: "Comminuted fracture of the tibial shaft with displacement", location: "mid tibial diaphysis", required: true }
+    - { finding: "Overlying soft tissue defect with communication to the fracture site", location: "anterior soft tissues of the lower leg", required: true }
+    - { finding: "Subcutaneous and intramuscular air at the fracture site", location: "anterior compartment", required: false }
+  severity: "severe"
+  laterality: "right"
   negatives:
-    - bilateral renal masses
-    - macroscopic fat (angiomyolipoma)
-    - IVC thrombus extension
-    - adrenal metastasis
-    - lung metastases on visualized lung bases
-    - renal pelvis invasion pattern
+    - "No vascular injury on CT angiography"
 pattern_checks:
-  - { name: rcc_mentioned, check_type: regex, pattern: "renal\\s+cell\\s+carcinoma|RCC\\b|renal.*malignan|renal.*carcinoma", required: true }
-  - { name: renal_mass, check_type: regex, pattern: "renal\\s+mass|kidney.*mass|mass.*kidney", required: true }
-  - { name: tumor_thrombus, check_type: regex, pattern: "tumor\\s+thrombus|venous.*thrombus|renal\\s+vein.{0,20}(thrombus|extension|involve)", required: true }
-  - { name: left_kidney, check_type: regex, pattern: "left.*kidney|left.*renal", required: true }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(open\\s*fracture|compound\\s*fracture|comminuted.*fracture)", required: true }
+  - { name: "key_finding_soft_tissue", check_type: regex, pattern: "(?i)(soft\\s*tissue\\s*defect|open.*wound|subcutaneous\\s*air|gas.*fracture)", required: true }
 reference_solution: |
-  Multiphase contrast-enhanced CT of the abdomen demonstrates a large
-  heterogeneously enhancing solid mass arising from the upper pole of the
-  left kidney, measuring 7.2 x 6.5 x 6.0 cm. The mass shows avid
-  corticomedullary phase enhancement with central areas of necrosis. No
-  macroscopic fat is identified within the mass, arguing against
-  angiomyolipoma. Tumor thrombus is present extending from the mass into
-  the left renal vein, with expansion of the vein to 2.2 cm in diameter.
-  The thrombus approaches but does not extend into the inferior vena cava.
-  The right kidney is normal. No retroperitoneal or para-aortic
-  lymphadenopathy exceeding 1 cm. The bilateral adrenal glands are normal.
-  Visualized lung bases are clear without metastatic nodules.
-  Impression: Large left upper pole renal mass consistent with renal cell
-  carcinoma (T3a) with left renal vein tumor thrombus. No IVC extension.
-  No distant metastases on this study. Urologic oncology referral for
-  surgical planning. Complete staging with chest CT recommended.
+  CT of the right lower extremity demonstrates a comminuted displaced fracture of the mid tibial diaphysis with associated fibular fracture. There is a large overlying anterior soft tissue defect communicating with the fracture site, confirming an open fracture. Subcutaneous and intramuscular air is present at the fracture site. No vascular injury is identified on CT angiography. Findings are consistent with a Gustilo type IIIA open tibial fracture requiring emergent surgical debridement, irrigation, and fixation.
 condition_present: true
 confusion_pair: null
-source_dataset: eurorad
+source_dataset: openem-grounded
 tags:
-  - renal-cell-carcinoma
-  - oncology
-  - abdomen
-  - renal
-  - tumor-thrombus
-  - report-generation
+  - musculoskeletal
+  - trauma
+  - orthopedic
+  - emergency

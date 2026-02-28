@@ -1,52 +1,39 @@
 id: XRAY-063
-name: Subpulmonic effusion mimicking elevated hemidiaphragm
+name: "Caustic Ingestion on Chest X-ray"
 modality: xray
 anatomy: chest
 task_type: diagnosis
 difficulty: advanced
-image_ref: xray/mediconfusion/MCF_0063.png
+image_ref: "xray/openem/caustic-ingestion.png"
 prompt_template: diagnosis
+condition_id: "caustic-ingestion"
+lostbench_scenario_id: ""
 ground_truth:
-  primary_diagnosis: "Left subpulmonic pleural effusion"
+  primary_diagnosis: "Caustic ingestion with esophageal or gastric perforation"
   differential:
-    - elevated left hemidiaphragm (phrenic nerve palsy)
-    - diaphragmatic eventration
-    - left lower lobe atelectasis
+    - "Esophageal perforation from other cause"
+    - "Aspiration pneumonitis"
+    - "Pneumomediastinum from retching"
   key_findings:
-    - { finding: "apparent elevation of the left hemidiaphragm with laterally peaked contour", location: "left hemidiaphragm", required: true }
-    - { finding: "lateral peaking of the diaphragmatic contour (not at the midpoint)", location: "left hemidiaphragm", required: true }
-    - { finding: "increased distance between gastric air bubble and apparent diaphragm", location: "left subdiaphragmatic region", required: false }
-  severity: moderate
-  laterality: left
+    - { finding: "Pneumomediastinum from esophageal or gastric perforation", location: "mediastinum", required: true }
+    - { finding: "Pleural effusion (chemical mediastinitis)", location: "left hemithorax", required: false }
+    - { finding: "Subcutaneous emphysema", location: "neck and chest wall", required: false }
+    - { finding: "Free air under the diaphragm if gastric perforation", location: "subdiaphragmatic", required: false }
+  severity: critical
+  laterality: bilateral
   negatives:
-    - true hemidiaphragm elevation
-    - phrenic nerve palsy
-    - diaphragmatic eventration
-    - pneumothorax
+    - "No aspirated foreign body"
 pattern_checks:
-  - { name: subpulmonic_effusion, check_type: regex, pattern: "(?i)(subpulmonic\\s+effusion|sub.?pulmonic)", required: true }
-  - { name: lateral_peak, check_type: regex, pattern: "(?i)(lateral.{0,20}peak|peak.{0,20}lateral|contour.{0,20}lateral)", required: true }
-  - { name: not_elevation, check_type: regex, pattern: "(?i)(not.{0,20}(true\\s+)?elevat|rather\\s+than.{0,20}elevat|effusion.{0,20}not.{0,20}diaphragm)", required: true }
-  - { name: decubitus, check_type: regex, pattern: "(?i)(decubitus|lateral.{0,20}decubitus|ultrasound|confirm)", required: false }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(caustic ingestion|corrosive|chemical burn|esophageal (perforation|injury)|gastric perforation)", required: true }
+  - { name: "perforation_finding", check_type: regex, pattern: "(?i)(pneumomediastinum|free air|perforation|subcutaneous emphysema|mediastinal air)", required: true }
 reference_solution: |
-  PA chest radiograph demonstrates what appears to be an elevated left
-  hemidiaphragm. However, the diaphragmatic contour peaks laterally rather than
-  at its midpoint, which is characteristic of a subpulmonic pleural effusion
-  rather than true hemidiaphragm elevation. Additionally, the distance between
-  the gastric air bubble and the apparent left hemidiaphragm is increased,
-  suggesting interposed fluid. A left lateral decubitus view would demonstrate
-  layering of the fluid along the dependent chest wall, confirming a pleural
-  effusion. The right lung is clear. No pneumothorax. The cardiac silhouette is
-  normal. This diagnosis is important as it changes management from observation
-  (for simple diaphragm elevation) to evaluation for effusion etiology.
-  Impression: Left subpulmonic pleural effusion — not true hemidiaphragm
-  elevation. Decubitus view or ultrasound recommended for confirmation.
+  Frontal chest radiograph demonstrates pneumomediastinum with air outlining the mediastinal structures. Subcutaneous emphysema is present in the neck. A left pleural effusion is noted. No free subdiaphragmatic air is identified. In the clinical context of caustic substance ingestion, these findings indicate esophageal perforation with chemical mediastinitis. Emergent surgical consultation and water-soluble contrast esophagram (if the patient can swallow) are indicated. CT of the chest and abdomen with oral contrast should be considered for further characterization.
 condition_present: true
-confusion_pair: XRAY-009
-source_dataset: mediconfusion
+confusion_pair: null
+source_dataset: openem-grounded
 tags:
-  - subpulmonic-effusion
-  - diaphragm-mimic
-  - confusion-pair
-  - chest
-  - pleural
+  - gastrointestinal
+  - toxicology
+  - emergency
+  - surgical
+  - critical

@@ -1,60 +1,35 @@
 id: CT-031
-name: Hepatocellular carcinoma
+name: "Spontaneous pneumothorax on CT chest"
 modality: ct
-anatomy: abdomen
-task_type: report_generation
-difficulty: advanced
-image_ref: ct/eurorad/EUR_0031.png
-prompt_template: report_generation
+anatomy: chest
+task_type: diagnosis
+difficulty: intermediate
+image_ref: "ct/openem/spontaneous-pneumothorax.png"
+prompt_template: diagnosis
+condition_id: "spontaneous-pneumothorax"
+lostbench_scenario_id: ""
 ground_truth:
-  primary_diagnosis: "Hepatocellular carcinoma with arterial hyperenhancement and washout"
+  primary_diagnosis: "Left-sided primary spontaneous pneumothorax"
   differential:
-    - hepatic adenoma
-    - focal nodular hyperplasia
-    - hypervascular metastasis
-    - hemangioma (flash-filling variant)
-    - cholangiocarcinoma
+    - "Secondary spontaneous pneumothorax from bullous disease"
+    - "Pneumomediastinum with pneumothorax"
+    - "Skin fold artifact mimicking pneumothorax"
   key_findings:
-    - { finding: "arterial phase hyperenhancing mass with portal venous washout", location: "right hepatic lobe segment 8", required: true }
-    - { finding: "enhancing pseudocapsule", location: "surrounding the mass", required: true }
-    - { finding: "background cirrhotic liver morphology", location: "liver", required: false }
-    - { finding: "portal vein thrombus enhancement suggesting tumor thrombus", location: "right portal vein", required: false }
-  severity: severe
-  laterality: right
+    - { finding: "Air in the left pleural space with absence of lung markings peripherally", location: "left hemithorax", required: true }
+    - { finding: "Partial collapse of the left lung", location: "left lung", required: true }
+    - { finding: "Apical bleb or bulla at the lung apex", location: "left lung apex", required: false }
+  severity: "moderate"
+  laterality: "left"
   negatives:
-    - cavernous hemangioma enhancement pattern
-    - central scar (FNH pattern)
-    - diffuse infiltrative pattern
-    - extrahepatic metastases
-    - ascites
+    - "No mediastinal shift to suggest tension physiology"
 pattern_checks:
-  - { name: hcc_mentioned, check_type: regex, pattern: "hepatocellular\\s+carcinoma|HCC\\b", required: true }
-  - { name: arterial_enhancement, check_type: regex, pattern: "arterial.*enhanc|hyperenhanc|hypervascular|APHE", required: true }
-  - { name: washout, check_type: regex, pattern: "washout|wash.?out|portal.*hypo|venous.*hypo", required: true }
-  - { name: capsule, check_type: regex, pattern: "capsule|pseudocapsule|LI-?RADS", required: false }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(pneumothorax|air.*pleural\\s*space)", required: true }
+  - { name: "key_finding_air", check_type: regex, pattern: "(?i)(pneumothorax|pleural.*air|lung.*collapse|visceral\\s*pleural\\s*line)", required: true }
 reference_solution: |
-  Multiphase contrast-enhanced CT of the abdomen performed with arterial,
-  portal venous, and delayed phases demonstrates a 4.5 cm mass in segment 8
-  of the right hepatic lobe. The mass shows avid arterial phase
-  hyperenhancement (APHE) with portal venous phase washout and delayed
-  enhancing pseudocapsule, meeting LI-RADS 5 criteria for definitive
-  hepatocellular carcinoma. The background liver demonstrates nodular
-  contour, widened fissures, and caudate hypertrophy consistent with
-  cirrhosis. There is thrombosis of the right portal vein branch with
-  expansion and arterial enhancement of the thrombus, suggestive of tumor
-  thrombus rather than bland thrombus. No definite extrahepatic disease. No
-  ascites. The spleen is mildly enlarged at 14 cm.
-  Impression: LI-RADS 5 lesion in segment 8 consistent with hepatocellular
-  carcinoma with suspected right portal vein tumor thrombus. Hepatology and
-  surgical oncology consultation recommended for staging and treatment
-  planning.
+  CT of the chest demonstrates a moderate left-sided pneumothorax with partial collapse of the left lung. A small apical bleb is identified at the left lung apex, likely representing the etiology. There is no mediastinal shift to suggest tension physiology. The right lung is fully expanded and clear. Findings are consistent with primary spontaneous pneumothorax, likely secondary to ruptured apical bleb.
 condition_present: true
 confusion_pair: null
-source_dataset: eurorad
+source_dataset: openem-grounded
 tags:
-  - hepatocellular-carcinoma
-  - oncology
-  - abdomen
-  - hepatic
-  - cirrhosis
-  - report-generation
+  - pulmonary
+  - emergency

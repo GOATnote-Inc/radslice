@@ -1,60 +1,37 @@
 id: CT-056
-name: Pulmonary edema (confusion pair for GGO/viral pneumonia)
+name: "Fournier gangrene on contrast-enhanced CT pelvis"
 modality: ct
-anatomy: chest
+anatomy: pelvis
 task_type: diagnosis
-difficulty: intermediate
-image_ref: ct/omnimedvqa/CT_0056.png
+difficulty: advanced
+image_ref: "ct/openem/fourniers-gangrene.png"
 prompt_template: diagnosis
+condition_id: "fourniers-gangrene"
+lostbench_scenario_id: ""
 ground_truth:
-  primary_diagnosis: "Cardiogenic pulmonary edema"
+  primary_diagnosis: "Fournier gangrene (necrotizing fasciitis of the perineum)"
   differential:
-    - viral pneumonia
-    - ARDS
-    - fluid overload
-    - pulmonary hemorrhage
-    - lymphangitic carcinomatosis
+    - "Perianal abscess"
+    - "Scrotal cellulitis"
+    - "Ischiorectal abscess"
   key_findings:
-    - { finding: "bilateral dependent ground-glass opacities with gravitational gradient", location: "bilateral lower lobes", required: true }
-    - { finding: "bilateral pleural effusions", location: "bilateral pleural spaces", required: true }
-    - { finding: "interlobular septal thickening (Kerley B lines equivalent)", location: "bilateral lung bases", required: false }
-    - { finding: "enlarged heart", location: "cardiac silhouette", required: true }
-  severity: moderate
-  laterality: bilateral
+    - { finding: "Subcutaneous gas tracking along fascial planes in the perineum and scrotum", location: "perineum and scrotum", required: true }
+    - { finding: "Thickening and non-enhancement of the perineal fascia", location: "perineal soft tissues", required: true }
+    - { finding: "Extension of gas into the anterior abdominal wall or retroperitoneum", location: "inguinal region", required: false }
+  severity: "critical"
+  laterality: "bilateral"
   negatives:
-    - peripheral predominance (viral pattern)
-    - consolidation suggesting pneumonia
-    - lymphadenopathy
-    - crazy-paving without effusions
-    - pericardial effusion
+    - "No intra-abdominal source of infection"
 pattern_checks:
-  - { name: edema_mentioned, check_type: regex, pattern: "edema|oedema|pulmonary.*edema|cardiogenic|fluid\\s+overload|congesti", required: true }
-  - { name: bilateral_effusions, check_type: regex, pattern: "bilateral.*effusion|effusion.*bilateral|bilateral.*pleural", required: true }
-  - { name: cardiomegaly, check_type: regex, pattern: "cardiomegaly|enlarged.*heart|heart.*enlarged|cardiothoracic.*ratio", required: true }
-  - { name: septal_thickening, check_type: regex, pattern: "septal.*thicken|Kerley|interlobular", required: false }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(Fournier|necrotizing\\s*fasciitis.*perin|perineal.*gangrene)", required: true }
+  - { name: "key_finding_gas", check_type: regex, pattern: "(?i)(subcutaneous\\s*gas|fascial.*gas|gas.*perineum|gas.*scrotum)", required: true }
 reference_solution: |
-  Contrast-enhanced CT of the chest demonstrates bilateral dependent
-  ground-glass opacities with a gravitational gradient (posterior greater
-  than anterior), characteristic of cardiogenic pulmonary edema rather than
-  infectious process. Smooth interlobular septal thickening is present
-  bilaterally (CT equivalent of Kerley B lines). Moderate bilateral pleural
-  effusions are noted, left greater than right. The heart is enlarged with
-  a cardiothoracic ratio of approximately 0.6. The pulmonary arteries are
-  prominent, suggesting pulmonary venous hypertension. No focal
-  consolidation to suggest superimposed pneumonia. No lymphadenopathy. The
-  peribronchovascular interstitium is thickened consistent with fluid
-  distribution along the bronchovascular bundles (peribronchial cuffing).
-  Impression: Cardiogenic pulmonary edema with bilateral pleural effusions,
-  cardiomegaly, and dependent ground-glass opacities with septal
-  thickening. The gravitational distribution and associated effusions
-  distinguish this from viral pneumonia. Diuresis and cardiac optimization
-  recommended.
+  Contrast-enhanced CT of the pelvis demonstrates extensive subcutaneous and subfascial gas tracking throughout the perineum and bilateral scrotal soft tissues. The perineal fascia is thickened with areas of non-enhancement consistent with necrosis. Gas extends superiorly along the inguinal canals toward the anterior abdominal wall. No definite intra-abdominal source of infection is identified. Findings are consistent with Fournier gangrene requiring emergent surgical debridement, broad-spectrum antibiotics, and ICU admission.
 condition_present: true
-confusion_pair: CT-055
-source_dataset: omnimedvqa-open
+confusion_pair: null
+source_dataset: openem-grounded
 tags:
-  - pulmonary-edema
-  - cardiogenic
-  - chest
-  - cardiac
-  - confusion-pair
+  - surgical
+  - infectious
+  - emergency
+  - pelvic

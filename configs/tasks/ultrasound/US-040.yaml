@@ -1,0 +1,39 @@
+id: US-040
+name: "Threatened Abortion on Transvaginal Ultrasound"
+modality: ultrasound
+anatomy: pelvis
+task_type: diagnosis
+difficulty: intermediate
+image_ref: "ultrasound/openem/threatened-abortion.png"
+prompt_template: diagnosis
+condition_id: "threatened-abortion"
+lostbench_scenario_id: ""
+ground_truth:
+  primary_diagnosis: "Threatened abortion with subchorionic hematoma and viable intrauterine pregnancy"
+  differential:
+    - "Inevitable abortion"
+    - "Ectopic pregnancy"
+    - "Molar pregnancy"
+  key_findings:
+    - { finding: "Intrauterine gestational sac with viable embryo (cardiac activity present)", location: "uterine cavity", required: true }
+    - { finding: "Subchorionic hematoma (crescentic hypoechoic collection)", location: "between gestational sac and uterine wall", required: true }
+    - { finding: "Closed internal cervical os", location: "cervix", required: false }
+    - { finding: "Yolk sac and fetal pole appropriate for gestational age", location: "gestational sac", required: false }
+  severity: moderate
+  laterality: n/a
+  negatives:
+    - "No evidence of cervical dilation"
+    - "No free fluid in the cul-de-sac"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(threatened (abortion|miscarriage)|subchorionic (hematoma|hemorrhage)|viable.{0,20}(pregnancy|IUP))", required: true }
+  - { name: "viable_pregnancy", check_type: regex, pattern: "(?i)(cardiac activity|fetal heart|viable (embryo|pregnancy|IUP)|FHR|heart (beat|motion))", required: true }
+  - { name: "hematoma_finding", check_type: regex, pattern: "(?i)(subchorionic (hematoma|hemorrhage|collection)|retrochorionic|perigestational)", required: true }
+reference_solution: |
+  Transvaginal ultrasound demonstrates an intrauterine gestational sac containing a fetal pole with crown-rump length consistent with 8 weeks gestation. Fetal cardiac activity is present with a heart rate of 155 bpm. A crescentic hypoechoic collection is identified between the gestational sac and the uterine wall consistent with a subchorionic hematoma measuring 3 x 1.5 cm. The internal cervical os is closed. No free fluid is present in the cul-de-sac. These findings are consistent with a viable intrauterine pregnancy complicated by subchorionic hematoma in the setting of threatened abortion.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - obstetric
+  - gynecologic
+  - transvaginal

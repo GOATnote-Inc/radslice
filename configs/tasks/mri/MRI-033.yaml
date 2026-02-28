@@ -1,59 +1,39 @@
 id: MRI-033
-name: Achilles tendon rupture
+name: "Necrotizing Fasciitis on Extremity MRI"
 modality: mri
-anatomy: ankle
-task_type: finding_detection
-difficulty: intermediate
-image_ref: mri/omnimedvqa/MRI_0033.png
-prompt_template: finding_detection
+anatomy: extremity
+task_type: diagnosis
+difficulty: advanced
+image_ref: "mri/openem/necrotizing-fasciitis.png"
+prompt_template: diagnosis
+condition_id: "necrotizing-fasciitis"
+lostbench_scenario_id: "MTR-025"
 ground_truth:
-  primary_diagnosis: "Complete rupture of the left Achilles tendon"
+  primary_diagnosis: "Necrotizing fasciitis with fascial and soft tissue involvement on MRI"
   differential:
-    - partial Achilles tendon tear
-    - Achilles tendinopathy with interstitial tearing
-    - retrocalcaneal bursitis
-    - plantaris tendon rupture
-    - posterior tibialis tendon tear
+    - "Cellulitis with myositis"
+    - "Deep vein thrombosis with soft tissue edema"
+    - "Pyomyositis"
   key_findings:
-    - { finding: "complete discontinuity of the Achilles tendon with fluid-filled gap", location: "Achilles tendon approximately 4-6 cm proximal to calcaneal insertion (watershed zone)", required: true }
-    - { finding: "retraction of the proximal tendon stump with wavy morphology", location: "proximal Achilles tendon", required: true }
-    - { finding: "surrounding soft tissue edema and hemorrhage", location: "pre-Achilles fat pad and Kager fat pad", required: false }
-    - { finding: "thickening of the tendon stumps with heterogeneous T2 signal", location: "proximal and distal Achilles tendon stumps", required: false }
-  severity: moderate
-  laterality: left
+    - { finding: "T2 hyperintense thickening and enhancement of the deep fascia (fascial enhancement sign)", location: "Right lower extremity deep fascia", required: true }
+    - { finding: "Diffuse subcutaneous and intramuscular edema on STIR", location: "Right thigh compartments", required: true }
+    - { finding: "Non-enhancing areas within the fascia or muscle indicating necrosis", location: "Right anterior thigh compartment", required: false }
+  severity: "critical"
+  laterality: "right"
   negatives:
-    - calcaneal fracture
-    - posterior tibialis tendon pathology
-    - peroneal tendon subluxation
-    - ankle joint effusion with loose body
-    - stress fracture
+    - "No gas tracking within the soft tissues on MRI (better seen on CT)"
+    - "No abscess with rim enhancement"
 pattern_checks:
-  - { name: achilles_tear, check_type: regex, pattern: "Achilles.*tear|Achilles.*rupture|rupture.*Achilles|tear.*Achilles|Achilles.*disrupt", required: true }
-  - { name: complete_tear, check_type: regex, pattern: "complete|full.?thickness|total.*disrupt|discontinu", required: true }
-  - { name: gap_or_retraction, check_type: regex, pattern: "gap|retract|discontinu|fluid.*defect|diastasis", required: true }
-  - { name: laterality_left, check_type: regex, pattern: "left", required: true }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)necrotizing\\s+fasciitis", required: true }
+  - { name: "fascial_involvement", check_type: regex, pattern: "(?i)(fasci|deep\\s+fascia).*(thicken|enhanc|signal|involv)", required: true }
+  - { name: "laterality", check_type: regex, pattern: "(?i)right", required: true }
 reference_solution: |
-  MRI of the left ankle demonstrates a complete rupture of the Achilles
-  tendon. On sagittal T2-weighted fat-saturated and proton density images,
-  there is complete discontinuity of the Achilles tendon approximately 5 cm
-  proximal to its calcaneal insertion, within the classic watershed zone of
-  relative hypovascularity. A fluid-filled gap of approximately 2.5 cm is
-  present between the retracted proximal stump and the distal stump. The
-  proximal stump demonstrates a wavy, retracted morphology with surrounding
-  hemorrhage and edema in the Kager fat pad. The pre-Achilles fat pad shows
-  increased signal consistent with edema. Both tendon stumps are thickened
-  and heterogeneous, suggesting pre-existing tendinopathy. The plantaris
-  tendon is intact. No calcaneal fracture. The remaining ankle tendons are
-  normal.
-  Impression: Complete left Achilles tendon rupture with 2.5 cm gap and
-  proximal stump retraction. Orthopedic consultation for surgical vs
-  conservative management.
+  MRI of the right lower extremity demonstrates diffuse T2/STIR hyperintensity in the subcutaneous tissues and intermuscular fascial planes of the right thigh. The deep fascia is thickened with avid enhancement on post-gadolinium images (fascial enhancement sign), characteristic of necrotizing fasciitis. Areas of non-enhancement within the anterior compartment fascia suggest necrosis. No drainable abscess collection. The extent of fascial involvement is significantly greater than the surface skin changes would suggest. Findings are highly suspicious for necrotizing fasciitis requiring emergent surgical debridement.
 condition_present: true
 confusion_pair: null
-source_dataset: omnimedvqa-open
+source_dataset: openem-grounded
 tags:
-  - achilles
-  - ankle
   - musculoskeletal
-  - tendon
-  - sports-injury
+  - infection
+  - emergency
+  - surgical

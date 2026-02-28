@@ -1,51 +1,38 @@
 id: XRAY-019
-name: Bilateral pulmonary edema
+name: "Acute Asthma Exacerbation on Chest X-ray"
 modality: xray
 anatomy: chest
 task_type: diagnosis
-difficulty: intermediate
-image_ref: xray/omnimedvqa/CXR_0019.png
+difficulty: basic
+image_ref: "xray/openem/acute-asthma-exacerbation.png"
 prompt_template: diagnosis
+condition_id: "acute-asthma-exacerbation"
+lostbench_scenario_id: ""
 ground_truth:
-  primary_diagnosis: "Bilateral pulmonary edema"
+  primary_diagnosis: "Acute asthma exacerbation"
   differential:
-    - congestive heart failure
-    - fluid overload
-    - ARDS
-    - bilateral pneumonia
-    - diffuse alveolar hemorrhage
+    - "COPD exacerbation"
+    - "Pneumonia with reactive airways"
+    - "Foreign body aspiration"
   key_findings:
-    - { finding: "bilateral perihilar airspace opacities in a bat-wing distribution", location: "bilateral perihilar regions", required: true }
-    - { finding: "cephalization of pulmonary vasculature", location: "bilateral upper lobes", required: true }
-    - { finding: "Kerley B lines", location: "bilateral lung periphery", required: false }
-    - { finding: "cardiomegaly", location: "cardiac silhouette", required: false }
-  severity: severe
+    - { finding: "Hyperinflation with flattened hemidiaphragms", location: "bilateral lung fields", required: true }
+    - { finding: "Increased AP diameter and increased retrosternal air space", location: "chest", required: false }
+    - { finding: "Peribronchial thickening", location: "bilateral perihilar regions", required: false }
+  severity: moderate
   laterality: bilateral
   negatives:
-    - focal consolidation
-    - pneumothorax
-    - pleural-based mass
-    - cavitary lesion
+    - "No focal consolidation to suggest pneumonia"
+    - "No pneumothorax"
+    - "No pneumomediastinum"
 pattern_checks:
-  - { name: primary_diagnosis, check_type: regex, pattern: "(?i)(pulmonary\\s+(edema|oedema)|pulmonary\\s+congestion|fluid\\s+overload)", required: true }
-  - { name: bilateral_opacities, check_type: regex, pattern: "(?i)(bilateral.{0,30}(opacit|infiltrat|airspace)|bat.?wing|butterfly)", required: true }
-  - { name: vascular_congestion, check_type: regex, pattern: "(?i)(cephalization|vascular.{0,20}(redistribution|congestion|engorge)|upper\\s+lobe.{0,20}(diversion|distension|vessel))", required: true }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(asthma|hyperinflat|air trapping|bronchospasm)", required: true }
+  - { name: "hyperinflation_finding", check_type: regex, pattern: "(?i)(hyperinflat|flattened (hemi)?diaphragm|increased.*lucency|air trapping)", required: true }
 reference_solution: |
-  Frontal chest radiograph demonstrates bilateral symmetric perihilar airspace
-  opacities in a classic bat-wing distribution, consistent with pulmonary edema.
-  There is cephalization of the pulmonary vasculature indicating elevated pulmonary
-  venous pressure. Kerley B lines are seen at the lung periphery bilaterally,
-  indicating interstitial edema. The cardiac silhouette is enlarged, suggesting
-  cardiomegaly as the underlying etiology. Small bilateral pleural effusions may
-  also be present. No focal consolidation to suggest superimposed pneumonia. No
-  pneumothorax. Findings are most consistent with cardiogenic pulmonary edema.
-  Clinical correlation with BNP levels and echocardiography recommended.
+  Frontal chest radiograph demonstrates bilateral pulmonary hyperinflation with flattened hemidiaphragms and increased intercostal spacing. Peribronchial thickening is noted bilaterally. The lung fields are clear without focal consolidation or pneumothorax. No pneumomediastinum is identified. These findings are consistent with acute air trapping as seen in an asthma exacerbation.
 condition_present: true
 confusion_pair: null
-source_dataset: omnimedvqa-open
+source_dataset: openem-grounded
 tags:
-  - pulmonary-edema
-  - congestive-heart-failure
-  - bat-wing
-  - cephalization
-  - bilateral
+  - pulmonary
+  - airway
+  - pediatric-common

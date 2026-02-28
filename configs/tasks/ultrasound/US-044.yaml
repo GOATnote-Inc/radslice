@@ -1,0 +1,39 @@
+id: US-044
+name: "Complicated UTI on Renal Ultrasound"
+modality: ultrasound
+anatomy: abdomen
+task_type: diagnosis
+difficulty: intermediate
+image_ref: "ultrasound/openem/complicated-uti.png"
+prompt_template: diagnosis
+condition_id: "complicated-uti"
+lostbench_scenario_id: ""
+ground_truth:
+  primary_diagnosis: "Complicated urinary tract infection with hydronephrosis and pyonephrosis"
+  differential:
+    - "Obstructive urolithiasis with infection"
+    - "Renal abscess"
+    - "Xanthogranulomatous pyelonephritis"
+  key_findings:
+    - { finding: "Moderate hydronephrosis with echogenic debris in the collecting system", location: "right kidney", required: true }
+    - { finding: "Echogenic layering material in the renal pelvis (pyonephrosis)", location: "right renal pelvis", required: true }
+    - { finding: "Renal parenchymal edema with loss of corticomedullary differentiation", location: "right kidney", required: false }
+    - { finding: "Ureteral dilation", location: "right proximal ureter", required: false }
+  severity: severe
+  laterality: right
+  negatives:
+    - "No perinephric abscess"
+    - "No renal calculus identified"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(complicated UTI|pyonephrosis|infected hydronephrosis|obstructed.{0,20}infect)", required: true }
+  - { name: "hydronephrosis_finding", check_type: regex, pattern: "(?i)(hydronephrosis|dilated (collecting system|renal pelvis|calyces)|pelvicalyceal distension)", required: true }
+  - { name: "infection_finding", check_type: regex, pattern: "(?i)(echogenic debris|pyonephrosis|layering (material|debris)|infected)", required: true }
+reference_solution: |
+  Renal ultrasound demonstrates moderate right-sided hydronephrosis with dilation of the renal pelvis and calyces. Echogenic layering debris is identified within the dilated collecting system, consistent with pyonephrosis. The renal parenchyma appears edematous with loss of normal corticomedullary differentiation. The right proximal ureter is dilated. No obstructing calculus is visualized, though distal ureteral visualization is limited by bowel gas. The left kidney appears normal. In the setting of fever and positive urinalysis, these findings indicate a complicated urinary tract infection with pyonephrosis requiring urgent urologic decompression.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - urologic
+  - renal
+  - infectious

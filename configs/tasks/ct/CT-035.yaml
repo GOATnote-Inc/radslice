@@ -1,59 +1,37 @@
 id: CT-035
-name: Anterior mediastinal mass (thymoma)
+name: "Acute cholecystitis on contrast-enhanced CT abdomen"
 modality: ct
-anatomy: chest
-task_type: report_generation
+anatomy: abdomen
+task_type: diagnosis
 difficulty: intermediate
-image_ref: ct/eurorad/EUR_0035.png
-prompt_template: report_generation
+image_ref: "ct/openem/acute-cholecystitis.png"
+prompt_template: diagnosis
+condition_id: "acute-cholecystitis"
+lostbench_scenario_id: ""
 ground_truth:
-  primary_diagnosis: "Anterior mediastinal mass consistent with thymoma"
+  primary_diagnosis: "Acute calculous cholecystitis"
   differential:
-    - thymic carcinoma
-    - lymphoma
-    - teratoma or germ cell tumor
-    - thymic hyperplasia
-    - substernal thyroid goiter
+    - "Acalculous cholecystitis"
+    - "Gallbladder carcinoma"
+    - "Hepatitis"
   key_findings:
-    - { finding: "well-circumscribed solid mass in anterior mediastinum", location: "anterior mediastinum/prevascular space", required: true }
-    - { finding: "homogeneous enhancement", location: "within the mass", required: true }
-    - { finding: "no invasion of great vessels", location: "SVC, aorta, and branches", required: false }
-    - { finding: "no associated pleural nodules", location: "bilateral pleura", required: false }
-  severity: moderate
-  laterality: ""
+    - { finding: "Gallbladder wall thickening and hyperenhancement", location: "gallbladder", required: true }
+    - { finding: "Pericholecystic fat stranding and fluid", location: "gallbladder fossa", required: true }
+    - { finding: "Gallstone impacted in the gallbladder neck or cystic duct", location: "gallbladder neck", required: false }
+  severity: "moderate"
+  laterality: "right"
   negatives:
-    - great vessel invasion
-    - pericardial invasion
-    - pleural dissemination (drop metastases)
-    - pulmonary metastases
-    - calcification (suggesting teratoma)
-    - necrosis or hemorrhage
+    - "No gallbladder perforation"
+    - "No biliary ductal dilatation"
 pattern_checks:
-  - { name: thymoma_mentioned, check_type: regex, pattern: "thymoma|thymic\\s+(mass|neoplasm|tumor|tumour)", required: true }
-  - { name: anterior_mediastinal, check_type: regex, pattern: "anterior\\s+mediast|prevascular", required: true }
-  - { name: mass_identified, check_type: regex, pattern: "mass|lesion|tumor|tumour", required: true }
-  - { name: well_circumscribed, check_type: regex, pattern: "well.?circumscribed|well.?defined|encapsulat|homogeneous", required: false }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(cholecystitis|inflamed\\s*gallbladder)", required: true }
+  - { name: "key_finding_gb_wall", check_type: regex, pattern: "(?i)(gallbladder\\s*wall\\s*thicken|pericholecystic|gb.*thicken)", required: true }
 reference_solution: |
-  Contrast-enhanced CT of the chest demonstrates a well-circumscribed,
-  homogeneously enhancing solid mass in the anterior mediastinum
-  (prevascular space), measuring 5.2 x 4.0 x 3.8 cm. The mass is located
-  in the expected region of the thymus and displaces the great vessels
-  posteriorly without evidence of invasion. The superior vena cava, aortic
-  arch, and brachiocephalic vessels are patent and smoothly displaced. No
-  pericardial invasion or effusion. The bilateral pleural surfaces are
-  smooth without nodular implants (drop metastases). The lungs are clear
-  without metastatic nodules. No calcification or fat within the mass
-  (arguing against teratoma). No mediastinal lymphadenopathy.
-  Impression: Well-circumscribed anterior mediastinal mass in the thymic
-  region, most consistent with thymoma (Masaoka stage I based on imaging
-  appearance). Tissue sampling and staging evaluation recommended.
-  Assessment for myasthenia gravis clinically advised.
+  Contrast-enhanced CT of the abdomen demonstrates gallbladder distension with diffuse wall thickening and hyperenhancement. Pericholecystic fat stranding and a small amount of pericholecystic fluid are present. A hyperdense gallstone is impacted in the gallbladder neck. There is no gallbladder perforation, abscess, or biliary ductal dilatation. Findings are consistent with acute calculous cholecystitis.
 condition_present: true
 confusion_pair: null
-source_dataset: eurorad
+source_dataset: openem-grounded
 tags:
-  - thymoma
-  - mediastinal-mass
-  - chest
-  - oncology
-  - report-generation
+  - abdominal
+  - surgical
+  - hepatobiliary

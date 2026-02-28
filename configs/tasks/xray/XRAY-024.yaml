@@ -1,54 +1,38 @@
 id: XRAY-024
-name: Bilateral hilar lymphadenopathy - sarcoidosis
+name: "Pneumonia on Chest X-ray"
 modality: xray
 anatomy: chest
 task_type: diagnosis
-difficulty: advanced
-image_ref: xray/omnimedvqa/CXR_0024.png
+difficulty: basic
+image_ref: "xray/openem/pneumonia.png"
 prompt_template: diagnosis
+condition_id: "pneumonia"
+lostbench_scenario_id: ""
 ground_truth:
-  primary_diagnosis: "Bilateral hilar lymphadenopathy consistent with sarcoidosis"
+  primary_diagnosis: "Community-acquired pneumonia"
   differential:
-    - lymphoma
-    - bilateral hilar metastases
-    - berylliosis
-    - fungal infection (coccidioidomycosis, histoplasmosis)
+    - "Atelectasis"
+    - "Pulmonary infarction"
+    - "Lung abscess"
   key_findings:
-    - { finding: "bilateral symmetric hilar enlargement", location: "bilateral hila", required: true }
-    - { finding: "lobulated hilar contours", location: "bilateral hila", required: true }
-    - { finding: "right paratracheal lymphadenopathy (lambda sign)", location: "right paratracheal region", required: false }
-    - { finding: "clear lung parenchyma", location: "bilateral lung fields", required: false }
+    - { finding: "Lobar consolidation with air bronchograms", location: "right lower lobe", required: true }
+    - { finding: "Air bronchograms within the opacity", location: "right lower lobe", required: true }
+    - { finding: "Small parapneumonic effusion", location: "right costophrenic angle", required: false }
   severity: moderate
-  laterality: bilateral
+  laterality: right
   negatives:
-    - pleural effusion
-    - focal consolidation
-    - cavitation
-    - cardiomegaly
-    - mediastinal mass
+    - "No pneumothorax"
+    - "No cavitation to suggest abscess"
 pattern_checks:
-  - { name: bilateral_hilar, check_type: regex, pattern: "(?i)bilateral\\s+hilar\\s+(lymphadenopathy|adenopathy|enlargement)", required: true }
-  - { name: sarcoidosis_mentioned, check_type: regex, pattern: "(?i)sarcoidosis", required: true }
-  - { name: symmetric, check_type: regex, pattern: "(?i)(symmetric|bilateral|both\\s+hil)", required: true }
-  - { name: paratracheal, check_type: regex, pattern: "(?i)(paratracheal|1-2-3\\s+sign|lambda|Garland)", required: false }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(pneumonia|consolidation|lobar (consolidation|pneumonia))", required: true }
+  - { name: "consolidation_finding", check_type: regex, pattern: "(?i)(consolidation|air bronchogram|opacity|infiltrate)", required: true }
+  - { name: "laterality_mentioned", check_type: regex, pattern: "(?i)(right|lower lobe)", required: true }
 reference_solution: |
-  PA chest radiograph demonstrates bilateral symmetric hilar lymphadenopathy with
-  lobulated, prominent hilar shadows bilaterally. There is also subtle widening of
-  the right paratracheal stripe suggesting right paratracheal lymphadenopathy,
-  producing the classic 1-2-3 sign (Garland triad) of bilateral hilar and right
-  paratracheal adenopathy. The lung parenchyma is clear without focal consolidation,
-  nodules, or fibrotic change. No pleural effusion or pneumothorax. The cardiac
-  silhouette is normal in size. In a young patient, these findings are highly
-  suggestive of sarcoidosis (Scadding stage I). Serum ACE level, calcium, and CT
-  chest are recommended for further evaluation.
-  Impression: Bilateral hilar lymphadenopathy with right paratracheal adenopathy —
-  findings consistent with sarcoidosis (Scadding stage I).
+  Frontal chest radiograph demonstrates a dense lobar consolidation in the right lower lobe with well-defined air bronchograms. A small right-sided parapneumonic pleural effusion is present with blunting of the costophrenic angle. The remainder of the lung fields are clear. No pneumothorax or cavitation is identified. These findings are consistent with community-acquired pneumonia.
 condition_present: true
 confusion_pair: null
-source_dataset: omnimedvqa-open
+source_dataset: openem-grounded
 tags:
-  - sarcoidosis
-  - hilar-lymphadenopathy
-  - bilateral
-  - chest
-  - granulomatous
+  - pulmonary
+  - infection
+  - common

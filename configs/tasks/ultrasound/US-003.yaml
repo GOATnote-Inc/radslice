@@ -1,53 +1,40 @@
 id: US-003
-name: Deep vein thrombosis
+name: "Acute Valvular Emergency on Echocardiography"
 modality: ultrasound
-anatomy: extremity
+anatomy: chest
 task_type: diagnosis
-difficulty: intermediate
-image_ref: ultrasound/radimagenet/US_0003.png
+difficulty: advanced
+image_ref: "ultrasound/openem/acute-valvular-emergency.png"
 prompt_template: diagnosis
+condition_id: "acute-valvular-emergency"
+lostbench_scenario_id: ""
 ground_truth:
-  primary_diagnosis: "Acute deep vein thrombosis of the left common femoral vein"
+  primary_diagnosis: "Acute severe mitral regurgitation with flail leaflet"
   differential:
-    - chronic DVT with recanalization
-    - extrinsic compression by lymphadenopathy or mass
-    - superficial thrombophlebitis
-    - Baker cyst rupture mimicking DVT
+    - "Papillary muscle rupture post-MI"
+    - "Infective endocarditis with valvular destruction"
+    - "Acute aortic regurgitation from aortic dissection"
   key_findings:
-    - { finding: "non-compressible vein with intraluminal echogenic material", location: "left common femoral vein", required: true }
-    - { finding: "absent color Doppler flow", location: "left common femoral vein", required: true }
-    - { finding: "distended venous lumen", location: "left common femoral vein", required: false }
-  severity: moderate
-  laterality: left
+    - { finding: "Flail posterior mitral leaflet with eccentric regurgitant jet", location: "mitral valve", required: true }
+    - { finding: "Severe mitral regurgitation on color Doppler", location: "left atrium", required: true }
+    - { finding: "Hyperdynamic left ventricular function", location: "left ventricle", required: false }
+    - { finding: "Pulmonary vein flow reversal", location: "pulmonary veins", required: false }
+  severity: critical
+  laterality: n/a
   negatives:
-    - superficial venous thrombosis
-    - popliteal vein thrombosis
-    - arterial occlusion
-    - lymphadenopathy
-    - soft tissue abscess
+    - "No aortic valve pathology"
+    - "No pericardial effusion"
 pattern_checks:
-  - { name: dvt_mentioned, check_type: regex, pattern: "deep\\s+vein\\s+thromb|DVT|venous\\s+thromb", required: true }
-  - { name: non_compressible, check_type: regex, pattern: "non.?compress|incompress|fail.*compress|not.*compress", required: true }
-  - { name: laterality_left, check_type: regex, pattern: "left", required: true }
-  - { name: absent_flow, check_type: regex, pattern: "absent.*flow|no.*(flow|Doppler|augmentation)|loss.*flow", required: true }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(valvular (emergency|rupture|regurgitation)|mitral regurgitation|flail leaflet|papillary muscle rupture)", required: true }
+  - { name: "regurgitation_finding", check_type: regex, pattern: "(?i)(regurgit(ation|ant)|insufficiency|flail|prolapse)", required: true }
+  - { name: "severity_noted", check_type: regex, pattern: "(?i)(severe|acute|torrential|massive)", required: true }
 reference_solution: |
-  Compression ultrasound of the left lower extremity demonstrates a
-  non-compressible left common femoral vein with intraluminal echogenic material
-  consistent with acute thrombus. The vein is distended and fails to coapt with
-  transducer pressure. Color Doppler interrogation shows absent flow within the
-  thrombosed segment. Spectral Doppler of the left common femoral vein demonstrates
-  no respiratory phasicity or augmentation with distal compression. The left
-  superficial femoral, popliteal, and calf veins are patent and compressible. The
-  left common femoral artery demonstrates normal triphasic waveforms. No
-  inguinal lymphadenopathy or extrinsic mass is identified.
-  Impression: Acute deep vein thrombosis of the left common femoral vein.
-  Clinical correlation and anticoagulation therapy recommended.
+  Transthoracic echocardiography demonstrates a flail posterior mitral valve leaflet (P2 segment) with an eccentric posteriorly directed regurgitant jet filling the left atrium on color Doppler. The vena contracta measures greater than 7 mm, consistent with severe mitral regurgitation. Left ventricular systolic function is hyperdynamic with an estimated EF of 65-70%. There is evidence of pulmonary vein systolic flow reversal. These findings indicate acute severe mitral regurgitation, likely from chordal rupture, requiring urgent surgical evaluation.
 condition_present: true
 confusion_pair: null
-source_dataset: radimagenet
+source_dataset: openem-grounded
 tags:
-  - dvt
-  - thrombosis
-  - extremity
-  - vascular
-  - compression-ultrasound
+  - cardiac
+  - emergency
+  - echocardiography
+  - valvular

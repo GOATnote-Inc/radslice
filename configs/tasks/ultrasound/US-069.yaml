@@ -1,0 +1,40 @@
+id: US-069
+name: "Pyloric Stenosis on Abdominal Ultrasound"
+modality: ultrasound
+anatomy: abdomen
+task_type: diagnosis
+difficulty: intermediate
+image_ref: "ultrasound/openem/pyloric-stenosis.png"
+prompt_template: diagnosis
+condition_id: "pyloric-stenosis"
+lostbench_scenario_id: "MTR-032"
+ground_truth:
+  primary_diagnosis: "Hypertrophic pyloric stenosis"
+  differential:
+    - "Pylorospasm"
+    - "Gastric outlet obstruction from other cause"
+    - "Malrotation with midgut volvulus"
+  key_findings:
+    - { finding: "Pyloric muscle thickness greater than 3 mm", location: "pylorus", required: true }
+    - { finding: "Pyloric channel length greater than 15 mm", location: "pylorus", required: true }
+    - { finding: "Failure of pyloric canal to open during observation (no gastric emptying)", location: "pyloric canal", required: false }
+    - { finding: "Target sign on transverse view of the pylorus", location: "pylorus", required: false }
+  severity: moderate
+  laterality: midline
+  negatives:
+    - "No gastric mass"
+    - "No duodenal obstruction distal to the pylorus"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(pyloric stenosis|hypertrophic pylor|HPS)", required: true }
+  - { name: "muscle_thickness", check_type: regex, pattern: "(?i)(pyloric (muscle|wall) (thickness|>|greater|measuring)|muscle.{0,10}(thick|>\\s*3|greater than 3)|3\\s*mm)", required: true }
+  - { name: "channel_length", check_type: regex, pattern: "(?i)(pyloric (channel|length|canal).{0,20}(>|greater|measuring|length|15|16|17|18)|channel length)", required: true }
+reference_solution: |
+  Abdominal ultrasound demonstrates a thickened and elongated pylorus. The pyloric muscle wall thickness measures 4.5 mm (normal less than 3 mm) and the pyloric channel length measures 18 mm (normal less than 15 mm). The pyloric canal fails to open during the observation period, and no gastric emptying is seen. On transverse view, the characteristic target sign or donut sign is present with the hypertrophied muscle appearing as a hypoechoic ring surrounding the echogenic mucosa. The stomach is fluid-filled and distended. These findings are diagnostic of hypertrophic pyloric stenosis in this infant presenting with projectile non-bilious emesis.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - abdominal
+  - pediatric
+  - gastrointestinal
+  - surgical

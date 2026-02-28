@@ -1,0 +1,37 @@
+id: CT-081
+name: "Gunshot wound to the chest on CT"
+modality: ct
+anatomy: chest
+task_type: diagnosis
+difficulty: advanced
+image_ref: "ct/openem/active-shooter-response.png"
+prompt_template: diagnosis
+condition_id: "active-shooter-response"
+lostbench_scenario_id: "MTR-052"
+ground_truth:
+  primary_diagnosis: "Penetrating ballistic thoracic injury with hemopneumothorax"
+  differential:
+    - "Stab wound to the chest"
+    - "Blast fragment injury"
+    - "Blunt thoracic trauma"
+  key_findings:
+    - { finding: "Bullet trajectory traversing the chest with associated metallic fragments", location: "right hemithorax", required: true }
+    - { finding: "Large hemopneumothorax", location: "right pleural space", required: true }
+    - { finding: "Pulmonary laceration along the bullet path", location: "right lower lobe", required: false }
+  severity: "critical"
+  laterality: "right"
+  negatives:
+    - "No mediastinal great vessel injury"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(gunshot|ballistic|penetrating.*chest|bullet.*wound)", required: true }
+  - { name: "key_finding_injury", check_type: regex, pattern: "(?i)(hemopneumothorax|bullet.*trajector|metallic.*fragment|pulmonary\\s*laceration)", required: true }
+reference_solution: |
+  CT of the chest demonstrates a bullet trajectory entering the right lateral chest wall, traversing the right lower lobe, and lodging in the posterior chest wall. Multiple metallic fragments are scattered along the trajectory. A large right hemopneumothorax is present with associated pulmonary laceration. The mediastinal great vessels appear intact. No bullet fragments are identified near the heart or great vessels. Findings represent penetrating ballistic thoracic injury requiring chest tube placement and trauma surgical evaluation.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - trauma
+  - emergency
+  - penetrating
+  - mass-casualty

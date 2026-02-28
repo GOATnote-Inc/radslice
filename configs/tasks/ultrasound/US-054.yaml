@@ -1,0 +1,40 @@
+id: US-054
+name: "Sickle Cell Crisis on Splenic Ultrasound"
+modality: ultrasound
+anatomy: abdomen
+task_type: diagnosis
+difficulty: advanced
+image_ref: "ultrasound/openem/sickle-cell-crisis.png"
+prompt_template: diagnosis
+condition_id: "sickle-cell-crisis"
+lostbench_scenario_id: ""
+ground_truth:
+  primary_diagnosis: "Sickle cell crisis with splenic sequestration"
+  differential:
+    - "Splenic infarction"
+    - "Splenic abscess"
+    - "Splenic vein thrombosis"
+  key_findings:
+    - { finding: "Enlarged spleen with heterogeneous echotexture", location: "spleen", required: true }
+    - { finding: "Hypoechoic wedge-shaped areas suggesting infarction or sequestration", location: "splenic parenchyma", required: true }
+    - { finding: "Decreased or absent splenic Doppler flow in infarcted regions", location: "splenic vasculature", required: false }
+    - { finding: "Free fluid in the left upper quadrant", location: "splenorenal recess", required: false }
+  severity: severe
+  laterality: left
+  negatives:
+    - "No splenic rupture"
+    - "No perisplenic abscess"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(sickle cell|splenic (sequestration|infarct|crisis)|vaso.?occlusive|sickle crisis)", required: true }
+  - { name: "splenic_finding", check_type: regex, pattern: "(?i)((enlarged|splenomegaly|heterogeneous).{0,20}spleen|spleen.{0,20}(enlarg|heterogeneous|abnormal)|splenic (enlargement|infarct))", required: true }
+  - { name: "infarction_finding", check_type: regex, pattern: "(?i)(wedge.?shaped|hypoechoic (area|region|zone)|infarct|sequestration|avascular)", required: true }
+reference_solution: |
+  Abdominal ultrasound demonstrates splenomegaly with the spleen measuring 18 cm in bipolar length. The splenic parenchyma appears heterogeneous with multiple hypoechoic wedge-shaped areas in the upper pole and hilum, consistent with areas of infarction or acute sequestration. Color Doppler reveals diminished flow in the affected regions. A small amount of free fluid is noted in the splenorenal recess. The liver appears normal. In the clinical context of a patient with known sickle cell disease presenting with acute left upper quadrant pain and dropping hemoglobin, these findings are consistent with acute splenic sequestration crisis.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - abdominal
+  - hematologic
+  - emergency
+  - splenic

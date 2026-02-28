@@ -1,53 +1,37 @@
 id: CT-018
-name: Normal abdomen CT
+name: "Aortic transection on CTA"
 modality: ct
-anatomy: abdomen
+anatomy: chest
 task_type: diagnosis
-difficulty: basic
-image_ref: ct/omnimedvqa/CT_0018.png
+difficulty: expert
+image_ref: "ct/openem/aortic-transection.png"
 prompt_template: diagnosis
+condition_id: "aortic-transection"
+lostbench_scenario_id: "MTR-064"
 ground_truth:
-  primary_diagnosis: "Normal abdomen and pelvis CT"
+  primary_diagnosis: "Traumatic aortic transection at the aortic isthmus"
   differential:
-    - hepatic steatosis below diagnostic threshold
-    - simple renal cysts too small to characterize
-    - physiologic free fluid
+    - "Aortic dissection"
+    - "Aortic pseudoaneurysm"
+    - "Ductus diverticulum (normal variant)"
   key_findings:
-    - { finding: "normal solid abdominal organs", location: "liver, spleen, pancreas, kidneys, adrenals", required: true }
-    - { finding: "no bowel obstruction or wall thickening", location: "small and large bowel", required: true }
-    - { finding: "no free fluid or free air", location: "peritoneal cavity", required: true }
-    - { finding: "no lymphadenopathy", location: "mesenteric and retroperitoneal spaces", required: false }
-  severity: mild
-  laterality: ""
+    - { finding: "Intimal flap or pseudoaneurysm at the aortic isthmus", location: "aortic isthmus distal to the left subclavian artery", required: true }
+    - { finding: "Periaortic mediastinal hematoma", location: "posterior mediastinum", required: true }
+    - { finding: "Hemothorax", location: "left pleural space", required: false }
+  severity: "critical"
+  laterality: "midline"
   negatives:
-    - appendicitis
-    - bowel obstruction
-    - free air
-    - solid organ injury
-    - aortic aneurysm
-    - kidney stone
-    - mass lesion
+    - "No extension of injury into the aortic root"
 pattern_checks:
-  - { name: normal_identified, check_type: regex, pattern: "normal|unremarkable|no\\s+acute|negative|no\\s+significant", required: true }
-  - { name: no_obstruction, check_type: regex, pattern: "no.{0,30}(obstruction|dilat|free\\s+air|pneumoperitoneum)", required: true }
-  - { name: no_mass, check_type: regex, pattern: "no.{0,30}(mass|lesion|collection|abscess)", required: true }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(aortic\\s*transection|traumatic.*aortic\\s*injury|aortic.*tear|aortic.*rupture)", required: true }
+  - { name: "key_finding_isthmus", check_type: regex, pattern: "(?i)(isthmus|pseudoaneurysm|mediastinal\\s*hematoma|periaortic)", required: true }
 reference_solution: |
-  Contrast-enhanced CT of the abdomen and pelvis demonstrates normal solid
-  abdominal organs. The liver, spleen, pancreas, and bilateral kidneys are
-  normal in size and attenuation with homogeneous enhancement. The adrenal
-  glands are normal. The gallbladder is unremarkable without calculi. No
-  biliary dilatation. The abdominal aorta is normal in caliber. The small
-  and large bowel are normal in caliber without obstruction or wall
-  thickening. The appendix is normal. No free intraperitoneal air or fluid.
-  No mesenteric or retroperitoneal lymphadenopathy. The bladder and
-  visualized pelvic structures are unremarkable.
-  Impression: Normal contrast-enhanced CT of the abdomen and pelvis. No
-  acute abdominal pathology.
-condition_present: false
+  CTA of the chest demonstrates a focal pseudoaneurysm at the aortic isthmus just distal to the origin of the left subclavian artery with an intimal flap and irregular aortic contour, consistent with traumatic aortic transection. There is a surrounding periaortic mediastinal hematoma and a moderate left hemothorax. No injury to the aortic root is identified. Findings represent a grade III traumatic aortic injury requiring emergent endovascular or surgical repair.
+condition_present: true
 confusion_pair: null
-source_dataset: omnimedvqa-open
+source_dataset: openem-grounded
 tags:
-  - normal
-  - abdomen
-  - baseline
-  - negative-study
+  - vascular
+  - trauma
+  - emergency
+  - cta

@@ -1,0 +1,38 @@
+id: CT-086
+name: "REBOA positioning assessment on CT aortogram"
+modality: ct
+anatomy: abdomen
+task_type: diagnosis
+difficulty: expert
+image_ref: "ct/openem/reboa.png"
+prompt_template: diagnosis
+condition_id: "reboa"
+lostbench_scenario_id: "MTR-063"
+ground_truth:
+  primary_diagnosis: "Hemorrhagic shock with aortic occlusion balloon in situ (REBOA zone I)"
+  differential:
+    - "Aortic cross-clamp"
+    - "Aortic stent graft"
+    - "Intra-aortic balloon pump"
+  key_findings:
+    - { finding: "Occlusion balloon within the descending thoracic aorta (zone I)", location: "descending thoracic aorta between left subclavian artery and celiac trunk", required: true }
+    - { finding: "Absence of contrast flow distal to the balloon", location: "infradiaphragmatic aorta", required: true }
+    - { finding: "Large pelvic hematoma or free fluid in the abdomen as indication", location: "pelvis and abdomen", required: false }
+  severity: "critical"
+  laterality: "midline"
+  negatives:
+    - "No aortic dissection"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(REBOA|resuscitative.*endovascular.*balloon|aortic\\s*occlusion\\s*balloon)", required: true }
+  - { name: "key_finding_balloon", check_type: regex, pattern: "(?i)(occlusion\\s*balloon|aortic.*balloon|zone\\s*(I|1)|descending.*aorta.*balloon)", required: true }
+reference_solution: |
+  CT aortogram demonstrates an endovascular occlusion balloon positioned within the descending thoracic aorta (zone I) between the left subclavian artery origin and the celiac trunk. There is complete occlusion of aortic flow at the level of the balloon with no contrast opacification of the infradiaphragmatic aorta. A large pelvic hematoma is present, consistent with the clinical indication for REBOA deployment. The balloon position is appropriate for hemorrhage control in the setting of non-compressible torso hemorrhage.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - vascular
+  - trauma
+  - emergency
+  - procedural
+  - cta

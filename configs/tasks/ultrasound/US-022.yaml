@@ -1,0 +1,39 @@
+id: US-022
+name: "Pneumonia on Lung Ultrasound"
+modality: ultrasound
+anatomy: chest
+task_type: diagnosis
+difficulty: intermediate
+image_ref: "ultrasound/openem/pneumonia.png"
+prompt_template: diagnosis
+condition_id: "pneumonia"
+lostbench_scenario_id: ""
+ground_truth:
+  primary_diagnosis: "Lobar pneumonia with consolidation on lung ultrasound"
+  differential:
+    - "Atelectasis"
+    - "Pulmonary contusion"
+    - "Lung abscess"
+  key_findings:
+    - { finding: "Hepatization of lung tissue (tissue-like echotexture)", location: "right lower lobe", required: true }
+    - { finding: "Air bronchograms within the consolidated lung", location: "right lower lobe", required: true }
+    - { finding: "B-lines surrounding the consolidation", location: "right lower lobe periphery", required: false }
+    - { finding: "Small parapneumonic pleural effusion", location: "right costophrenic angle", required: false }
+  severity: moderate
+  laterality: right
+  negatives:
+    - "No lung abscess or necrotizing features"
+    - "Normal lung sliding present"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(pneumonia|consolidation|lobar (pneumonia|consolidation))", required: true }
+  - { name: "consolidation_finding", check_type: regex, pattern: "(?i)(consolidation|hepatization|tissue.?like (echo|pattern)|air bronchograms)", required: true }
+  - { name: "laterality", check_type: regex, pattern: "(?i)(right)", required: true }
+reference_solution: |
+  Lung ultrasound demonstrates a sonographic consolidation in the right lower lobe with hepatization of the lung parenchyma appearing as a tissue-like echotexture. Dynamic air bronchograms are visible within the consolidated area, indicating patent airways filled with air, which helps distinguish pneumonia from obstructive atelectasis. Surrounding B-lines are present indicating perilesional interstitial edema. A small anechoic parapneumonic pleural effusion is noted. Normal lung sliding is preserved. These findings are consistent with lobar pneumonia involving the right lower lobe.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - pulmonary
+  - lung-ultrasound
+  - infectious

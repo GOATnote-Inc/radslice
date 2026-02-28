@@ -1,48 +1,38 @@
 id: XRAY-017
-name: Left lower lobe consolidation
+name: "Penetrating Chest Trauma on X-ray"
 modality: xray
 anatomy: chest
 task_type: diagnosis
-difficulty: basic
-image_ref: xray/omnimedvqa/CXR_0017.png
+difficulty: advanced
+image_ref: "xray/openem/penetrating-chest-trauma.png"
 prompt_template: diagnosis
+condition_id: "penetrating-chest-trauma"
+lostbench_scenario_id: ""
 ground_truth:
-  primary_diagnosis: "Left lower lobe consolidation"
+  primary_diagnosis: "Penetrating chest trauma with hemopneumothorax"
   differential:
-    - community-acquired pneumonia
-    - aspiration pneumonia
-    - pulmonary infarction
-    - organizing pneumonia
+    - "Isolated pneumothorax"
+    - "Isolated hemothorax"
+    - "Cardiac injury with tamponade"
   key_findings:
-    - { finding: "dense airspace opacity in the left lower zone", location: "left lower lobe", required: true }
-    - { finding: "air bronchograms within the consolidation", location: "left lower lobe", required: false }
-    - { finding: "obscuration of the left hemidiaphragm", location: "left hemidiaphragm", required: true }
-  severity: moderate
+    - { finding: "Radiopaque foreign body or projectile fragments", location: "left hemithorax", required: true }
+    - { finding: "Hemopneumothorax with air-fluid level", location: "left hemithorax", required: true }
+    - { finding: "Subcutaneous emphysema", location: "left chest wall", required: false }
+  severity: critical
   laterality: left
   negatives:
-    - pleural effusion
-    - right lung opacity
-    - pneumothorax
-    - cavitation
-    - lymphadenopathy
+    - "No mediastinal shift"
+    - "No widened mediastinum to suggest great vessel injury"
 pattern_checks:
-  - { name: primary_diagnosis, check_type: regex, pattern: "(?i)left\\s+lower\\s+lobe\\s+(consolidation|pneumonia|opacity)", required: true }
-  - { name: airspace_opacity, check_type: regex, pattern: "(?i)(airspace\\s+opaci|consolidat|dense\\s+opaci).{0,30}left", required: true }
-  - { name: silhouette_sign, check_type: regex, pattern: "(?i)(silhouette.{0,30}diaphragm|obscur.{0,30}(left\\s+)?(hemi)?diaphragm|diaphragm.{0,30}obscur)", required: false }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(penetrating|foreign body|projectile|gunshot|stab|hemopneumothorax)", required: true }
+  - { name: "trauma_finding", check_type: regex, pattern: "(?i)(hemopneumothorax|pneumothorax|hemothorax|subcutaneous emphysema|foreign body)", required: true }
 reference_solution: |
-  Frontal chest radiograph demonstrates a dense airspace opacity in the left lower
-  zone with obscuration of the left hemidiaphragm (positive silhouette sign),
-  consistent with left lower lobe consolidation. Air bronchograms are present within
-  the opacity, confirming airspace disease. No associated pleural effusion. The right
-  lung is clear. Heart size is normal. No pneumothorax. In the appropriate clinical
-  setting, the findings are most suggestive of pneumonia. Follow-up radiograph
-  recommended after completion of antibiotic therapy to ensure resolution.
+  Frontal chest radiograph demonstrates a radiopaque foreign body consistent with a projectile fragment in the left hemithorax. There is a left-sided hemopneumothorax with an air-fluid level. Subcutaneous emphysema is noted along the left chest wall. No mediastinal widening is identified. Emergent chest tube placement and surgical consultation are warranted given the penetrating mechanism and hemopneumothorax.
 condition_present: true
 confusion_pair: null
-source_dataset: omnimedvqa-open
+source_dataset: openem-grounded
 tags:
-  - consolidation
-  - pneumonia
-  - left-lower-lobe
-  - airspace-disease
-  - silhouette-sign
+  - trauma
+  - emergency
+  - penetrating
+  - critical

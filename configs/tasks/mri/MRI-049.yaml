@@ -1,0 +1,39 @@
+id: MRI-049
+name: "Neonatal Emergencies with Brain MRI Findings"
+modality: mri
+anatomy: head
+task_type: diagnosis
+difficulty: advanced
+image_ref: "mri/openem/neonatal-emergencies.png"
+prompt_template: diagnosis
+condition_id: "neonatal-emergencies"
+lostbench_scenario_id: "MTR-001"
+ground_truth:
+  primary_diagnosis: "Neonatal hypoxic-ischemic encephalopathy (HIE) on brain MRI"
+  differential:
+    - "Neonatal meningitis"
+    - "Inborn error of metabolism with neonatal crisis"
+    - "Non-accidental trauma (abusive head trauma)"
+  key_findings:
+    - { finding: "Restricted diffusion in the bilateral basal ganglia and thalami on DWI", location: "Bilateral basal ganglia and thalami", required: true }
+    - { finding: "T1 hyperintensity in the posterior limb of the internal capsule (abnormal signal intensity pattern)", location: "Bilateral posterior limbs of internal capsule", required: true }
+    - { finding: "Cortical restricted diffusion in the perirolandic and parasagittal regions", location: "Bilateral perirolandic cortex", required: false }
+  severity: "critical"
+  laterality: "bilateral"
+  negatives:
+    - "No intracranial hemorrhage"
+    - "No congenital structural anomaly"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(hypoxic.?ischemic\\s+encephalopathy|HIE|neonatal.*(brain|encephalopathy))", required: true }
+  - { name: "basal_ganglia_thalami", check_type: regex, pattern: "(?i)(basal\\s+ganglia|thalam)", required: true }
+  - { name: "restricted_diffusion", check_type: regex, pattern: "(?i)restricted\\s+diffusion", required: true }
+reference_solution: |
+  MRI of the neonatal brain demonstrates bilateral symmetric restricted diffusion on DWI involving the basal ganglia, thalami, and perirolandic cortex, consistent with severe hypoxic-ischemic encephalopathy (HIE). T1-weighted images show abnormal hyperintensity in the posterior limbs of the internal capsules and ventrolateral thalami. The pattern of injury involving the deep gray nuclei and perirolandic cortex suggests a profound asphyxia event. No intracranial hemorrhage or structural anomaly. These findings portend significant neurologic morbidity and warrant continued therapeutic hypothermia and neuroprotective management.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - neuro
+  - pediatric
+  - neonatal
+  - emergency

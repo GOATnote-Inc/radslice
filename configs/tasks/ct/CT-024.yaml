@@ -1,61 +1,37 @@
 id: CT-024
-name: Mesenteric ischemia with bowel infarction
+name: "Spinal cord injury with vertebral fracture-dislocation on CT"
 modality: ct
-anatomy: abdomen
+anatomy: spine
 task_type: diagnosis
-difficulty: expert
-image_ref: ct/omnimedvqa/CT_0024.png
+difficulty: advanced
+image_ref: "ct/openem/spinal-cord-injury.png"
 prompt_template: diagnosis
+condition_id: "spinal-cord-injury"
+lostbench_scenario_id: ""
 ground_truth:
-  primary_diagnosis: "Acute superior mesenteric artery occlusion with bowel infarction"
+  primary_diagnosis: "Cervical spine fracture-dislocation with spinal cord compression"
   differential:
-    - mesenteric venous thrombosis
-    - non-occlusive mesenteric ischemia
-    - small bowel obstruction with strangulation
-    - vasculitis with bowel involvement
-    - portal vein thrombosis with bowel congestion
+    - "Vertebral burst fracture"
+    - "Bilateral facet dislocation"
+    - "Odontoid fracture"
   key_findings:
-    - { finding: "thrombus in superior mesenteric artery", location: "proximal SMA", required: true }
-    - { finding: "non-enhancing small bowel wall", location: "jejunum and proximal ileum", required: true }
-    - { finding: "pneumatosis intestinalis", location: "affected small bowel loops", required: false }
-    - { finding: "portal venous gas", location: "intrahepatic portal vein branches", required: false }
-    - { finding: "mesenteric fat stranding", location: "small bowel mesentery", required: false }
-  severity: severe
-  laterality: ""
+    - { finding: "Vertebral body fracture with anterolisthesis", location: "C5 on C6", required: true }
+    - { finding: "Bilateral facet joint disruption", location: "C5-C6 facet joints", required: true }
+    - { finding: "Spinal canal compromise with bone fragment retropulsion", location: "C5-C6 spinal canal", required: false }
+  severity: "critical"
+  laterality: "midline"
   negatives:
-    - mesenteric venous thrombosis
-    - large bowel involvement
-    - aortic dissection
-    - free intraperitoneal air
-    - normal bowel wall enhancement
+    - "No vertebral artery injury on CTA"
 pattern_checks:
-  - { name: mesenteric_ischemia, check_type: regex, pattern: "mesenteric\\s+isch[ae]mi|bowel\\s+(isch[ae]mi|infarct)|SMA.{0,20}(occlus|thrombus|embol)", required: true }
-  - { name: sma_involvement, check_type: regex, pattern: "superior\\s+mesenteric|SMA\\b", required: true }
-  - { name: bowel_non_enhancement, check_type: regex, pattern: "non.?enhanc|lack.*enhanc|no.*enhanc|infarct|necrotic\\s+bowel", required: true }
-  - { name: pneumatosis, check_type: regex, pattern: "pneumatosis|intramural\\s+(gas|air)|portal.*gas|gas.*portal", required: false }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(fracture.?dislocation|spinal\\s*cord\\s*(injury|compression)|cervical.*fracture)", required: true }
+  - { name: "key_finding_subluxation", check_type: regex, pattern: "(?i)(anterolisthesis|subluxation|facet.*dislocat|facet.*disrupt)", required: true }
 reference_solution: |
-  Contrast-enhanced CT angiography of the abdomen demonstrates acute
-  thrombotic occlusion of the proximal superior mesenteric artery,
-  approximately 2 cm from its origin. There is non-enhancement of multiple
-  jejunal and proximal ileal loops indicating transmural infarction. The
-  affected bowel walls are thinned and paper-like, consistent with
-  irreversible ischemia. Pneumatosis intestinalis is identified in multiple
-  loops of the affected jejunum. Portal venous gas is present within
-  intrahepatic portal vein branches, a grave prognostic sign. There is
-  haziness and fat stranding within the small bowel mesentery. The
-  mesenteric venous system is patent. The distal ileum and colon appear
-  normally perfused. No free intraperitoneal air.
-  Impression: Acute SMA occlusion with extensive small bowel infarction,
-  pneumatosis intestinalis, and portal venous gas. Emergent surgical
-  exploration required. This represents a surgical emergency with high
-  mortality risk.
+  CT of the cervical spine demonstrates a C5 vertebral body fracture with grade 2 anterolisthesis of C5 on C6. Bilateral C5-C6 facet joint disruption is present with perched facets. There is significant spinal canal compromise at the C5-C6 level from retropulsed bone fragments. No vertebral artery injury is identified on CTA. Findings represent an unstable cervical spine fracture-dislocation with high likelihood of spinal cord injury requiring emergent neurosurgical consultation and spinal immobilization.
 condition_present: true
 confusion_pair: null
-source_dataset: omnimedvqa-open
+source_dataset: openem-grounded
 tags:
-  - mesenteric-ischemia
-  - bowel-infarction
+  - spine
+  - trauma
   - emergency
-  - abdomen
-  - vascular
-  - life-threatening
+  - neurosurgical

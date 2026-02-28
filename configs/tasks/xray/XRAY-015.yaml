@@ -1,43 +1,38 @@
 id: XRAY-015
-name: Normal lateral CXR
+name: "Hemorrhagic Shock on Chest X-ray"
 modality: xray
 anatomy: chest
 task_type: diagnosis
-difficulty: basic
-image_ref: xray/omnimedvqa/CXR_0015.png
+difficulty: advanced
+image_ref: "xray/openem/hemorrhagic-shock.png"
 prompt_template: diagnosis
+condition_id: "hemorrhagic-shock"
+lostbench_scenario_id: ""
 ground_truth:
-  primary_diagnosis: "Normal lateral chest radiograph"
-  differential: []
+  primary_diagnosis: "Massive hemothorax with hemorrhagic shock"
+  differential:
+    - "Large pleural effusion from other cause"
+    - "Diaphragmatic rupture"
+    - "Lobar collapse"
   key_findings:
-    - { finding: "clear retrosternal and retrocardiac spaces", location: "lateral projection", required: true }
-    - { finding: "normal thoracic vertebral body height and alignment", location: "thoracic spine", required: false }
-    - { finding: "normal hemidiaphragm contours", location: "bilateral diaphragms", required: false }
-  severity: mild
-  laterality: ""
+    - { finding: "Complete opacification of hemithorax (massive hemothorax)", location: "left hemithorax", required: true }
+    - { finding: "Mediastinal shift to contralateral side", location: "mediastinum", required: false }
+    - { finding: "Small cardiac silhouette suggesting hypovolemia", location: "cardiac silhouette", required: false }
+    - { finding: "Rib fractures", location: "left ribs", required: false }
+  severity: critical
+  laterality: left
   negatives:
-    - retrosternal opacity
-    - retrocardiac opacity
-    - vertebral compression fracture
-    - pleural effusion
-    - hilar enlargement
-    - posterior gutter fluid
+    - "No contralateral pneumothorax"
 pattern_checks:
-  - { name: normal_finding, check_type: regex, pattern: "(?i)(normal|no\\s+(acute|significant|definite)\\s+(abnormality|finding|pathology)|unremarkable)", required: true }
-  - { name: retrosternal_clear, check_type: regex, pattern: "(?i)(retrosternal.{0,30}(clear|normal|lucen)|clear.{0,30}retrosternal)", required: false }
-  - { name: no_effusion, check_type: regex, pattern: "(?i)no.{0,40}(pleural\\s+)?effusion", required: false }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(hemothorax|hemorrhagic|opacification|hemorrhage)", required: true }
+  - { name: "hemithorax_finding", check_type: regex, pattern: "(?i)(opacification|white.?out|hemothorax|pleural (effusion|fluid))", required: true }
 reference_solution: |
-  Lateral chest radiograph demonstrates no acute cardiopulmonary abnormality. The
-  retrosternal space is clear without anterior mediastinal mass. The retrocardiac
-  space is clear without posterior mediastinal abnormality. Both hemidiaphragms are
-  well-visualized with normal contour and no blunting of the posterior costophrenic
-  angles to suggest effusion. The thoracic vertebral bodies demonstrate normal
-  height and alignment without compression fracture. The visualized airways are
-  patent. No focal bone lesion identified. Normal lateral chest radiograph.
-condition_present: false
+  Frontal chest radiograph (supine/AP) demonstrates near-complete opacification of the left hemithorax consistent with a massive hemothorax. There is mediastinal shift to the right. The cardiac silhouette appears small, suggesting hypovolemia. Multiple left-sided rib fractures are identified, likely the source of hemorrhage. These findings in the trauma setting are consistent with hemorrhagic shock from massive hemothorax requiring emergent chest tube placement.
+condition_present: true
 confusion_pair: null
-source_dataset: omnimedvqa-open
+source_dataset: openem-grounded
 tags:
-  - normal
-  - lateral-projection
-  - negative-study
+  - trauma
+  - emergency
+  - hemothorax
+  - critical

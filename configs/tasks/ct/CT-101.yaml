@@ -1,0 +1,37 @@
+id: CT-101
+name: "Intussusception in a child on contrast-enhanced CT abdomen"
+modality: ct
+anatomy: abdomen
+task_type: diagnosis
+difficulty: advanced
+image_ref: "ct/openem/intussusception.png"
+prompt_template: diagnosis
+condition_id: "intussusception"
+lostbench_scenario_id: "MTR-031"
+ground_truth:
+  primary_diagnosis: "Ileocolic intussusception"
+  differential:
+    - "Colonic mass as lead point"
+    - "Bowel obstruction from adhesive band"
+    - "Meckel diverticulum with intussusception"
+  key_findings:
+    - { finding: "Target sign or bowel-within-bowel configuration", location: "right lower quadrant and ascending colon", required: true }
+    - { finding: "Intussusceptum with mesenteric fat and vessels within the intussuscipiens", location: "ascending colon", required: true }
+    - { finding: "Proximal small bowel dilatation", location: "ileum", required: false }
+  severity: "severe"
+  laterality: "right"
+  negatives:
+    - "No pneumatosis or perforation"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(intussusception|bowel.?within.?bowel|target\\s*sign)", required: true }
+  - { name: "key_finding_target", check_type: regex, pattern: "(?i)(target\\s*sign|bowel.?within.?bowel|intussuscep|coil.?spring)", required: true }
+reference_solution: |
+  Contrast-enhanced CT of the abdomen demonstrates a bowel-within-bowel configuration (target sign) in the ascending colon with the intussusceptum containing mesenteric fat and engorged vessels projecting into the colonic lumen. Proximal ileal dilatation is present. No pneumatosis intestinalis or free air to suggest perforation or ischemic compromise is identified. No discrete lead-point mass is seen. Findings are consistent with ileocolic intussusception requiring emergent air or contrast enema reduction, or surgical consultation if reduction fails.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - abdominal
+  - pediatric
+  - emergency
+  - surgical

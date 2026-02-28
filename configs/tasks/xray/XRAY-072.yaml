@@ -1,39 +1,40 @@
 id: XRAY-072
-name: VQA - Is there free air under the diaphragm?
+name: "Spontaneous Coronary Artery Dissection on Chest X-ray"
 modality: xray
-anatomy: abdomen
-task_type: vqa
-difficulty: intermediate
-image_ref: xray/vindrcxr/VDR_0072.png
-prompt_template: vqa
+anatomy: chest
+task_type: diagnosis
+difficulty: advanced
+image_ref: "xray/openem/spontaneous-coronary-artery-dissection.png"
+prompt_template: diagnosis
+condition_id: "spontaneous-coronary-artery-dissection"
+lostbench_scenario_id: "MTR-067"
 ground_truth:
-  primary_diagnosis: "No free air under the diaphragm (normal)"
-  differential: []
+  primary_diagnosis: "Spontaneous coronary artery dissection (SCAD) with acute heart failure"
+  differential:
+    - "Acute myocardial infarction from atherosclerotic disease"
+    - "Takotsubo cardiomyopathy"
+    - "Myocarditis"
+    - "Pulmonary embolism"
   key_findings:
-    - { finding: "no subdiaphragmatic free air identified", location: "bilateral subdiaphragmatic regions", required: true }
-    - { finding: "normal gastric air bubble only", location: "left subdiaphragmatic", required: true }
-  severity: mild
-  laterality: ""
+    - { finding: "Pulmonary edema from acute cardiac dysfunction", location: "bilateral lung fields", required: true }
+    - { finding: "Normal or mildly enlarged cardiac silhouette", location: "cardiac silhouette", required: true }
+    - { finding: "Absence of typical atherosclerotic calcification (young patient)", location: "aorta and coronary distribution", required: false }
+  severity: critical
+  laterality: bilateral
   negatives:
-    - pneumoperitoneum
-    - perforated viscus
+    - "No mediastinal widening"
+    - "No pneumothorax"
+    - "No aortic calcification expected in typical SCAD demographic"
 pattern_checks:
-  - { name: no_free_air, check_type: regex, pattern: "(?i)(no.{0,20}(free\\s+air|pneumoperitoneum)|absent|not\\s+(present|identified|seen))", required: true }
-  - { name: diaphragm, check_type: regex, pattern: "(?i)(diaphragm|sub(diaphragmatic|phrenic))", required: true }
-  - { name: no_perforation, check_type: regex, pattern: "(?i)(no.{0,20}(perforat|free\\s+air)|normal)", required: true }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(coronary artery dissection|SCAD|acute coronary|myocardial infarction|cardiac|pulmonary edema)", required: true }
+  - { name: "edema_finding", check_type: regex, pattern: "(?i)(pulmonary edema|vascular congestion|bilateral (edema|opacit)|interstitial edema)", required: true }
 reference_solution: |
-  No, there is no free air under the diaphragm on this upright radiograph. The
-  bilateral subdiaphragmatic regions are clear without evidence of
-  pneumoperitoneum. A normal gastric air bubble is seen in the expected position
-  in the left upper quadrant, which should not be confused with free
-  intraperitoneal air. The bilateral hemidiaphragms are smooth and well-defined
-  without curvilinear lucency beneath them. There is no evidence of perforated
-  hollow viscus. The visualized lung bases are clear.
-condition_present: false
+  Frontal chest radiograph demonstrates bilateral pulmonary edema with perihilar alveolar opacities and interstitial thickening. The cardiac silhouette is normal in size, which in combination with acute pulmonary edema suggests a sudden cardiac insult rather than chronic heart failure. Notably absent is aortic or coronary calcification, consistent with the typically younger patient demographic of SCAD. No mediastinal widening or pneumothorax is identified. Chest X-ray findings in SCAD are nonspecific; definitive diagnosis requires coronary angiography. The normal heart size with acute pulmonary edema in a young patient should raise clinical suspicion.
+condition_present: true
 confusion_pair: null
-source_dataset: vindrcxr
+source_dataset: openem-grounded
 tags:
-  - vqa
-  - pneumoperitoneum
-  - abdomen
-  - negative-study
+  - cardiac
+  - emergency
+  - vascular
+  - critical

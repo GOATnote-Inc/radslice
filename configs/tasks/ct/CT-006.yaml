@@ -1,57 +1,36 @@
 id: CT-006
-name: Aortic dissection type A
+name: "Pericarditis with pericardial effusion on contrast-enhanced CT"
 modality: ct
 anatomy: chest
 task_type: diagnosis
-difficulty: expert
-image_ref: ct/omnimedvqa/CT_0006.png
+difficulty: advanced
+image_ref: "ct/openem/pericarditis-myocarditis.png"
 prompt_template: diagnosis
+condition_id: "pericarditis-myocarditis"
+lostbench_scenario_id: ""
 ground_truth:
-  primary_diagnosis: "Stanford type A aortic dissection"
+  primary_diagnosis: "Acute pericarditis with pericardial effusion"
   differential:
-    - type B aortic dissection
-    - intramural hematoma
-    - penetrating aortic ulcer
-    - aortic aneurysm with mural thrombus
-    - motion artifact mimicking intimal flap
+    - "Myocarditis"
+    - "Pericardial metastasis"
+    - "Uremic pericarditis"
   key_findings:
-    - { finding: "intimal flap with true and false lumen", location: "ascending aorta", required: true }
-    - { finding: "extension of dissection flap", location: "aortic arch", required: true }
-    - { finding: "differential contrast opacification of true and false lumen", location: "aorta", required: false }
-    - { finding: "pericardial effusion", location: "pericardium", required: false }
-  severity: severe
-  laterality: ""
+    - { finding: "Pericardial thickening with enhancement", location: "pericardium", required: true }
+    - { finding: "Moderate pericardial effusion", location: "pericardial space", required: true }
+    - { finding: "Mediastinal fat stranding adjacent to the pericardium", location: "anterior mediastinum", required: false }
+  severity: "moderate"
+  laterality: "midline"
   negatives:
-    - aortic rupture with active extravasation
-    - coronary artery involvement
-    - complete aortic occlusion
-    - branch vessel malperfusion
+    - "No right ventricular collapse to suggest tamponade"
 pattern_checks:
-  - { name: dissection_mentioned, check_type: regex, pattern: "dissection", required: true }
-  - { name: type_a_stanford, check_type: regex, pattern: "type\\s*A|Stanford\\s*A|DeBakey\\s*(I|II)\\b|ascending", required: true }
-  - { name: intimal_flap, check_type: regex, pattern: "intimal\\s+flap|dissection\\s+flap|flap", required: true }
-  - { name: true_false_lumen, check_type: regex, pattern: "true.{0,15}(false|lumen)|false\\s+lumen|dual\\s+lumen|two\\s+lumen", required: true }
-  - { name: ascending_aorta, check_type: regex, pattern: "ascending\\s+aort", required: true }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(pericarditis|pericardial\\s*(effusion|thickening|enhancement))", required: true }
+  - { name: "key_finding_enhancement", check_type: regex, pattern: "(?i)(pericardial\\s*(thickening|enhancement)|enhancing\\s*pericardium)", required: true }
 reference_solution: |
-  ECG-gated CT aortography demonstrates an intimal flap within the ascending
-  aorta originating approximately 2 cm above the aortic root, creating true
-  and false lumens with differential contrast opacification. The dissection
-  flap extends through the aortic arch and into the proximal descending
-  thoracic aorta. The true lumen is compressed with the false lumen being
-  larger. A small pericardial effusion is present raising concern for
-  hemopericardium. The coronary artery ostia appear to arise from the true
-  lumen. No active extravasation to suggest rupture. The great vessels
-  appear patent.
-  Impression: Stanford type A aortic dissection involving the ascending
-  aorta and arch with small pericardial effusion. Emergent cardiovascular
-  surgical consultation is required.
+  Contrast-enhanced CT of the chest demonstrates diffuse pericardial thickening with avid enhancement and a moderate-sized pericardial effusion. Mild fat stranding is present in the anterior mediastinum adjacent to the pericardium. There is no right ventricular compression to suggest tamponade physiology. Findings are consistent with acute pericarditis with associated effusion.
 condition_present: true
 confusion_pair: null
-source_dataset: omnimedvqa-open
+source_dataset: openem-grounded
 tags:
-  - aortic-dissection
-  - emergency
-  - chest
-  - vascular
-  - cardiothoracic
-  - life-threatening
+  - cardiac
+  - pericardial
+  - inflammatory

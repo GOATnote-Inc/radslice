@@ -1,58 +1,40 @@
 id: MRI-026
-name: Hippocampal sclerosis (mesial temporal sclerosis)
+name: "Central Retinal Artery Occlusion on MR Angiography"
 modality: mri
 anatomy: head
-task_type: finding_detection
-difficulty: advanced
-image_ref: mri/omnimedvqa/MRI_0026.png
-prompt_template: finding_detection
+task_type: diagnosis
+difficulty: expert
+image_ref: "mri/openem/central-retinal-artery-occlusion.png"
+prompt_template: diagnosis
+condition_id: "central-retinal-artery-occlusion"
+lostbench_scenario_id: "MTR-007"
 ground_truth:
-  primary_diagnosis: "Left mesial temporal sclerosis (hippocampal sclerosis)"
+  primary_diagnosis: "Central retinal artery occlusion with globe and orbital MRI findings"
   differential:
-    - hippocampal glioma (low-grade)
-    - herpes simplex encephalitis (acute)
-    - limbic encephalitis (autoimmune)
-    - hippocampal malformation of cortical development
+    - "Optic neuritis"
+    - "Retinal detachment"
+    - "Orbital tumor compressing optic nerve"
   key_findings:
-    - { finding: "volume loss of the left hippocampus compared to the contralateral side", location: "left hippocampus", required: true }
-    - { finding: "increased T2/FLAIR signal in the left hippocampus (gliosis)", location: "left hippocampal body and head", required: true }
-    - { finding: "loss of normal internal architecture of the hippocampus", location: "left hippocampus", required: false }
-    - { finding: "ipsilateral temporal horn dilatation", location: "left temporal horn of the lateral ventricle", required: false }
-  severity: moderate
-  laterality: left
+    - { finding: "Restricted diffusion in the retina of the affected eye on DWI", location: "Left globe (retina)", required: true }
+    - { finding: "Absent flow in the ophthalmic artery on MRA", location: "Left ophthalmic artery", required: true }
+    - { finding: "Normal contralateral globe and optic nerve for comparison", location: "Right globe", required: false }
+  severity: "critical"
+  laterality: "left"
   negatives:
-    - mass or space-occupying lesion in the temporal lobe
-    - bilateral hippocampal abnormality
-    - restricted diffusion (would suggest acute process)
-    - abnormal enhancement (would suggest tumor or encephalitis)
-    - cortical dysplasia
+    - "No orbital mass"
+    - "No optic nerve enhancement"
 pattern_checks:
-  - { name: hippocampal_sclerosis, check_type: regex, pattern: "hippocampal\\s+sclerosis|mesial\\s+temporal\\s+sclerosis|MTS|temporal\\s+lobe\\s+epilepsy", required: true }
-  - { name: volume_loss, check_type: regex, pattern: "volume\\s+loss|atrophy|atrophic|small.*hippocampus|asymmetr", required: true }
-  - { name: signal_change, check_type: regex, pattern: "T2.*hyperintens|FLAIR.*hyperintens|signal.*abnormal|gliosis", required: true }
-  - { name: laterality_left, check_type: regex, pattern: "left", required: true }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(central\\s+retinal\\s+artery\\s+occlusion|CRAO)", required: true }
+  - { name: "retinal_diffusion", check_type: regex, pattern: "(?i)(retina|globe).*(restrict|diffusion|DWI)", required: true }
+  - { name: "laterality", check_type: regex, pattern: "(?i)left", required: true }
 reference_solution: |
-  MRI of the brain with dedicated temporal lobe protocol demonstrates
-  asymmetric hippocampal volumes with the left hippocampus significantly
-  smaller than the right. The left hippocampus shows increased T2 and FLAIR
-  signal intensity representing gliosis, with loss of the normal internal
-  architecture. The left temporal horn of the lateral ventricle is mildly
-  dilated (ex vacuo) secondary to the hippocampal volume loss. No mass
-  lesion or abnormal enhancement is identified in the temporal lobe. No
-  restricted diffusion to suggest an acute process. The right hippocampus
-  is normal in size, morphology, and signal. No evidence of cortical
-  dysplasia or other dual pathology. Quantitative volumetric analysis, if
-  available, would confirm the asymmetry.
-  Impression: Left mesial temporal sclerosis (hippocampal sclerosis) with
-  hippocampal volume loss and T2/FLAIR hyperintense gliosis. Clinical
-  correlation with seizure semiology and EEG findings is recommended for
-  surgical candidacy evaluation.
+  MRI of the orbits with DWI and MRA demonstrates restricted diffusion in the retina of the left globe, with high DWI signal and low ADC values consistent with retinal ischemia. MRA of the circle of Willis and orbital vessels shows absence of flow in the left ophthalmic artery, confirming central retinal artery occlusion. The right globe and optic nerve appear normal. No orbital mass or optic nerve enhancement. Findings are consistent with left central retinal artery occlusion, a stroke-equivalent requiring emergent evaluation for embolic source.
 condition_present: true
 confusion_pair: null
-source_dataset: omnimedvqa-open
+source_dataset: openem-grounded
 tags:
-  - hippocampal-sclerosis
-  - epilepsy
   - neuro
-  - temporal-lobe
-  - atrophy
+  - vascular
+  - orbital
+  - mra
+  - emergency

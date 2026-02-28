@@ -1,0 +1,40 @@
+id: US-077
+name: "Spinal Cord Compression on Intraoperative Ultrasound"
+modality: ultrasound
+anatomy: spine
+task_type: diagnosis
+difficulty: expert
+image_ref: "ultrasound/openem/spinal-cord-compression.png"
+prompt_template: diagnosis
+condition_id: "spinal-cord-compression"
+lostbench_scenario_id: "MTR-030"
+ground_truth:
+  primary_diagnosis: "Spinal cord compression from epidural mass lesion"
+  differential:
+    - "Spinal epidural abscess"
+    - "Spinal epidural hematoma"
+    - "Metastatic epidural disease"
+  key_findings:
+    - { finding: "Hypoechoic epidural mass compressing the spinal cord", location: "posterior epidural space", required: true }
+    - { finding: "Effacement of the subarachnoid space at the level of compression", location: "spinal canal", required: true }
+    - { finding: "Loss of normal pulsatile cord motion", location: "spinal cord at compression level", required: false }
+    - { finding: "Hyperechoic vertebral body with possible pathologic fracture", location: "vertebral body", required: false }
+  severity: critical
+  laterality: midline
+  negatives:
+    - "Normal cord caliber above and below the compression"
+    - "No syrinx formation"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(spinal cord compression|epidural (mass|compression|lesion)|cord compression|myelopathy)", required: true }
+  - { name: "mass_finding", check_type: regex, pattern: "(?i)(epidural mass|compressive (mass|lesion)|extradural (mass|lesion)|spinal (mass|tumor))", required: true }
+  - { name: "cord_finding", check_type: regex, pattern: "(?i)(cord (compression|effacement|displacement)|subarachnoid.{0,20}(effaced|obliterated|compressed)|thecal sac compression)", required: true }
+reference_solution: |
+  Intraoperative spinal ultrasound following posterior laminectomy demonstrates a hypoechoic epidural mass lesion compressing the spinal cord at the T7-T8 level. The subarachnoid space is completely effaced at the level of maximal compression. The spinal cord appears deformed and displaced anteriorly. Normal pulsatile cord motion is absent at this level. Above and below the compression, the cord caliber returns to normal and normal pulsatile motion is observed. The underlying vertebral body at T7 appears hyperechoic and irregular, suggesting pathologic involvement. These findings confirm significant spinal cord compression requiring surgical decompression.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - spine
+  - emergency
+  - intraoperative
+  - neurosurgical

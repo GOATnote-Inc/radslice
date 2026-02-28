@@ -1,54 +1,37 @@
 id: CT-033
-name: Acute sinusitis
+name: "Tracheal disruption on CT chest"
 modality: ct
-anatomy: head
-task_type: vqa
-difficulty: basic
-image_ref: ct/omnimedvqa/CT_0033.png
-prompt_template: vqa
+anatomy: chest
+task_type: diagnosis
+difficulty: expert
+image_ref: "ct/openem/tracheal-disruption.png"
+prompt_template: diagnosis
+condition_id: "tracheal-disruption"
+lostbench_scenario_id: "MTR-076"
 ground_truth:
-  primary_diagnosis: "Acute pansinusitis"
+  primary_diagnosis: "Tracheobronchial disruption with pneumomediastinum"
   differential:
-    - allergic fungal sinusitis
-    - sinonasal polyposis
-    - mucocele
-    - sinusoidal retention cyst
+    - "Esophageal perforation (Boerhaave syndrome)"
+    - "Tracheal tumor with perforation"
+    - "Post-intubation tracheal injury"
   key_findings:
-    - { finding: "air-fluid levels within maxillary sinuses", location: "bilateral maxillary sinuses", required: true }
-    - { finding: "complete opacification of ethmoid air cells", location: "bilateral anterior and posterior ethmoid sinuses", required: true }
-    - { finding: "mucosal thickening in frontal sinuses", location: "bilateral frontal sinuses", required: false }
-    - { finding: "ostiomeatal complex obstruction", location: "bilateral ostiomeatal units", required: false }
-  severity: moderate
-  laterality: bilateral
+    - { finding: "Discontinuity of the tracheal or bronchial wall", location: "distal trachea or right mainstem bronchus", required: true }
+    - { finding: "Pneumomediastinum with subcutaneous emphysema", location: "mediastinum and chest wall", required: true }
+    - { finding: "Fallen lung sign (lung falling posteriorly away from hilum)", location: "right hemithorax", required: false }
+  severity: "critical"
+  laterality: "right"
   negatives:
-    - bony erosion or destruction
-    - orbital complication
-    - intracranial extension
-    - sinonasal mass
-    - fungal calcification pattern
+    - "No esophageal perforation"
 pattern_checks:
-  - { name: sinusitis_mentioned, check_type: regex, pattern: "sinusitis|sinus.*infect|sinus.*inflam", required: true }
-  - { name: air_fluid_level, check_type: regex, pattern: "air.?fluid|opacif|fluid.*level|sinus.*fluid", required: true }
-  - { name: bilateral, check_type: regex, pattern: "bilateral|both|pansinusitis", required: true }
-  - { name: no_complication, check_type: regex, pattern: "no.{0,20}(orbital|intracranial|erosion|complicat)", required: false }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(tracheal\\s*(disruption|rupture|tear|injury)|tracheobronchial.*rupture|bronchial.*rupture)", required: true }
+  - { name: "key_finding_pneumomediastinum", check_type: regex, pattern: "(?i)(pneumomediastinum|tracheal.*discontinu|fallen\\s*lung)", required: true }
 reference_solution: |
-  Non-contrast CT of the paranasal sinuses demonstrates bilateral air-fluid
-  levels within the maxillary sinuses, consistent with acute sinusitis. The
-  bilateral anterior and posterior ethmoid air cells are completely
-  opacified. The bilateral frontal sinuses show moderate mucosal thickening.
-  The sphenoid sinuses demonstrate partial opacification. The ostiomeatal
-  complexes are obstructed bilaterally. No bony erosion or destruction of
-  the sinus walls is identified. No orbital complication such as subperiosteal
-  abscess or orbital cellulitis. No intracranial extension. No sinonasal
-  mass or polyposis. The nasal septum is midline.
-  Impression: Acute pansinusitis with bilateral maxillary air-fluid levels
-  and ethmoid opacification without evidence of complications. Clinical
-  management with appropriate antibiotic therapy recommended.
+  CT of the chest demonstrates discontinuity of the posterior membranous wall of the distal trachea extending to the right mainstem bronchus origin. Extensive pneumomediastinum and subcutaneous emphysema are present throughout the chest wall and neck. There is a right pneumothorax with the right lung falling posteriorly and dependent in position (fallen lung sign). No esophageal perforation is identified. Findings are consistent with tracheobronchial disruption requiring emergent surgical repair.
 condition_present: true
 confusion_pair: null
-source_dataset: omnimedvqa-open
+source_dataset: openem-grounded
 tags:
-  - sinusitis
-  - head
-  - infectious
-  - vqa
+  - airway
+  - trauma
+  - emergency
+  - thoracic-surgery

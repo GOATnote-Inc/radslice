@@ -1,0 +1,39 @@
+id: US-046
+name: "Urolithiasis with Hydronephrosis on Renal Ultrasound"
+modality: ultrasound
+anatomy: abdomen
+task_type: diagnosis
+difficulty: intermediate
+image_ref: "ultrasound/openem/urolithiasis.png"
+prompt_template: diagnosis
+condition_id: "urolithiasis"
+lostbench_scenario_id: ""
+ground_truth:
+  primary_diagnosis: "Obstructive urolithiasis with unilateral hydronephrosis"
+  differential:
+    - "Ureteropelvic junction obstruction"
+    - "Ureteral stricture"
+    - "Retroperitoneal mass causing extrinsic ureteral compression"
+  key_findings:
+    - { finding: "Echogenic focus with posterior acoustic shadowing in the renal pelvis or UPJ", location: "left renal pelvis", required: true }
+    - { finding: "Moderate hydronephrosis with dilated calyces", location: "left kidney", required: true }
+    - { finding: "Twinkling artifact on color Doppler at the stone", location: "left renal pelvis", required: false }
+    - { finding: "Ureteral jet asymmetry on bladder Doppler", location: "urinary bladder", required: false }
+  severity: moderate
+  laterality: left
+  negatives:
+    - "No perinephric fluid collection"
+    - "Normal contralateral right kidney"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(urolithiasis|renal (calcul|stone)|kidney stone|nephrolithiasis|ureteral (calcul|stone))", required: true }
+  - { name: "stone_finding", check_type: regex, pattern: "(?i)(echogenic focus|acoustic shadow|calcul|stone|twinkling artifact)", required: true }
+  - { name: "hydronephrosis_finding", check_type: regex, pattern: "(?i)(hydronephrosis|dilated (collecting|calyces|renal pelvis)|pelvicalyceal)", required: true }
+reference_solution: |
+  Renal ultrasound demonstrates a 9 mm echogenic focus with clean posterior acoustic shadowing at the left ureteropelvic junction, consistent with a renal calculus. The twinkling artifact is present on color Doppler, confirming a true calcification. There is moderate left-sided hydronephrosis with dilation of the renal pelvis and calyces. The left renal parenchyma is preserved without thinning. Bladder Doppler demonstrates an absent ureteral jet on the left side, supporting a complete left-sided obstruction. The right kidney is normal in size and echogenicity without hydronephrosis. These findings are consistent with obstructive left urolithiasis.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - urologic
+  - renal
+  - emergency

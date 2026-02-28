@@ -1,46 +1,41 @@
 id: XRAY-012
-name: Subcutaneous emphysema
+name: "Aortic Transection on Chest X-ray"
 modality: xray
 anatomy: chest
 task_type: diagnosis
-difficulty: intermediate
-image_ref: xray/omnimedvqa/CXR_0012.png
+difficulty: expert
+image_ref: "xray/openem/aortic-transection.png"
 prompt_template: diagnosis
+condition_id: "aortic-transection"
+lostbench_scenario_id: "MTR-064"
 ground_truth:
-  primary_diagnosis: "Subcutaneous emphysema"
+  primary_diagnosis: "Traumatic aortic transection"
   differential:
-    - pneumomediastinum
-    - pneumothorax with chest wall tracking
-    - post-procedural air
-    - esophageal rupture with mediastinal air
+    - "Aortic dissection"
+    - "Mediastinal hematoma from venous injury"
+    - "Ruptured thoracic aortic aneurysm"
   key_findings:
-    - { finding: "linear lucencies within the soft tissues of the chest wall", location: "bilateral chest wall soft tissues", required: true }
-    - { finding: "air tracking along fascial planes", location: "lateral chest wall and neck base", required: true }
-    - { finding: "streaky gas outlining the pectoralis muscles", location: "bilateral pectoralis region", required: false }
-  severity: moderate
-  laterality: bilateral
+    - { finding: "Widened mediastinum greater than 8 cm", location: "superior mediastinum", required: true }
+    - { finding: "Obscured aortic knob", location: "aortic arch", required: true }
+    - { finding: "Left apical pleural cap", location: "left apex", required: false }
+    - { finding: "Depression of left mainstem bronchus", location: "left mainstem bronchus", required: false }
+    - { finding: "Deviation of trachea and esophagus (NG tube) to the right", location: "trachea", required: false }
+    - { finding: "Left hemothorax", location: "left hemithorax", required: false }
+  severity: critical
+  laterality: left
   negatives:
-    - rib fracture
-    - large pneumothorax
-    - pleural effusion
-    - pulmonary consolidation
+    - "No right-sided pneumothorax"
 pattern_checks:
-  - { name: primary_diagnosis, check_type: regex, pattern: "(?i)subcutaneous\\s+emphysema", required: true }
-  - { name: soft_tissue_air, check_type: regex, pattern: "(?i)(soft\\s+tissue.{0,30}(air|gas|lucen)|air.{0,30}(soft\\s+tissue|fascial|subcutaneous))", required: true }
-  - { name: pneumomediastinum_mention, check_type: regex, pattern: "(?i)pneumomediastinum", required: false }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(aortic transection|aortic injury|traumatic aortic|aortic rupture|aortic tear)", required: true }
+  - { name: "mediastinal_widening", check_type: regex, pattern: "(?i)(widened mediastinum|mediastinal widening|obscured aortic knob)", required: true }
+  - { name: "apical_cap", check_type: regex, pattern: "(?i)(apical (pleural )?cap|left apex|hemothorax)", required: true }
 reference_solution: |
-  Frontal chest radiograph demonstrates extensive linear gas lucencies tracking through
-  the soft tissues of the bilateral chest wall, consistent with subcutaneous emphysema.
-  Air is seen dissecting along fascial planes of the lateral chest wall and extending
-  toward the base of the neck. The pectoralis muscles are outlined by gas bilaterally.
-  No definite large pneumothorax identified, though a small component cannot be excluded
-  given the extent of subcutaneous air. Lungs are otherwise clear. Clinical correlation
-  is recommended to determine etiology (trauma, recent procedure, or spontaneous).
+  Frontal chest radiograph obtained in a trauma setting demonstrates marked widening of the superior mediastinum exceeding 8 cm with loss of the normal aortic knob contour. A left apical pleural cap is present. The trachea and nasogastric tube are deviated to the right. Depression of the left mainstem bronchus is noted. A moderate left hemothorax is also present. These findings are highly suspicious for traumatic aortic injury at the aortic isthmus, and emergent CT angiography of the chest is indicated.
 condition_present: true
 confusion_pair: null
-source_dataset: omnimedvqa-open
+source_dataset: openem-grounded
 tags:
-  - subcutaneous-emphysema
-  - soft-tissue-air
-  - chest-wall
   - trauma
+  - emergency
+  - aortic
+  - critical

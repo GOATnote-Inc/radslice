@@ -1,51 +1,37 @@
 id: XRAY-035
-name: Central venous catheter tip in right atrium
+name: "Acute Low Back Pain with Red Flags on Spine X-ray"
 modality: xray
-anatomy: chest
-task_type: finding_detection
+anatomy: spine
+task_type: diagnosis
 difficulty: intermediate
-image_ref: xray/omnimedvqa/CXR_0035.png
+image_ref: "xray/openem/acute-low-back-pain-red-flags.png"
 prompt_template: diagnosis
+condition_id: "acute-low-back-pain-red-flags"
+lostbench_scenario_id: ""
 ground_truth:
-  primary_diagnosis: "Central venous catheter tip malpositioned in the right atrium"
+  primary_diagnosis: "Lumbar vertebral compression fracture"
   differential:
-    - appropriate catheter positioning at cavoatrial junction
-    - catheter in internal jugular vein
-    - catheter tip in right ventricle
+    - "Metastatic disease with pathologic fracture"
+    - "Degenerative disc disease"
+    - "Vertebral osteomyelitis"
   key_findings:
-    - { finding: "central venous catheter tip projecting over the right atrium", location: "right atrium", required: true }
-    - { finding: "catheter tip well below the cavoatrial junction", location: "below SVC-RA junction", required: true }
-    - { finding: "catheter course from left subclavian approach", location: "left subclavian vein", required: false }
+    - { finding: "Vertebral body compression fracture with loss of height", location: "lumbar spine", required: true }
+    - { finding: "Anterior wedging of vertebral body", location: "L1 vertebral body", required: true }
+    - { finding: "Paraspinal soft tissue swelling", location: "paravertebral", required: false }
   severity: moderate
-  laterality: ""
+  laterality: midline
   negatives:
-    - pneumothorax
-    - arterial placement
-    - catheter kinking
-    - pleural effusion
+    - "No lytic lesion to suggest metastatic disease"
+    - "No disc space narrowing with endplate irregularity suggesting infection"
 pattern_checks:
-  - { name: catheter_mentioned, check_type: regex, pattern: "(?i)(central\\s+(venous\\s+)?catheter|CVC|central\\s+line)", required: true }
-  - { name: malposition, check_type: regex, pattern: "(?i)(malposition|too\\s+(far|deep|low)|right\\s+atrium|beyond.{0,20}junction|below.{0,20}(SVC|cavo))", required: true }
-  - { name: reposition, check_type: regex, pattern: "(?i)(reposition|withdraw|pull\\s+back|adjust)", required: true }
-  - { name: no_pneumothorax, check_type: not_contains, pattern: "pneumothorax is identified", required: false }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(compression fracture|vertebral fracture|wedge fracture|burst fracture)", required: true }
+  - { name: "fracture_finding", check_type: regex, pattern: "(?i)(compression|height loss|wedging|anterior.*height|vertebral body fracture)", required: true }
 reference_solution: |
-  Portable AP chest radiograph demonstrates a left subclavian central venous
-  catheter with the tip projecting over the right atrium, well below the expected
-  cavoatrial junction. The ideal position for the catheter tip is at the SVC-right
-  atrial junction. The current deep positioning risks arrhythmia, cardiac
-  perforation, and tamponade. No pneumothorax related to catheter placement. The
-  lungs are otherwise clear. No pleural effusion. Heart size is within normal
-  limits. An additional nasogastric tube is present with tip below the diaphragm
-  in satisfactory position. Withdrawal of the central venous catheter by
-  approximately 3-4 cm is recommended.
-  Impression: Malpositioned central venous catheter with tip in the right atrium —
-  repositioning recommended.
+  Lateral lumbar spine radiograph demonstrates anterior wedge compression of the L1 vertebral body with approximately 40% loss of anterior height. The posterior vertebral body height is maintained. No retropulsion of bone fragments is identified on this view. No lytic or blastic lesions are seen to suggest pathologic fracture. The remaining vertebral body heights and disc spaces are preserved. MRI is recommended to assess for posterior ligamentous injury and to exclude pathologic etiology.
 condition_present: true
 confusion_pair: null
-source_dataset: omnimedvqa-open
+source_dataset: openem-grounded
 tags:
-  - line-malposition
-  - central-venous-catheter
-  - ICU
-  - lines-and-tubes
-  - chest
+  - musculoskeletal
+  - spine
+  - fracture

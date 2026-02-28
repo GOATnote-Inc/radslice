@@ -1,52 +1,36 @@
 id: CT-040
-name: Normal pelvis CT
+name: "Esophageal perforation on contrast-enhanced CT chest"
 modality: ct
-anatomy: abdomen
+anatomy: chest
 task_type: diagnosis
-difficulty: basic
-image_ref: ct/omnimedvqa/CT_0040.png
+difficulty: advanced
+image_ref: "ct/openem/esophageal-perforation.png"
 prompt_template: diagnosis
+condition_id: "esophageal-perforation"
+lostbench_scenario_id: ""
 ground_truth:
-  primary_diagnosis: "Normal CT pelvis"
+  primary_diagnosis: "Esophageal perforation (Boerhaave syndrome)"
   differential:
-    - small physiologic ovarian cyst
-    - trace physiologic free fluid
-    - benign uterine fibroid below reporting threshold
+    - "Tracheal disruption"
+    - "Perforated peptic ulcer"
+    - "Mediastinitis from other cause"
   key_findings:
-    - { finding: "normal pelvic organs", location: "bladder, uterus/prostate, rectum", required: true }
-    - { finding: "no pelvic mass or collection", location: "pelvis", required: true }
-    - { finding: "no pelvic lymphadenopathy", location: "pelvic sidewalls", required: true }
-    - { finding: "intact osseous pelvis", location: "pelvic bones", required: false }
-  severity: mild
-  laterality: ""
+    - { finding: "Pneumomediastinum with extraluminal air adjacent to the esophagus", location: "posterior mediastinum", required: true }
+    - { finding: "Left-sided pleural effusion or hydropneumothorax", location: "left pleural space", required: true }
+    - { finding: "Periesophageal fluid collection", location: "distal esophagus", required: false }
+  severity: "critical"
+  laterality: "left"
   negatives:
-    - pelvic mass
-    - lymphadenopathy
-    - free fluid
-    - fracture
-    - appendicitis
-    - abscess
-    - bowel obstruction
+    - "No aortic injury"
 pattern_checks:
-  - { name: normal_identified, check_type: regex, pattern: "normal|unremarkable|no\\s+acute|negative|no\\s+significant", required: true }
-  - { name: no_mass, check_type: regex, pattern: "no.{0,30}(mass|lesion|collection|abscess)", required: true }
-  - { name: no_lymphadenopathy, check_type: regex, pattern: "no.{0,30}(lymph|adenopath)", required: true }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(esophageal\\s*perforation|Boerhaave|esophag.*rupture)", required: true }
+  - { name: "key_finding_pneumomediastinum", check_type: regex, pattern: "(?i)(pneumomediastinum|extraluminal\\s*air|mediastinal.*air|periesophageal)", required: true }
 reference_solution: |
-  Contrast-enhanced CT of the pelvis demonstrates normal-appearing pelvic
-  organs. The urinary bladder is normally distended without wall thickening
-  or intraluminal mass. The rectum and sigmoid colon are unremarkable
-  without wall thickening. No pelvic mass, abscess, or fluid collection.
-  The pelvic sidewall lymph nodes are within normal limits. The bilateral
-  inguinal regions are unremarkable. The osseous pelvis is intact without
-  fracture or lytic lesion. The bilateral hip joints are normal. No free
-  pelvic fluid. The visualized vasculature is patent.
-  Impression: Normal CT of the pelvis. No acute pelvic pathology.
-condition_present: false
+  Contrast-enhanced CT of the chest demonstrates pneumomediastinum with extraluminal air tracking along the distal esophagus in the posterior mediastinum. A periesophageal fluid collection is present at the distal esophagus with an associated left hydropneumothorax. No aortic injury is identified. Oral contrast, if administered, may demonstrate extravasation at the site of perforation. Findings are consistent with esophageal perforation (Boerhaave syndrome) requiring emergent surgical consultation.
+condition_present: true
 confusion_pair: null
-source_dataset: omnimedvqa-open
+source_dataset: openem-grounded
 tags:
-  - normal
-  - abdomen
-  - pelvis
-  - baseline
-  - negative-study
+  - thoracic
+  - emergency
+  - surgical

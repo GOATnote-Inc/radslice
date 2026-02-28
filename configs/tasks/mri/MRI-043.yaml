@@ -1,0 +1,38 @@
+id: MRI-043
+name: "Herpes Zoster Ophthalmicus with Orbital Involvement on MRI"
+modality: mri
+anatomy: face
+task_type: diagnosis
+difficulty: advanced
+image_ref: "mri/openem/herpes-zoster-ophthalmicus.png"
+prompt_template: diagnosis
+condition_id: "herpes-zoster-ophthalmicus"
+lostbench_scenario_id: ""
+ground_truth:
+  primary_diagnosis: "Herpes zoster ophthalmicus with orbital and trigeminal nerve involvement on MRI"
+  differential:
+    - "Orbital cellulitis"
+    - "Tolosa-Hunt syndrome"
+    - "Orbital pseudotumor"
+  key_findings:
+    - { finding: "Enhancement and thickening of the V1 (ophthalmic) division of the trigeminal nerve", location: "Right V1 trigeminal nerve from Meckel cave to orbit", required: true }
+    - { finding: "Preseptal and postseptal soft tissue inflammatory changes", location: "Right periorbital region", required: true }
+    - { finding: "Enhancement of the extraocular muscles and orbital apex (orbital apex syndrome)", location: "Right orbital apex", required: false }
+  severity: "severe"
+  laterality: "right"
+  negatives:
+    - "No intracranial abscess"
+    - "No cavernous sinus thrombosis"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(herpes\\s+zoster\\s+ophthalmicus|HZO|varicella.?zoster.*ophthalmic)", required: true }
+  - { name: "trigeminal_involvement", check_type: regex, pattern: "(?i)(V1|trigeminal|ophthalmic\\s+(nerve|division))", required: true }
+  - { name: "laterality", check_type: regex, pattern: "(?i)right", required: true }
+reference_solution: |
+  MRI of the orbits with gadolinium demonstrates enhancement and thickening of the right ophthalmic (V1) division of the trigeminal nerve extending from Meckel cave through the cavernous sinus to the orbital apex. There is preseptal and postseptal soft tissue inflammatory change in the right periorbital region. Enhancement of the right orbital apex structures, including the extraocular muscles, is noted, raising concern for orbital apex syndrome. No cavernous sinus thrombosis or intracranial abscess. Findings in the clinical context of dermatomal vesicular rash are consistent with herpes zoster ophthalmicus with orbital involvement, requiring IV antiviral therapy and ophthalmologic consultation.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - orbital
+  - infection
+  - cranial-nerve

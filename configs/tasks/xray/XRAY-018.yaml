@@ -1,51 +1,38 @@
 id: XRAY-018
-name: Left bullous emphysema
+name: "Spinal Cord Injury on Spine X-ray"
 modality: xray
-anatomy: chest
+anatomy: spine
 task_type: diagnosis
-difficulty: intermediate
-image_ref: xray/omnimedvqa/CXR_0018.png
+difficulty: advanced
+image_ref: "xray/openem/spinal-cord-injury.png"
 prompt_template: diagnosis
+condition_id: "spinal-cord-injury"
+lostbench_scenario_id: ""
 ground_truth:
-  primary_diagnosis: "Left bullous emphysema"
+  primary_diagnosis: "Cervical spine fracture-dislocation with spinal cord injury"
   differential:
-    - left pneumothorax
-    - giant bulla mimicking pneumothorax
-    - congenital lobar emphysema
-    - pneumatocele
+    - "Degenerative cervical spondylosis"
+    - "Cervical strain without fracture"
+    - "Central cord syndrome without bony injury"
   key_findings:
-    - { finding: "large lucent area in the left hemithorax with absent lung markings", location: "left upper and mid zones", required: true }
-    - { finding: "thin-walled bulla with visible curvilinear margin", location: "left hemithorax", required: true }
-    - { finding: "compressed adjacent lung parenchyma", location: "left lower zone", required: false }
-    - { finding: "hyperinflation with flattened diaphragms", location: "bilateral diaphragms", required: false }
-  severity: moderate
-  laterality: left
+    - { finding: "Cervical vertebral body fracture or subluxation", location: "cervical spine", required: true }
+    - { finding: "Loss of vertebral alignment or anterolisthesis", location: "cervical spine", required: true }
+    - { finding: "Prevertebral soft tissue swelling", location: "prevertebral space", required: false }
+    - { finding: "Widened interspinous distance (posterior ligament disruption)", location: "spinous processes", required: false }
+  severity: critical
+  laterality: midline
   negatives:
-    - pleural effusion
-    - mediastinal shift
-    - tension physiology
-    - right lung bulla
+    - "No foreign body"
 pattern_checks:
-  - { name: primary_diagnosis, check_type: regex, pattern: "(?i)(bull(a|ae|ous)\\s+(emphysema|disease)|emphysema.{0,30}bull(a|ae|ous)|giant\\s+bull(a|ae))", required: true }
-  - { name: lucent_area, check_type: regex, pattern: "(?i)(lucen(t|cy)|hyperlucen|avascular.{0,30}(area|zone|region)|absent.{0,30}(lung\\s+)?marking)", required: true }
-  - { name: pneumothorax_distinction, check_type: regex, pattern: "(?i)(bull(a|ae|ous).{0,50}(rather|not|distinguish|versus|vs)|not.{0,30}pneumothorax|thin.{0,20}wall)", required: false }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(spinal cord injury|cervical fracture|fracture.?dislocation|subluxation|vertebral fracture)", required: true }
+  - { name: "spine_finding", check_type: regex, pattern: "(?i)(fracture|subluxation|anterolisthesis|malalignment|prevertebral swelling)", required: true }
 reference_solution: |
-  Frontal chest radiograph demonstrates a large lucent area in the left hemithorax
-  occupying the upper and mid zones with absent lung markings. A thin curvilinear
-  wall is visible along the margin of the lucency, distinguishing this as a giant
-  bulla rather than pneumothorax. In pneumothorax, the visceral pleural line would
-  parallel the chest wall, whereas here the curvilinear margin represents the bulla
-  wall. There is compressed lung parenchyma in the left lower zone. Signs of
-  hyperinflation are present with flattened hemidiaphragms bilaterally. No mediastinal
-  shift or tension physiology. Findings are consistent with left bullous emphysema.
-  CT chest is recommended for further characterization and surgical planning if
-  symptomatic.
+  Lateral cervical spine radiograph demonstrates anterolisthesis at C5-C6 with disruption of the anterior and posterior vertebral body lines. Prevertebral soft tissue swelling is noted measuring greater than 7 mm at C2 and greater than 21 mm at C6. A compression fracture of the C6 vertebral body is present. These findings indicate an unstable cervical spine injury with high likelihood of spinal cord involvement. MRI is urgently indicated to evaluate the spinal cord, and spine immobilization must be maintained.
 condition_present: true
-confusion_pair: XRAY-001
-source_dataset: omnimedvqa-open
+confusion_pair: null
+source_dataset: openem-grounded
 tags:
-  - bullous-emphysema
-  - bulla
-  - emphysema
-  - pneumothorax-mimic
-  - confusion-pair
+  - trauma
+  - spine
+  - emergency
+  - neurosurgical

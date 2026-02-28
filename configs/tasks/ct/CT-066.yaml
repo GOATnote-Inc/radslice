@@ -1,0 +1,36 @@
+id: CT-066
+name: "Malignant otitis externa with skull base osteomyelitis on CT"
+modality: ct
+anatomy: head
+task_type: diagnosis
+difficulty: advanced
+image_ref: "ct/openem/malignant-otitis-externa.png"
+prompt_template: diagnosis
+condition_id: "malignant-otitis-externa"
+lostbench_scenario_id: "MTR-078"
+ground_truth:
+  primary_diagnosis: "Malignant (necrotizing) otitis externa with skull base osteomyelitis"
+  differential:
+    - "Squamous cell carcinoma of the temporal bone"
+    - "Cholesteatoma with ossicular erosion"
+    - "Langerhans cell histiocytosis"
+  key_findings:
+    - { finding: "Erosion of the floor of the external auditory canal", location: "right temporal bone", required: true }
+    - { finding: "Soft tissue mass in the external ear canal extending to the skull base", location: "right external auditory canal and infratemporal fossa", required: true }
+    - { finding: "Osseous destruction of the temporal bone and skull base", location: "right petrous apex and clivus", required: false }
+  severity: "severe"
+  laterality: "right"
+  negatives:
+    - "No intracranial abscess"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(malignant\\s*otitis|necrotizing\\s*otitis|skull\\s*base\\s*osteomyelitis)", required: true }
+  - { name: "key_finding_erosion", check_type: regex, pattern: "(?i)(bony\\s*erosion|osseous\\s*destruct|temporal\\s*bone.*erosion|skull\\s*base.*erosion)", required: true }
+reference_solution: |
+  CT of the temporal bones demonstrates erosion of the inferior wall of the right external auditory canal with soft tissue filling the canal and extending into the right infratemporal fossa. Osseous destruction involves the right petrous apex with extension toward the clivus. No intracranial abscess or dural enhancement is identified. In a diabetic patient with chronic ear pain and granulation tissue, findings are consistent with malignant (necrotizing) otitis externa with skull base osteomyelitis requiring prolonged IV antibiotics.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - ent
+  - infectious
+  - skull-base

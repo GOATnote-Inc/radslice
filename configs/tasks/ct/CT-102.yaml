@@ -1,0 +1,37 @@
+id: CT-102
+name: "Kawasaki disease with coronary artery aneurysm on CTA"
+modality: ct
+anatomy: chest
+task_type: diagnosis
+difficulty: advanced
+image_ref: "ct/openem/kawasaki-disease.png"
+prompt_template: diagnosis
+condition_id: "kawasaki-disease"
+lostbench_scenario_id: "MTR-022"
+ground_truth:
+  primary_diagnosis: "Kawasaki disease with coronary artery aneurysms"
+  differential:
+    - "Congenital coronary artery anomaly"
+    - "Coronary artery fistula"
+    - "Takayasu arteritis"
+  key_findings:
+    - { finding: "Fusiform aneurysmal dilatation of the coronary artery", location: "proximal left anterior descending artery", required: true }
+    - { finding: "Additional coronary artery aneurysm", location: "proximal right coronary artery", required: true }
+    - { finding: "Mural thrombus within the aneurysm", location: "LAD aneurysm", required: false }
+  severity: "severe"
+  laterality: "bilateral"
+  negatives:
+    - "No coronary artery stenosis"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(Kawasaki|coronary\\s*artery\\s*aneurysm|coronary.*aneury)", required: true }
+  - { name: "key_finding_aneurysm", check_type: regex, pattern: "(?i)(coronary.*aneurysm|fusiform.*dilatat|aneurysm.*LAD|aneurysm.*RCA)", required: true }
+reference_solution: |
+  Coronary CTA demonstrates fusiform aneurysmal dilatation of the proximal left anterior descending artery measuring approximately 6 mm in diameter and a separate fusiform aneurysm of the proximal right coronary artery measuring 5 mm. A small mural thrombus is noted within the LAD aneurysm. No coronary artery stenosis is identified. The remaining coronary segments are normal in caliber. In a child with recent febrile mucocutaneous illness, findings are consistent with coronary artery aneurysms from Kawasaki disease requiring aspirin, IVIG, and serial imaging surveillance.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - cardiac
+  - pediatric
+  - vascular
+  - emergency

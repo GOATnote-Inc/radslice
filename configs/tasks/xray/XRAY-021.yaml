@@ -1,52 +1,38 @@
 id: XRAY-021
-name: Right-sided massive pleural effusion
+name: "Epiglottitis on Lateral Neck X-ray"
 modality: xray
-anatomy: chest
+anatomy: neck
 task_type: diagnosis
 difficulty: intermediate
-image_ref: xray/omnimedvqa/CXR_0021.png
+image_ref: "xray/openem/epiglottitis.png"
 prompt_template: diagnosis
+condition_id: "epiglottitis"
+lostbench_scenario_id: "MTR-033"
 ground_truth:
-  primary_diagnosis: "Right-sided massive pleural effusion"
+  primary_diagnosis: "Acute epiglottitis"
   differential:
-    - complete right lung collapse with effusion
-    - empyema
-    - hemothorax
-    - mesothelioma with effusion
+    - "Croup"
+    - "Retropharyngeal abscess"
+    - "Peritonsillar abscess"
   key_findings:
-    - { finding: "complete opacification of the right hemithorax", location: "right hemithorax", required: true }
-    - { finding: "contralateral mediastinal shift", location: "mediastinum shifted to left", required: true }
-    - { finding: "meniscus sign or complete white-out", location: "right hemithorax", required: true }
-    - { finding: "preserved left lung aeration", location: "left lung", required: false }
+    - { finding: "Thumbprint sign (swollen epiglottis)", location: "epiglottis", required: true }
+    - { finding: "Thickened aryepiglottic folds", location: "supraglottic region", required: true }
+    - { finding: "Narrowed airway at supraglottic level", location: "hypopharynx", required: false }
   severity: severe
-  laterality: right
+  laterality: midline
   negatives:
-    - pneumothorax
-    - left-sided effusion
-    - rib fractures
-    - pneumoperitoneum
+    - "No subglottic narrowing (steeple sign) to suggest croup"
+    - "No prevertebral soft tissue widening"
 pattern_checks:
-  - { name: effusion_mentioned, check_type: regex, pattern: "(?i)pleural\\s+effusion", required: true }
-  - { name: laterality_right, check_type: regex, pattern: "(?i)right", required: true }
-  - { name: massive_or_large, check_type: regex, pattern: "(?i)(massive|large|complete.*opacif|white.?out)", required: true }
-  - { name: mediastinal_shift, check_type: regex, pattern: "(?i)(mediastinal\\s+shift|tracheal\\s+devia|contralateral\\s+shift)", required: false }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(epiglottitis|thumb.?print sign|swollen epiglottis)", required: true }
+  - { name: "epiglottis_finding", check_type: regex, pattern: "(?i)(thumb.?print|swollen epiglottis|thickened (epiglottis|aryepiglottic))", required: true }
 reference_solution: |
-  PA chest radiograph demonstrates complete opacification of the right hemithorax
-  consistent with a massive right-sided pleural effusion. There is contralateral
-  mediastinal shift to the left, with the trachea deviated leftward, indicating
-  the effusion is under pressure. No air-fluid level is identified to suggest
-  hydropneumothorax. The left lung is clear and fully expanded. The visible
-  cardiac silhouette appears displaced to the left. No rib fractures or bony
-  destruction. Thoracentesis is recommended for both diagnostic and therapeutic
-  purposes, and CT chest with contrast should be considered to evaluate for
-  underlying etiology including malignancy.
-  Impression: Massive right pleural effusion with contralateral mediastinal shift.
+  Lateral soft tissue neck radiograph demonstrates a markedly swollen epiglottis with the classic thumbprint sign, replacing the normal thin epiglottic shadow. The aryepiglottic folds are thickened. The subglottic airway is normal without the steeple sign of croup. No prevertebral soft tissue widening to suggest retropharyngeal abscess. These findings are diagnostic of acute epiglottitis, and airway management should be the immediate priority.
 condition_present: true
 confusion_pair: null
-source_dataset: omnimedvqa-open
+source_dataset: openem-grounded
 tags:
-  - pleural-effusion
-  - massive-effusion
-  - chest
-  - mediastinal-shift
-  - right
+  - airway
+  - emergency
+  - infection
+  - pediatric-common

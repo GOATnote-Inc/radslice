@@ -1,54 +1,38 @@
 id: XRAY-033
-name: Thoracic aortic aneurysm
+name: "Mesenteric Ischemia on Abdominal X-ray"
 modality: xray
-anatomy: chest
+anatomy: abdomen
 task_type: diagnosis
-difficulty: advanced
-image_ref: xray/omnimedvqa/CXR_0033.png
+difficulty: expert
+image_ref: "xray/openem/mesenteric-ischemia.png"
 prompt_template: diagnosis
+condition_id: "mesenteric-ischemia"
+lostbench_scenario_id: ""
 ground_truth:
-  primary_diagnosis: "Thoracic aortic aneurysm"
+  primary_diagnosis: "Acute mesenteric ischemia"
   differential:
-    - aortic dissection
-    - tortuous aorta in elderly
-    - mediastinal mass
-    - post-stenotic dilatation of the aorta
-    - aortic pseudoaneurysm
+    - "Small bowel obstruction"
+    - "Paralytic ileus"
+    - "Necrotizing enterocolitis (in neonates)"
   key_findings:
-    - { finding: "dilated aortic contour with convex lateral margin", location: "descending thoracic aorta", required: true }
-    - { finding: "widened mediastinal silhouette", location: "superior mediastinum", required: true }
-    - { finding: "mural calcification along the aortic wall", location: "aortic wall", required: false }
-    - { finding: "tracheal deviation", location: "trachea", required: false }
-  severity: severe
-  laterality: ""
+    - { finding: "Pneumatosis intestinalis (gas within the bowel wall)", location: "small bowel or colon", required: true }
+    - { finding: "Portal venous gas", location: "liver periphery", required: false }
+    - { finding: "Dilated featureless bowel loops (thumbprinting of bowel wall)", location: "small bowel", required: false }
+    - { finding: "Free intraperitoneal air if perforation has occurred", location: "subdiaphragmatic", required: false }
+  severity: critical
+  laterality: n/a
   negatives:
-    - pneumothorax
-    - pleural effusion
-    - focal consolidation
-    - rib fractures
+    - "Findings may be subtle or absent in early mesenteric ischemia"
 pattern_checks:
-  - { name: aneurysm_mentioned, check_type: regex, pattern: "(?i)(aortic\\s+aneurysm|aneurysm.{0,20}aort)", required: true }
-  - { name: aortic_dilatation, check_type: regex, pattern: "(?i)(dilat|ectasia|enlarg|widen).{0,30}aort", required: true }
-  - { name: thoracic, check_type: regex, pattern: "(?i)(thoracic|descend)", required: true }
-  - { name: workup, check_type: regex, pattern: "(?i)(CT[A]?|angiograph|CTA|echocardiogra|vascular\\s+surgery)", required: false }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(mesenteric ischemia|bowel ischemia|intestinal ischemia|pneumatosis)", required: true }
+  - { name: "ischemia_finding", check_type: regex, pattern: "(?i)(pneumatosis|portal venous gas|thumbprinting|bowel wall (gas|thickening))", required: true }
 reference_solution: |
-  PA chest radiograph demonstrates a prominent aortic contour with convex lateral
-  bulging of the descending thoracic aorta and widening of the mediastinal
-  silhouette, consistent with a thoracic aortic aneurysm. Mural calcification is
-  visible along the dilated aortic wall. There is mild rightward tracheal
-  deviation secondary to mass effect from the aneurysm. No associated pleural
-  effusion or hemothorax. The lung fields are clear. The cardiac silhouette is
-  borderline enlarged. The aneurysm appears to involve the descending thoracic
-  aorta. CT angiography of the chest is recommended to precisely measure the
-  aneurysm diameter, assess for mural thrombus, and guide surgical planning.
-  Vascular surgery consultation is warranted.
-  Impression: Thoracic aortic aneurysm of the descending aorta — CTA recommended.
+  Abdominal radiograph demonstrates pneumatosis intestinalis with linear and bubbly gas within the walls of multiple small bowel loops. Branching linear lucencies projecting over the liver suggest portal venous gas. Several bowel loops appear dilated and featureless. These findings are highly concerning for advanced mesenteric ischemia with bowel necrosis. Urgent CT angiography and surgical consultation are indicated, as this represents a surgical emergency.
 condition_present: true
 confusion_pair: null
-source_dataset: omnimedvqa-open
+source_dataset: openem-grounded
 tags:
-  - aortic-aneurysm
-  - thoracic-aorta
+  - gastrointestinal
   - vascular
-  - chest
-  - mediastinal
+  - emergency
+  - critical

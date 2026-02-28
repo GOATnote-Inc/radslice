@@ -1,49 +1,37 @@
 id: XRAY-044
-name: Normal CXR post-sternotomy with intact wires
+name: "Urolithiasis on Abdominal X-ray"
 modality: xray
-anatomy: chest
-task_type: finding_detection
-difficulty: basic
-image_ref: xray/omnimedvqa/CXR_0044.png
+anatomy: abdomen
+task_type: diagnosis
+difficulty: intermediate
+image_ref: "xray/openem/urolithiasis.png"
 prompt_template: diagnosis
+condition_id: "urolithiasis"
+lostbench_scenario_id: ""
 ground_truth:
-  primary_diagnosis: "Normal post-sternotomy chest radiograph with intact sternal wires"
-  differential: []
+  primary_diagnosis: "Ureteral calculus (urolithiasis)"
+  differential:
+    - "Phlebolith"
+    - "Appendicolith"
+    - "Calcified mesenteric lymph node"
   key_findings:
-    - { finding: "intact median sternotomy wires", location: "sternum", required: true }
-    - { finding: "clear lung fields", location: "bilateral lungs", required: true }
-    - { finding: "normal cardiac silhouette", location: "cardiomediastinal", required: true }
-    - { finding: "no sternal dehiscence", location: "sternum", required: false }
-  severity: mild
-  laterality: ""
+    - { finding: "Radiopaque calcification along the course of the ureter", location: "right ureteral course", required: true }
+    - { finding: "Absence of comet-tail sign (distinguishes from phlebolith)", location: "pelvis", required: false }
+    - { finding: "Renal calculus if present", location: "renal shadow", required: false }
+  severity: moderate
+  laterality: right
   negatives:
-    - sternal dehiscence
-    - wire fracture
-    - pleural effusion
-    - pneumothorax
-    - mediastinal widening
-    - pericardial effusion
+    - "No bowel obstruction"
+    - "No free air"
 pattern_checks:
-  - { name: post_sternotomy, check_type: regex, pattern: "(?i)(sternotomy|sternal\\s+wire|median\\s+sternotomy|CABG|cardiac\\s+surgery)", required: true }
-  - { name: wires_intact, check_type: regex, pattern: "(?i)(intact|stable|unchanged|satisfactor).{0,30}(wire|sternotomy)", required: true }
-  - { name: no_complication, check_type: regex, pattern: "(?i)(no\\s+acute|normal|unremarkable|no.{0,20}complicat)", required: true }
-  - { name: lungs_clear, check_type: regex, pattern: "(?i)(clear|no.*opaci|no.*consolidat)", required: true }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(urolithiasis|ureteral (calculus|stone)|renal (calculus|stone)|kidney stone|nephrolithiasis)", required: true }
+  - { name: "calcification_finding", check_type: regex, pattern: "(?i)(calcification|radiopaque|calculus|stone|ureter)", required: true }
 reference_solution: |
-  PA chest radiograph demonstrates intact median sternotomy wires without evidence
-  of sternal dehiscence or wire fracture. The lungs are clear bilaterally without
-  focal consolidation, pleural effusion, or pneumothorax. No mediastinal widening
-  or pericardial effusion. The cardiac silhouette is within normal limits. The
-  costophrenic angles are sharp. No residual post-operative complications
-  identified. The prosthetic valve (if present) appears well-seated. The
-  mediastinal contours are stable.
-  Impression: Stable post-sternotomy appearance with intact wires. No acute
-  cardiopulmonary abnormality.
-condition_present: false
+  Abdominal radiograph (KUB) demonstrates a 7 mm radiopaque calcification projected over the expected course of the right ureter at the level of L4, consistent with a ureteral calculus. No comet-tail lucency is identified to suggest a phlebolith. An additional small calcification is noted at the right renal shadow. No bowel dilatation or free air is identified. Non-contrast CT is the gold standard for further evaluation and confirmation of the ureteral stone location.
+condition_present: true
 confusion_pair: null
-source_dataset: omnimedvqa-open
+source_dataset: openem-grounded
 tags:
-  - normal
-  - post-surgical
-  - sternotomy
-  - chest
-  - baseline
+  - genitourinary
+  - emergency
+  - common

@@ -1,0 +1,36 @@
+id: CT-061
+name: "Retrobulbar hemorrhage on CT face"
+modality: ct
+anatomy: face
+task_type: diagnosis
+difficulty: advanced
+image_ref: "ct/openem/retrobulbar-hemorrhage.png"
+prompt_template: diagnosis
+condition_id: "retrobulbar-hemorrhage"
+lostbench_scenario_id: "MTR-075"
+ground_truth:
+  primary_diagnosis: "Retrobulbar hemorrhage with proptosis"
+  differential:
+    - "Orbital cellulitis with abscess"
+    - "Orbital tumor"
+    - "Cavernous hemangioma"
+  key_findings:
+    - { finding: "Hyperdense collection in the retrobulbar intraconal space", location: "right retrobulbar space", required: true }
+    - { finding: "Proptosis of the globe", location: "right globe", required: true }
+    - { finding: "Tenting of the posterior sclera (taut optic nerve sign)", location: "right optic nerve", required: false }
+  severity: "critical"
+  laterality: "right"
+  negatives:
+    - "No globe rupture"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(retrobulbar\\s*hemorrhage|retrobulbar.*hematoma|orbital.*hemorrhage)", required: true }
+  - { name: "key_finding_proptosis", check_type: regex, pattern: "(?i)(proptosis|retrobulbar.*collection|intraconal.*hematoma|tenting)", required: true }
+reference_solution: |
+  CT of the orbits demonstrates a hyperdense retrobulbar collection within the right intraconal space, consistent with retrobulbar hemorrhage. There is marked right-sided proptosis with stretching of the right optic nerve and tenting of the posterior sclera. An associated right orbital wall fracture is present. No globe rupture is identified. The left orbit is normal. Findings represent retrobulbar hemorrhage with signs of optic nerve compromise requiring emergent lateral canthotomy and cantholysis.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - ophthalmologic
+  - trauma
+  - emergency

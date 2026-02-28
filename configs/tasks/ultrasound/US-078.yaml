@@ -1,0 +1,40 @@
+id: US-078
+name: "Compartment Syndrome on Extremity Ultrasound"
+modality: ultrasound
+anatomy: extremity
+task_type: diagnosis
+difficulty: advanced
+image_ref: "ultrasound/openem/compartment-syndrome.png"
+prompt_template: diagnosis
+condition_id: "compartment-syndrome"
+lostbench_scenario_id: "MTR-027"
+ground_truth:
+  primary_diagnosis: "Acute compartment syndrome with elevated compartment pressure and vascular compromise"
+  differential:
+    - "Deep vein thrombosis"
+    - "Severe muscle contusion without compartment syndrome"
+    - "Rhabdomyolysis"
+  key_findings:
+    - { finding: "Enlarged and tense muscle compartment with convex fascial bowing", location: "anterior compartment of lower leg", required: true }
+    - { finding: "Decreased or absent arterial flow in the compartment on Doppler", location: "anterior tibial artery", required: true }
+    - { finding: "Muscle edema with heterogeneous echotexture", location: "anterior compartment musculature", required: false }
+    - { finding: "Normal patent deep veins excluding DVT", location: "posterior tibial and peroneal veins", required: false }
+  severity: critical
+  laterality: right
+  negatives:
+    - "No deep vein thrombosis"
+    - "No fracture fragment or foreign body"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(compartment syndrome|compartment (pressure|swelling)|fasciotomy|elevated compartment)", required: true }
+  - { name: "compartment_finding", check_type: regex, pattern: "(?i)(enlarged compartment|tense compartment|fascial (bowing|distension)|compartment (enlarg|swollen|tense))", required: true }
+  - { name: "vascular_finding", check_type: regex, pattern: "(?i)((decreased|absent|diminished|reduced).{0,20}(arterial flow|Doppler|perfusion)|vascular (compromise|insufficiency))", required: true }
+reference_solution: |
+  Ultrasound of the right lower leg demonstrates a markedly enlarged anterior compartment with tense, convex bowing of the anterior fascial boundary. The compartment musculature appears edematous with heterogeneous echotexture and loss of normal fibrillar architecture. Color Doppler reveals significantly diminished flow in the anterior tibial artery within the compartment. The deep venous system is patent and compressible, excluding DVT. The lateral and posterior compartments appear less affected but should be monitored. In the clinical context of severe pain out of proportion with passive stretch, these findings are consistent with acute anterior compartment syndrome of the right lower leg, requiring emergent fasciotomy.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - musculoskeletal
+  - emergency
+  - vascular
+  - surgical

@@ -1,0 +1,40 @@
+id: US-079
+name: "Benign Positional Vertigo - Normal Ultrasound Study"
+modality: ultrasound
+anatomy: head
+task_type: diagnosis
+difficulty: basic
+image_ref: "ultrasound/openem/benign-positional-vertigo.png"
+prompt_template: diagnosis
+condition_id: "benign-positional-vertigo"
+lostbench_scenario_id: "DEF-010"
+ground_truth:
+  primary_diagnosis: "Normal transcranial and carotid Doppler study, supporting benign positional vertigo diagnosis by exclusion"
+  differential:
+    - "Posterior circulation stroke"
+    - "Vertebrobasilar insufficiency"
+    - "Cerebellar hemorrhage"
+  key_findings:
+    - { finding: "Normal bilateral vertebral artery Doppler waveforms", location: "bilateral vertebral arteries", required: true }
+    - { finding: "Normal bilateral carotid artery flow without stenosis", location: "bilateral carotid arteries", required: true }
+    - { finding: "Normal basilar artery flow on transcranial Doppler (if performed)", location: "basilar artery", required: false }
+    - { finding: "No intracranial hemorrhage on transcranial ultrasound", location: "intracranial structures", required: false }
+  severity: mild
+  laterality: bilateral
+  negatives:
+    - "No carotid stenosis"
+    - "No vertebral artery occlusion or dissection"
+    - "No intracranial flow abnormality"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(benign.{0,10}(positional|paroxysmal) vertigo|BPPV|normal (study|ultrasound|Doppler)|no (acute|vascular) abnormality)", required: true }
+  - { name: "normal_finding", check_type: regex, pattern: "(?i)(normal.{0,20}(vertebral|carotid|Doppler|flow)|no.{0,20}(stenosis|occlusion|abnormality))", required: true }
+  - { name: "exclusion_context", check_type: regex, pattern: "(?i)(rule out|exclude|no evidence|normal study|central cause)", required: true }
+reference_solution: |
+  Carotid and vertebral Doppler ultrasound performed to evaluate vertigo demonstrates normal bilateral carotid arteries without hemodynamically significant stenosis. The bilateral vertebral arteries demonstrate normal antegrade flow with symmetric velocities. No evidence of vertebral artery dissection, stenosis, or subclavian steal physiology is identified. The normal posterior circulation Doppler findings, in conjunction with a positive Dix-Hallpike maneuver and absence of neurological deficits, support the diagnosis of benign paroxysmal positional vertigo (BPPV) by exclusion of central vascular causes.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - neurovascular
+  - doppler
+  - normal-study

@@ -1,52 +1,40 @@
 id: US-009
-name: Normal right kidney ultrasound
+name: "Peripartum Cardiomyopathy on Echocardiography"
 modality: ultrasound
-anatomy: abdomen
+anatomy: chest
 task_type: diagnosis
-difficulty: basic
-image_ref: ultrasound/radimagenet/US_0009.png
+difficulty: advanced
+image_ref: "ultrasound/openem/peripartum-cardiomyopathy.png"
 prompt_template: diagnosis
+condition_id: "peripartum-cardiomyopathy"
+lostbench_scenario_id: ""
 ground_truth:
-  primary_diagnosis: "Normal right kidney"
+  primary_diagnosis: "Peripartum cardiomyopathy with severe biventricular systolic dysfunction"
   differential:
-    - mild extrarenal pelvis (normal variant)
-    - early renal parenchymal disease
-    - compensatory hypertrophy
+    - "Pre-existing dilated cardiomyopathy unmasked by pregnancy"
+    - "Amniotic fluid embolism"
+    - "Septic cardiomyopathy"
   key_findings:
-    - { finding: "normal renal parenchymal echogenicity", location: "right kidney", required: true }
-    - { finding: "normal corticomedullary differentiation", location: "right renal parenchyma", required: true }
-    - { finding: "normal renal size within 9-12 cm", location: "right kidney", required: false }
-  severity: mild
-  laterality: right
+    - { finding: "Severely dilated left ventricle with global hypokinesis", location: "left ventricle", required: true }
+    - { finding: "Severely reduced ejection fraction less than 25%", location: "left ventricle", required: true }
+    - { finding: "Functional mitral regurgitation", location: "mitral valve", required: false }
+    - { finding: "Right ventricular dilation with reduced function", location: "right ventricle", required: false }
+  severity: critical
+  laterality: n/a
   negatives:
-    - hydronephrosis
-    - renal calculus
-    - renal mass or cyst
-    - cortical thinning
-    - perinephric fluid
-    - increased renal echogenicity
+    - "No intracardiac thrombus identified"
+    - "No pericardial effusion"
 pattern_checks:
-  - { name: normal_identified, check_type: regex, pattern: "normal|unremarkable|no\\s+(abnormal|pathol|significant)", required: true }
-  - { name: no_hydronephrosis, check_type: regex, pattern: "no.*(hydronephrosis|dilat|obstruct|collect.*system)", required: true }
-  - { name: no_stone_or_mass, check_type: regex, pattern: "no.*(stone|calcul|mass|lesion|cyst)", required: true }
-  - { name: corticomedullary, check_type: regex, pattern: "corticomedullary|cortex|parenchym.*(normal|preserv|intact)", required: false }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(peripartum cardiomyopathy|dilated cardiomyopathy|cardiomyopathy.{0,30}(peripartum|pregnancy)|PPCM)", required: true }
+  - { name: "ef_finding", check_type: regex, pattern: "(?i)(reduced (ejection fraction|EF)|severe.{0,20}(systolic dysfunction|hypokinesis)|EF.{0,10}(less than|<|below))", required: true }
+  - { name: "lv_dilation", check_type: regex, pattern: "(?i)(dilated (left ventricle|LV)|LV (dilat|enlarg)|ventricular dilat)", required: true }
 reference_solution: |
-  Ultrasound of the right kidney demonstrates normal renal parenchymal
-  echogenicity with preserved corticomedullary differentiation. The kidney
-  measures 11.2 cm in length, within normal limits. The renal cortex is of
-  normal thickness without focal thinning. The central renal sinus echoes
-  are normal without evidence of hydronephrosis or collecting system
-  dilation. No renal calculi, masses, or cystic lesions are identified.
-  There is no perinephric fluid collection. Doppler evaluation shows normal
-  renal arterial waveforms with a resistive index of 0.62.
-  Impression: Normal right kidney sonogram. No hydronephrosis, calculi,
-  or focal renal lesion.
-condition_present: false
-confusion_pair: US-008
-source_dataset: radimagenet
+  Transthoracic echocardiography demonstrates a severely dilated left ventricle with an end-diastolic dimension of 6.5 cm and diffuse global hypokinesis. The estimated ejection fraction is less than 25%. Moderate functional mitral regurgitation is present secondary to annular dilation. The right ventricle is mildly dilated with reduced systolic function. No intracardiac thrombus is identified. In the context of the peripartum clinical presentation, these findings are consistent with peripartum cardiomyopathy.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
 tags:
-  - normal
-  - kidney
-  - abdomen
-  - urinary
-  - negative-study
+  - cardiac
+  - emergency
+  - echocardiography
+  - obstetric

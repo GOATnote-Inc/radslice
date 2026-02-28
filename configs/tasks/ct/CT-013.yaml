@@ -1,51 +1,37 @@
 id: CT-013
-name: Normal chest CT
+name: "Cavernous sinus thrombosis on contrast-enhanced CT"
 modality: ct
-anatomy: chest
+anatomy: head
 task_type: diagnosis
-difficulty: basic
-image_ref: ct/omnimedvqa/CT_0013.png
+difficulty: expert
+image_ref: "ct/openem/cavernous-sinus-thrombosis.png"
 prompt_template: diagnosis
+condition_id: "cavernous-sinus-thrombosis"
+lostbench_scenario_id: "MTR-073"
 ground_truth:
-  primary_diagnosis: "Normal chest CT"
+  primary_diagnosis: "Septic cavernous sinus thrombosis"
   differential:
-    - subcentimeter pulmonary nodule below reporting threshold
-    - mild dependent atelectasis
-    - trace physiologic pericardial fluid
+    - "Cavernous sinus meningioma"
+    - "Tolosa-Hunt syndrome"
+    - "Carotid-cavernous fistula"
   key_findings:
-    - { finding: "clear bilateral lung fields", location: "bilateral lungs", required: true }
-    - { finding: "no pulmonary embolism", location: "pulmonary vasculature", required: true }
-    - { finding: "normal mediastinal structures", location: "mediastinum", required: true }
-    - { finding: "no pleural effusion", location: "bilateral pleural spaces", required: false }
-  severity: mild
-  laterality: ""
+    - { finding: "Expansion and filling defect within the cavernous sinus", location: "left cavernous sinus", required: true }
+    - { finding: "Bulging of the lateral wall of the cavernous sinus", location: "left cavernous sinus", required: true }
+    - { finding: "Proptosis and preseptal soft tissue swelling", location: "left orbit", required: false }
+  severity: "critical"
+  laterality: "left"
   negatives:
-    - pulmonary embolism
-    - lung mass or nodule
-    - pneumonia
-    - pleural effusion
-    - aortic dissection
-    - lymphadenopathy
-    - pneumothorax
+    - "No intracranial abscess"
 pattern_checks:
-  - { name: normal_identified, check_type: regex, pattern: "normal|unremarkable|no\\s+acute|negative|no\\s+significant", required: true }
-  - { name: no_pe, check_type: regex, pattern: "no.{0,30}(embol|PE\\b|thrombus|filling\\s+defect)", required: true }
-  - { name: no_mass, check_type: regex, pattern: "no.{0,30}(mass|nodule|lesion|consolidat)", required: true }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(cavernous\\s*sinus\\s*thrombosis|cavernous.*thrombus)", required: true }
+  - { name: "key_finding_filling_defect", check_type: regex, pattern: "(?i)(filling\\s*defect|expansion.*cavernous|cavernous.*expand|non.?enhance)", required: true }
 reference_solution: |
-  Contrast-enhanced CT of the chest demonstrates clear bilateral lung fields
-  without focal consolidation, mass, or nodule. The pulmonary vasculature
-  enhances normally without filling defect to suggest pulmonary embolism. The
-  heart is normal in size and configuration. The thoracic aorta is normal in
-  caliber without dissection or aneurysm. The mediastinum is unremarkable
-  without lymphadenopathy. No pleural or pericardial effusion. No
-  pneumothorax. The visualized osseous structures are intact.
-  Impression: Normal contrast-enhanced chest CT. No acute cardiopulmonary
-  abnormality.
-condition_present: false
+  Contrast-enhanced CT of the head demonstrates expansion of the left cavernous sinus with a central filling defect consistent with thrombosis. The lateral wall of the left cavernous sinus is convex. There is associated left orbital proptosis and preseptal soft tissue swelling. No intracranial abscess is identified. In the setting of facial infection, findings are consistent with septic cavernous sinus thrombosis requiring emergent anticoagulation and intravenous antibiotics.
+condition_present: true
 confusion_pair: null
-source_dataset: omnimedvqa-open
+source_dataset: openem-grounded
 tags:
-  - normal
-  - chest
-  - baseline
-  - negative-study
+  - neuro
+  - vascular
+  - infectious
+  - emergency

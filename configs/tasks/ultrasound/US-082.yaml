@@ -1,0 +1,39 @@
+id: US-082
+name: "Necrotizing Fasciitis on Soft Tissue Ultrasound"
+modality: ultrasound
+anatomy: extremity
+task_type: diagnosis
+difficulty: advanced
+image_ref: "ultrasound/openem/necrotizing-fasciitis.png"
+prompt_template: diagnosis
+condition_id: "necrotizing-fasciitis"
+lostbench_scenario_id: "MTR-025"
+ground_truth:
+  primary_diagnosis: "Necrotizing fasciitis with fascial thickening, fluid tracking, and subcutaneous gas"
+  differential:
+    - "Severe cellulitis or phlegmon"
+    - "Gas gangrene (clostridial myonecrosis)"
+    - "Deep space abscess"
+  key_findings:
+    - { finding: "Thickened and hyperechoic deep fascia with surrounding fluid", location: "deep fascial layer of the affected extremity", required: true }
+    - { finding: "Dirty shadowing from subcutaneous gas (echogenic foci with reverberation artifact)", location: "subcutaneous tissue and fascial planes", required: true }
+    - { finding: "Fluid tracking along the fascial planes", location: "intermuscular and subfascial planes", required: false }
+    - { finding: "Cobblestoning of subcutaneous tissue", location: "subcutaneous fat", required: false }
+  severity: critical
+  laterality: left
+  negatives:
+    - "No discrete drainable abscess"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(necrotizing fasciitis|necrotizing soft tissue|fascial (necrosis|infection)|nec(rotizing)?\\s*fasc)", required: true }
+  - { name: "gas_finding", check_type: regex, pattern: "(?i)(subcutaneous (gas|air|emphysema)|dirty shadow|reverberation artifact|echogenic foci.{0,20}(shadow|gas|air))", required: true }
+  - { name: "fascial_finding", check_type: regex, pattern: "(?i)(fascial (thicken|fluid|involvement|edema|necrosis)|fluid.{0,20}fasci|deep fascia.{0,20}(abnormal|thicken|edema))", required: true }
+reference_solution: |
+  Soft tissue ultrasound of the left lower extremity demonstrates thickened and irregular deep fascia with perifascial fluid tracking along the intermuscular planes. Echogenic foci with dirty posterior acoustic shadowing are identified within the subcutaneous tissue and along the fascial planes, consistent with subcutaneous gas. Diffuse cobblestoning of the subcutaneous fat indicates extensive cellulitis. No discrete drainable abscess is identified. The changes extend over a significant length of the extremity. These findings of fascial thickening, fluid tracking, and subcutaneous gas are highly suspicious for necrotizing fasciitis and warrant emergent surgical exploration and debridement.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - soft-tissue
+  - emergency
+  - infectious
+  - surgical

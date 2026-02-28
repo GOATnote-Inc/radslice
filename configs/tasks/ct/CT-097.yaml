@@ -1,0 +1,36 @@
+id: CT-097
+name: "Acute angle-closure glaucoma on CT orbits"
+modality: ct
+anatomy: face
+task_type: diagnosis
+difficulty: advanced
+image_ref: "ct/openem/acute-angle-closure-glaucoma.png"
+prompt_template: diagnosis
+condition_id: "acute-angle-closure-glaucoma"
+lostbench_scenario_id: "MTR-029"
+ground_truth:
+  primary_diagnosis: "Acute angle-closure glaucoma with anteriorly displaced lens"
+  differential:
+    - "Lens subluxation"
+    - "Globe rupture"
+    - "Retrobulbar mass"
+  key_findings:
+    - { finding: "Shallow anterior chamber depth compared with the contralateral eye", location: "right anterior chamber", required: true }
+    - { finding: "Anteriorly positioned lens", location: "right globe", required: true }
+    - { finding: "No other orbital pathology", location: "right orbit", required: false }
+  severity: "severe"
+  laterality: "right"
+  negatives:
+    - "No retrobulbar mass"
+    - "No globe rupture"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(angle.?closure\\s*glaucoma|acute\\s*glaucoma|shallow\\s*anterior\\s*chamber)", required: true }
+  - { name: "key_finding_anterior_chamber", check_type: regex, pattern: "(?i)(shallow.*anterior\\s*chamber|anterior.*lens|narrow\\s*angle|anterior\\s*chamber.*depth)", required: true }
+reference_solution: |
+  CT of the orbits demonstrates a shallow right anterior chamber with an anteriorly positioned lens compared with the normal-depth left anterior chamber. No retrobulbar mass, hemorrhage, or globe deformity is identified. Both globes are otherwise intact and symmetric. In the clinical setting of acute monocular pain, conjunctival injection, and elevated intraocular pressure, the shallow anterior chamber finding supports the diagnosis of acute angle-closure glaucoma requiring emergent IOP-lowering therapy and ophthalmologic consultation.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - ophthalmologic
+  - emergency

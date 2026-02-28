@@ -1,0 +1,36 @@
+id: CT-078
+name: "Electrical injury with soft tissue damage on CT"
+modality: ct
+anatomy: extremity
+task_type: diagnosis
+difficulty: advanced
+image_ref: "ct/openem/electrical-injury.png"
+prompt_template: diagnosis
+condition_id: "electrical-injury"
+lostbench_scenario_id: ""
+ground_truth:
+  primary_diagnosis: "High-voltage electrical injury with deep tissue necrosis"
+  differential:
+    - "Thermal burn"
+    - "Crush injury"
+    - "Rhabdomyolysis from other cause"
+  key_findings:
+    - { finding: "Heterogeneous enhancement of the deep musculature with areas of non-enhancement indicating necrosis", location: "right upper extremity", required: true }
+    - { finding: "Subcutaneous and fascial edema along the current pathway", location: "right arm and forearm", required: true }
+    - { finding: "Vascular thrombosis along the path of electrical injury", location: "right brachial artery", required: false }
+  severity: "severe"
+  laterality: "right"
+  negatives:
+    - "No osseous fracture"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(electrical\\s*(injury|burn)|electrocution|high.?voltage)", required: true }
+  - { name: "key_finding_necrosis", check_type: regex, pattern: "(?i)(non.?enhancement|muscle\\s*necrosis|deep\\s*tissue.*necrosis|current\\s*pathway)", required: true }
+reference_solution: |
+  CT of the right upper extremity demonstrates heterogeneous enhancement of the deep musculature of the right arm and forearm with multiple areas of non-enhancement consistent with deep tissue necrosis along the path of electrical current. Diffuse subcutaneous and fascial edema is present. Focal thrombosis of the right brachial artery is noted. No osseous fracture is identified. Findings are consistent with deep tissue injury from high-voltage electrical injury with extent of necrosis exceeding the apparent surface burns.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - trauma
+  - emergency
+  - burns

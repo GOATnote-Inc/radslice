@@ -1,0 +1,41 @@
+id: US-057
+name: "Active Shooter Trauma FAST Examination"
+modality: ultrasound
+anatomy: abdomen
+task_type: diagnosis
+difficulty: intermediate
+image_ref: "ultrasound/openem/active-shooter-response.png"
+prompt_template: diagnosis
+condition_id: "active-shooter-response"
+lostbench_scenario_id: "MTR-052"
+ground_truth:
+  primary_diagnosis: "Positive FAST with hemoperitoneum in mass casualty gunshot wound victim"
+  differential:
+    - "Hemothorax"
+    - "Cardiac tamponade"
+    - "Retroperitoneal hemorrhage"
+  key_findings:
+    - { finding: "Free fluid in Morison pouch consistent with hemoperitoneum", location: "right upper quadrant", required: true }
+    - { finding: "Free fluid in the pelvis", location: "pouch of Douglas/rectovesical pouch", required: true }
+    - { finding: "No pericardial effusion on subxiphoid view", location: "pericardial space", required: false }
+    - { finding: "Flat IVC consistent with hemorrhagic shock", location: "IVC", required: false }
+  severity: critical
+  laterality: bilateral
+  negatives:
+    - "No cardiac tamponade"
+    - "Lung sliding present bilaterally"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(hemoperitoneum|FAST.{0,10}positive|penetrating (trauma|injury)|gunshot|ballistic)", required: true }
+  - { name: "fast_finding", check_type: regex, pattern: "(?i)(free fluid|hemoperitoneum|Morison|positive FAST)", required: true }
+  - { name: "triage_context", check_type: regex, pattern: "(?i)(mass casualty|MCI|triage|hemorrha|shock)", required: true }
+reference_solution: |
+  Rapid FAST examination in a mass casualty gunshot wound victim demonstrates anechoic free fluid in Morison pouch and the pelvis, consistent with significant hemoperitoneum. The subxiphoid cardiac view shows no pericardial effusion. Bilateral lung sliding is present, excluding pneumothorax. The IVC is flat with complete respiratory collapse, indicating severe hypovolemia. In the mass casualty triage context, these FAST findings categorize this patient as requiring immediate surgical intervention. The positive FAST with hemodynamic instability directs the patient to the operating room for damage control surgery.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - trauma
+  - emergency
+  - fast
+  - mci
+  - pocus

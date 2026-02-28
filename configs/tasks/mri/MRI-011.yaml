@@ -1,59 +1,38 @@
 id: MRI-011
-name: Brain abscess on MRI
+name: "Spinal Cord Compression on MRI"
 modality: mri
-anatomy: head
+anatomy: spine
 task_type: diagnosis
-difficulty: advanced
-image_ref: mri/eurorad/EUR_0011.png
+difficulty: intermediate
+image_ref: "mri/openem/spinal-cord-compression.png"
 prompt_template: diagnosis
+condition_id: "spinal-cord-compression"
+lostbench_scenario_id: "MTR-030"
 ground_truth:
-  primary_diagnosis: "Pyogenic brain abscess with restricted diffusion"
+  primary_diagnosis: "Spinal cord compression with myelopathy on MRI"
   differential:
-    - glioblastoma with central necrosis
-    - brain metastasis with necrosis
-    - tumefactive demyelination
-    - toxoplasmosis (immunocompromised)
-    - neurocysticercosis (colloidal vesicular stage)
+    - "Spinal epidural metastasis"
+    - "Disc herniation with cord compression"
+    - "Spinal epidural abscess"
   key_findings:
-    - { finding: "ring-enhancing lesion with thin smooth wall on post-gadolinium T1-weighted images", location: "left frontal lobe subcortical white matter", required: true }
-    - { finding: "central restricted diffusion on DWI with low ADC values (bright DWI, dark ADC)", location: "core of the lesion", required: true }
-    - { finding: "T2/FLAIR hyperintense surrounding vasogenic edema", location: "left frontal white matter", required: true }
-    - { finding: "dual rim sign on SWI (T2 hypointense outer rim, T2 hyperintense inner rim)", location: "abscess wall", required: false }
-  severity: severe
-  laterality: left
+    - { finding: "Severe spinal canal stenosis with cord compression from epidural mass", location: "Thoracic spine (T6-T8)", required: true }
+    - { finding: "T2 hyperintense signal within the spinal cord at the level of compression (myelopathy)", location: "Thoracic spinal cord", required: true }
+    - { finding: "Enhancing epidural mass with posterior vertebral body involvement", location: "T7 vertebral body and epidural space", required: false }
+  severity: "critical"
+  laterality: "midline"
   negatives:
-    - satellite lesions
-    - leptomeningeal enhancement
-    - ventriculitis
-    - dural venous sinus thrombosis
-    - hydrocephalus
+    - "No spinal cord hemorrhage"
+    - "No complete spinal cord transection"
 pattern_checks:
-  - { name: abscess_mentioned, check_type: regex, pattern: "abscess|pyogenic|infect.*collect|empyema", required: true }
-  - { name: restricted_diffusion, check_type: regex, pattern: "restrict.*diffusion|DWI.*bright|DWI.*hyperintens|diffusion.*restrict|ADC.*low", required: true }
-  - { name: ring_enhancement, check_type: regex, pattern: "ring.?enhanc|rim.*enhanc|peripheral.*enhanc", required: true }
-  - { name: laterality_left, check_type: regex, pattern: "left", required: true }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)spinal\\s+cord\\s+compress", required: true }
+  - { name: "myelopathy_signal", check_type: regex, pattern: "(?i)(myelopathy|cord.*(signal|T2|hyperinten))", required: true }
+  - { name: "level_specified", check_type: regex, pattern: "(?i)(thoracic|T[5-9]|T1[0-2])", required: true }
 reference_solution: |
-  MRI of the brain demonstrates a ring-enhancing lesion in the left frontal
-  lobe subcortical white matter measuring approximately 3.2 x 2.8 cm. The
-  lesion shows a thin, smooth enhancing rim on post-gadolinium T1-weighted
-  images, distinct from the thick irregular enhancement typically seen with
-  neoplasms. Critically, the core of the lesion demonstrates markedly
-  restricted diffusion on DWI with corresponding low ADC values, a hallmark
-  of pyogenic abscess reflecting viscous purulent material. Surrounding T2/FLAIR
-  hyperintense vasogenic edema extends into the adjacent frontal white matter.
-  SWI demonstrates a dual rim sign at the abscess wall. No satellite daughter
-  abscesses are identified. No ventriculitis or leptomeningeal enhancement.
-  The dural venous sinuses are patent.
-  Impression: Left frontal ring-enhancing lesion with central restricted
-  diffusion, most consistent with pyogenic brain abscess. Neurosurgical
-  consultation recommended for aspiration and culture.
+  MRI of the thoracic spine demonstrates severe spinal canal stenosis at the T6-T8 level secondary to an enhancing epidural mass with posterior vertebral body involvement, most consistent with epidural metastatic disease. The thoracic spinal cord is significantly compressed with intramedullary T2 hyperintense signal indicating compressive myelopathy. No cord hemorrhage or complete transection. Findings warrant emergent neurosurgical and oncologic consultation.
 condition_present: true
 confusion_pair: null
-source_dataset: eurorad
+source_dataset: openem-grounded
 tags:
-  - abscess
-  - brain
-  - neuro
-  - infection
-  - ring-enhancing
-  - diffusion
+  - spine
+  - oncology
+  - emergency

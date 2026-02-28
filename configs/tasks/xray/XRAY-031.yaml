@@ -1,54 +1,38 @@
 id: XRAY-031
-name: Right lower lobe bronchiectasis
+name: "Esophageal Foreign Body Impaction on Chest X-ray"
 modality: xray
 anatomy: chest
 task_type: diagnosis
 difficulty: intermediate
-image_ref: xray/omnimedvqa/CXR_0031.png
+image_ref: "xray/openem/esophageal-foreign-body-impaction.png"
 prompt_template: diagnosis
+condition_id: "esophageal-foreign-body-impaction"
+lostbench_scenario_id: "MTR-077"
 ground_truth:
-  primary_diagnosis: "Right lower lobe bronchiectasis"
+  primary_diagnosis: "Esophageal foreign body impaction"
   differential:
-    - cystic fibrosis
-    - post-infectious bronchiectasis
-    - allergic bronchopulmonary aspergillosis
-    - Kartagener syndrome
+    - "Tracheal foreign body"
+    - "Calcified lymph node"
+    - "Vascular calcification"
   key_findings:
-    - { finding: "tram-track opacities representing dilated bronchi", location: "right lower lobe", required: true }
-    - { finding: "ring shadows (dilated bronchi en face)", location: "right lower zone", required: true }
-    - { finding: "volume loss in the right lower lobe", location: "right lower lobe", required: false }
-    - { finding: "peribronchial thickening", location: "right lower lobe", required: false }
+    - { finding: "Radiopaque foreign body in the esophagus", location: "upper esophagus at thoracic inlet", required: true }
+    - { finding: "Coin or disc battery oriented in coronal plane (en face on AP view)", location: "esophagus", required: true }
+    - { finding: "Prevertebral soft tissue swelling", location: "prevertebral space", required: false }
   severity: moderate
-  laterality: right
+  laterality: midline
   negatives:
-    - pneumothorax
-    - pleural effusion
-    - left lung abnormality
-    - cavitary lesion
-    - consolidation
+    - "No pneumomediastinum"
+    - "No free air suggesting perforation"
 pattern_checks:
-  - { name: bronchiectasis_mentioned, check_type: regex, pattern: "(?i)bronchiectasis", required: true }
-  - { name: laterality_right, check_type: regex, pattern: "(?i)right", required: true }
-  - { name: tram_track_or_ring, check_type: regex, pattern: "(?i)(tram.?track|ring\\s+shadow|dilated\\s+bronch|bronchial\\s+dilat)", required: true }
-  - { name: lower_lobe, check_type: regex, pattern: "(?i)(lower\\s+lobe|basilar|RLL|lower\\s+zone)", required: false }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(esophageal foreign body|foreign body|impaction|coin|disc battery|button battery)", required: true }
+  - { name: "location_finding", check_type: regex, pattern: "(?i)(esophag|thoracic inlet|coronal plane|en face|AP view)", required: true }
 reference_solution: |
-  PA chest radiograph demonstrates tram-track opacities in the right lower lobe,
-  representing dilated, thick-walled bronchi seen in longitudinal section. Several
-  ring shadows are also present in the right lower zone, representing dilated
-  bronchi seen en face. There is subtle volume loss in the right lower lobe with
-  crowding of the pulmonary vasculature. Peribronchial thickening is noted. The
-  left lung is clear. No pleural effusion, pneumothorax, or consolidation. The
-  cardiac silhouette is normal. These findings are consistent with bronchiectasis
-  in the right lower lobe. HRCT is recommended for definitive characterization
-  and to assess the full extent of disease. Clinical correlation for underlying
-  etiology (post-infectious, cystic fibrosis, immune deficiency) is advised.
-  Impression: Right lower lobe bronchiectasis.
+  Frontal chest radiograph demonstrates a radiopaque disc-shaped foreign body at the level of the thoracic inlet, oriented in the coronal plane (appearing en face on the AP view). This orientation is characteristic of an esophageal foreign body, as tracheal foreign bodies typically orient in the sagittal plane. No pneumomediastinum or prevertebral soft tissue swelling is identified to suggest perforation. Lateral view confirms the posterior (esophageal) location. Endoscopic retrieval is recommended, particularly if a button battery is suspected.
 condition_present: true
 confusion_pair: null
-source_dataset: omnimedvqa-open
+source_dataset: openem-grounded
 tags:
-  - bronchiectasis
-  - tram-tracks
-  - airway-disease
-  - right-lower-lobe
-  - chest
+  - gastrointestinal
+  - emergency
+  - foreign-body
+  - pediatric-common

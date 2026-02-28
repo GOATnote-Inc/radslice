@@ -1,44 +1,38 @@
 id: XRAY-013
-name: Left rib fractures
+name: "Epidural Hematoma on Skull X-ray"
 modality: xray
-anatomy: chest
+anatomy: head
 task_type: diagnosis
-difficulty: basic
-image_ref: xray/omnimedvqa/CXR_0013.png
+difficulty: advanced
+image_ref: "xray/openem/epidural-hematoma.png"
 prompt_template: diagnosis
+condition_id: "epidural-hematoma"
+lostbench_scenario_id: ""
 ground_truth:
-  primary_diagnosis: "Left rib fractures"
+  primary_diagnosis: "Skull fracture with suspected epidural hematoma"
   differential:
-    - pathologic fracture
-    - metastatic bone disease
-    - prior healed fractures with callus
+    - "Linear skull fracture without intracranial hemorrhage"
+    - "Subdural hematoma"
+    - "Normal skull suture or vascular groove"
   key_findings:
-    - { finding: "cortical disruption of left lateral ribs", location: "left 6th and 7th ribs laterally", required: true }
-    - { finding: "displaced fracture fragments", location: "left 7th rib", required: false }
-    - { finding: "adjacent soft tissue swelling", location: "left lateral chest wall", required: false }
-  severity: moderate
+    - { finding: "Temporal bone linear fracture", location: "temporal bone", required: true }
+    - { finding: "Fracture crossing the middle meningeal artery groove", location: "temporal-parietal region", required: true }
+    - { finding: "Soft tissue swelling overlying fracture site", location: "scalp", required: false }
+  severity: critical
   laterality: left
   negatives:
-    - pneumothorax
-    - hemothorax
-    - flail segment
-    - pulmonary contusion
+    - "No depressed skull fracture"
+    - "No foreign body identified"
 pattern_checks:
-  - { name: primary_diagnosis, check_type: regex, pattern: "(?i)(left.{0,20}rib\\s+fracture|fracture.{0,20}left.{0,20}rib)", required: true }
-  - { name: cortical_disruption, check_type: regex, pattern: "(?i)(cortical\\s+(disruption|break|discontinuity)|fracture\\s+line)", required: true }
-  - { name: rib_number, check_type: regex, pattern: "(?i)(6th|7th|sixth|seventh)\\s*rib", required: false }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(epidural hematoma|skull fracture|temporal fracture|middle meningeal)", required: true }
+  - { name: "fracture_finding", check_type: regex, pattern: "(?i)(fracture|linear lucency|temporal bone|middle meningeal artery)", required: true }
 reference_solution: |
-  Frontal chest radiograph demonstrates cortical disruption involving the left 6th and
-  7th ribs in the lateral aspect, consistent with acute fractures. The left 7th rib
-  fracture shows mild displacement of the fracture fragments. There is subtle adjacent
-  soft tissue swelling along the left lateral chest wall. No associated pneumothorax
-  or pleural effusion is identified. Lungs are clear bilaterally. No flail segment.
-  Clinical correlation for pain management and follow-up recommended.
+  Lateral skull radiograph demonstrates a linear lucency traversing the temporal bone consistent with a non-depressed linear skull fracture. The fracture line crosses the groove of the middle meningeal artery, raising high suspicion for an associated epidural hematoma. Overlying soft tissue swelling is noted. Urgent CT of the head is mandatory to evaluate for intracranial hemorrhage, as skull radiography cannot directly visualize the epidural collection.
 condition_present: true
 confusion_pair: null
-source_dataset: omnimedvqa-open
+source_dataset: openem-grounded
 tags:
-  - rib-fracture
   - trauma
-  - left-chest
-  - bone-injury
+  - neurosurgical
+  - emergency
+  - skull

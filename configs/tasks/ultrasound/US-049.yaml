@@ -1,0 +1,39 @@
+id: US-049
+name: "Globe Rupture on Ocular Ultrasound"
+modality: ultrasound
+anatomy: face
+task_type: diagnosis
+difficulty: expert
+image_ref: "ultrasound/openem/globe-rupture.png"
+prompt_template: diagnosis
+condition_id: "globe-rupture"
+lostbench_scenario_id: ""
+ground_truth:
+  primary_diagnosis: "Open globe injury (globe rupture) with vitreous hemorrhage and abnormal globe contour"
+  differential:
+    - "Closed globe injury with vitreous hemorrhage"
+    - "Retinal detachment"
+    - "Choroidal hemorrhage"
+  key_findings:
+    - { finding: "Irregular or collapsed globe contour", location: "globe", required: true }
+    - { finding: "Dense vitreous hemorrhage with echogenic material filling vitreous cavity", location: "vitreous body", required: true }
+    - { finding: "Decreased globe volume compared to contralateral eye", location: "globe", required: false }
+    - { finding: "Intraocular foreign body (if present)", location: "vitreous or retina", required: false }
+  severity: critical
+  laterality: left
+  negatives:
+    - "Normal contralateral eye"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(globe rupture|open globe|ruptured globe|globe (injury|perforation))", required: true }
+  - { name: "globe_finding", check_type: regex, pattern: "(?i)(irregular.{0,15}(globe|contour)|collapsed globe|globe (deformity|asymmetry|deflat)|abnormal globe)", required: true }
+  - { name: "vitreous_finding", check_type: regex, pattern: "(?i)(vitreous hemorrhage|echogenic vitreous|vitreous.{0,20}(blood|hemorrh|echogenic))", required: true }
+reference_solution: |
+  Ocular ultrasound of the left eye (performed with minimal transducer pressure due to clinical concern for open globe) demonstrates an irregular globe contour with flattening of the anterior chamber. Dense echogenic material fills the vitreous cavity consistent with vitreous hemorrhage. The globe appears smaller in volume compared to the normal contralateral right eye. The lens position cannot be clearly delineated. No obvious intraocular foreign body is identified. Caution: ultrasound in suspected open globe is relatively contraindicated and should only be performed if the diagnosis would change management. These findings are consistent with an open globe injury requiring emergent ophthalmologic surgical repair.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - ophthalmologic
+  - emergency
+  - ocular-ultrasound
+  - trauma

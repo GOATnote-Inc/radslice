@@ -1,0 +1,40 @@
+id: US-070
+name: "Neonatal Emergencies on Cranial Ultrasound"
+modality: ultrasound
+anatomy: head
+task_type: diagnosis
+difficulty: advanced
+image_ref: "ultrasound/openem/neonatal-emergencies.png"
+prompt_template: diagnosis
+condition_id: "neonatal-emergencies"
+lostbench_scenario_id: "MTR-001"
+ground_truth:
+  primary_diagnosis: "Severe intraventricular hemorrhage with hydrocephalus in a premature neonate"
+  differential:
+    - "Periventricular leukomalacia"
+    - "Congenital hydrocephalus"
+    - "Neonatal meningitis with ventriculitis"
+  key_findings:
+    - { finding: "Echogenic blood within the lateral ventricles (intraventricular hemorrhage)", location: "lateral ventricles", required: true }
+    - { finding: "Dilated lateral ventricles (ventriculomegaly)", location: "lateral ventricles", required: true }
+    - { finding: "Germinal matrix hemorrhage with parenchymal extension", location: "caudothalamic groove and periventricular white matter", required: false }
+    - { finding: "Blood clot within the ventricle causing obstruction", location: "third ventricle or aqueduct", required: false }
+  severity: critical
+  laterality: bilateral
+  negatives:
+    - "No midline shift"
+    - "No periventricular cystic changes (early scan)"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(intraventricular hemorrhage|IVH|germinal matrix hemorrhage|neonatal (hemorrhage|hydrocephalus))", required: true }
+  - { name: "ivh_finding", check_type: regex, pattern: "(?i)(intraventricular (hemorrhage|blood)|echogenic.{0,20}(ventricle|blood)|ventricular hemorrhage)", required: true }
+  - { name: "hydrocephalus_finding", check_type: regex, pattern: "(?i)(ventriculomegaly|hydrocephalus|dilated (lateral )?ventricle|ventricular (dilat|enlarg))", required: true }
+reference_solution: |
+  Cranial ultrasound through the anterior fontanelle demonstrates bilateral intraventricular hemorrhage with echogenic blood products filling and expanding both lateral ventricles, consistent with Grade III IVH. There is associated ventriculomegaly with the frontal horn ratio measuring above the 97th percentile. Echogenic hemorrhage is identified at the left caudothalamic groove representing the germinal matrix source. A small area of periventricular parenchymal involvement is noted on the left, suggesting possible extension to Grade IV. No cystic periventricular leukomalacia is seen at this time. These findings represent a severe neonatal intracranial emergency requiring close neurosurgical monitoring for progressive hydrocephalus.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - neonatal
+  - emergency
+  - cranial-ultrasound
+  - pediatric

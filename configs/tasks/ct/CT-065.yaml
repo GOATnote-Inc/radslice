@@ -1,0 +1,37 @@
+id: CT-065
+name: "Ludwig angina on contrast-enhanced CT neck"
+modality: ct
+anatomy: neck
+task_type: diagnosis
+difficulty: advanced
+image_ref: "ct/openem/ludwigs-angina.png"
+prompt_template: diagnosis
+condition_id: "ludwigs-angina"
+lostbench_scenario_id: ""
+ground_truth:
+  primary_diagnosis: "Ludwig angina (submandibular space infection)"
+  differential:
+    - "Submandibular abscess"
+    - "Ranula"
+    - "Sublingual space tumor"
+  key_findings:
+    - { finding: "Diffuse soft tissue swelling and edema of the submandibular and sublingual spaces", location: "bilateral submandibular and sublingual spaces", required: true }
+    - { finding: "Elevation of the floor of the mouth with posterior displacement of the tongue", location: "oral cavity", required: true }
+    - { finding: "Gas within the soft tissues", location: "submandibular space", required: false }
+  severity: "critical"
+  laterality: "bilateral"
+  negatives:
+    - "No drainable fluid collection in early disease"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(Ludwig.*angina|submandibular\\s*(space\\s*)?infection|floor.*mouth.*infection)", required: true }
+  - { name: "key_finding_submandibular", check_type: regex, pattern: "(?i)(submandibular|sublingual|floor.*mouth|tongue.*displace)", required: true }
+reference_solution: |
+  Contrast-enhanced CT of the neck demonstrates diffuse cellulitis and edema of the bilateral submandibular and sublingual spaces with thickening of the overlying platysma. The floor of the mouth is elevated with posterior displacement of the tongue toward the oropharyngeal airway, causing moderate airway narrowing. Small foci of gas are present within the submandibular soft tissues. No discrete drainable abscess is identified. Findings are consistent with Ludwig angina with impending airway compromise requiring emergent airway management.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - ent
+  - infectious
+  - emergency
+  - airway

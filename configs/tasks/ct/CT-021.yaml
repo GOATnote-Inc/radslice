@@ -1,57 +1,37 @@
 id: CT-021
-name: Obstructive hydrocephalus
+name: "Hemorrhagic shock with active abdominal hemorrhage on CTA"
 modality: ct
-anatomy: head
+anatomy: abdomen
 task_type: diagnosis
-difficulty: intermediate
-image_ref: ct/omnimedvqa/CT_0021.png
+difficulty: advanced
+image_ref: "ct/openem/hemorrhagic-shock.png"
 prompt_template: diagnosis
+condition_id: "hemorrhagic-shock"
+lostbench_scenario_id: ""
 ground_truth:
-  primary_diagnosis: "Obstructive hydrocephalus"
+  primary_diagnosis: "Traumatic hepatic laceration with active hemorrhage"
   differential:
-    - normal pressure hydrocephalus
-    - communicating hydrocephalus
-    - cerebral atrophy with ex vacuo ventriculomegaly
-    - aqueductal stenosis
+    - "Splenic laceration with hemorrhage"
+    - "Mesenteric vascular injury"
+    - "Retroperitoneal hemorrhage"
   key_findings:
-    - { finding: "dilated lateral and third ventricles", location: "bilateral lateral ventricles and third ventricle", required: true }
-    - { finding: "normal fourth ventricle", location: "fourth ventricle", required: true }
-    - { finding: "transependymal CSF flow", location: "periventricular white matter", required: false }
-    - { finding: "temporal horn dilatation", location: "bilateral temporal horns", required: false }
-  severity: moderate
-  laterality: bilateral
+    - { finding: "Hepatic laceration with active contrast extravasation", location: "right hepatic lobe", required: true }
+    - { finding: "Large volume hemoperitoneum", location: "peritoneal cavity", required: true }
+    - { finding: "Collapsed IVC indicating hypovolemia", location: "IVC", required: false }
+  severity: "critical"
+  laterality: "right"
   negatives:
-    - intracranial hemorrhage
-    - brain tumor visible on this study
-    - sulcal widening proportionate to ventricular size
-    - fourth ventricle dilatation
-    - midline shift
+    - "No splenic injury"
 pattern_checks:
-  - { name: hydrocephalus_mentioned, check_type: regex, pattern: "hydrocephalus", required: true }
-  - { name: obstructive, check_type: regex, pattern: "obstructive|non.?communicat|aqueduct", required: true }
-  - { name: ventricles_dilated, check_type: regex, pattern: "dilat|enlarg|ventriculomegaly|prominent.*ventricle", required: true }
-  - { name: transependymal, check_type: regex, pattern: "transependymal|periventricular.*edema|periventricular.*hypodensity", required: false }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(hepatic\\s*laceration|liver.*laceration|active.*hemorrhage|hemoperitoneum)", required: true }
+  - { name: "key_finding_extravasation", check_type: regex, pattern: "(?i)(contrast\\s*extravasation|active.*bleed|hemoperitoneum)", required: true }
 reference_solution: |
-  Non-contrast CT of the head demonstrates marked dilatation of the bilateral
-  lateral ventricles and third ventricle with the fourth ventricle being
-  normal in size, indicating obstructive hydrocephalus at the level of the
-  aqueduct of Sylvius. The temporal horns are prominently dilated bilaterally.
-  There is periventricular hypodensity consistent with transependymal CSF
-  flow, an indicator of acute hydrocephalus. The cerebral sulci are effaced
-  rather than widened, supporting a diagnosis of hydrocephalus rather than
-  atrophy. No intracranial hemorrhage is identified. No obvious mass lesion
-  on this non-contrast study, though MRI is recommended for further
-  evaluation of the aqueductal region.
-  Impression: Obstructive hydrocephalus with aqueductal level obstruction and
-  transependymal CSF flow suggesting acute-on-chronic process. MRI
-  recommended for etiology. Neurosurgical consultation for potential CSF
-  diversion.
+  CTA of the abdomen demonstrates a complex laceration of the right hepatic lobe (AAST grade IV) with a focus of active contrast extravasation indicating ongoing arterial hemorrhage. Large volume hemoperitoneum is present throughout the peritoneal cavity. The IVC is collapsed, consistent with hypovolemic shock. The spleen, kidneys, and bowel appear intact. Findings require emergent surgical or interventional radiology consultation for hemorrhage control.
 condition_present: true
 confusion_pair: null
-source_dataset: omnimedvqa-open
+source_dataset: openem-grounded
 tags:
-  - hydrocephalus
-  - obstructive
-  - head
-  - neurosurgery
-  - cerebrospinal-fluid
+  - trauma
+  - emergency
+  - hemorrhage
+  - cta

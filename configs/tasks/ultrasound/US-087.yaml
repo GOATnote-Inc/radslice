@@ -1,0 +1,40 @@
+id: US-087
+name: "Tension Headache - Normal Transcranial Ultrasound Study"
+modality: ultrasound
+anatomy: head
+task_type: diagnosis
+difficulty: basic
+image_ref: "ultrasound/openem/tension-headache.png"
+prompt_template: diagnosis
+condition_id: "tension-headache"
+lostbench_scenario_id: "DEF-007"
+ground_truth:
+  primary_diagnosis: "Normal transcranial Doppler and optic nerve sheath assessment, consistent with tension headache"
+  differential:
+    - "Intracranial hypertension (pseudotumor cerebri)"
+    - "Subarachnoid hemorrhage"
+    - "Cerebral venous sinus thrombosis"
+  key_findings:
+    - { finding: "Normal optic nerve sheath diameter bilaterally (less than 5 mm)", location: "bilateral optic nerves", required: true }
+    - { finding: "Normal middle cerebral artery velocities on transcranial Doppler", location: "bilateral MCAs", required: true }
+    - { finding: "Normal pulsatility indices", location: "intracranial arteries", required: false }
+    - { finding: "No midline shift", location: "intracranial midline", required: false }
+  severity: mild
+  laterality: bilateral
+  negatives:
+    - "No elevated ICP findings"
+    - "No intracranial hemorrhage"
+    - "No vasospasm"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(tension headache|normal (transcranial|TCD|ONSD|ultrasound|study)|no (acute|intracranial) (pathology|abnormality))", required: true }
+  - { name: "onsd_normal", check_type: regex, pattern: "(?i)(normal.{0,20}(ONSD|optic nerve sheath)|ONSD.{0,20}(normal|<\\s*5|within normal)|optic nerve.{0,20}normal)", required: true }
+  - { name: "no_icp_elevation", check_type: regex, pattern: "(?i)(no (elevated|raised|increased) (ICP|intracranial pressure)|normal.{0,20}(ICP|pulsatility|PI))", required: true }
+reference_solution: |
+  Transcranial Doppler assessment and optic nerve sheath diameter measurement are within normal limits. The bilateral optic nerve sheath diameters measure 4.2 mm (right) and 4.0 mm (left), within the normal range of less than 5 mm, making elevated intracranial pressure unlikely. Middle cerebral artery velocities are symmetric and within normal limits with normal pulsatility indices, excluding vasospasm or significant intracranial flow disturbance. No midline shift is detected. In a patient presenting with bilateral pressing headache without neurological deficits and normal POCUS assessment, the findings support a diagnosis of tension-type headache without evidence of secondary intracranial pathology.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - neurovascular
+  - normal-study
+  - pocus

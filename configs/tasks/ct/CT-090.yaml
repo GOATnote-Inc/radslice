@@ -1,0 +1,37 @@
+id: CT-090
+name: "Heat stroke with cerebral edema on non-contrast CT head"
+modality: ct
+anatomy: head
+task_type: diagnosis
+difficulty: advanced
+image_ref: "ct/openem/heat-stroke.png"
+prompt_template: diagnosis
+condition_id: "heat-stroke"
+lostbench_scenario_id: "MTR-040"
+ground_truth:
+  primary_diagnosis: "Heat stroke with diffuse cerebral edema"
+  differential:
+    - "Hypoxic-ischemic encephalopathy"
+    - "Status epilepticus with cerebral edema"
+    - "Toxic metabolic encephalopathy"
+  key_findings:
+    - { finding: "Diffuse cerebral edema with effacement of sulci and cisterns", location: "bilateral cerebral hemispheres", required: true }
+    - { finding: "Loss of gray-white matter differentiation", location: "diffuse", required: true }
+    - { finding: "Bilateral cerebellar edema", location: "bilateral cerebellar hemispheres", required: false }
+  severity: "critical"
+  laterality: "bilateral"
+  negatives:
+    - "No intracranial hemorrhage"
+    - "No focal mass lesion"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(heat\\s*stroke|heat.*cerebral\\s*edema|hyperthermia.*cerebral)", required: true }
+  - { name: "key_finding_edema", check_type: regex, pattern: "(?i)(cerebral\\s*edema|sulcal\\s*effacement|gray.?white.*differentiat)", required: true }
+reference_solution: |
+  Non-contrast CT head demonstrates diffuse cerebral edema with effacement of the cortical sulci and basal cisterns. There is diffuse loss of gray-white matter differentiation throughout both cerebral hemispheres and bilateral cerebellar hemispheres. No intracranial hemorrhage or focal mass lesion is identified. In the setting of severe hyperthermia (core temperature > 40 degrees C) and altered mental status, findings are consistent with heat stroke with cerebral edema requiring emergent cooling measures and neuroprotective care.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - neuro
+  - environmental
+  - emergency

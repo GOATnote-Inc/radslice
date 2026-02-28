@@ -1,51 +1,38 @@
 id: MRI-029
-name: Normal shoulder MRI
+name: "Bacterial Meningitis on Contrast-Enhanced Brain MRI"
 modality: mri
-anatomy: shoulder
+anatomy: head
 task_type: diagnosis
-difficulty: basic
-image_ref: mri/omnimedvqa/MRI_0029.png
+difficulty: advanced
+image_ref: "mri/openem/bacterial-meningitis.png"
 prompt_template: diagnosis
+condition_id: "bacterial-meningitis"
+lostbench_scenario_id: "MTR-035"
 ground_truth:
-  primary_diagnosis: "Normal left shoulder MRI"
+  primary_diagnosis: "Bacterial meningitis with leptomeningeal enhancement on MRI"
   differential:
-    - mild supraspinatus tendinopathy (age-related)
-    - incidental acromioclavicular joint arthrosis
-    - incidental subacromial spur
+    - "Leptomeningeal carcinomatosis"
+    - "Viral meningitis"
+    - "Neurosarcoidosis"
   key_findings:
-    - { finding: "intact rotator cuff tendons with normal signal and morphology", location: "supraspinatus, infraspinatus, subscapularis, teres minor", required: true }
-    - { finding: "intact glenoid labrum without tear or detachment", location: "glenoid labrum circumferentially", required: true }
-    - { finding: "normal glenohumeral joint alignment", location: "glenohumeral joint", required: false }
-  severity: mild
-  laterality: left
+    - { finding: "Diffuse leptomeningeal enhancement on post-gadolinium T1-weighted images", location: "Bilateral cerebral convexities and basal cisterns", required: true }
+    - { finding: "FLAIR hyperintensity within the sulci indicating exudate", location: "Bilateral cerebral sulci", required: true }
+    - { finding: "Restricted diffusion in the sulci suggesting purulent exudate", location: "Bilateral frontoparietal sulci", required: false }
+  severity: "critical"
+  laterality: "bilateral"
   negatives:
-    - rotator cuff tear
-    - labral tear or detachment
-    - glenohumeral dislocation or subluxation
-    - biceps tendon pathology
-    - bone marrow edema
-    - fracture
+    - "No brain abscess"
+    - "No hydrocephalus"
 pattern_checks:
-  - { name: normal_mentioned, check_type: regex, pattern: "normal|unremarkable|no.*abnormal|negative|intact", required: true }
-  - { name: no_tear, check_type: regex, pattern: "no.*tear|intact.*cuff|intact.*tendon|without.*tear|intact.*rotator", required: true }
-  - { name: laterality_left, check_type: regex, pattern: "left", required: true }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(bacterial\\s+)?meningitis", required: true }
+  - { name: "leptomeningeal_enhancement", check_type: regex, pattern: "(?i)leptomeningeal.*(enhanc|inflam)", required: true }
+  - { name: "bilateral", check_type: regex, pattern: "(?i)bilateral", required: true }
 reference_solution: |
-  MRI of the left shoulder demonstrates normal findings. The supraspinatus,
-  infraspinatus, subscapularis, and teres minor tendons are intact with normal
-  low signal and morphology on all sequences. No rotator cuff tendinopathy or
-  tear. The long head of the biceps tendon is in normal position within the
-  bicipital groove. The glenoid labrum is intact circumferentially without
-  tear, detachment, or paralabral cyst. The glenohumeral joint is normally
-  aligned without subluxation or dislocation. No joint effusion. The
-  acromioclavicular joint is normal. Normal acromion morphology without
-  significant subacromial spurring. No bone marrow edema or fracture.
-  Impression: Normal left shoulder MRI without evidence of rotator cuff
-  pathology, labral tear, or other abnormality.
-condition_present: false
+  MRI of the brain with gadolinium demonstrates diffuse leptomeningeal enhancement along the bilateral cerebral convexities and basal cisterns on post-contrast T1-weighted images, consistent with meningitis. FLAIR images show hyperintensity within the cerebral sulci indicating meningeal exudate. DWI demonstrates restricted diffusion within the sulci, favoring purulent (bacterial) exudate over viral etiology. No focal brain abscess, ventriculitis, or hydrocephalus. Findings are consistent with bacterial meningitis requiring urgent empiric antibiotic therapy and lumbar puncture for culture.
+condition_present: true
 confusion_pair: null
-source_dataset: omnimedvqa-open
+source_dataset: openem-grounded
 tags:
-  - normal
-  - shoulder
-  - musculoskeletal
-  - negative-case
+  - neuro
+  - infection
+  - emergency

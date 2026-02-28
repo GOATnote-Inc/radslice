@@ -1,41 +1,39 @@
 id: XRAY-070
-name: VQA - Is the ETT appropriately positioned?
+name: "Carbon Monoxide Poisoning on Chest X-ray"
 modality: xray
 anatomy: chest
-task_type: vqa
-difficulty: intermediate
-image_ref: xray/vindrcxr/VDR_0070.png
-prompt_template: vqa
+task_type: diagnosis
+difficulty: advanced
+image_ref: "xray/openem/carbon-monoxide-poisoning.png"
+prompt_template: diagnosis
+condition_id: "carbon-monoxide-poisoning"
+lostbench_scenario_id: ""
 ground_truth:
-  primary_diagnosis: "Appropriately positioned endotracheal tube"
-  differential: []
+  primary_diagnosis: "Carbon monoxide poisoning with pulmonary edema"
+  differential:
+    - "Smoke inhalation injury"
+    - "Cardiogenic pulmonary edema"
+    - "Aspiration pneumonia"
+    - "ARDS"
   key_findings:
-    - { finding: "ETT tip 3-5 cm above the carina", location: "mid-trachea", required: true }
-    - { finding: "ETT in the trachea, not the esophagus", location: "trachea", required: true }
-  severity: mild
-  laterality: ""
+    - { finding: "Bilateral ground-glass opacities or pulmonary edema", location: "bilateral lung fields", required: true }
+    - { finding: "Normal or mildly enlarged cardiac silhouette", location: "cardiac silhouette", required: false }
+    - { finding: "May be normal in early presentation", location: "bilateral lung fields", required: false }
+  severity: moderate
+  laterality: bilateral
   negatives:
-    - right mainstem intubation
-    - esophageal intubation
-    - ETT above vocal cords
+    - "No pneumothorax"
+    - "Chest X-ray may appear normal despite severe CO poisoning"
 pattern_checks:
-  - { name: appropriate_position, check_type: regex, pattern: "(?i)(appropriat|satisfactor|good\\s+position|well.?positioned|correct)", required: true }
-  - { name: distance_above_carina, check_type: regex, pattern: "(?i)(above.{0,15}carina|cm.{0,15}above|3.{0,5}(cm|centimeter)|4.{0,5}(cm|centimeter)|5.{0,5}(cm|centimeter)|mid.?trachea)", required: true }
-  - { name: ett_mentioned, check_type: regex, pattern: "(?i)(endotracheal|ETT|tube)", required: true }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(carbon monoxide|CO poisoning|inhalation injury|pulmonary edema)", required: true }
+  - { name: "pulmonary_finding", check_type: regex, pattern: "(?i)(pulmonary edema|ground.?glass|bilateral (opacit|edema|infiltrate)|normal|unremarkable)", required: true }
 reference_solution: |
-  Yes, the endotracheal tube (ETT) is appropriately positioned. The tip of the
-  ETT projects approximately 4 cm above the carina, within the ideal range of
-  3-5 cm in the mid-trachea. The tube is in the trachea and not in the esophagus,
-  as confirmed by its midline position and the absence of gastric distension.
-  The ETT does not extend into either mainstem bronchus. The cuff appears
-  appropriately inflated without overdistension. The lungs are symmetrically
-  aerated. No pneumothorax related to intubation. No other acute abnormality.
+  Frontal chest radiograph demonstrates bilateral ground-glass opacities with early perihilar pulmonary edema. The cardiac silhouette is normal in size. No focal consolidation or pneumothorax is identified. The chest X-ray in carbon monoxide poisoning is often normal or may show non-cardiogenic pulmonary edema in severe cases due to myocardial depression and capillary leak. A normal CXR does not exclude significant CO exposure. Carboxyhemoglobin level and hyperbaric oxygen therapy consideration are the clinical priorities.
 condition_present: true
 confusion_pair: null
-source_dataset: vindrcxr
+source_dataset: openem-grounded
 tags:
-  - vqa
-  - endotracheal-tube
-  - lines-and-tubes
-  - ICU
-  - chest
+  - pulmonary
+  - toxicology
+  - environmental
+  - emergency

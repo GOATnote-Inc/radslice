@@ -1,50 +1,39 @@
 id: XRAY-042
-name: Normal AP portable CXR with lines in place
+name: "Amniotic Fluid Embolism on Chest X-ray"
 modality: xray
 anatomy: chest
-task_type: finding_detection
-difficulty: basic
-image_ref: xray/omnimedvqa/CXR_0042.png
+task_type: diagnosis
+difficulty: expert
+image_ref: "xray/openem/amniotic-fluid-embolism.png"
 prompt_template: diagnosis
+condition_id: "amniotic-fluid-embolism"
+lostbench_scenario_id: ""
 ground_truth:
-  primary_diagnosis: "Normal portable chest radiograph with appropriately positioned lines and tubes"
-  differential: []
+  primary_diagnosis: "Amniotic fluid embolism with acute pulmonary edema"
+  differential:
+    - "Pulmonary embolism"
+    - "ARDS"
+    - "Peripartum cardiomyopathy"
+    - "Aspiration pneumonitis"
   key_findings:
-    - { finding: "ETT tip approximately 4 cm above the carina", location: "mid-trachea", required: true }
-    - { finding: "right internal jugular central line tip at the cavoatrial junction", location: "SVC-RA junction", required: true }
-    - { finding: "clear lung fields", location: "bilateral lungs", required: true }
-    - { finding: "nasogastric tube tip below the diaphragm", location: "stomach", required: false }
-  severity: mild
-  laterality: ""
+    - { finding: "Bilateral diffuse pulmonary edema", location: "bilateral lung fields", required: true }
+    - { finding: "Normal cardiac silhouette (right heart strain pattern)", location: "cardiac silhouette", required: false }
+    - { finding: "Prominent pulmonary arteries suggesting acute pulmonary hypertension", location: "pulmonary vasculature", required: false }
+  severity: critical
+  laterality: bilateral
   negatives:
-    - line malposition
-    - pneumothorax
-    - pleural effusion
-    - consolidation
-    - cardiomegaly
-    - atelectasis
+    - "No pneumothorax"
+    - "No focal consolidation suggesting aspiration"
 pattern_checks:
-  - { name: lines_satisfactory, check_type: regex, pattern: "(?i)(satisfactor|appropriat|good\\s+position|normal\\s+position|well.?positioned|unchanged)", required: true }
-  - { name: ett_mentioned, check_type: regex, pattern: "(?i)(endotracheal|ETT|tube)", required: true }
-  - { name: central_line, check_type: regex, pattern: "(?i)(central.{0,15}(line|catheter|venous)|CVC)", required: true }
-  - { name: no_pneumothorax, check_type: regex, pattern: "(?i)no.{0,20}pneumothorax", required: true }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(amniotic fluid embolism|pulmonary edema|ARDS|non.?cardiogenic edema)", required: true }
+  - { name: "bilateral_edema", check_type: regex, pattern: "(?i)(bilateral (pulmonary )?edema|diffuse (alveolar )?opacit|bilateral infiltrate)", required: true }
 reference_solution: |
-  Portable AP chest radiograph demonstrates appropriately positioned support
-  devices. The endotracheal tube tip is located approximately 4 cm above the
-  carina in satisfactory position. A right internal jugular central venous
-  catheter has its tip at the cavoatrial junction, in appropriate position. A
-  nasogastric tube courses into the stomach with the tip below the diaphragm.
-  The lungs are clear bilaterally without focal consolidation, pleural effusion,
-  or pneumothorax. No interval development of complication related to line
-  placement. The cardiac silhouette is normal in size for AP projection.
-  Impression: Appropriately positioned ETT, central venous catheter, and NG tube.
-  No acute cardiopulmonary abnormality.
-condition_present: false
+  Frontal chest radiograph in a peripartum patient demonstrates diffuse bilateral pulmonary edema with confluent alveolar opacities. The cardiac silhouette is normal in size, suggesting a non-cardiogenic etiology. The pulmonary arteries may appear prominent. No focal consolidation or pneumothorax is identified. In the clinical context of acute cardiorespiratory collapse during labor or delivery, these findings are consistent with amniotic fluid embolism. This is a clinical diagnosis supported by imaging findings of non-cardiogenic pulmonary edema.
+condition_present: true
 confusion_pair: null
-source_dataset: omnimedvqa-open
+source_dataset: openem-grounded
 tags:
-  - normal
-  - lines-and-tubes
-  - ICU
-  - portable
-  - baseline
+  - pulmonary
+  - obstetric
+  - emergency
+  - critical

@@ -1,0 +1,39 @@
+id: US-027
+name: "Ascending Cholangitis on Biliary Ultrasound"
+modality: ultrasound
+anatomy: abdomen
+task_type: diagnosis
+difficulty: advanced
+image_ref: "ultrasound/openem/ascending-cholangitis.png"
+prompt_template: diagnosis
+condition_id: "ascending-cholangitis"
+lostbench_scenario_id: "MTR-028"
+ground_truth:
+  primary_diagnosis: "Ascending cholangitis with biliary ductal dilation and choledocholithiasis"
+  differential:
+    - "Obstructive biliary mass (cholangiocarcinoma, pancreatic head tumor)"
+    - "Acute cholecystitis"
+    - "Mirizzi syndrome"
+  key_findings:
+    - { finding: "Dilated common bile duct greater than 7 mm", location: "common bile duct", required: true }
+    - { finding: "Intrahepatic biliary ductal dilation", location: "liver", required: true }
+    - { finding: "Echogenic focus in the distal CBD with acoustic shadowing (choledocholithiasis)", location: "distal common bile duct", required: false }
+    - { finding: "Gallbladder distension", location: "gallbladder", required: false }
+  severity: severe
+  laterality: n/a
+  negatives:
+    - "No hepatic abscess identified"
+    - "No definite pancreatic mass visualized"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(cholangitis|biliary obstruction|choledocholithiasis|bile duct (dilat|obstruct))", required: true }
+  - { name: "cbd_dilation", check_type: regex, pattern: "(?i)(common bile duct (dilat|>|greater|measuring)|CBD (dilat|>|greater)|biliary (dilat|duct(al)? dilat))", required: true }
+  - { name: "intrahepatic_finding", check_type: regex, pattern: "(?i)(intrahepatic (biliary|ductal) dilat|dilated intrahepatic)", required: true }
+reference_solution: |
+  Right upper quadrant ultrasound demonstrates significant dilation of the common bile duct measuring 12 mm, well above the upper limit of normal. There is associated intrahepatic biliary ductal dilation with the parallel channel (shotgun) sign in the liver. A shadowing echogenic focus is identified in the distal common bile duct consistent with choledocholithiasis. The gallbladder is distended with wall edema. In the clinical context of Charcot triad (fever, jaundice, right upper quadrant pain), these findings are consistent with acute ascending cholangitis secondary to choledocholithiasis requiring emergent biliary decompression.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - abdominal
+  - emergency
+  - hepatobiliary

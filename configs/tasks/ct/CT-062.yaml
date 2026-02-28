@@ -1,0 +1,37 @@
+id: CT-062
+name: "Bacterial meningitis complications on contrast-enhanced CT head"
+modality: ct
+anatomy: head
+task_type: diagnosis
+difficulty: advanced
+image_ref: "ct/openem/bacterial-meningitis.png"
+prompt_template: diagnosis
+condition_id: "bacterial-meningitis"
+lostbench_scenario_id: "MTR-035"
+ground_truth:
+  primary_diagnosis: "Bacterial meningitis with leptomeningeal enhancement"
+  differential:
+    - "Carcinomatous meningitis"
+    - "Tuberculous meningitis"
+    - "Viral meningoencephalitis"
+  key_findings:
+    - { finding: "Diffuse leptomeningeal enhancement", location: "cerebral convexities and basal cisterns", required: true }
+    - { finding: "Ventriculomegaly suggesting communicating hydrocephalus", location: "lateral ventricles", required: true }
+    - { finding: "Subdural empyema or effusion", location: "frontal convexity", required: false }
+  severity: "critical"
+  laterality: "bilateral"
+  negatives:
+    - "No brain abscess"
+    - "No cerebral venous sinus thrombosis"
+pattern_checks:
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(meningitis|leptomeningeal\\s*enhancement|meningeal\\s*enhancement)", required: true }
+  - { name: "key_finding_meningeal", check_type: regex, pattern: "(?i)(leptomeningeal|meningeal.*enhance|hydrocephalus)", required: true }
+reference_solution: |
+  Contrast-enhanced CT of the head demonstrates diffuse leptomeningeal enhancement along the cerebral convexities and within the basal cisterns, consistent with meningitis. There is communicating hydrocephalus with dilatation of all ventricles and transependymal CSF flow. A small left frontal convexity subdural effusion is present. No brain abscess or cerebral venous sinus thrombosis is identified. In the setting of fever and meningismus, findings are consistent with bacterial meningitis with early hydrocephalus.
+condition_present: true
+confusion_pair: null
+source_dataset: openem-grounded
+tags:
+  - neuro
+  - infectious
+  - emergency

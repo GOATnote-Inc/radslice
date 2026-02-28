@@ -59,6 +59,7 @@ def sample_task() -> Task:
         reference_solution="PA chest radiograph: left-sided simple pneumothorax.",
         condition_present=True,
         confusion_pair="XRAY-043",
+        condition_id="spontaneous-pneumothorax",
         source_dataset="omnimedvqa-open",
         tags=["thoracic", "emergency"],
     )
@@ -102,6 +103,7 @@ def sample_task_yaml(tmp_path) -> Path:
         ],
         "reference_solution": "Right lower lobe pneumonia.",
         "condition_present": True,
+        "condition_id": "pneumonia",
         "source_dataset": "test",
         "tags": ["test"],
     }
@@ -143,6 +145,7 @@ def sample_tasks_dir(tmp_path) -> Path:
                 },
             ],
             "condition_present": True,
+            "condition_id": f"test-condition-{i}",
             "source_dataset": "test",
             "tags": ["test"],
         }
