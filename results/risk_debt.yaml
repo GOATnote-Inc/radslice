@@ -1,0 +1,18 @@
+# Risk Debt Register
+# Tracks unresolved Class A failures and other safety risks.
+# Managed by eval-lead agent.
+entries: []
+# Format:
+# - id: RD-001
+#   created: "2026-02-28T00:00:00Z"
+#   severity: critical  # critical | high | medium
+#   task_id: XRAY-042
+#   condition: tension-pneumothorax
+#   modality: xray
+#   failure_class: A
+#   description: "Missed mediastinal shift on tension pneumothorax"
+#   models_affected: [gpt-5.2]
+#   campaigns: [eval-20260228-gpt52-xray]
+#   status: open  # open | mitigated | resolved
+#   resolution: null
+#   resolved_date: null

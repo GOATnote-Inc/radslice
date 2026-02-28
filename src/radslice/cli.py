@@ -298,6 +298,201 @@ def corpus_download(manifest, output_dir):
     click.echo("(Not yet implemented — requires dataset-specific downloaders)")
 
 
+# --- saturation ---
+
+
+@main.command()
+@click.option(
+    "--results-dirs",
+    required=True,
+    multiple=True,
+    type=click.Path(exists=True),
+    help="Results directories (ordered oldest first)",
+)
+@click.option("--threshold", default=0.95, type=float, help="pass^k saturation threshold")
+@click.option("--min-runs", default=3, type=int, help="Min consecutive runs above threshold")
+@click.option("--format", "fmt", type=click.Choice(["markdown", "json"]), default="markdown")
+def saturation(results_dirs, threshold, min_runs, fmt):
+    """Detect saturated tasks across evaluation runs."""
+    from radslice.analysis.saturation import detect_saturation, format_saturation_report
+
+    report = detect_saturation(
+        results_dirs=list(results_dirs),
+        threshold=threshold,
+        min_consecutive_runs=min_runs,
+    )
+
+    if fmt == "json":
+        import dataclasses
+
+        click.echo(json.dumps(dataclasses.asdict(report), indent=2, default=str))
+    else:
+        click.echo(format_saturation_report(report))
+
+
+# --- suite-update ---
+
+
+@main.command("suite-update")
+@click.option("--results", required=True, type=click.Path(exists=True), help="Results directory")
+@click.option(
+    "--membership",
+    default="results/suite_membership.yaml",
+    help="Suite membership YAML",
+)
+@click.option("--min-models-broken", default=2, type=int, help="Min models broken for promotion")
+@click.option("--max-consecutive-passes", default=5, type=int, help="Max passes for retirement")
+@click.option("--apply/--dry-run", default=False, help="Apply changes or just report")
+def suite_update(results, membership, min_models_broken, max_consecutive_passes, apply):
+    """Update suite membership based on evaluation results."""
+    from radslice.analysis.suite_tracker import (
+        apply_promotion,
+        apply_retirement,
+        load_suite_membership,
+        propose_promotions,
+        propose_retirements,
+        save_suite_membership,
+        update_tracking,
+    )
+
+    grades = _load_grades(results)
+    if not grades:
+        click.echo("No grades found.", err=True)
+        return
+
+    mem = load_suite_membership(membership)
+    update_tracking(mem, grades)
+
+    promotions = propose_promotions(grades, mem, min_models_broken=min_models_broken)
+    retirements = propose_retirements(mem, max_consecutive_passes=max_consecutive_passes)
+
+    click.echo(f"Grades loaded: {len(grades)}")
+    click.echo(f"Promotion proposals: {len(promotions)}")
+    for tid in promotions:
+        click.echo(f"  PROMOTE {tid} → regression")
+    click.echo(f"Retirement proposals: {len(retirements)}")
+    for tid in retirements:
+        click.echo(f"  RETIRE {tid} → retired")
+
+    if apply:
+        for tid in promotions:
+            apply_promotion(mem, tid)
+        for tid in retirements:
+            apply_retirement(mem, tid)
+        save_suite_membership(mem, membership)
+        click.echo(f"Applied changes to {membership}")
+    else:
+        save_suite_membership(mem, membership)
+        click.echo("Tracking updated (dry-run, no promotions/retirements applied)")
+
+
+# --- cross-repo ---
+
+
+@main.command("cross-repo")
+@click.option("--results", required=True, type=click.Path(exists=True), help="RadSlice results dir")
+@click.option("--lostbench-results", type=click.Path(exists=True), help="LostBench results dir")
+@click.option("--tasks-dir", default="configs/tasks", help="Tasks directory")
+@click.option("--format", "fmt", type=click.Choice(["markdown", "json"]), default="markdown")
+def cross_repo(results, lostbench_results, tasks_dir, fmt):
+    """Correlate RadSlice findings with LostBench results."""
+    from radslice.analysis.cross_repo import (
+        correlate_findings,
+        generate_cross_repo_report,
+    )
+
+    findings = correlate_findings(results, lostbench_results, tasks_dir)
+
+    if fmt == "json":
+        import dataclasses
+
+        click.echo(
+            json.dumps(
+                [dataclasses.asdict(f) for f in findings],
+                indent=2,
+                default=str,
+            )
+        )
+    else:
+        click.echo(generate_cross_repo_report(findings))
+
+
+# --- calibration ---
+
+
+@main.command()
+@click.option(
+    "--results-dirs",
+    required=True,
+    multiple=True,
+    type=click.Path(exists=True),
+    help="Results directories to analyze",
+)
+@click.option(
+    "--calibration-set",
+    default="configs/calibration/calibration_set.yaml",
+    help="Calibration set YAML",
+)
+@click.option(
+    "--human-grades",
+    default="configs/calibration/human_grades.jsonl",
+    help="Human reference grades",
+)
+@click.option("--kappa-threshold", default=0.60, type=float, help="Min kappa threshold")
+@click.option("--agreement-threshold", default=0.70, type=float, help="Min agreement threshold")
+@click.option("--format", "fmt", type=click.Choice(["markdown", "json"]), default="markdown")
+def calibration(
+    results_dirs, calibration_set, human_grades, kappa_threshold, agreement_threshold, fmt
+):
+    """Check calibration drift across evaluation runs."""
+    import yaml as _yaml
+
+    from radslice.analysis.calibration_drift import (
+        compare_to_human,
+        compute_calibration_drift,
+        format_drift_report,
+    )
+
+    # Load calibration set
+    cal_path = Path(calibration_set)
+    cal_ids = None
+    if cal_path.exists():
+        with open(cal_path) as f:
+            cal_data = _yaml.safe_load(f) or {}
+        cal_ids = set(cal_data.get("task_ids", []))
+
+    # Aggregate grades from all result dirs
+    all_grades = []
+    for rdir in results_dirs:
+        all_grades.extend(_load_grades(rdir))
+
+    if not all_grades:
+        click.echo("No grades found in results directories.", err=True)
+        return
+
+    report = compute_calibration_drift(
+        all_grades,
+        calibration_set_ids=cal_ids,
+        kappa_threshold=kappa_threshold,
+        agreement_threshold=agreement_threshold,
+    )
+
+    # Optional human comparison
+    human_result = compare_to_human(human_grades, all_grades)
+    if human_result:
+        # Reconstruct report with human comparison
+        from dataclasses import replace
+
+        report = replace(report, human_comparison=human_result)
+
+    if fmt == "json":
+        import dataclasses
+
+        click.echo(json.dumps(dataclasses.asdict(report), indent=2, default=str))
+    else:
+        click.echo(format_drift_report(report))
+
+
 # --- helpers ---
 
 

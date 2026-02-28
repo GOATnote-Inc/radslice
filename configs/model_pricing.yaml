@@ -1,0 +1,25 @@
+# Model pricing per 1M tokens (USD)
+# Used by eval-lead for cost estimation.
+# Updated: 2026-02-28
+
+models:
+  gpt-5.2:
+    provider: openai
+    input_per_1m: 2.50
+    output_per_1m: 10.00
+    vision_per_image: 0.25  # approximate per-image surcharge
+  opus-4-6:
+    provider: anthropic
+    input_per_1m: 15.00
+    output_per_1m: 75.00
+    vision_per_image: 0.48  # approximate per-image surcharge
+  sonnet-4-6:
+    provider: anthropic
+    input_per_1m: 3.00
+    output_per_1m: 15.00
+    vision_per_image: 0.24  # approximate per-image surcharge
+  gemini-2.5-pro:
+    provider: google
+    input_per_1m: 1.25
+    output_per_1m: 5.00
+    vision_per_image: 0.10  # approximate per-image surcharge

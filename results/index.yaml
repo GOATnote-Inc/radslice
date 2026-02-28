@@ -1,0 +1,4 @@
+# RadSlice Experiment Manifest
+# Source of truth for all evaluation campaigns.
+# Managed by eval-lead agent. Append-only.
+experiments: []

@@ -1,4 +1,4 @@
-.PHONY: test lint smoke format install clean
+.PHONY: test lint smoke format install clean audit calibrate
 
 install:
 	pip install -e ".[dev]"
@@ -16,6 +16,12 @@ lint:
 format:
 	ruff format src/ tests/
 	ruff check --fix src/ tests/
+
+audit:
+	python scripts/run_audit.py --results-dirs $$(ls -d results/eval-* 2>/dev/null || echo "")
+
+calibrate:
+	radslice calibration --results-dirs $$(ls -d results/eval-* 2>/dev/null || echo "")
 
 clean:
 	rm -rf build/ dist/ *.egg-info src/*.egg-info

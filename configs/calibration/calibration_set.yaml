@@ -1,0 +1,47 @@
+# Calibration Set — 30 tasks stratified by modality, difficulty, and type
+# Used for calibration drift detection and grading consistency monitoring.
+#
+# Selection criteria:
+# - 8 X-ray, 8 CT, 8 MRI, 6 Ultrasound
+# - Mix of difficulties (basic through expert)
+# - Includes confusion pairs and normal findings
+# - Covers high-risk (time_to_harm < 1h) and low-risk conditions
+
+task_ids:
+  # X-ray (8)
+  - XRAY-001  # acute-heart-failure (intermediate)
+  - XRAY-005  # tension-pneumothorax (advanced)
+  - XRAY-010  # rib-fracture (basic)
+  - XRAY-015  # pulmonary-embolism (expert)
+  - XRAY-020  # pneumonia (intermediate)
+  - XRAY-030  # pleural-effusion (basic)
+  - XRAY-040  # aortic-dissection (advanced)
+  - XRAY-050  # normal-chest (basic, confusion pair anchor)
+
+  # CT (8)
+  - CT-001    # acute-appendicitis (intermediate)
+  - CT-010    # subdural-hematoma (advanced)
+  - CT-020    # pulmonary-embolism (advanced)
+  - CT-030    # aortic-dissection (expert)
+  - CT-040    # bowel-obstruction (intermediate)
+  - CT-050    # stroke (advanced)
+  - CT-060    # renal-stone (basic)
+  - CT-070    # normal-abdomen (basic, confusion pair anchor)
+
+  # MRI (8)
+  - MRI-001   # meniscal-tear (intermediate)
+  - MRI-005   # disc-herniation (intermediate)
+  - MRI-010   # acl-tear (basic)
+  - MRI-015   # brain-tumor (advanced)
+  - MRI-020   # spinal-cord-compression (expert)
+  - MRI-025   # rotator-cuff-tear (intermediate)
+  - MRI-030   # ms-demyelination (advanced)
+  - MRI-035   # normal-brain (basic, confusion pair anchor)
+
+  # Ultrasound (6)
+  - US-001    # ectopic-pregnancy (advanced)
+  - US-005    # testicular-torsion (advanced)
+  - US-010    # cholecystitis (intermediate)
+  - US-015    # dvt (intermediate)
+  - US-020    # abdominal-aortic-aneurysm (advanced)
+  - US-025    # normal-gallbladder (basic, confusion pair anchor)

@@ -1,0 +1,38 @@
+# Suite Membership Tracking
+# Tracks which tasks belong to capability vs regression suites.
+# Managed by eval-lead agent (proposals from corpus-strategist).
+
+# All 320 tasks start in capability suite.
+# Tasks promoted to regression when they discriminate between models.
+# Tasks retired from capability when saturated (pass@5 > 0.95 all models, 3+ runs).
+
+capability:
+  xray: 72
+  ct: 106
+  mri: 53
+  ultrasound: 89
+  total: 320
+
+regression:
+  xray: 0
+  ct: 0
+  mri: 0
+  ultrasound: 0
+  total: 0
+
+retired:
+  xray: 0
+  ct: 0
+  mri: 0
+  ultrasound: 0
+  total: 0
+
+# Per-task tracking populated by radslice suite-update
+tasks: {}
+# Format:
+# XRAY-001:
+#   suite: capability  # capability | regression | retired
+#   consecutive_all_pass: 0
+#   consecutive_any_fail: 0
+#   promoted_date: null
+#   retired_date: null

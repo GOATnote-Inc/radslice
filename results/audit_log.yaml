@@ -1,0 +1,26 @@
+# Audit Log
+# Append-only history of program audits.
+# Managed by program-auditor agent.
+audits: []
+# Format:
+# - id: AUDIT-001
+#   timestamp: "2026-02-28T00:00:00Z"
+#   type: scheduled  # scheduled | event-driven
+#   coverage:
+#     total_tasks: 320
+#     tasks_with_results: 0
+#     tasks_never_run: 320
+#     modality_coverage: {xray: 0.0, ct: 0.0, mri: 0.0, ultrasound: 0.0}
+#   calibration:
+#     kappa: null
+#     agreement: null
+#     drift_detected: false
+#   saturation:
+#     saturated_tasks: 0
+#     saturation_rate: 0.0
+#   risk_debt:
+#     open_entries: 0
+#     critical: 0
+#   governance_review_counter: 0
+#   findings: []
+#   recommendations: []
