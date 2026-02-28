@@ -1,4 +1,4 @@
-# RadSlice
+# 🩻🍕RadSlice
 
 Multimodal radiology LLM benchmark. Evaluates frontier vision-language models on radiological image interpretation across four modalities: X-ray, CT, MRI, and Ultrasound. Every task is grounded in a real clinical condition from the [OpenEM](https://github.com/GOATnote-Inc/openem-corpus) emergency medicine corpus.
 
