@@ -19,6 +19,11 @@ Benchmarks frontier multimodal LLMs (GPT-5.2, Claude Opus/Sonnet 4.6, Gemini 2.5
 - **Scoring**: pass@k, pass^k, Wilson CI, bootstrap CI, two-proportion z-test
 - **Analysis**: per-modality, per-anatomy breakdowns, regression detection
 
+## Install Extras
+- `pip install -e .` — Core install (uncompressed DICOMs work out of the box)
+- `pip install -e ".[dicom-codecs]"` — Adds `pylibjpeg` + `pylibjpeg-libjpeg` (JPEG Lossless) + `pylibjpeg-openjpeg` (JPEG 2000) for compressed DICOM transfer syntaxes
+- `pip install -e ".[dev]"` — Dev/test dependencies
+
 ## Key Commands
 - `make test` — Run all tests (no API keys needed)
 - `make smoke` — Smoke tests only
