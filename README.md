@@ -1,15 +1,15 @@
 # RadSlice
 
-Multimodal radiology LLM benchmark. Evaluates frontier vision-language models on radiological image interpretation across four modalities: X-ray, CT, MRI, and Ultrasound.
+Multimodal radiology LLM benchmark. Evaluates frontier vision-language models on radiological image interpretation across four modalities: X-ray, CT, MRI, and Ultrasound. Every task is grounded in a real clinical condition from the [OpenEM](https://github.com/GOATnote-Inc/openem-corpus) emergency medicine corpus.
 
 ## Why RadSlice
 
 Multimodal LLMs are increasingly used for radiology triage and decision support, but there is no standardized benchmark that tests across modalities, anatomy regions, and difficulty levels with clinically rigorous grading. RadSlice fills this gap with:
 
-- **200 curated tasks** spanning 4 modalities, 15+ anatomy regions, and 3 difficulty tiers
+- **320 tasks** across 133 OpenEM conditions and 4 imaging modalities, linked by `condition_id`
+- **65 cross-references** to LostBench safety persistence scenarios for cross-cutting analysis
 - **3-layer grading** combining deterministic pattern checks with cross-vendor LLM radiologist judges
 - **Statistically grounded metrics** — pass@k, pass^k, Wilson confidence intervals, bootstrap CI, regression detection
-- **Confusion pairs** that test whether models distinguish look-alike conditions
 
 ## Quick start
 
@@ -32,19 +32,22 @@ radslice analyze --results results/smoke --per-modality --per-anatomy
 
 ## Corpus
 
-| Modality   | Tasks | Anatomy regions | Normal cases | Confusion pairs |
-|------------|-------|-----------------|--------------|-----------------|
-| X-ray      | 80    | chest, abdomen, musculoskeletal, spine, ... | 16 | 15 |
-| CT         | 60    | head, chest, abdomen, pelvis, spine, ... | 11 | 10 |
-| MRI        | 40    | brain, knee, spine, shoulder, ... | 6 | 7 |
-| Ultrasound | 20    | abdomen, pelvis, obstetric, vascular, ... | 4 | 4 |
-| **Total**  | **200** | | **37** | **36** |
+320 tasks grounded in 133 unique [OpenEM](https://github.com/GOATnote-Inc/openem-corpus) conditions (131 imaging-relevant out of 185 total). One task per condition×modality pair.
+
+| Modality   | Tasks | Conditions | Difficulty spread |
+|------------|-------|------------|-------------------|
+| X-ray      | 72    | 72         | 8 basic, 20 intermediate, 39 advanced, 5 expert |
+| CT         | 106   | 106        | 3 basic, 28 intermediate, 64 advanced, 11 expert |
+| MRI        | 53    | 53         | 1 basic, 6 intermediate, 40 advanced, 6 expert |
+| Ultrasound | 89    | 89         | 9 basic, 31 intermediate, 30 advanced, 19 expert |
+| **Total**  | **320** | **133 unique** | **21 basic, 85 intermediate, 175 advanced, 39 expert** |
 
 Each task YAML includes:
+- `condition_id` linking to an OpenEM condition (e.g. `spontaneous-pneumothorax`)
+- `lostbench_scenario_id` cross-reference where applicable (65 tasks, e.g. `MTR-016`)
 - Ground truth with primary diagnosis, differentials, key findings, laterality, severity
 - Required and optional pattern checks (regex)
 - Reference radiologist solution
-- Confusion pair linkage where applicable
 
 ## Models tested
 
@@ -127,12 +130,12 @@ src/radslice/
     cache.py          Disk-cached wrapper
 
 configs/
-  tasks/{xray,ct,mri,ultrasound}/   200 task YAMLs
+  tasks/{xray,ct,mri,ultrasound}/   320 task YAMLs (grounded in OpenEM)
   models/                            Per-model configs
   matrices/                          Sweep configs (full, quick_smoke)
   rubrics/                           Grading rubric
 
-tests/                858 tests, no API keys required
+tests/                1,218 tests, no API keys required
 ```
 
 ## Development
