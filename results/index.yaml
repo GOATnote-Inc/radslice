@@ -1,4 +1,22 @@
 # RadSlice Experiment Manifest
 # Source of truth for all evaluation campaigns.
 # Managed by eval-lead agent. Append-only.
-experiments: []
+experiments:
+  - id: eval-20260228-opus46-smoke
+    date: "2026-02-28"
+    model: opus-4.6
+    model_id: claude-opus-4-6
+    judge_model: gpt-5.2
+    modality: all
+    n_tasks: 7
+    n_trials: 1
+    pass_rate: 0.000
+    class_a_count: 5
+    class_b_count: 1
+    class_d_count: 1
+    decision: CLEAR
+    results_dir: results/eval-20260228-opus46-smoke/
+    pipeline_version: "0.3.0"
+    pipeline_commit: 8972e1a
+    corpus_note: "IDC open-access DICOM (LIDC-IDRI, NLST, TCGA-LIHC, CMB-CRC); images not condition-matched — screening/research cases, not pathology-specific"
+    notes: "First image-backed smoke test. Pipeline validated end-to-end: DICOM load, multimodal inference, cross-vendor judge. 0% pass rate expected — IDC screening images do not exhibit target pathology (e.g., normal CXR for CHF task). Confirms grading correctly penalizes condition mismatch."
