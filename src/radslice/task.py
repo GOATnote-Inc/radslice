@@ -94,8 +94,15 @@ VALID_MODALITIES = {"xray", "ct", "mri", "ultrasound"}
 VALID_TASK_TYPES = {"diagnosis", "finding_detection", "vqa", "report_generation"}
 VALID_DIFFICULTIES = {"basic", "intermediate", "advanced", "expert"}
 VALID_WINDOW_PRESETS = {
-    "ct_soft_tissue", "ct_lung", "ct_bone", "ct_brain", "ct_liver", "ct_abdomen",
-    "xray_default", "mri_default", "us_default",
+    "ct_soft_tissue",
+    "ct_lung",
+    "ct_bone",
+    "ct_brain",
+    "ct_liver",
+    "ct_abdomen",
+    "xray_default",
+    "mri_default",
+    "us_default",
 }
 
 
@@ -161,8 +168,7 @@ def validate_task(task: Task) -> list[str]:
     # Validate window_preset if set
     if task.window_preset and task.window_preset not in VALID_WINDOW_PRESETS:
         errors.append(
-            f"Invalid window_preset '{task.window_preset}', "
-            f"must be one of {VALID_WINDOW_PRESETS}"
+            f"Invalid window_preset '{task.window_preset}', must be one of {VALID_WINDOW_PRESETS}"
         )
     # Validate pattern check types
     for pc in task.pattern_checks:

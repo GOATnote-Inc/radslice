@@ -441,8 +441,15 @@ class TestWindowPresets:
 
     def test_expected_presets_exist(self):
         expected = [
-            "ct_soft_tissue", "ct_lung", "ct_bone", "ct_brain",
-            "ct_liver", "ct_abdomen", "xray_default", "mri_default", "us_default",
+            "ct_soft_tissue",
+            "ct_lung",
+            "ct_bone",
+            "ct_brain",
+            "ct_liver",
+            "ct_abdomen",
+            "xray_default",
+            "mri_default",
+            "us_default",
         ]
         for name in expected:
             assert name in WINDOW_PRESETS, f"Missing preset: {name}"
