@@ -86,7 +86,16 @@ def load_dicom(path: str | Path) -> DICOMStudy:
     if not hasattr(ds, "pixel_array"):
         raise ValueError(f"DICOM file has no pixel data: {path}")
 
-    pixels = ds.pixel_array.astype(np.float64)
+    try:
+        pixels = ds.pixel_array.astype(np.float64)
+    except Exception as e:
+        msg = str(e).lower()
+        if "unable to decompress" in msg or "no available image handler" in msg:
+            raise RuntimeError(
+                f"Cannot decode compressed DICOM pixels: {e}. "
+                "Install codec support with: pip install radslice[dicom-codecs]"
+            ) from e
+        raise
 
     # Apply rescale slope/intercept (converts to Hounsfield Units for CT)
     slope = float(getattr(ds, "RescaleSlope", 1))
@@ -167,7 +176,16 @@ def auto_window(ds: Any) -> tuple[float, float]:
         return wc, ww
 
     # Fallback: histogram-based (1st to 99th percentile)
-    pixels = ds.pixel_array.astype(np.float64)
+    try:
+        pixels = ds.pixel_array.astype(np.float64)
+    except Exception as e:
+        msg = str(e).lower()
+        if "unable to decompress" in msg or "no available image handler" in msg:
+            raise RuntimeError(
+                f"Cannot decode compressed DICOM pixels: {e}. "
+                "Install codec support with: pip install radslice[dicom-codecs]"
+            ) from e
+        raise
     slope = float(getattr(ds, "RescaleSlope", 1))
     intercept = float(getattr(ds, "RescaleIntercept", 0))
     if slope != 1 or intercept != 0:
@@ -238,9 +256,7 @@ def select_frame(pixels: np.ndarray, frame_index: int | None = None) -> np.ndarr
         # Multi-frame grayscale: (frames, rows, cols)
         if frame_index is not None:
             if frame_index < 0 or frame_index >= n_frames:
-                raise IndexError(
-                    f"Frame index {frame_index} out of range [0, {n_frames - 1}]"
-                )
+                raise IndexError(f"Frame index {frame_index} out of range [0, {n_frames - 1}]")
             return pixels[frame_index]
         # Default: middle frame
         return pixels[n_frames // 2]
@@ -257,7 +273,16 @@ def dicom_to_pil(ds: Any, window: dict[str, float] | None = None) -> Image.Image
                 If None, uses auto_window (DICOM tags → histogram fallback).
     """
     _require_pydicom()
-    pixels = ds.pixel_array.astype(np.float64)
+    try:
+        pixels = ds.pixel_array.astype(np.float64)
+    except Exception as e:
+        msg = str(e).lower()
+        if "unable to decompress" in msg or "no available image handler" in msg:
+            raise RuntimeError(
+                f"Cannot decode compressed DICOM pixels: {e}. "
+                "Install codec support with: pip install radslice[dicom-codecs]"
+            ) from e
+        raise
 
     # Rescale to Hounsfield Units (CT) or real values
     slope = float(getattr(ds, "RescaleSlope", 1))

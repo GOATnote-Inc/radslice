@@ -232,18 +232,18 @@ Datasets requiring credentialed access (PhysioNet VinDr-CXR, MIMIC-CXR) are neve
 
 ---
 
-## 6.0 Known Constraints
+## 6.0 Known Challenges
 
-### 6.1 Technical Constraints
+### 6.1 Technical Challenges
 
-| Constraint | Impact | Mitigation |
+| Challenge | Impact | Mitigation |
 |---|---|---|
-| JPEG2000 transfer syntax DICOMs (OsiriX) require `openjpeg` or `gdcm` codec libraries | Load failure without codec; silent fallback to text-only prompt | Dependency check at pipeline initialization; explicit error if codec missing |
+| Compressed transfer syntax DICOMs (JPEG Lossless, JPEG 2000) require codec libraries not included in base install | `RuntimeError` with install instructions at pixel decode time | `pip install radslice[dicom-codecs]` installs `pylibjpeg`, `pylibjpeg-libjpeg` (JPEG/JPEG-LS), and `pylibjpeg-openjpeg` (JPEG 2000); uncompressed DICOMs work without codecs |
 | Multi-value WindowCenter/WindowWidth DICOM tags | pydicom returns `MultiValue` list; incorrect handling produces wrong windowing | Explicit `MultiValue` detection with first-value extraction in `dicom.py` |
 | Layer 2 judge non-determinism | Score variance between identical runs | Bootstrap CI quantifies variance; Layer 0 provides deterministic lower bound |
 | PhysioNet-credentialed datasets cannot be redistributed | Limits out-of-box reproducibility for VinDr-CXR / MIMIC-CXR tasks | All core tasks (320) sourceable from non-credentialed repositories; credentialed sources enhance but are not required |
 
-### 6.2 Coverage Constraints
+### 6.2 Coverage Challenges
 
 | Gap | Detail | Status |
 |---|---|---|
