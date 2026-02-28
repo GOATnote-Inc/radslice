@@ -7,7 +7,7 @@ Multimodal radiology LLM benchmark. Evaluates frontier vision-language models on
 Multimodal LLMs are increasingly used for radiology triage and decision support, but there is no standardized benchmark that tests across modalities, anatomy regions, and difficulty levels with clinically rigorous grading. RadSlice fills this gap with:
 
 - **320 tasks** across 133 OpenEM conditions and 4 imaging modalities, linked by `condition_id`
-- **65 cross-references** to LostBench safety persistence scenarios for cross-cutting analysis
+- **65 cross-references** to [LostBench](https://github.com/GOATnote-Inc/lostbench) safety persistence scenarios for cross-cutting analysis
 - **3-layer grading** combining deterministic pattern checks with cross-vendor LLM radiologist judges
 - **Statistically grounded metrics** — pass@k, pass^k, Wilson confidence intervals, bootstrap CI, regression detection
 
@@ -146,6 +146,18 @@ make test        # pytest
 make lint        # ruff check + format
 make smoke       # smoke tests only
 ```
+
+## Part of the GOATnote Evaluation Program
+
+| Repository | Purpose |
+|------------|---------|
+| [LostBench](https://github.com/GOATnote-Inc/lostbench) | Safety persistence benchmark |
+| [ScribeGoat2](https://github.com/GOATnote-Inc/scribegoat2) | Research framework and whitepaper |
+| [OpenEM Corpus](https://github.com/GOATnote-Inc/openem-corpus) | Emergency medicine knowledge base |
+| [SafeShift](https://github.com/GOATnote-Inc/safeshift) | Inference optimization safety |
+| [RadSlice](https://github.com/GOATnote-Inc/radslice) | Multimodal radiology benchmark |
+
+Architecture overview: [CROSS_REPO_ARCHITECTURE.md](https://github.com/GOATnote-Inc/scribegoat2/blob/main/docs/CROSS_REPO_ARCHITECTURE.md)
 
 ## License
 
