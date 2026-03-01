@@ -177,8 +177,7 @@ class TestReportAuditPatternScoring:
 
     def test_patterns_miss_errors(self, sample_report_audit_task):
         bad_response = (
-            "The report appears accurate. No errors identified. "
-            "The chest CT is indeed normal."
+            "The report appears accurate. No errors identified. The chest CT is indeed normal."
         )
         result = run_task_patterns(sample_report_audit_task, bad_response)
         assert not result.all_required_pass

@@ -154,7 +154,7 @@ def build_judge_prompt(
         for err in report_errors:
             parts.append(
                 f"  - [{err['error_type']}] ({err['severity']}): "
-                f"Report says: \"{err['claim']}\" → Should be: \"{err['correction']}\""
+                f'Report says: "{err["claim"]}" → Should be: "{err["correction"]}"'
             )
 
     provided_report = ground_truth.get("provided_report", "")

@@ -135,9 +135,7 @@ class TestIncidentalPatternScoring:
         assert result.all_required_pass
 
     def test_patterns_miss_incidentals(self, sample_incidental_task):
-        partial_response = (
-            "Abdominal CT shows cholelithiasis. No other abnormalities identified."
-        )
+        partial_response = "Abdominal CT shows cholelithiasis. No other abnormalities identified."
         result = run_task_patterns(sample_incidental_task, partial_response)
         # Should find cholelithiasis but miss steatosis
         assert result.checks.get("identifies_gallstones", False)

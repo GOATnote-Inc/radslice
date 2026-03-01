@@ -65,9 +65,7 @@ class TestIDCDownloader:
         dest.parent.mkdir(parents=True, exist_ok=True)
         dest.write_bytes(b"fake dicom data")
 
-        images = {
-            "ct/idc/abdomen-ct-liver.dcm": sample_idc_images["ct/idc/abdomen-ct-liver.dcm"]
-        }
+        images = {"ct/idc/abdomen-ct-liver.dcm": sample_idc_images["ct/idc/abdomen-ct-liver.dcm"]}
         stats = _download_idc(images, output_dir)
         assert stats["skipped"] == 1
 
@@ -76,9 +74,7 @@ class TestIDCDownloader:
         """When idc-index is not installed, falls back to URL download."""
         mock_dl.return_value = True
 
-        images = {
-            "ct/idc/abdomen-ct-liver.dcm": sample_idc_images["ct/idc/abdomen-ct-liver.dcm"]
-        }
+        images = {"ct/idc/abdomen-ct-liver.dcm": sample_idc_images["ct/idc/abdomen-ct-liver.dcm"]}
         stats = _download_idc(images, output_dir)
         assert stats["downloaded"] == 1
         assert mock_dl.called
@@ -136,8 +132,6 @@ class TestIDCDownloader:
         mock_dl.return_value = True
 
         # The function should work even when idc_index is not installed
-        images = {
-            "ct/idc/abdomen-ct-liver.dcm": sample_idc_images["ct/idc/abdomen-ct-liver.dcm"]
-        }
+        images = {"ct/idc/abdomen-ct-liver.dcm": sample_idc_images["ct/idc/abdomen-ct-liver.dcm"]}
         stats = _download_idc(images, output_dir)
         assert stats["downloaded"] == 1

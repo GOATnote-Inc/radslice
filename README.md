@@ -1,5 +1,13 @@
 # 🩻🍕RadSlice — Multimodal Radiology LLM Evaluation Benchmark
 
+[![Tests](https://github.com/GOATnote-Inc/radslice/actions/workflows/tests.yml/badge.svg)](https://github.com/GOATnote-Inc/radslice/actions/workflows/tests.yml)
+[![Integration](https://github.com/GOATnote-Inc/radslice/actions/workflows/integration.yml/badge.svg)](https://github.com/GOATnote-Inc/radslice/actions/workflows/integration.yml)
+[![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
+[![Tasks: 330](https://img.shields.io/badge/tasks-330-green.svg)]()
+[![OpenEM Conditions: 133](https://img.shields.io/badge/OpenEM_conditions-133-blue.svg)]()
+
+
 **Document Type:** Technical Specification
 **Document ID:** RADSLICE-TSD-001
 **Maintained by:** GOATnote Inc.

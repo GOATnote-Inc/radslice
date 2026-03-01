@@ -117,8 +117,12 @@ class Task:
 
 VALID_MODALITIES = {"xray", "ct", "mri", "ultrasound"}
 VALID_TASK_TYPES = {
-    "diagnosis", "finding_detection", "vqa", "report_generation",
-    "incidental_detection", "report_audit",
+    "diagnosis",
+    "finding_detection",
+    "vqa",
+    "report_generation",
+    "incidental_detection",
+    "report_audit",
 }
 VALID_DIFFICULTIES = {"basic", "intermediate", "advanced", "expert"}
 VALID_WINDOW_PRESETS = {

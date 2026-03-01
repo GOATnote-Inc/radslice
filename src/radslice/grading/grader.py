@@ -141,9 +141,7 @@ class RubricGrader:
             return self._scores_from_patterns_report_audit(
                 pattern_result, lat_correct, overcalled, task
             )
-        return self._scores_from_patterns_default(
-            pattern_result, lat_correct, overcalled, task
-        )
+        return self._scores_from_patterns_default(pattern_result, lat_correct, overcalled, task)
 
     def _scores_from_patterns_default(
         self,
