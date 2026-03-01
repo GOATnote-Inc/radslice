@@ -35,7 +35,9 @@ class IncidentalFinding:
 class ReportError:
     """An error in a radiologist's report."""
 
-    error_type: str  # missed_finding | wrong_laterality | severity_underestimate | hallucinated_finding | wrong_diagnosis
+    # missed_finding | wrong_laterality | severity_underestimate
+    # | hallucinated_finding | wrong_diagnosis
+    error_type: str
     claim: str  # What the report says (or omits)
     correction: str  # What the correct statement should be
     severity: str  # critical | major | minor
@@ -114,7 +116,10 @@ class Task:
 
 
 VALID_MODALITIES = {"xray", "ct", "mri", "ultrasound"}
-VALID_TASK_TYPES = {"diagnosis", "finding_detection", "vqa", "report_generation", "incidental_detection", "report_audit"}
+VALID_TASK_TYPES = {
+    "diagnosis", "finding_detection", "vqa", "report_generation",
+    "incidental_detection", "report_audit",
+}
 VALID_DIFFICULTIES = {"basic", "intermediate", "advanced", "expert"}
 VALID_WINDOW_PRESETS = {
     "ct_soft_tissue",
@@ -223,7 +228,9 @@ def validate_task(task: Task) -> list[str]:
         errors.append("report_audit tasks require at least one ground_truth.report_errors entry")
     # incidental_detection tasks require at least one incidental_finding
     if task.task_type == "incidental_detection" and not task.ground_truth.incidental_findings:
-        errors.append("incidental_detection tasks require at least one ground_truth.incidental_findings entry")
+        msg = "incidental_detection tasks require at least one "
+        msg += "ground_truth.incidental_findings entry"
+        errors.append(msg)
     # Validate window_preset if set
     if task.window_preset and task.window_preset not in VALID_WINDOW_PRESETS:
         errors.append(
