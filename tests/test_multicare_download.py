@@ -3,14 +3,12 @@
 from __future__ import annotations
 
 from pathlib import Path
-from unittest.mock import MagicMock, patch
+from unittest.mock import patch
 
 import pytest
 
 from corpus.download import (
     _download_multicare,
-    compute_sha256,
-    verify_checksum,
 )
 
 
@@ -70,10 +68,8 @@ class TestMultiCareDownloader:
         dest.parent.mkdir(parents=True, exist_ok=True)
         dest.write_bytes(b"fake image data")
 
-        stats = _download_multicare(
-            {"ct/multicare/hepatic-steatosis.png": sample_images["ct/multicare/hepatic-steatosis.png"]},
-            output_dir,
-        )
+        key = "ct/multicare/hepatic-steatosis.png"
+        stats = _download_multicare({key: sample_images[key]}, output_dir)
         assert stats["skipped"] == 1
         assert stats["downloaded"] == 0
 
@@ -82,7 +78,8 @@ class TestMultiCareDownloader:
         mock_dl.return_value = True
 
         # Only the entry without sha256
-        images = {"ct/multicare/hepatic-steatosis.png": sample_images["ct/multicare/hepatic-steatosis.png"]}
+        key = "ct/multicare/hepatic-steatosis.png"
+        images = {key: sample_images[key]}
         stats = _download_multicare(images, output_dir)
 
         assert stats["downloaded"] == 1

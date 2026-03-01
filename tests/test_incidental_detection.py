@@ -14,10 +14,7 @@ from radslice.grading.patterns import run_task_patterns
 from radslice.task import (
     GroundTruth,
     IncidentalFinding,
-    KeyFinding,
-    PatternCheck,
     Task,
-    TaskValidationError,
     load_task,
     validate_task,
 )

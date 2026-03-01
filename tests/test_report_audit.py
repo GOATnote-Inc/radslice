@@ -13,11 +13,8 @@ from radslice.grading.judge import (
 from radslice.grading.patterns import run_task_patterns
 from radslice.task import (
     GroundTruth,
-    KeyFinding,
-    PatternCheck,
     ReportError,
     Task,
-    TaskValidationError,
     load_task,
     validate_task,
 )
