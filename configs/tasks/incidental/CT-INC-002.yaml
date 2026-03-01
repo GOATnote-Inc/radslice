@@ -1,0 +1,55 @@
+id: CT-INC-002
+name: "Incidental pulmonary nodule and thyroid nodule on chest CT for rib fracture"
+modality: ct
+anatomy: chest
+task_type: incidental_detection
+difficulty: advanced
+image_ref: "ct/incidental/rib-fracture-with-nodule.png"
+prompt_template: incidental_detection
+condition_id: "rib-fracture"
+lostbench_scenario_id: ""
+ground_truth:
+  primary_diagnosis: "Acute non-displaced fracture of the right lateral seventh rib"
+  differential:
+    - "Pathologic fracture"
+    - "Rib contusion without cortical disruption"
+    - "Metastatic lytic lesion"
+  key_findings:
+    - { finding: "Non-displaced cortical disruption with adjacent soft tissue swelling", location: "right lateral seventh rib", required: true }
+    - { finding: "No pleural effusion or pneumothorax", location: "right hemithorax", required: true }
+    - { finding: "No additional rib fractures identified", location: "bilateral ribs", required: false }
+  severity: "moderate"
+  laterality: "right"
+  negatives:
+    - "No pneumothorax"
+    - "No hemothorax or pleural effusion"
+    - "No flail segment"
+    - "No sternal fracture"
+  incidental_findings:
+    - finding: "Solitary solid non-calcified pulmonary nodule measuring 8 mm in greatest dimension"
+      location: "right upper lobe"
+      clinical_significance: "significant"
+      recommended_action: "Follow-up CT chest in 3-6 months per Fleischner Society guidelines for solid nodules 6-8 mm in a high-risk patient; consider PET-CT if nodule persists or grows"
+    - finding: "Low-attenuation nodule within the left thyroid lobe measuring 1.5 cm"
+      location: "left thyroid lobe"
+      clinical_significance: "incidental"
+      recommended_action: "Recommend dedicated thyroid ultrasound for further characterization per ACR white paper on incidental thyroid nodules"
+pattern_checks:
+  - { name: "fracture_identified", check_type: regex, pattern: "(?i)(rib\\s*fracture|fracture.*rib|cortical\\s*(disruption|break))", required: true }
+  - { name: "pulmonary_nodule_detected", check_type: regex, pattern: "(?i)(pulmonary\\s*nodule|lung\\s*nodule|solitary.*nodule)", required: true }
+  - { name: "follow_up_recommended", check_type: regex, pattern: "(?i)(follow.?up|fleischner|surveillance)", required: true }
+reference_solution: |
+  CT of the chest in bone and soft tissue windows demonstrates a non-displaced cortical disruption involving the right lateral seventh rib with mild adjacent soft tissue swelling, consistent with an acute rib fracture. No pneumothorax or pleural effusion is identified. No additional rib fractures or sternal fracture.
+
+  Incidental findings:
+  1. An 8 mm solid non-calcified pulmonary nodule is noted in the right upper lobe. In the absence of a known primary malignancy, follow-up CT chest in 3-6 months is recommended per Fleischner Society guidelines. If the patient is high-risk (smoking history, occupational exposure), earlier follow-up or PET-CT may be considered.
+  2. A 1.5 cm low-attenuation nodule is identified in the left thyroid lobe, partially visualized on the chest CT. Dedicated thyroid ultrasound is recommended for further characterization per ACR guidelines for incidental thyroid nodules detected on CT.
+condition_present: true
+confusion_pair: null
+source_dataset: synthetic
+tags:
+  - incidental
+  - thoracic
+  - trauma
+  - pulmonary-nodule
+  - thyroid

@@ -208,6 +208,140 @@ def _download_radimagenet(
     return stats
 
 
+def _download_multicare(
+    images: dict[str, dict], output_dir: Path, dry_run: bool = False
+) -> dict[str, int]:
+    """Download images from MultiCaRe (PubMed Central open-access clinical case images).
+
+    MultiCaRe provides curated clinical case images from open-access PubMed Central
+    articles. Images are fetched directly via PMC figure URLs.
+    """
+    stats = {"downloaded": 0, "skipped": 0, "failed": 0}
+    entries = {k: v for k, v in images.items() if v.get("source") == "multicare"}
+
+    if not entries:
+        return stats
+
+    logger.info("MultiCaRe: %d images to fetch", len(entries))
+
+    for image_ref, info in entries.items():
+        dest = output_dir / image_ref
+        if dest.exists():
+            expected = info.get("sha256")
+            if expected and verify_checksum(dest, expected):
+                stats["skipped"] += 1
+                continue
+            elif expected:
+                logger.warning("Checksum mismatch for %s, re-downloading", image_ref)
+            else:
+                # No checksum to verify — trust existing file
+                stats["skipped"] += 1
+                continue
+
+        if dry_run:
+            logger.info("  [dry-run] Would download: %s", image_ref)
+            stats["skipped"] += 1
+            continue
+
+        url = info.get("url")
+        if not url:
+            logger.warning("No URL for %s, skipping", image_ref)
+            stats["failed"] += 1
+            continue
+
+        if _download_url(url, dest):
+            expected = info.get("sha256")
+            if expected and not verify_checksum(dest, expected):
+                logger.error("Checksum mismatch after download: %s", image_ref)
+                dest.unlink(missing_ok=True)
+                stats["failed"] += 1
+            else:
+                stats["downloaded"] += 1
+        else:
+            stats["failed"] += 1
+
+    return stats
+
+
+def _download_idc(
+    images: dict[str, dict], output_dir: Path, dry_run: bool = False
+) -> dict[str, int]:
+    """Download DICOM images from NCI Imaging Data Commons (IDC).
+
+    Uses idc-index package if available for efficient bucket access,
+    otherwise falls back to direct URLs.
+    """
+    stats = {"downloaded": 0, "skipped": 0, "failed": 0}
+    entries = {k: v for k, v in images.items() if v.get("source") == "idc"}
+
+    if not entries:
+        return stats
+
+    logger.info("IDC: %d images to fetch", len(entries))
+
+    # Try idc-index for batch download
+    idc_client = None
+    try:
+        from idc_index import IDCClient  # type: ignore[import-untyped]
+        idc_client = IDCClient()
+        logger.info("Using idc-index for IDC downloads")
+    except ImportError:
+        logger.info("idc-index not installed, using direct URLs for IDC downloads")
+
+    for image_ref, info in entries.items():
+        dest = output_dir / image_ref
+        if dest.exists():
+            expected = info.get("sha256")
+            if expected and verify_checksum(dest, expected):
+                stats["skipped"] += 1
+                continue
+            elif expected:
+                logger.warning("Checksum mismatch for %s, re-downloading", image_ref)
+            else:
+                # No checksum to verify — trust existing file
+                stats["skipped"] += 1
+                continue
+
+        if dry_run:
+            logger.info("  [dry-run] Would download: %s", image_ref)
+            stats["skipped"] += 1
+            continue
+
+        downloaded = False
+
+        # Try idc-index first if available and series_uid is provided
+        if idc_client and info.get("series_uid"):
+            try:
+                dest.parent.mkdir(parents=True, exist_ok=True)
+                idc_client.download_from_selection(
+                    seriesInstanceUID=info["series_uid"],
+                    downloadDir=str(dest.parent),
+                )
+                # idc-index downloads to a nested dir structure, find the file
+                downloaded = dest.exists()
+            except Exception as e:
+                logger.warning("idc-index download failed for %s: %s", image_ref, e)
+
+        # Fallback to direct URL
+        if not downloaded:
+            url = info.get("url")
+            if url and _download_url(url, dest):
+                downloaded = True
+
+        if downloaded:
+            expected = info.get("sha256")
+            if expected and not verify_checksum(dest, expected):
+                logger.error("Checksum mismatch after download: %s", image_ref)
+                dest.unlink(missing_ok=True)
+                stats["failed"] += 1
+            else:
+                stats["downloaded"] += 1
+        else:
+            stats["failed"] += 1
+
+    return stats
+
+
 # --- Main entry point ---
 
 _DOWNLOADERS: dict[str, Any] = {
@@ -216,6 +350,8 @@ _DOWNLOADERS: dict[str, Any] = {
     "vindr-cxr": _download_vindr,
     "eurorad": _download_eurorad,
     "radimagenet": _download_radimagenet,
+    "multicare": _download_multicare,
+    "idc": _download_idc,
 }
 
 

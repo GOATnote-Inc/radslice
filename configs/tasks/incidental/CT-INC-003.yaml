@@ -1,0 +1,56 @@
+id: CT-INC-003
+name: "Incidental renal cyst and hepatic hemangioma on abdominal CT for appendicitis"
+modality: ct
+anatomy: abdomen
+task_type: incidental_detection
+difficulty: advanced
+image_ref: "ct/incidental/appendicitis-with-renal-cyst.png"
+prompt_template: incidental_detection
+condition_id: "appendicitis"
+lostbench_scenario_id: ""
+ground_truth:
+  primary_diagnosis: "Acute uncomplicated appendicitis"
+  differential:
+    - "Perforated appendicitis with abscess"
+    - "Mesenteric lymphadenitis"
+    - "Right ovarian torsion"
+    - "Cecal diverticulitis"
+  key_findings:
+    - { finding: "Dilated fluid-filled appendix measuring 11 mm in diameter with mural hyperenhancement and periappendiceal fat stranding", location: "right lower quadrant, appendix", required: true }
+    - { finding: "No extraluminal air or abscess formation", location: "periappendiceal region", required: true }
+    - { finding: "Appendicolith at the base of the appendix", location: "appendiceal base", required: false }
+  severity: "moderate"
+  laterality: "right"
+  negatives:
+    - "No free intraperitoneal air to suggest perforation"
+    - "No drainable periappendiceal abscess"
+    - "No small bowel obstruction"
+    - "No adnexal pathology"
+  incidental_findings:
+    - finding: "Well-circumscribed homogeneous hypodense lesion with water attenuation and thin imperceptible wall measuring 2.3 cm"
+      location: "left kidney, interpolar region"
+      clinical_significance: "benign"
+      recommended_action: "No follow-up required; Bosniak category I simple renal cyst with classic imaging features"
+    - finding: "Well-defined hypodense lesion with peripheral nodular discontinuous enhancement and progressive centripetal fill-in on delayed images measuring 1.8 cm"
+      location: "right hepatic lobe, segment VI"
+      clinical_significance: "incidental"
+      recommended_action: "Characteristic enhancement pattern of hepatic hemangioma; no further workup required if imaging features are typical. Consider MRI with hepatocyte-specific contrast agent if features are atypical"
+pattern_checks:
+  - { name: "appendicitis_diagnosed", check_type: regex, pattern: "(?i)(appendicitis|dilated.*appendix|appendiceal.*inflammation)", required: true }
+  - { name: "renal_cyst_noted", check_type: regex, pattern: "(?i)(renal\\s*cyst|kidney\\s*cyst|simple\\s*cyst)", required: true }
+  - { name: "hemangioma_identified", check_type: regex, pattern: "(?i)(hemangioma|hepatic\\s*hemangioma|cavernous\\s*hemangioma)", required: false }
+reference_solution: |
+  Contrast-enhanced CT of the abdomen and pelvis demonstrates a dilated fluid-filled appendix measuring 11 mm in maximal diameter with mural hyperenhancement and surrounding periappendiceal fat stranding. An appendicolith is noted at the appendiceal base. There is no extraluminal air, abscess formation, or free intraperitoneal fluid to suggest perforation. Findings are consistent with acute uncomplicated appendicitis.
+
+  Incidental findings:
+  1. A 2.3 cm well-circumscribed homogeneous hypodense lesion in the left kidney interpolar region with water attenuation (approximately 5 HU) and an imperceptible wall is consistent with a Bosniak I simple renal cyst. No follow-up is necessary.
+  2. An 1.8 cm well-defined hypodense lesion in segment VI of the right hepatic lobe demonstrates peripheral nodular discontinuous enhancement with progressive centripetal fill-in, a pattern characteristic of a hepatic hemangioma. No further workup is required given the classic imaging features.
+condition_present: true
+confusion_pair: null
+source_dataset: synthetic
+tags:
+  - incidental
+  - gastrointestinal
+  - renal
+  - hepatic
+  - hemangioma

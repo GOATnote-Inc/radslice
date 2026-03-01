@@ -1,0 +1,49 @@
+id: CT-AUD-004
+name: "Hallucinated finding in normal chest CT"
+modality: ct
+anatomy: chest
+task_type: report_audit
+difficulty: advanced
+image_ref: "ct/audit/normal-chest.png"
+prompt_template: report_audit
+condition_id: "normal-chest-ct"
+source_dataset: synthetic
+tags:
+  - audit
+  - hallucinated-finding
+  - false-positive
+  - chest
+ground_truth:
+  primary_diagnosis: "Normal chest CT"
+  differential: []
+  key_findings:
+    - { finding: "No mass or nodule in the right lower lobe or elsewhere", location: "bilateral lungs", required: true }
+  severity: moderate
+  laterality: null
+  negatives:
+    - "No pulmonary mass or nodule"
+    - "No lymphadenopathy"
+    - "No pleural effusion"
+    - "No consolidation"
+    - "No pericardial effusion"
+  provided_report: >
+    CT chest without contrast: There is an ill-defined soft tissue mass in the right lower
+    lobe measuring approximately 3.2 x 2.8 cm, concerning for primary pulmonary malignancy.
+    Recommend PET-CT for further characterization. The remainder of the lungs are clear without
+    additional nodules or consolidation. No pleural effusion. The mediastinum is unremarkable
+    without significant lymphadenopathy. The heart is normal in size. The visualized upper
+    abdomen is unremarkable. Impression: Right lower lobe mass suspicious for malignancy;
+    PET-CT recommended.
+  report_errors:
+    - error_type: hallucinated_finding
+      claim: "Ill-defined soft tissue mass in the right lower lobe measuring approximately 3.2 x 2.8 cm"
+      correction: "No mass or nodule is present in the right lower lobe; the lung parenchyma is normal throughout. This finding is fabricated and would lead to unnecessary invasive workup"
+      severity: critical
+    - error_type: wrong_diagnosis
+      claim: "Right lower lobe mass suspicious for malignancy; PET-CT recommended"
+      correction: "The chest CT is normal with no mass, nodule, or other abnormality requiring further imaging workup"
+      severity: critical
+pattern_checks:
+  - { name: "identifies_hallucination", check_type: regex, pattern: "(?i)(hallucinated|fabricat|false\\s+positive|does\\s+not\\s+exist|not\\s+(present|seen|identified)|no\\s+(mass|lesion))", required: true }
+  - { name: "states_normal_study", check_type: regex, pattern: "(?i)(normal|unremarkable|no\\s+(acute|significant)\\s+(finding|abnormal))", required: true }
+  - { name: "flags_unnecessary_workup", check_type: contains, pattern: "unnecessary", required: false }

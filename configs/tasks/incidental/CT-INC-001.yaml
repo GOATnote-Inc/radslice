@@ -1,0 +1,53 @@
+id: CT-INC-001
+name: "Incidental hepatic steatosis on abdominal CT for cholelithiasis"
+modality: ct
+anatomy: abdomen
+task_type: incidental_detection
+difficulty: advanced
+image_ref: "ct/incidental/cholelithiasis-with-steatosis.png"
+prompt_template: incidental_detection
+condition_id: "cholelithiasis"
+lostbench_scenario_id: ""
+ground_truth:
+  primary_diagnosis: "Cholelithiasis with multiple gallstones"
+  differential:
+    - "Acute cholecystitis"
+    - "Porcelain gallbladder"
+    - "Gallbladder polyp"
+  key_findings:
+    - { finding: "Multiple hyperdense calcified gallstones within the gallbladder lumen", location: "gallbladder", required: true }
+    - { finding: "No gallbladder wall thickening or pericholecystic fluid", location: "gallbladder", required: true }
+    - { finding: "Common bile duct within normal caliber", location: "common bile duct", required: false }
+  severity: "moderate"
+  laterality: ""
+  negatives:
+    - "No gallbladder wall thickening to suggest acute cholecystitis"
+    - "No intrahepatic or extrahepatic biliary dilatation"
+    - "No pancreatic duct dilatation"
+  incidental_findings:
+    - finding: "Diffusely decreased hepatic attenuation measuring approximately 30 HU, lower than splenic parenchyma, consistent with hepatic steatosis"
+      location: "liver parenchyma"
+      clinical_significance: "significant"
+      recommended_action: "Correlate with metabolic panel, lipid profile, and hepatitis serologies; consider hepatology referral for further evaluation of non-alcoholic fatty liver disease"
+    - finding: "Simple hypodense cyst with imperceptible wall and water attenuation"
+      location: "right kidney, lower pole"
+      clinical_significance: "benign"
+      recommended_action: "No follow-up required; Bosniak category I cyst"
+pattern_checks:
+  - { name: "primary_diagnosis", check_type: regex, pattern: "(?i)(cholelithiasis|gallstone)", required: true }
+  - { name: "steatosis_detected", check_type: regex, pattern: "(?i)(hepatic\\s*steatosis|fatty\\s*liver|steatosis|fatty\\s*infiltration)", required: true }
+  - { name: "renal_cyst_noted", check_type: regex, pattern: "(?i)(renal\\s*cyst|kidney\\s*cyst|simple\\s*cyst)", required: false }
+reference_solution: |
+  Contrast-enhanced CT of the abdomen demonstrates multiple hyperdense calcified gallstones within the gallbladder lumen. The gallbladder wall is not thickened and there is no pericholecystic fluid or stranding to suggest acute cholecystitis. The common bile duct measures within normal limits with no intra- or extrahepatic biliary dilatation.
+
+  Incidental findings:
+  1. The hepatic parenchyma demonstrates diffusely decreased attenuation measuring approximately 30 HU, which is lower than the splenic attenuation. This is consistent with moderate-to-severe hepatic steatosis. Clinical correlation with metabolic risk factors and hepatitis serologies is recommended.
+  2. A 1.2 cm simple-appearing hypodense lesion in the right kidney lower pole with water attenuation and imperceptible wall is consistent with a Bosniak I simple renal cyst. No follow-up is required.
+condition_present: true
+confusion_pair: null
+source_dataset: synthetic
+tags:
+  - incidental
+  - hepatobiliary
+  - steatosis
+  - renal

@@ -1,0 +1,51 @@
+id: CT-AUD-003
+name: "Severity underestimate on pulmonary embolism"
+modality: ct
+anatomy: chest
+task_type: report_audit
+difficulty: advanced
+image_ref: "ct/audit/pulmonary-embolism-saddle.png"
+prompt_template: report_audit
+condition_id: "pulmonary-embolism"
+source_dataset: synthetic
+tags:
+  - audit
+  - severity-underestimate
+  - pulmonary-embolism
+  - vascular
+  - emergency
+ground_truth:
+  primary_diagnosis: "Saddle pulmonary embolism"
+  differential:
+    - "Acute pulmonary embolism with right heart strain"
+    - "Chronic thromboembolic pulmonary hypertension"
+    - "Pulmonary artery sarcoma"
+  key_findings:
+    - { finding: "Large filling defect straddling the main pulmonary artery bifurcation", location: "main pulmonary artery bifurcation", required: true }
+    - { finding: "Extension of thrombus into bilateral main pulmonary arteries", location: "bilateral pulmonary arteries", required: true }
+    - { finding: "Right ventricular dilatation with interventricular septal bowing", location: "right ventricle", required: false }
+  severity: severe
+  laterality: "bilateral"
+  negatives:
+    - "No pulmonary infarction"
+    - "No pericardial effusion"
+  provided_report: >
+    CT pulmonary angiogram: There is a small filling defect identified within the right
+    lower lobe segmental pulmonary artery, consistent with a subsegmental pulmonary embolism.
+    No evidence of right heart strain. The main pulmonary artery caliber is within normal
+    limits. The lungs are clear without consolidation or ground-glass opacity. No pleural
+    effusion. Impression: Small subsegmental pulmonary embolism in the right lower lobe.
+    Recommend anticoagulation per clinical protocol.
+  report_errors:
+    - error_type: severity_underestimate
+      claim: "Small filling defect within the right lower lobe segmental pulmonary artery, consistent with a subsegmental pulmonary embolism"
+      correction: "The filling defect is a large saddle embolus straddling the main pulmonary artery bifurcation with extension into bilateral pulmonary arteries, not a small subsegmental PE"
+      severity: critical
+    - error_type: missed_finding
+      claim: "No evidence of right heart strain"
+      correction: "Right ventricular dilatation with interventricular septal bowing toward the left ventricle is present, indicating acute right heart strain"
+      severity: critical
+pattern_checks:
+  - { name: "identifies_saddle_pe", check_type: regex, pattern: "(?i)(saddle|central|massive).{0,20}(embol|PE|thrombus)", required: true }
+  - { name: "identifies_underestimate", check_type: regex, pattern: "(?i)(underestimat|understated|minimiz|downplay|more\\s+severe|actually.{0,20}(large|massive|saddle))", required: true }
+  - { name: "mentions_rv_strain", check_type: regex, pattern: "(?i)(right\\s+ventricul|RV).{0,30}(dilat|strain|enlarg|bowing)", required: false }

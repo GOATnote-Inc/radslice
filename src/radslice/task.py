@@ -22,6 +22,26 @@ class KeyFinding:
 
 
 @dataclass(frozen=True)
+class IncidentalFinding:
+    """An incidental/secondary finding with clinical significance triage."""
+
+    finding: str
+    location: str
+    clinical_significance: str  # critical | significant | incidental | benign
+    recommended_action: str  # e.g. "urgent follow-up CT", "routine follow-up", "no action"
+
+
+@dataclass(frozen=True)
+class ReportError:
+    """An error in a radiologist's report."""
+
+    error_type: str  # missed_finding | wrong_laterality | severity_underestimate | hallucinated_finding | wrong_diagnosis
+    claim: str  # What the report says (or omits)
+    correction: str  # What the correct statement should be
+    severity: str  # critical | major | minor
+
+
+@dataclass(frozen=True)
 class GroundTruth:
     """Ground truth for a radiology task."""
 
@@ -31,6 +51,9 @@ class GroundTruth:
     severity: str = ""
     laterality: str = ""
     negatives: list[str] = field(default_factory=list)
+    incidental_findings: list[IncidentalFinding] = field(default_factory=list)
+    report_errors: list[ReportError] = field(default_factory=list)
+    provided_report: str = ""
 
 
 @dataclass(frozen=True)
@@ -91,7 +114,7 @@ class Task:
 
 
 VALID_MODALITIES = {"xray", "ct", "mri", "ultrasound"}
-VALID_TASK_TYPES = {"diagnosis", "finding_detection", "vqa", "report_generation"}
+VALID_TASK_TYPES = {"diagnosis", "finding_detection", "vqa", "report_generation", "incidental_detection", "report_audit"}
 VALID_DIFFICULTIES = {"basic", "intermediate", "advanced", "expert"}
 VALID_WINDOW_PRESETS = {
     "ct_soft_tissue",
@@ -117,6 +140,30 @@ def _parse_key_findings(raw: list[dict]) -> list[KeyFinding]:
     ]
 
 
+def _parse_incidental_findings(raw: list[dict]) -> list[IncidentalFinding]:
+    return [
+        IncidentalFinding(
+            finding=f["finding"],
+            location=f["location"],
+            clinical_significance=f["clinical_significance"],
+            recommended_action=f["recommended_action"],
+        )
+        for f in raw
+    ]
+
+
+def _parse_report_errors(raw: list[dict]) -> list[ReportError]:
+    return [
+        ReportError(
+            error_type=e["error_type"],
+            claim=e["claim"],
+            correction=e["correction"],
+            severity=e["severity"],
+        )
+        for e in raw
+    ]
+
+
 def _parse_ground_truth(raw: dict) -> GroundTruth:
     return GroundTruth(
         primary_diagnosis=raw["primary_diagnosis"],
@@ -125,6 +172,9 @@ def _parse_ground_truth(raw: dict) -> GroundTruth:
         severity=raw.get("severity", ""),
         laterality=raw.get("laterality", ""),
         negatives=raw.get("negatives", []),
+        incidental_findings=_parse_incidental_findings(raw.get("incidental_findings", [])),
+        report_errors=_parse_report_errors(raw.get("report_errors", [])),
+        provided_report=raw.get("provided_report", ""),
     )
 
 
@@ -165,6 +215,15 @@ def validate_task(task: Task) -> list[str]:
         errors.append("ground_truth.primary_diagnosis is required")
     if not task.condition_id:
         errors.append("condition_id is required (must reference an OpenEM condition)")
+    # report_audit tasks require a provided_report
+    if task.task_type == "report_audit" and not task.ground_truth.provided_report:
+        errors.append("report_audit tasks require ground_truth.provided_report to be non-empty")
+    # report_audit tasks require at least one report_error
+    if task.task_type == "report_audit" and not task.ground_truth.report_errors:
+        errors.append("report_audit tasks require at least one ground_truth.report_errors entry")
+    # incidental_detection tasks require at least one incidental_finding
+    if task.task_type == "incidental_detection" and not task.ground_truth.incidental_findings:
+        errors.append("incidental_detection tasks require at least one ground_truth.incidental_findings entry")
     # Validate window_preset if set
     if task.window_preset and task.window_preset not in VALID_WINDOW_PRESETS:
         errors.append(

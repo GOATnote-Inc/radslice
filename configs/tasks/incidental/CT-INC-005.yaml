@@ -1,0 +1,57 @@
+id: CT-INC-005
+name: "Incidental aortic calcification and pulmonary nodule on chest CT for pneumonia"
+modality: ct
+anatomy: chest
+task_type: incidental_detection
+difficulty: advanced
+image_ref: "ct/incidental/pneumonia-with-aortic-calcification.png"
+prompt_template: incidental_detection
+condition_id: "pneumonia"
+lostbench_scenario_id: ""
+ground_truth:
+  primary_diagnosis: "Right lower lobe community-acquired pneumonia"
+  differential:
+    - "Aspiration pneumonia"
+    - "Pulmonary infarct"
+    - "Organizing pneumonia (cryptogenic)"
+    - "Bronchoalveolar carcinoma"
+  key_findings:
+    - { finding: "Dense consolidation with air bronchograms", location: "right lower lobe, posterior basal segment", required: true }
+    - { finding: "Small ipsilateral parapneumonic pleural effusion", location: "right costophrenic angle", required: true }
+    - { finding: "Reactive mediastinal lymph nodes not exceeding 1 cm in short axis", location: "subcarinal and right hilar stations", required: false }
+  severity: "moderate"
+  laterality: "right"
+  negatives:
+    - "No cavitation within the consolidation"
+    - "No endobronchial lesion identified"
+    - "No contralateral lung consolidation"
+    - "No empyema or loculated effusion"
+  incidental_findings:
+    - finding: "Extensive atherosclerotic calcification of the thoracic aorta including the aortic arch and descending thoracic aorta with scattered mural calcific plaques"
+      location: "thoracic aorta, arch and descending segments"
+      clinical_significance: "incidental"
+      recommended_action: "Correlate with cardiovascular risk factors; consider cardiology referral for atherosclerotic risk stratification. No acute aortic pathology identified"
+    - finding: "Part-solid ground-glass nodule measuring 12 mm with a solid component of 6 mm"
+      location: "left upper lobe, lingula"
+      clinical_significance: "significant"
+      recommended_action: "Part-solid nodule with solid component exceeding 6 mm warrants short-interval follow-up CT in 3 months per Fleischner Society guidelines; if persistent, consider tissue sampling or PET-CT"
+pattern_checks:
+  - { name: "pneumonia_diagnosed", check_type: regex, pattern: "(?i)(pneumonia|consolidation|lobar.*opaci|infectious.*process)", required: true }
+  - { name: "aortic_calcification_noted", check_type: regex, pattern: "(?i)(aortic\\s*calcif|atheroscler.*aort|calcif.*aort|aort.*atheroscler)", required: true }
+  - { name: "pulmonary_nodule_detected", check_type: regex, pattern: "(?i)(pulmonary\\s*nodule|lung\\s*nodule|ground.?glass\\s*nodule|part.?solid\\s*nodule)", required: true }
+reference_solution: |
+  CT of the chest demonstrates dense consolidation with air bronchograms in the posterior basal segment of the right lower lobe, consistent with community-acquired pneumonia. A small right-sided parapneumonic pleural effusion is present without evidence of loculation or empyema. Reactive subcarinal and right hilar lymph nodes are noted, none exceeding 1 cm in short axis. No cavitation or endobronchial lesion.
+
+  Incidental findings:
+  1. Extensive atherosclerotic calcification is identified involving the aortic arch and descending thoracic aorta with scattered mural calcific plaques. No acute aortic pathology such as dissection or aneurysm is seen. Clinical correlation with cardiovascular risk factors is recommended.
+  2. A 12 mm part-solid ground-glass nodule is noted in the lingula of the left upper lobe with a solid component measuring approximately 6 mm. This finding is separate from the infectious process and warrants short-interval follow-up CT in 3 months per Fleischner Society guidelines for part-solid nodules. If the nodule persists, tissue sampling or PET-CT should be considered to exclude malignancy.
+condition_present: true
+confusion_pair: null
+source_dataset: synthetic
+tags:
+  - incidental
+  - thoracic
+  - pneumonia
+  - vascular
+  - pulmonary-nodule
+  - atherosclerosis

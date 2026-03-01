@@ -53,3 +53,87 @@ images:
     source_id: "omnimedvqa_us_pelvic_ectopic_001"
     original_format: png
     notes: "Pelvic ultrasound showing adnexal mass with empty uterus"
+
+  # --- MultiCaRe (PubMed Central open-access case images) ---
+  ct/multicare/hepatic-steatosis.png:
+    source: multicare
+    source_id: "PMC7890123_fig2"
+    original_format: png
+    license: CC-BY-4.0
+    notes: "Abdominal CT showing diffuse hepatic steatosis (Hounsfield attenuation < 40 HU)"
+
+  ct/multicare/pulmonary-nodule.png:
+    source: multicare
+    source_id: "PMC8901234_fig1"
+    original_format: png
+    license: CC-BY-4.0
+    window_preset: ct_lung
+    notes: "Chest CT showing solitary pulmonary nodule in RUL"
+
+  ct/multicare/renal-cyst.png:
+    source: multicare
+    source_id: "PMC7123456_fig3"
+    original_format: png
+    license: CC-BY-4.0
+    window_preset: ct_abdomen
+    notes: "Abdominal CT showing simple renal cyst, Bosniak I"
+
+  ct/multicare/adrenal-adenoma.png:
+    source: multicare
+    source_id: "PMC8234567_fig1"
+    original_format: png
+    license: CC-BY-4.0
+    window_preset: ct_abdomen
+    notes: "Abdominal CT showing adrenal adenoma (< 10 HU on unenhanced CT)"
+
+  xray/multicare/cardiomegaly.png:
+    source: multicare
+    source_id: "PMC9345678_fig1"
+    original_format: png
+    license: CC-BY-4.0
+    notes: "PA chest radiograph with cardiomegaly (CTR > 0.5)"
+
+  # --- NCI Imaging Data Commons (IDC) DICOM ---
+  ct/idc/chest-ct-nodule.dcm:
+    source: idc
+    source_id: "LIDC-IDRI-0001"
+    series_uid: "1.3.6.1.4.1.14519.5.2.1.6279.6001.179049373636438705059720603192"
+    original_format: dicom
+    license: CC-BY-4.0
+    window_preset: ct_lung
+    notes: "LIDC-IDRI chest CT with annotated lung nodule"
+
+  ct/idc/abdomen-ct-liver.dcm:
+    source: idc
+    source_id: "TCGA-LIHC-0001"
+    series_uid: "1.3.6.1.4.1.14519.5.2.1.4792.2001.105216574054253895819671475627"
+    original_format: dicom
+    license: CC-BY-4.0
+    window_preset: ct_liver
+    notes: "TCGA-LIHC abdominal CT with hepatic lesion"
+
+  xray/idc/chest-xray-pneumonia.dcm:
+    source: idc
+    source_id: "NLST-0001"
+    series_uid: "1.3.6.1.4.1.14519.5.2.1.7009.2401.190297785975799021788614534439"
+    original_format: dicom
+    license: CC-BY-4.0
+    notes: "NLST chest X-ray"
+
+  ct/idc/head-ct-stroke.dcm:
+    source: idc
+    source_id: "CQ500-0001"
+    series_uid: "1.3.6.1.4.1.14519.5.2.1.5826.4001.268760579088901982322749584883"
+    original_format: dicom
+    license: CC-BY-4.0
+    window_preset: ct_brain
+    notes: "Head CT for hemorrhagic stroke evaluation"
+
+  ct/idc/chest-ct-pe.dcm:
+    source: idc
+    source_id: "RSPECT-0001"
+    series_uid: "1.3.6.1.4.1.14519.5.2.1.3344.4001.116798725757339889234834121223"
+    original_format: dicom
+    license: CC-BY-4.0
+    window_preset: ct_soft_tissue
+    notes: "CTPA for pulmonary embolism evaluation"

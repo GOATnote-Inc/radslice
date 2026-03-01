@@ -47,6 +47,36 @@ PROMPT_TEMPLATES = {
         "for the provided medical image.\n\n"
         "Include: Technique, Comparison, Findings, and Impression sections."
     ),
+    "incidental_detection": (
+        "You are an expert radiologist. Analyze the provided medical image thoroughly.\n\n"
+        "Identify ALL findings, both the primary pathology and any incidental or secondary "
+        "findings. For each finding, provide:\n"
+        "1. Description of the finding\n"
+        "2. Anatomic location\n"
+        "3. Clinical significance (critical / significant / incidental / benign)\n"
+        "4. Recommended action (e.g., urgent follow-up, routine follow-up, no action needed)\n\n"
+        "Organize your response as:\n"
+        "- **Primary Finding**: [diagnosis and details]\n"
+        "- **Incidental Findings**: [list each with significance and recommended action]"
+    ),
+    "report_audit": (
+        "You are an expert radiologist performing a second-opinion audit. "
+        "You are given a medical image AND a radiologist's report. "
+        "Your task is to identify errors in the report.\n\n"
+        "Review the image independently, then compare your interpretation against the "
+        "provided report. For each error found, classify it as:\n"
+        "- **missed_finding**: Finding visible on the image but not mentioned in the report\n"
+        "- **wrong_laterality**: Correct finding but attributed to the wrong side\n"
+        "- **severity_underestimate**: Finding identified but severity understated\n"
+        "- **hallucinated_finding**: Finding described in the report but not present on the image\n"
+        "- **wrong_diagnosis**: Incorrect diagnostic conclusion\n\n"
+        "For each error, state:\n"
+        "1. Error type\n"
+        "2. What the report claims (or omits)\n"
+        "3. What the correct interpretation should be\n"
+        "4. Severity of the error (critical / major / minor)\n\n"
+        "## Report to Audit:\n{provided_report}"
+    ),
 }
 
 
@@ -96,6 +126,8 @@ def _build_prompt(task: Task) -> str:
     template = PROMPT_TEMPLATES.get(task.prompt_template, PROMPT_TEMPLATES["diagnosis"])
     if task.task_type == "vqa" and task.metadata.get("question"):
         template = template.format(question=task.metadata["question"])
+    elif task.task_type == "report_audit" and task.ground_truth.provided_report:
+        template = template.format(provided_report=task.ground_truth.provided_report)
     return template
 
 

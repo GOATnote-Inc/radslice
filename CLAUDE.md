@@ -4,18 +4,29 @@
 Benchmarks frontier multimodal LLMs (GPT-5.2, Claude Opus/Sonnet 4.6, Gemini 2.5 Pro) on radiology image interpretation across X-ray, CT, MRI, and Ultrasound. Every task is grounded in a real clinical condition from the OpenEM emergency medicine corpus via `condition_id`.
 
 ## Corpus
-- **320 tasks** across 133 unique OpenEM conditions (one per condition×modality pair)
-- 72 X-ray, 106 CT, 53 MRI, 89 Ultrasound
+- **330 tasks** across 133 unique OpenEM conditions
+- 72 X-ray, 106 CT, 53 MRI, 89 Ultrasound, 5 incidental detection, 5 report audit
 - 65 tasks cross-referenced to LostBench scenarios (MTR/DEF IDs)
-- Difficulty: 21 basic, 85 intermediate, 175 advanced, 39 expert
+- Difficulty: 21 basic, 85 intermediate, 185 advanced, 39 expert
 - `condition_id` (required) links each task to an OpenEM condition
 - `lostbench_scenario_id` (optional) enables cross-repo safety analysis
+
+## Task Types
+| Type | Description |
+|------|-------------|
+| `diagnosis` | Identify primary diagnosis from image |
+| `finding_detection` | List all significant findings |
+| `vqa` | Answer a specific question about the image |
+| `report_generation` | Generate a structured radiology report |
+| `incidental_detection` | Identify primary AND incidental findings, triage by significance |
+| `report_audit` | Audit a provided radiologist report for errors against the image |
 
 ## Architecture
 - **Task YAMLs** define evaluation cases with ground truth, pattern checks, OpenEM condition links
 - **Providers** abstract multimodal LLM APIs (OpenAI, Anthropic, Google)
 - **Executor** runs NxM matrix (tasks × models × trials) with concurrency limits
 - **3-Layer Grading**: Layer 0 (deterministic patterns) → Layer 2 (LLM radiologist judge)
+- **Task-type-aware grading**: `incidental_detection` and `report_audit` use specialized judge prompts and scoring
 - **Scoring**: pass@k, pass^k, Wilson CI, bootstrap CI, two-proportion z-test
 - **Analysis**: per-modality, per-anatomy breakdowns, regression detection
 
@@ -45,14 +56,30 @@ Benchmarks frontier multimodal LLMs (GPT-5.2, Claude Opus/Sonnet 4.6, Gemini 2.5
 - Images gitignored; `corpus/download.py` fetches with checksums
 - Every task YAML must have a valid `condition_id` referencing an OpenEM condition
 
-## Grading Dimensions
-| Dimension | Weight |
-|-----------|--------|
-| Diagnostic accuracy | 0.35 |
-| Finding detection | 0.25 |
-| Anatomic precision | 0.15 |
-| Clinical relevance | 0.15 |
-| False positive control | 0.10 |
+## Grading Dimensions (default weights)
+| Dimension | Default | Incidental | Report Audit |
+|-----------|---------|------------|--------------|
+| Diagnostic accuracy | 0.35 | 0.25 | 0.30 |
+| Finding detection | 0.25 | 0.35 | 0.30 |
+| Anatomic precision | 0.15 | 0.15 | 0.10 |
+| Clinical relevance | 0.15 | 0.15 | 0.15 |
+| False positive control | 0.10 | 0.10 | 0.15 |
+
+## Ground Truth Schema Extensions
+- `IncidentalFinding`: finding, location, clinical_significance (critical/significant/incidental/benign), recommended_action
+- `ReportError`: error_type (missed_finding/wrong_laterality/severity_underestimate/hallucinated_finding/wrong_diagnosis), claim, correction, severity (critical/major/minor)
+- `provided_report`: str — the radiologist report to audit (required for report_audit tasks)
+
+## Corpus Sources
+| Source | License | Modalities |
+|--------|---------|------------|
+| OmniMedVQA | CC-BY (varies) | xray, ct, mri, ultrasound |
+| MediConfusion | MIT | xray, ct, mri |
+| Eurorad | CC BY-NC-SA 4.0 | ct, mri |
+| RadImageNet | CC BY 4.0 | ultrasound, ct, mri |
+| VinDr-CXR | PhysioNet 1.0 | xray |
+| MultiCaRe (PubMed Central) | CC-BY-4.0 | xray, ct, mri, ultrasound |
+| NCI IDC | CC-BY-4.0 | xray, ct, mri |
 
 ## File Layout
 - `src/radslice/` — All source code
@@ -67,12 +94,15 @@ Benchmarks frontier multimodal LLMs (GPT-5.2, Claude Opus/Sonnet 4.6, Gemini 2.5
   - `grading/judge.py` — Layer 2 LLM radiologist judge
   - `grading/rubric.py` — Rubric definitions
   - `providers/` — OpenAI, Anthropic, Google, disk-cached wrapper
-- `configs/tasks/{xray,ct,mri,ultrasound}/` — 320 task YAMLs (OpenEM-grounded)
+- `configs/tasks/{xray,ct,mri,ultrasound}/` — 320 original task YAMLs (OpenEM-grounded)
+- `configs/tasks/incidental/` — 5 incidental detection tasks (hepatic steatosis, pulmonary nodule, renal cyst, adrenal adenoma, aortic calcification)
+- `configs/tasks/audit/` — 5 report audit tasks (missed nodule, wrong laterality, severity underestimate, hallucinated finding, missed cardiomegaly)
 - `configs/models/` — Provider config YAMLs
 - `configs/matrices/` — Sweep configs (full, quick_smoke)
 - `configs/rubrics/` — Grading rubric
 - `corpus/` — Manifest, download script, annotations
-- `tests/` — 1,218 tests, no API keys required
+- `scripts/generate_report_audit_tasks.py` — Generate report_audit tasks from diagnosis tasks (--dry-run, --n-tasks, --error-types)
+- `tests/` — 1,365 tests, no API keys required
 - `results/` — Gitignored, populated by runs
 
 ## Agent Teams

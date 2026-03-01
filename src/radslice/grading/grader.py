@@ -132,7 +132,27 @@ class RubricGrader:
         overcalled: list[str],
         task: Task,
     ) -> dict[str, float]:
-        """Derive dimension scores from pattern checks."""
+        """Derive dimension scores from pattern checks. Routes by task_type."""
+        if task.task_type == "incidental_detection":
+            return self._scores_from_patterns_incidental(
+                pattern_result, lat_correct, overcalled, task
+            )
+        if task.task_type == "report_audit":
+            return self._scores_from_patterns_report_audit(
+                pattern_result, lat_correct, overcalled, task
+            )
+        return self._scores_from_patterns_default(
+            pattern_result, lat_correct, overcalled, task
+        )
+
+    def _scores_from_patterns_default(
+        self,
+        pattern_result: PatternResult,
+        lat_correct: bool,
+        overcalled: list[str],
+        task: Task,
+    ) -> dict[str, float]:
+        """Default dimension scores from pattern checks."""
         scores: dict[str, float] = {}
 
         # diagnostic_accuracy: based on required pattern pass rate
@@ -153,6 +173,84 @@ class RubricGrader:
         scores["clinical_relevance"] = 0.5
 
         # false_positive_control: penalize overcalls
+        if not overcalled:
+            scores["false_positive_control"] = 1.0
+        else:
+            n_negatives = len(task.ground_truth.negatives)
+            if n_negatives > 0:
+                scores["false_positive_control"] = max(0.0, 1.0 - len(overcalled) / n_negatives)
+            else:
+                scores["false_positive_control"] = 0.0
+
+        return scores
+
+    def _scores_from_patterns_incidental(
+        self,
+        pattern_result: PatternResult,
+        lat_correct: bool,
+        overcalled: list[str],
+        task: Task,
+    ) -> dict[str, float]:
+        """Incidental detection: finding_detection weighted higher, diagnostic_accuracy lower."""
+        scores: dict[str, float] = {}
+
+        # diagnostic_accuracy: lower weight — primary diagnosis is less central
+        if pattern_result.required_total > 0:
+            scores["diagnostic_accuracy"] = (
+                pattern_result.required_passed / pattern_result.required_total
+            )
+        else:
+            scores["diagnostic_accuracy"] = 0.5
+
+        # finding_detection: overall pass rate (incidental patterns should be in task checks)
+        scores["finding_detection"] = pattern_result.pass_rate
+
+        # anatomic_precision: laterality check
+        scores["anatomic_precision"] = 1.0 if lat_correct else 0.0
+
+        # clinical_relevance: slightly higher default — triage matters for incidentals
+        scores["clinical_relevance"] = 0.5
+
+        # false_positive_control
+        if not overcalled:
+            scores["false_positive_control"] = 1.0
+        else:
+            n_negatives = len(task.ground_truth.negatives)
+            if n_negatives > 0:
+                scores["false_positive_control"] = max(0.0, 1.0 - len(overcalled) / n_negatives)
+            else:
+                scores["false_positive_control"] = 0.0
+
+        return scores
+
+    def _scores_from_patterns_report_audit(
+        self,
+        pattern_result: PatternResult,
+        lat_correct: bool,
+        overcalled: list[str],
+        task: Task,
+    ) -> dict[str, float]:
+        """Report audit: error detection from patterns, false alarm penalty from overcalls."""
+        scores: dict[str, float] = {}
+
+        # diagnostic_accuracy: did patterns catch the planted errors?
+        if pattern_result.required_total > 0:
+            scores["diagnostic_accuracy"] = (
+                pattern_result.required_passed / pattern_result.required_total
+            )
+        else:
+            scores["diagnostic_accuracy"] = 0.5
+
+        # finding_detection: error detection rate
+        scores["finding_detection"] = pattern_result.pass_rate
+
+        # anatomic_precision: less important for audit — focus on error identification
+        scores["anatomic_precision"] = 1.0 if lat_correct else 0.5
+
+        # clinical_relevance: correction quality (patterns can't assess well)
+        scores["clinical_relevance"] = 0.5
+
+        # false_positive_control: false alarms (flagging correct statements as errors)
         if not overcalled:
             scores["false_positive_control"] = 1.0
         else:
@@ -218,7 +316,7 @@ class RubricGrader:
         if not self._judge_provider:
             return None
 
-        ground_truth = {
+        ground_truth: dict[str, Any] = {
             "primary_diagnosis": task.ground_truth.primary_diagnosis,
             "differential": task.ground_truth.differential,
             "severity": task.ground_truth.severity,
@@ -230,6 +328,33 @@ class RubricGrader:
             "negatives": task.ground_truth.negatives,
         }
 
+        # Include incidental findings for incidental_detection tasks
+        if task.ground_truth.incidental_findings:
+            ground_truth["incidental_findings"] = [
+                {
+                    "finding": inc.finding,
+                    "location": inc.location,
+                    "clinical_significance": inc.clinical_significance,
+                    "recommended_action": inc.recommended_action,
+                }
+                for inc in task.ground_truth.incidental_findings
+            ]
+
+        # Include report errors and provided report for report_audit tasks
+        if task.ground_truth.report_errors:
+            ground_truth["report_errors"] = [
+                {
+                    "error_type": err.error_type,
+                    "claim": err.claim,
+                    "correction": err.correction,
+                    "severity": err.severity,
+                }
+                for err in task.ground_truth.report_errors
+            ]
+
+        if task.ground_truth.provided_report:
+            ground_truth["provided_report"] = task.ground_truth.provided_report
+
         try:
             return await run_judge(
                 provider=self._judge_provider,
@@ -238,6 +363,7 @@ class RubricGrader:
                 ground_truth=ground_truth,
                 model_response=response,
                 reference_solution=task.reference_solution,
+                task_type=task.task_type,
             )
         except Exception:
             import logging

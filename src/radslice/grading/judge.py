@@ -40,6 +40,67 @@ Respond ONLY with valid JSON:
 }"""
 
 
+JUDGE_SYSTEM_PROMPT_INCIDENTAL = """You are an expert radiologist serving as a grading judge for a radiology AI benchmark. You will evaluate a model's response to an incidental finding detection task.
+
+The model was shown a medical image and asked to identify the primary pathology AND all incidental/secondary findings, then triage each by clinical significance.
+
+Grade the response on these 5 dimensions (each 0.0 to 1.0):
+
+1. **diagnostic_accuracy** (weight 0.25): Is the primary diagnosis correct?
+2. **finding_detection** (weight 0.35): Are incidental findings identified? Are critical incidentals caught?
+3. **anatomic_precision** (weight 0.15): Are finding locations correct?
+4. **clinical_relevance** (weight 0.15): Is clinical significance triage appropriate? Are recommended actions sensible?
+5. **false_positive_control** (weight 0.10): Are there hallucinated findings? (1.0 = no false positives)
+
+Also classify the failure mode (or null if passing):
+- **A**: Missed critical incidental finding (e.g., missed pulmonary nodule on abdominal CT)
+- **B**: Wrong significance triage (critical finding called benign, or vice versa)
+- **C**: Wrong location for a correctly identified finding
+- **D**: Overcall/hallucination (reported finding not present)
+- **E**: Refusal (declined to interpret the image)
+
+Respond ONLY with valid JSON:
+{
+  "diagnostic_accuracy": <float>,
+  "finding_detection": <float>,
+  "anatomic_precision": <float>,
+  "clinical_relevance": <float>,
+  "false_positive_control": <float>,
+  "failure_class": <string or null>,
+  "reasoning": "<brief explanation>"
+}"""
+
+JUDGE_SYSTEM_PROMPT_REPORT_AUDIT = """You are an expert radiologist serving as a grading judge for a radiology AI benchmark. You will evaluate a model's performance on a report audit task.
+
+The model was shown a medical image AND a radiologist's report containing planted errors. The model was asked to identify errors in the report.
+
+Grade the response on these 5 dimensions (each 0.0 to 1.0):
+
+1. **diagnostic_accuracy** (weight 0.30): Did the model correctly identify the errors in the report?
+2. **finding_detection** (weight 0.30): Were all planted errors detected? (sensitivity)
+3. **anatomic_precision** (weight 0.10): Are error descriptions anatomically precise?
+4. **clinical_relevance** (weight 0.15): Are error severity classifications appropriate? Are corrections clinically sound?
+5. **false_positive_control** (weight 0.15): Did the model flag correct report statements as errors? (1.0 = no false alarms)
+
+Also classify the failure mode (or null if passing):
+- **A**: Missed a critical error (e.g., didn't flag a missed pneumothorax)
+- **B**: Wrong error classification (called a laterality error a missed finding, etc.)
+- **C**: Identified error but gave wrong correction
+- **D**: False alarm (flagged a correct statement as an error)
+- **E**: Refusal (declined to audit the report)
+
+Respond ONLY with valid JSON:
+{
+  "diagnostic_accuracy": <float>,
+  "finding_detection": <float>,
+  "anatomic_precision": <float>,
+  "clinical_relevance": <float>,
+  "false_positive_control": <float>,
+  "failure_class": <string or null>,
+  "reasoning": "<brief explanation>"
+}"""
+
+
 @dataclass(frozen=True)
 class JudgeResult:
     """Result from LLM radiologist judge."""
@@ -78,12 +139,40 @@ def build_judge_prompt(
     if negatives:
         parts.append(f"- Should NOT be present: {negatives}")
 
+    incidental_findings = ground_truth.get("incidental_findings", [])
+    if incidental_findings:
+        parts.append("- Incidental findings (ground truth):")
+        for inc in incidental_findings:
+            parts.append(
+                f"  - {inc['finding']} at {inc['location']} "
+                f"[{inc['clinical_significance']}] → {inc['recommended_action']}"
+            )
+
+    report_errors = ground_truth.get("report_errors", [])
+    if report_errors:
+        parts.append("- Report errors (planted):")
+        for err in report_errors:
+            parts.append(
+                f"  - [{err['error_type']}] ({err['severity']}): "
+                f"Report says: \"{err['claim']}\" → Should be: \"{err['correction']}\""
+            )
+
+    provided_report = ground_truth.get("provided_report", "")
+    if provided_report:
+        parts.extend(["", "## Provided Report (being audited):", provided_report])
+
     if reference_solution:
         parts.extend(["", "## Reference Solution:", reference_solution])
 
     parts.extend(["", "## Model Response to Grade:", model_response])
 
     return "\n".join(parts)
+
+
+_JUDGE_PROMPTS_BY_TASK_TYPE = {
+    "incidental_detection": JUDGE_SYSTEM_PROMPT_INCIDENTAL,
+    "report_audit": JUDGE_SYSTEM_PROMPT_REPORT_AUDIT,
+}
 
 
 async def run_judge(
@@ -93,12 +182,15 @@ async def run_judge(
     ground_truth: dict[str, Any],
     model_response: str,
     reference_solution: str = "",
+    task_type: str = "",
 ) -> JudgeResult:
     """Run the LLM radiologist judge on a model response."""
     prompt = build_judge_prompt(task_name, ground_truth, model_response, reference_solution)
 
+    system_prompt = _JUDGE_PROMPTS_BY_TASK_TYPE.get(task_type, JUDGE_SYSTEM_PROMPT)
+
     messages = [
-        {"role": "system", "content": JUDGE_SYSTEM_PROMPT},
+        {"role": "system", "content": system_prompt},
         {"role": "user", "content": prompt},
     ]
 

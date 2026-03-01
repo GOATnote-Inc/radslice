@@ -1,0 +1,58 @@
+id: CT-INC-004
+name: "Incidental adrenal adenoma and vertebral compression fracture on abdominal CT for renal cell carcinoma"
+modality: ct
+anatomy: abdomen
+task_type: incidental_detection
+difficulty: advanced
+image_ref: "ct/incidental/rcc-with-adrenal-adenoma.png"
+prompt_template: incidental_detection
+condition_id: "renal-cell-carcinoma"
+lostbench_scenario_id: ""
+ground_truth:
+  primary_diagnosis: "Heterogeneously enhancing renal mass consistent with renal cell carcinoma"
+  differential:
+    - "Oncocytoma"
+    - "Angiomyolipoma (fat-poor variant)"
+    - "Renal metastasis"
+    - "Renal lymphoma"
+  key_findings:
+    - { finding: "Heterogeneously enhancing exophytic solid renal mass measuring 4.2 x 3.8 cm with areas of internal necrosis", location: "left kidney, upper pole", required: true }
+    - { finding: "No renal vein or inferior vena cava tumor thrombus", location: "left renal vein and IVC", required: true }
+    - { finding: "No retroperitoneal lymphadenopathy exceeding 1 cm in short axis", location: "retroperitoneum", required: false }
+  severity: "moderate"
+  laterality: "left"
+  negatives:
+    - "No renal vein tumor thrombus"
+    - "No IVC extension"
+    - "No retroperitoneal lymphadenopathy"
+    - "No hepatic metastatic disease"
+    - "No osseous metastatic disease on the visualized skeleton"
+  incidental_findings:
+    - finding: "Well-circumscribed homogeneous low-attenuation adrenal nodule measuring 2.1 cm with attenuation of 8 HU on unenhanced images, consistent with a lipid-rich adrenal adenoma"
+      location: "right adrenal gland"
+      clinical_significance: "significant"
+      recommended_action: "Attenuation less than 10 HU on unenhanced CT is diagnostic of a lipid-rich adenoma; no further imaging required. However, given concurrent renal malignancy, consider adrenal protocol CT washout study or chemical shift MRI to definitively exclude adrenal metastasis"
+    - finding: "Loss of vertebral body height of approximately 25% with mild retropulsion but no significant spinal canal narrowing"
+      location: "L1 vertebral body"
+      clinical_significance: "significant"
+      recommended_action: "Correlate clinically for back pain; recommend DEXA scan for osteoporosis screening. In the setting of known renal malignancy, consider MRI to differentiate osteoporotic from pathologic compression fracture"
+pattern_checks:
+  - { name: "renal_mass_identified", check_type: regex, pattern: "(?i)(renal\\s*(cell)?\\s*(carcinoma|mass|tumor|neoplasm)|RCC|renal\\s*lesion)", required: true }
+  - { name: "adrenal_adenoma_detected", check_type: regex, pattern: "(?i)(adrenal\\s*(adenoma|nodule|lesion|mass))", required: true }
+  - { name: "compression_fracture_noted", check_type: regex, pattern: "(?i)(compression\\s*fracture|vertebral.*fracture|height\\s*loss|vertebral.*collapse)", required: true }
+reference_solution: |
+  Contrast-enhanced CT of the abdomen demonstrates a 4.2 x 3.8 cm heterogeneously enhancing exophytic solid mass arising from the upper pole of the left kidney with central areas of low attenuation suggesting necrosis. The mass is suspicious for renal cell carcinoma. The left renal vein and inferior vena cava are patent without evidence of tumor thrombus. No retroperitoneal lymphadenopathy is identified. No hepatic lesions suspicious for metastatic disease.
+
+  Incidental findings:
+  1. A 2.1 cm well-circumscribed homogeneous low-attenuation nodule in the right adrenal gland measures approximately 8 HU on the unenhanced phase, consistent with a lipid-rich adrenal adenoma. While the unenhanced attenuation is diagnostic of adenoma, given the concurrent renal malignancy, an adrenal protocol CT with washout analysis or chemical shift MRI may be considered to definitively exclude metastatic disease.
+  2. There is loss of approximately 25% of the L1 vertebral body height with mild retropulsion but no significant spinal canal compromise, consistent with a compression fracture. In the setting of a known renal malignancy, MRI of the lumbar spine is recommended to differentiate an osteoporotic compression fracture from a pathologic fracture. DEXA scan for osteoporosis evaluation is also recommended.
+condition_present: true
+confusion_pair: null
+source_dataset: synthetic
+tags:
+  - incidental
+  - renal
+  - adrenal
+  - oncology
+  - spine
+  - compression-fracture

@@ -7,7 +7,14 @@ from pathlib import Path
 import pytest
 import yaml
 
-from radslice.task import GroundTruth, KeyFinding, PatternCheck, Task
+from radslice.task import (
+    GroundTruth,
+    IncidentalFinding,
+    KeyFinding,
+    PatternCheck,
+    ReportError,
+    Task,
+)
 
 
 @pytest.fixture
@@ -213,3 +220,121 @@ def sample_grades() -> list[dict]:
             }
         )
     return grades
+
+
+@pytest.fixture
+def sample_incidental_task() -> Task:
+    """A sample incidental detection task."""
+    return Task(
+        id="CT-INC-001",
+        name="Hepatic steatosis incidental on abdominal CT",
+        modality="ct",
+        anatomy="abdomen",
+        task_type="incidental_detection",
+        difficulty="advanced",
+        image_ref="ct/openem/hepatic-steatosis.png",
+        prompt_template="incidental_detection",
+        ground_truth=GroundTruth(
+            primary_diagnosis="cholelithiasis",
+            differential=["cholelithiasis", "cholecystitis"],
+            key_findings=[
+                KeyFinding(finding="gallstones", location="gallbladder", required=True),
+            ],
+            severity="moderate",
+            laterality="",
+            negatives=["cholangiocarcinoma"],
+            incidental_findings=[
+                IncidentalFinding(
+                    finding="hepatic steatosis",
+                    location="liver",
+                    clinical_significance="incidental",
+                    recommended_action="routine follow-up",
+                ),
+                IncidentalFinding(
+                    finding="simple renal cyst",
+                    location="right kidney",
+                    clinical_significance="benign",
+                    recommended_action="no action",
+                ),
+            ],
+        ),
+        pattern_checks=[
+            PatternCheck(
+                name="identifies_gallstones",
+                check_type="regex",
+                pattern=r"\b(gallstone|cholelithiasis)\b",
+                required=True,
+            ),
+            PatternCheck(
+                name="identifies_steatosis",
+                check_type="regex",
+                pattern=r"\b(steatosis|fatty.liver)\b",
+                required=True,
+            ),
+        ],
+        condition_id="cholelithiasis",
+        source_dataset="test",
+        tags=["incidental", "abdominal"],
+        window_preset="ct_abdomen",
+    )
+
+
+@pytest.fixture
+def sample_report_audit_task() -> Task:
+    """A sample report audit task with planted errors."""
+    return Task(
+        id="CT-AUD-001",
+        name="Report audit: missed pulmonary nodule on chest CT",
+        modality="ct",
+        anatomy="chest",
+        task_type="report_audit",
+        difficulty="advanced",
+        image_ref="ct/openem/pulmonary-nodule.png",
+        prompt_template="report_audit",
+        ground_truth=GroundTruth(
+            primary_diagnosis="pulmonary nodule",
+            differential=["pulmonary nodule", "granuloma", "early malignancy"],
+            key_findings=[
+                KeyFinding(
+                    finding="solitary pulmonary nodule",
+                    location="right upper lobe",
+                    required=True,
+                ),
+            ],
+            severity="moderate",
+            laterality="right",
+            negatives=["pneumothorax"],
+            provided_report=(
+                "CT chest without contrast: The heart is normal in size. "
+                "The lungs are clear bilaterally with no focal consolidation, "
+                "pleural effusion, or pneumothorax. The mediastinum is unremarkable. "
+                "IMPRESSION: Normal chest CT."
+            ),
+            report_errors=[
+                ReportError(
+                    error_type="missed_finding",
+                    claim="The lungs are clear bilaterally",
+                    correction="There is a 12mm solitary pulmonary nodule in the right upper lobe",
+                    severity="critical",
+                ),
+            ],
+        ),
+        pattern_checks=[
+            PatternCheck(
+                name="identifies_missed_nodule",
+                check_type="regex",
+                pattern=r"\b(missed|omitted|not.mentioned|failed.to.identify).*\b(nodule|mass)\b",
+                required=True,
+            ),
+            PatternCheck(
+                name="identifies_error_type",
+                check_type="contains",
+                pattern="missed",
+                required=True,
+            ),
+        ],
+        condition_id="pulmonary-nodule",
+        source_dataset="test",
+        tags=["audit", "thoracic"],
+        window_preset="ct_lung",
+    )

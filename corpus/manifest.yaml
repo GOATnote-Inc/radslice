@@ -37,6 +37,20 @@ sources:
     modalities: [xray]
     notes: 18K CXRs with bounding boxes from 17 radiologists
 
+  multicare:
+    name: MultiCaRe (PubMed Central)
+    url: https://zenodo.org/records/10079370
+    license: CC-BY-4.0
+    modalities: [xray, ct, mri, ultrasound]
+    notes: Open-access clinical case images curated from PubMed Central articles
+
+  idc:
+    name: NCI Imaging Data Commons
+    url: https://portal.imaging.datacommons.cancer.gov/
+    license: CC-BY-4.0
+    modalities: [xray, ct, mri]
+    notes: 85+ TB CC-BY DICOM data via public GCS/AWS buckets. Uses idc-index package when available.
+
 target_counts:
   xray: 80
   ct: 60

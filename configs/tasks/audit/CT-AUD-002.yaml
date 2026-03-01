@@ -1,0 +1,50 @@
+id: CT-AUD-002
+name: "Wrong laterality on pneumothorax"
+modality: xray
+anatomy: chest
+task_type: report_audit
+difficulty: advanced
+image_ref: "xray/audit/pneumothorax-laterality.png"
+prompt_template: report_audit
+condition_id: "pneumothorax"
+source_dataset: synthetic
+tags:
+  - audit
+  - wrong-laterality
+  - pneumothorax
+  - emergency
+ground_truth:
+  primary_diagnosis: "Left-sided pneumothorax"
+  differential:
+    - "Tension pneumothorax"
+    - "Simple pneumothorax"
+    - "Bullous emphysema mimicking pneumothorax"
+  key_findings:
+    - { finding: "Visceral pleural line with absent lung markings peripherally", location: "left hemithorax", required: true }
+    - { finding: "No mediastinal shift", location: "mediastinum", required: false }
+  severity: severe
+  laterality: "left"
+  negatives:
+    - "No mediastinal shift to suggest tension physiology"
+    - "No rib fractures"
+    - "No subcutaneous emphysema"
+  provided_report: >
+    Frontal chest radiograph: There is a visible pleural line along the right apex with
+    absence of lung markings lateral to this line, consistent with a right-sided pneumothorax.
+    The right lung appears partially collapsed. No mediastinal shift is identified.
+    The left lung is clear. Heart size is within normal limits. No acute osseous abnormality.
+    Impression: Right-sided pneumothorax without tension physiology. Clinical correlation and
+    consideration of chest tube placement recommended.
+  report_errors:
+    - error_type: wrong_laterality
+      claim: "Right-sided pneumothorax"
+      correction: "The pneumothorax is left-sided; the pleural line and absent lung markings are in the left hemithorax, not the right"
+      severity: critical
+    - error_type: missed_finding
+      claim: "The left lung is clear"
+      correction: "The left lung is the affected side with visible pleural line and absent peripheral lung markings indicating a left pneumothorax"
+      severity: major
+pattern_checks:
+  - { name: "identifies_laterality_error", check_type: regex, pattern: "(?i)(wrong|incorrect|error).{0,30}(lateral|side|left|right)", required: true }
+  - { name: "correct_side_stated", check_type: regex, pattern: "(?i)left.{0,20}(pneumothorax|PTX|pneumo)", required: true }
+  - { name: "mentions_right_incorrect", check_type: regex, pattern: "(?i)(right).{0,30}(incorrect|wrong|error|actually|should)", required: false }

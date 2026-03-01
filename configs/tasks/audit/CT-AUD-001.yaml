@@ -1,0 +1,46 @@
+id: CT-AUD-001
+name: "Missed pulmonary nodule on chest CT"
+modality: ct
+anatomy: chest
+task_type: report_audit
+difficulty: advanced
+image_ref: "ct/audit/pulmonary-nodule.png"
+prompt_template: report_audit
+condition_id: "solitary-pulmonary-nodule"
+source_dataset: synthetic
+tags:
+  - audit
+  - missed-finding
+  - pulmonary
+  - oncology
+ground_truth:
+  primary_diagnosis: "Solitary pulmonary nodule in the right upper lobe"
+  differential:
+    - "Primary lung malignancy"
+    - "Pulmonary metastasis"
+    - "Granuloma"
+    - "Hamartoma"
+  key_findings:
+    - { finding: "Spiculated pulmonary nodule measuring 12 mm", location: "right upper lobe", required: true }
+    - { finding: "No mediastinal lymphadenopathy", location: "mediastinum", required: false }
+  severity: moderate
+  laterality: "right"
+  negatives:
+    - "No pleural effusion"
+    - "No mediastinal lymphadenopathy"
+    - "No osseous lesions"
+  provided_report: >
+    CT chest with contrast: The lungs are clear bilaterally with no focal consolidation or
+    ground-glass opacity. The airways are patent to the subsegmental level. No pleural effusion
+    is identified. The mediastinal structures are unremarkable without lymphadenopathy. The
+    visualized osseous structures are intact. Heart size is normal. Impression: Normal chest CT
+    with no acute cardiopulmonary findings.
+  report_errors:
+    - error_type: missed_finding
+      claim: "The lungs are clear bilaterally with no focal consolidation"
+      correction: "A 12 mm spiculated nodule is present in the right upper lobe and should have been reported with recommendation for follow-up or tissue sampling"
+      severity: critical
+pattern_checks:
+  - { name: "identifies_nodule", check_type: regex, pattern: "(?i)(nodule|mass|lesion)\\s.{0,40}(right upper lobe|RUL|right\\s+upper)", required: true }
+  - { name: "identifies_missed_error", check_type: regex, pattern: "(?i)(missed|omitted|not\\s+reported|failed\\s+to\\s+(mention|identify|report))", required: true }
+  - { name: "recommends_followup", check_type: contains, pattern: "follow", required: false }

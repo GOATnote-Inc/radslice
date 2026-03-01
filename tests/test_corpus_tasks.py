@@ -107,5 +107,9 @@ class TestCorpusTasks:
 
     def test_reference_solutions_present(self):
         tasks = load_tasks_from_dir(TASKS_DIR)
+        # report_audit and incidental_detection tasks use ground truth structures
+        # (report_errors, incidental_findings) instead of reference_solution
+        exempt_types = {"report_audit", "incidental_detection"}
         for task in tasks:
-            assert task.reference_solution, f"{task.id} missing reference_solution"
+            if task.task_type not in exempt_types:
+                assert task.reference_solution, f"{task.id} missing reference_solution"

@@ -1,0 +1,51 @@
+id: CT-AUD-005
+name: "Missed cardiomegaly on chest X-ray"
+modality: xray
+anatomy: chest
+task_type: report_audit
+difficulty: advanced
+image_ref: "xray/audit/cardiomegaly.png"
+prompt_template: report_audit
+condition_id: "cardiomegaly"
+source_dataset: synthetic
+tags:
+  - audit
+  - missed-finding
+  - cardiac
+  - cardiomegaly
+ground_truth:
+  primary_diagnosis: "Cardiomegaly"
+  differential:
+    - "Dilated cardiomyopathy"
+    - "Pericardial effusion"
+    - "Valvular heart disease"
+    - "Congestive heart failure"
+  key_findings:
+    - { finding: "Cardiothoracic ratio greater than 0.5", location: "cardiac silhouette", required: true }
+    - { finding: "Enlarged cardiac silhouette", location: "mediastinum", required: true }
+    - { finding: "Cephalization of pulmonary vasculature", location: "bilateral upper lobes", required: false }
+  severity: moderate
+  laterality: null
+  negatives:
+    - "No focal consolidation"
+    - "No pneumothorax"
+    - "No acute rib fractures"
+  provided_report: >
+    PA chest radiograph: The lungs are clear bilaterally without focal consolidation,
+    pleural effusion, or pneumothorax. The heart size is within normal limits. The
+    mediastinal contours are unremarkable. There is mild upper lobe pulmonary venous
+    distension which may be positional. No acute osseous abnormality is seen. Impression:
+    No acute cardiopulmonary disease.
+  report_errors:
+    - error_type: missed_finding
+      claim: "The heart size is within normal limits"
+      correction: "The cardiac silhouette is enlarged with a cardiothoracic ratio exceeding 0.5, consistent with cardiomegaly. This was not reported"
+      severity: critical
+    - error_type: severity_underestimate
+      claim: "Mild upper lobe pulmonary venous distension which may be positional"
+      correction: "Upper lobe pulmonary venous cephalization in the setting of cardiomegaly is more likely due to elevated left atrial pressure than patient positioning, and should prompt consideration of congestive heart failure"
+      severity: major
+pattern_checks:
+  - { name: "identifies_cardiomegaly", check_type: regex, pattern: "(?i)(cardiomegaly|enlarged\\s+(heart|cardiac)|cardiothoracic\\s+ratio.{0,20}(0\\.5|50\\s*%|exceed|above|greater))", required: true }
+  - { name: "identifies_missed_error", check_type: regex, pattern: "(?i)(missed|omitted|not\\s+reported|incorrectly\\s+(stated|called|described).{0,20}normal)", required: true }
+  - { name: "mentions_ctr", check_type: contains, pattern: "cardiothoracic", required: false }
