@@ -1,4 +1,4 @@
-# RadSlice — Multimodal Radiology LLM Evaluation Benchmark
+# 🩻🍕RadSlice — Multimodal Radiology LLM Evaluation Benchmark
 
 **Document Type:** Technical Specification
 **Document ID:** RADSLICE-TSD-001
