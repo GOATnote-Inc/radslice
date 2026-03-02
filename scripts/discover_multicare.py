@@ -33,7 +33,7 @@ logger = logging.getLogger("discover_multicare")
 
 # Europe PMC REST API — no auth required
 EUROPEPMC_SEARCH = "https://www.ebi.ac.uk/europepmc/webservices/rest/search"
-EUROPEPMC_FULLTEXT = "https://www.ebi.ac.uk/europepmc/webservices/rest/{source}/{id}/fullTextXML"
+EUROPEPMC_FULLTEXT = "https://www.ebi.ac.uk/europepmc/webservices/rest/{id}/fullTextXML"
 
 # Rate limit: 10 req/sec
 RATE_LIMIT_DELAY = 0.12  # seconds between requests
@@ -83,7 +83,7 @@ def search_europepmc(
 
 def fetch_fulltext_xml(pmcid: str) -> ET.Element | None:
     """Fetch full-text XML for a PMC article."""
-    url = EUROPEPMC_FULLTEXT.format(source="PMC", id=pmcid)
+    url = EUROPEPMC_FULLTEXT.format(id=pmcid)
     logger.debug("Fetching full text: %s", url)
 
     try:
