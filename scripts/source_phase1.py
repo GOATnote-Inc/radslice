@@ -46,6 +46,65 @@ logger = logging.getLogger("source_phase1")
 # Default split when --modality all
 MODALITY_TARGETS = {"xray": 40, "ct": 60}
 
+# Tier 1: conditions where X-ray is the primary or confirmatory diagnostic modality.
+# These have key_findings that describe radiographically visible pathology.
+# Tier 2 conditions (ECG/CT/echo/labs primary) are skipped for X-ray sourcing.
+XRAY_TIER1_CONDITIONS = {
+    "active-shooter-response",
+    "acute-appendicitis",
+    "acute-asthma-exacerbation",
+    "acute-cholecystitis",
+    "acute-heart-failure",
+    "acute-low-back-pain-red-flags",
+    "air-embolism",
+    "aortic-dissection",
+    "aortic-transection",
+    "blast-injury",
+    "bowel-obstruction",
+    "bronchiolitis",
+    "cardiac-tamponade",
+    "caustic-ingestion",
+    "compartment-syndrome",
+    "copd-exacerbation",
+    "croup",
+    "crush-syndrome-mci",
+    "dengue-hemorrhagic-fever",
+    "epiglottitis",
+    "esophageal-foreign-body-impaction",
+    "esophageal-perforation",
+    "fat-embolism-syndrome",
+    "foreign-body-aspiration",
+    "fourniers-gangrene",
+    "globe-rupture",
+    "hemorrhagic-shock",
+    "high-altitude-illness",
+    "hip-fracture",
+    "intussusception",
+    "knee-osteoarthritis",
+    "major-joint-dislocation",
+    "massive-hemoptysis",
+    "mesenteric-ischemia",
+    "necrotizing-enterocolitis",
+    "necrotizing-fasciitis",
+    "neonatal-emergencies",
+    "neutropenic-fever",
+    "non-accidental-trauma",
+    "open-fracture",
+    "pelvic-fracture",
+    "penetrating-chest-trauma",
+    "pneumonia",
+    "retropharyngeal-abscess",
+    "sepsis",
+    "sickle-cell-crisis",
+    "spinal-cord-compression",
+    "spinal-cord-injury",
+    "spontaneous-pneumothorax",
+    "submersion-injury",
+    "tension-pneumothorax",
+    "tracheal-disruption",
+    "urolithiasis",
+}  # 53 of 72 X-ray conditions
+
 
 def load_image_sources(path: str = "corpus/image_sources.yaml") -> dict:
     p = Path(path)
@@ -199,10 +258,28 @@ def source_modality(
     else:
         skip_cids = get_sourced_condition_ids(sources)
 
-    unsourced = [(cid, t) for cid, t in seen.items() if cid not in skip_cids]
+    # For X-ray, only source Tier 1 conditions (X-ray is diagnostic)
+    tier_filter = None
+    if modality == "xray":
+        tier_filter = XRAY_TIER1_CONDITIONS
+        tier2_count = sum(
+            1 for cid in seen if cid not in tier_filter and cid not in skip_cids
+        )
+        if tier2_count:
+            logger.info(
+                "Skipping %d Tier 2 conditions (X-ray not primary modality)",
+                tier2_count,
+            )
+
+    unsourced = [
+        (cid, t)
+        for cid, t in seen.items()
+        if cid not in skip_cids and (tier_filter is None or cid in tier_filter)
+    ]
 
     logger.info(
-        "%s: %d tasks, %d unique conditions, %d already sourced, %d to source (limit %d)",
+        "%s: %d tasks, %d unique conditions, %d already sourced, "
+        "%d to source (limit %d)",
         modality,
         len(tasks),
         len(seen),
