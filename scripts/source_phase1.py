@@ -380,13 +380,15 @@ def source_modality(
             symlink_path = None
             if image_ref and image_ref != ref:
                 symlink_path = Path(images_dir) / image_ref
-                if not symlink_path.exists():
-                    symlink_path.parent.mkdir(parents=True, exist_ok=True)
-                    try:
-                        symlink_path.symlink_to(dest.resolve())
-                        symlink_created = True
-                    except OSError as e:
-                        logger.warning("  Symlink failed: %s", e)
+                symlink_path.parent.mkdir(parents=True, exist_ok=True)
+                # Remove stale symlink (broken or pointing to wrong image)
+                if symlink_path.is_symlink() or symlink_path.exists():
+                    symlink_path.unlink()
+                try:
+                    symlink_path.symlink_to(dest.resolve())
+                    symlink_created = True
+                except OSError as e:
+                    logger.warning("  Symlink failed: %s", e)
 
             # Validation
             if skip_validation:
