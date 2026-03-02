@@ -1,0 +1,41 @@
+# rc0.5 evaluation — GPT-5.2, judged by Opus 4.6
+# 27 pathology-validated tasks (14 X-ray + 13 CT) from Phase 1 sourcing
+tasks_dir: configs/tasks
+n_trials: 3
+max_concurrency: 5
+
+task_ids:
+  # X-ray (14 tasks)
+  - XRAY-007   # pericarditis-myocarditis
+  - XRAY-014   # fat-embolism-syndrome
+  - XRAY-017   # penetrating-chest-trauma
+  - XRAY-023   # massive-hemoptysis
+  - XRAY-024   # pneumonia
+  - XRAY-025   # spontaneous-pneumothorax
+  - XRAY-027   # tracheal-disruption
+  - XRAY-031   # esophageal-foreign-body-impaction
+  - XRAY-039   # major-joint-dislocation
+  - XRAY-045   # globe-rupture
+  - XRAY-052   # non-accidental-trauma
+  - XRAY-055   # submersion-injury
+  - XRAY-067   # fourniers-gangrene
+  - XRAY-068   # high-altitude-illness
+  # CT (13 tasks)
+  - CT-026     # epiglottitis
+  - CT-027     # foreign-body-aspiration
+  - CT-048     # open-fracture
+  - CT-058     # urolithiasis
+  - CT-061     # retrobulbar-hemorrhage
+  - CT-065     # ludwigs-angina
+  - CT-068     # peritonsillar-abscess
+  - CT-069     # retropharyngeal-abscess
+  - CT-070     # spinal-epidural-abscess
+  - CT-085     # lateral-canthotomy
+  - CT-091     # herpes-zoster-ophthalmicus
+  - CT-097     # acute-angle-closure-glaucoma
+  - CT-106     # neonatal-emergencies
+
+models:
+  - name: gpt-5.2
+    provider: openai
+    model_id: gpt-5.2

@@ -307,7 +307,7 @@ def source_modality(
         logger.info("[%d/%d] Discovering images for: %s", sourced + 1, limit, cid)
 
         try:
-            candidates = discover_candidates(search_term, modality, top=3)
+            candidates = discover_candidates(search_term, modality, top=5)
         except Exception as e:
             logger.error("Discovery failed for %s: %s", cid, e)
             failed += 1
