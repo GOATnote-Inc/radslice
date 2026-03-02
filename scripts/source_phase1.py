@@ -297,6 +297,20 @@ def source_modality(
             )
             append_provenance(prov)
 
+            # Create symlink so validate_single can find the image
+            # at the task's image_ref path
+            symlink_created = False
+            symlink_path = None
+            if image_ref and image_ref != ref:
+                symlink_path = Path(images_dir) / image_ref
+                if not symlink_path.exists():
+                    symlink_path.parent.mkdir(parents=True, exist_ok=True)
+                    try:
+                        symlink_path.symlink_to(dest.resolve())
+                        symlink_created = True
+                    except OSError as e:
+                        logger.warning("  Symlink failed: %s", e)
+
             # Validation
             if skip_validation:
                 validation_result = "skipped"
@@ -332,18 +346,6 @@ def source_modality(
                 entry_data["validation_status"] = vstatus
                 entry_data["pathology_confirmed"] = not skip_validation
                 images[ref] = entry_data
-
-                # Also create symlink from task image_ref if different
-                if image_ref and image_ref != ref:
-                    symlink_path = Path(images_dir) / image_ref
-                    if not symlink_path.exists():
-                        symlink_path.parent.mkdir(parents=True, exist_ok=True)
-                        try:
-                            symlink_path.symlink_to(dest.resolve())
-                            logger.info("  Created symlink: %s → %s", image_ref, ref)
-                        except OSError as e:
-                            logger.warning("  Symlink failed: %s", e)
-
                 save_image_sources(sources, sources_path)
                 sourced += 1
                 image_sourced = True
@@ -370,8 +372,10 @@ def source_modality(
                     "  FAIL — validation=%s, trying next candidate",
                     validation_result,
                 )
-                # Clean up failed download
+                # Clean up failed download and symlink
                 dest.unlink(missing_ok=True)
+                if symlink_created and symlink_path:
+                    symlink_path.unlink(missing_ok=True)
                 time.sleep(RATE_LIMIT_DELAY)
 
         if not image_sourced:
