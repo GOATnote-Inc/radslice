@@ -1,0 +1,17 @@
+# 1.0.0-rc evaluation matrix
+# Runs all sourced+validated tasks x 2 models x 3 trials.
+# Intended for use after sourcing ~100 pathology-matched images.
+tasks_dir: configs/tasks
+n_trials: 3
+max_concurrency: 5
+
+# Filter to modalities with sourced images (Phase 1: xray + ct)
+modality_filter: null  # Set to "xray" or "ct" to focus
+
+models:
+  - name: gpt-5.2
+    provider: openai
+    model_id: gpt-5.2
+  - name: opus-4-6
+    provider: anthropic
+    model_id: claude-opus-4-6

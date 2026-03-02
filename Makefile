@@ -1,4 +1,4 @@
-.PHONY: test lint smoke format install clean audit calibrate
+.PHONY: test lint smoke format install clean audit calibrate sourcing-progress discover validate-images
 
 install:
 	pip install -e ".[dev]"
@@ -22,6 +22,16 @@ audit:
 
 calibrate:
 	radslice calibration --results-dirs $$(ls -d results/eval-* 2>/dev/null || echo "")
+
+sourcing-progress:
+	python scripts/sourcing_progress.py
+
+discover:
+	python scripts/discover_multicare.py --batch configs/tasks/xray/ --top 3
+	python scripts/discover_multicare.py --batch configs/tasks/ct/ --top 3
+
+validate-images:
+	python scripts/validate_pathology.py --all --model gpt-5.2 --update-sources
 
 clean:
 	rm -rf build/ dist/ *.egg-info src/*.egg-info

@@ -292,10 +292,149 @@ def corpus_validate(tasks_dir):
 @corpus.command("download")
 @click.option("--manifest", default="corpus/manifest.yaml", help="Manifest path")
 @click.option("--output-dir", default="corpus/images", help="Image output directory")
-def corpus_download(manifest, output_dir):
+@click.option("--source", help="Filter to one source (e.g., multicare, idc)")
+@click.option("--dry-run", is_flag=True, help="Show what would be downloaded")
+def corpus_download(manifest, output_dir, source, dry_run):
     """Download corpus images from sources."""
-    click.echo(f"Downloading images from {manifest} to {output_dir}")
-    click.echo("(Not yet implemented — requires dataset-specific downloaders)")
+    from corpus.download import download_corpus
+
+    sources_filter = [source] if source else None
+    stats = download_corpus(
+        manifest_path=manifest,
+        output_dir=output_dir,
+        sources=sources_filter,
+        dry_run=dry_run,
+    )
+    click.echo(f"Downloaded: {stats['downloaded']}, Skipped: {stats['skipped']}, "
+               f"Failed: {stats['failed']}")
+
+
+@corpus.command("discover")
+@click.option("--source", type=click.Choice(["multicare", "idc"]), required=True)
+@click.option("--condition", help="Condition ID (e.g., pneumonia)")
+@click.option("--modality", type=click.Choice(["xray", "ct", "mri", "ultrasound"]))
+@click.option("--batch", type=click.Path(exists=True), help="Batch: task YAML directory")
+@click.option("--collection", help="IDC collection ID (for --source idc)")
+@click.option("--top", default=5, type=int, help="Max candidates per condition")
+@click.option("--append", is_flag=True, help="Append results to image_sources.yaml")
+@click.option("--sources-path", default="corpus/image_sources.yaml")
+def corpus_discover(source, condition, modality, batch, collection, top, append, sources_path):
+    """Discover condition-matched images from PMC or IDC."""
+    if source == "multicare":
+        from scripts.discover_multicare import (
+            append_to_sources,
+            batch_discover,
+            discover_candidates,
+            format_yaml_entry,
+        )
+
+        if batch:
+            candidates = batch_discover(batch, modality, top)
+        elif condition:
+            raw = discover_candidates(condition, modality, top)
+            candidates = [
+                format_yaml_entry(c, condition.replace(" ", "-"), modality or "unknown")
+                for c in raw
+            ]
+        else:
+            raise click.UsageError("Provide --condition or --batch for multicare")
+
+        click.echo(f"Found {len(candidates)} candidate(s)")
+        for c in candidates:
+            click.echo(f"  {c['image_ref']}: {c['entry'].get('notes', '')[:80]}")
+
+        if append and candidates:
+            added = append_to_sources(candidates, sources_path)
+            click.echo(f"Added {added} entries to {sources_path}")
+
+    elif source == "idc":
+        from scripts.discover_idc import (
+            append_to_sources,
+            discover_for_collection,
+            format_yaml_entry,
+            get_idc_client,
+            query_series,
+        )
+
+        client = get_idc_client()
+
+        if collection:
+            candidates = discover_for_collection(client, collection, top)
+        elif condition:
+            results = query_series(
+                client, modality=modality and modality.upper(),
+                collection=collection, top=top,
+            )
+            candidates = [format_yaml_entry(s, condition) for s in results]
+        else:
+            raise click.UsageError("Provide --condition or --collection for idc")
+
+        click.echo(f"Found {len(candidates)} candidate(s)")
+        for c in candidates:
+            click.echo(f"  {c['image_ref']}")
+
+        if append and candidates:
+            added = append_to_sources(candidates, sources_path)
+            click.echo(f"Added {added} entries to {sources_path}")
+
+
+@corpus.command("validate-pathology")
+@click.option("--task-id", help="Validate a single task")
+@click.option("--all", "validate_all", is_flag=True, help="Validate all downloaded images")
+@click.option("--modality", type=click.Choice(["xray", "ct", "mri", "ultrasound"]))
+@click.option("--model", default="gpt-5.2", help="Vision LLM for validation")
+@click.option("--dry-run", is_flag=True, help="Show what would be validated")
+@click.option("--tasks-dir", default="configs/tasks")
+@click.option("--images-dir", default="corpus/images")
+@click.option("--sources-path", default="corpus/image_sources.yaml")
+@click.option("--update/--no-update", default=True, help="Update image_sources.yaml")
+def corpus_validate_pathology(
+    task_id, validate_all, modality, model, dry_run, tasks_dir, images_dir, sources_path, update
+):
+    """Validate pathology presence in downloaded images using a vision LLM."""
+    from scripts.validate_pathology import (
+        update_sources_from_results,
+        validate_batch,
+        validate_single,
+    )
+
+    if not task_id and not validate_all:
+        raise click.UsageError("Provide --task-id or --all")
+
+    if task_id:
+        result = asyncio.run(
+            validate_single(task_id, tasks_dir, images_dir, model, dry_run)
+        )
+        results = [result]
+    else:
+        results = asyncio.run(
+            validate_batch(tasks_dir, images_dir, model, modality, dry_run, sources_path)
+        )
+
+    passed = sum(1 for r in results if r.get("overall") == "PASS")
+    failed = sum(1 for r in results if r.get("overall") == "FAIL")
+    click.echo(f"Results: {passed} PASS, {failed} FAIL, {len(results)} total")
+
+    if update and not dry_run:
+        updated = update_sources_from_results(results, sources_path)
+        click.echo(f"Updated {updated} entries in {sources_path}")
+
+
+@corpus.command("progress")
+@click.option("--sources", default="corpus/image_sources.yaml")
+@click.option("--tasks-dir", default="configs/tasks")
+@click.option("--images-dir", default="corpus/images")
+@click.option("--format", "fmt", type=click.Choice(["text", "json"]), default="text")
+def corpus_progress(sources, tasks_dir, images_dir, fmt):
+    """Show sourcing coverage report."""
+    from scripts.sourcing_progress import compute_progress, format_text
+
+    progress = compute_progress(sources, tasks_dir, images_dir)
+
+    if fmt == "json":
+        click.echo(json.dumps(progress, indent=2))
+    else:
+        click.echo(format_text(progress))
 
 
 # --- saturation ---

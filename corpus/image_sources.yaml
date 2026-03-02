@@ -1,30 +1,48 @@
-# Per-image source mapping for RadSlice corpus.
-# Each key is an image_ref (relative path under corpus/images/).
+# RadSlice Image Sources v2.0
+# Per-image source mapping with validation tracking.
+# Each key under `images` is an image_ref (relative path under corpus/images/).
 # After download, verify checksums with `corpus/download.py`.
-#
-# For the smoke test, 7 images across 4 modalities are needed.
-# Primary source: OmniMedVQA (HuggingFace, open access).
+
+schema_version: "2.0"
+
+metadata:
+  total_tasks: 330
+  total_sourced: 7
+  total_validated: 0
+  last_updated: "2026-03-02"
 
 images:
-  # --- X-ray ---
+  # --- X-ray (OmniMedVQA) ---
   xray/openem/acute-heart-failure.png:
     source: omnimedvqa-open
     source_id: "omnimedvqa_chestxray_chf_001"
     original_format: png
+    condition_id: "acute-heart-failure"
+    task_ids: ["XRAY-001"]
+    validation_status: downloaded
+    pathology_confirmed: false
     notes: "Chest X-ray showing cardiomegaly and bilateral pulmonary edema"
 
   xray/openem/pneumonia.png:
     source: omnimedvqa-open
     source_id: "omnimedvqa_chestxray_pneumonia_001"
     original_format: png
+    condition_id: "pneumonia"
+    task_ids: ["XRAY-002"]
+    validation_status: downloaded
+    pathology_confirmed: false
     notes: "Chest X-ray with focal consolidation"
 
-  # --- CT ---
+  # --- CT (OmniMedVQA) ---
   ct/openem/acute-limb-ischemia.png:
     source: omnimedvqa-open
     source_id: "omnimedvqa_ct_ali_001"
     original_format: png
     window_preset: ct_soft_tissue
+    condition_id: "acute-limb-ischemia"
+    task_ids: ["CT-001"]
+    validation_status: downloaded
+    pathology_confirmed: false
     notes: "CTA lower extremity showing arterial occlusion"
 
   ct/openem/pulmonary-embolism.png:
@@ -32,65 +50,103 @@ images:
     source_id: "omnimedvqa_ct_pe_001"
     original_format: png
     window_preset: ct_soft_tissue
+    condition_id: "pulmonary-embolism"
+    task_ids: ["CT-002"]
+    validation_status: downloaded
+    pathology_confirmed: false
     notes: "CTPA showing filling defect in pulmonary artery"
 
-  # --- MRI ---
+  # --- MRI (OmniMedVQA) ---
   mri/openem/aortic-dissection.png:
     source: omnimedvqa-open
     source_id: "omnimedvqa_mri_aortic_001"
     original_format: png
+    condition_id: "aortic-dissection"
+    task_ids: ["MRI-001"]
+    validation_status: downloaded
+    pathology_confirmed: false
     notes: "MRI showing intimal flap in aorta"
 
-  # --- Ultrasound ---
+  # --- Ultrasound (OmniMedVQA) ---
   ultrasound/openem/acute-heart-failure.png:
     source: omnimedvqa-open
     source_id: "omnimedvqa_us_echo_chf_001"
     original_format: png
+    condition_id: "acute-heart-failure"
+    task_ids: ["US-001"]
+    validation_status: downloaded
+    pathology_confirmed: false
     notes: "Echocardiogram showing reduced ejection fraction"
 
   ultrasound/openem/ectopic-pregnancy.png:
     source: omnimedvqa-open
     source_id: "omnimedvqa_us_pelvic_ectopic_001"
     original_format: png
+    condition_id: "ectopic-pregnancy"
+    task_ids: ["US-002"]
+    validation_status: downloaded
+    pathology_confirmed: false
     notes: "Pelvic ultrasound showing adnexal mass with empty uterus"
 
   # --- MultiCaRe (PubMed Central open-access case images) ---
+  # NOTE: PMC source_ids below are TODOs — placeholder IDs, not real articles.
+  # Run `scripts/discover_multicare.py` to find real PMC figure URLs.
   ct/multicare/hepatic-steatosis.png:
     source: multicare
-    source_id: "PMC7890123_fig2"
+    source_id: "TODO"  # was PMC7890123_fig2 — placeholder
     original_format: png
     license: CC-BY-4.0
+    condition_id: "hepatic-steatosis"
+    task_ids: ["CT-INC-001"]
+    validation_status: unsourced
+    pathology_confirmed: false
     notes: "Abdominal CT showing diffuse hepatic steatosis (Hounsfield attenuation < 40 HU)"
 
   ct/multicare/pulmonary-nodule.png:
     source: multicare
-    source_id: "PMC8901234_fig1"
+    source_id: "TODO"  # was PMC8901234_fig1 — placeholder
     original_format: png
     license: CC-BY-4.0
     window_preset: ct_lung
+    condition_id: "pulmonary-nodule"
+    task_ids: ["CT-INC-002"]
+    validation_status: unsourced
+    pathology_confirmed: false
     notes: "Chest CT showing solitary pulmonary nodule in RUL"
 
   ct/multicare/renal-cyst.png:
     source: multicare
-    source_id: "PMC7123456_fig3"
+    source_id: "TODO"  # was PMC7123456_fig3 — placeholder
     original_format: png
     license: CC-BY-4.0
     window_preset: ct_abdomen
+    condition_id: "renal-cyst"
+    task_ids: ["CT-INC-003"]
+    validation_status: unsourced
+    pathology_confirmed: false
     notes: "Abdominal CT showing simple renal cyst, Bosniak I"
 
   ct/multicare/adrenal-adenoma.png:
     source: multicare
-    source_id: "PMC8234567_fig1"
+    source_id: "TODO"  # was PMC8234567_fig1 — placeholder
     original_format: png
     license: CC-BY-4.0
     window_preset: ct_abdomen
+    condition_id: "adrenal-adenoma"
+    task_ids: ["CT-INC-004"]
+    validation_status: unsourced
+    pathology_confirmed: false
     notes: "Abdominal CT showing adrenal adenoma (< 10 HU on unenhanced CT)"
 
   xray/multicare/cardiomegaly.png:
     source: multicare
-    source_id: "PMC9345678_fig1"
+    source_id: "TODO"  # was PMC9345678_fig1 — placeholder
     original_format: png
     license: CC-BY-4.0
+    condition_id: "acute-heart-failure"
+    task_ids: ["XRAY-001"]
+    validation_status: unsourced
+    pathology_confirmed: false
     notes: "PA chest radiograph with cardiomegaly (CTR > 0.5)"
 
   # --- NCI Imaging Data Commons (IDC) DICOM ---
@@ -101,6 +157,10 @@ images:
     original_format: dicom
     license: CC-BY-4.0
     window_preset: ct_lung
+    condition_id: "pulmonary-nodule"
+    task_ids: ["CT-INC-002"]
+    validation_status: downloaded
+    pathology_confirmed: false
     notes: "LIDC-IDRI chest CT with annotated lung nodule"
 
   ct/idc/abdomen-ct-liver.dcm:
@@ -110,6 +170,10 @@ images:
     original_format: dicom
     license: CC-BY-4.0
     window_preset: ct_liver
+    condition_id: "hepatic-steatosis"
+    task_ids: ["CT-INC-001"]
+    validation_status: downloaded
+    pathology_confirmed: false
     notes: "TCGA-LIHC abdominal CT with hepatic lesion"
 
   xray/idc/chest-xray-pneumonia.dcm:
@@ -118,6 +182,10 @@ images:
     series_uid: "1.3.6.1.4.1.14519.5.2.1.7009.2401.190297785975799021788614534439"
     original_format: dicom
     license: CC-BY-4.0
+    condition_id: "pneumonia"
+    task_ids: ["XRAY-002"]
+    validation_status: downloaded
+    pathology_confirmed: false
     notes: "NLST chest X-ray"
 
   ct/idc/head-ct-stroke.dcm:
@@ -127,6 +195,10 @@ images:
     original_format: dicom
     license: CC-BY-4.0
     window_preset: ct_brain
+    condition_id: "hemorrhagic-stroke"
+    task_ids: ["CT-003"]
+    validation_status: downloaded
+    pathology_confirmed: false
     notes: "Head CT for hemorrhagic stroke evaluation"
 
   ct/idc/chest-ct-pe.dcm:
@@ -136,4 +208,8 @@ images:
     original_format: dicom
     license: CC-BY-4.0
     window_preset: ct_soft_tissue
+    condition_id: "pulmonary-embolism"
+    task_ids: ["CT-002"]
+    validation_status: downloaded
+    pathology_confirmed: false
     notes: "CTPA for pulmonary embolism evaluation"

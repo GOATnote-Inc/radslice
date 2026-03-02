@@ -52,11 +52,27 @@ sources:
     notes: 85+ TB CC-BY DICOM data via public GCS/AWS buckets. Uses idc-index package when available.
 
 target_counts:
-  xray: 80
-  ct: 60
-  mri: 40
-  ultrasound: 20
-  total: 200
+  phase_1:
+    description: "1.0.0-rc gate — X-ray + CT focus"
+    xray: 40
+    ct: 60
+    mri: 0
+    ultrasound: 0
+    total: 100
+  phase_2:
+    description: "1.0.0 — all modalities"
+    xray: 60
+    ct: 80
+    mri: 35
+    ultrasound: 25
+    total: 200
+  full:
+    description: "Full corpus coverage"
+    xray: 72
+    ct: 106
+    mri: 53
+    ultrasound: 89
+    total: 330
 
 balance:
   xray: { positive: 50, normal: 15, confusion_pair: 15 }
