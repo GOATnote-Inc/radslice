@@ -20,6 +20,7 @@ from __future__ import annotations
 import argparse
 import json
 import logging
+import re
 import sys
 import time
 import xml.etree.ElementTree as ET
@@ -35,8 +36,9 @@ logger = logging.getLogger("discover_multicare")
 EUROPEPMC_SEARCH = "https://www.ebi.ac.uk/europepmc/webservices/rest/search"
 EUROPEPMC_FULLTEXT = "https://www.ebi.ac.uk/europepmc/webservices/rest/{id}/fullTextXML"
 
-# Rate limit: 10 req/sec
-RATE_LIMIT_DELAY = 0.12  # seconds between requests
+# Rate limits
+RATE_LIMIT_DELAY = 0.12  # seconds between Europe PMC requests
+NCBI_RATE_LIMIT = 0.5  # seconds between NCBI fetches (stricter)
 
 MODALITY_KEYWORDS = {
     "xray": ["radiograph", "chest x-ray", "x-ray", "plain film", "CXR"],
@@ -44,6 +46,112 @@ MODALITY_KEYWORDS = {
     "mri": ["magnetic resonance", "MRI", "MR image"],
     "ultrasound": ["ultrasound", "sonography", "echocardiogram", "FAST exam"],
 }
+
+# Caption scoring terms
+_REJECT_TERMS = [
+    "flowchart", "flow chart", "diagram", "schematic",
+    "bar chart", "pie chart", "bar graph", "line graph",
+    "timeline", "prisma", "forest plot",
+    "kaplan-meier", "algorithm", "decision tree",
+]
+_LOW_TERMS = [
+    "histology", "pathology specimen", "gross specimen", "clinical photograph",
+    "ecg", "electrocardiogram", "laboratory", "fundus photo", "slit-lamp",
+    "dermatoscopy",
+]
+_COMPOSITE_TERMS = ["panels a", "serial", "composite", "comparison"]
+_COMPOSITE_RE = re.compile(r"\([a-f]\)|[a-f]-[a-f]")
+_IMAGING_TERMS = [
+    "radiograph", "chest x-ray", "x-ray", "cxr", "ct scan",
+    "computed tomography", "ctpa", "cta", "mri", "ultrasound",
+    "sonography", "echocardiogram",
+]
+
+
+def resolve_cdn_url(pmcid: str, fig_id: str, href: str) -> str | None:
+    """Resolve a PMC figure to its NCBI CDN URL.
+
+    Europe PMC figure URLs return HTML stubs. NCBI CDN URLs serve actual image
+    bytes. Tries the figure page first, then falls back to the article page.
+    """
+    # Try figure page first
+    fig_url = f"https://www.ncbi.nlm.nih.gov/pmc/articles/{pmcid}/figure/{fig_id}/"
+    cdn_url = _fetch_cdn_from_page(fig_url, href)
+    if cdn_url:
+        return cdn_url
+
+    time.sleep(NCBI_RATE_LIMIT)
+
+    # Fallback: search article page for the href filename
+    article_url = f"https://www.ncbi.nlm.nih.gov/pmc/articles/{pmcid}/"
+    cdn_url = _fetch_cdn_from_page(article_url, href)
+    return cdn_url
+
+
+def _fetch_cdn_from_page(page_url: str, href: str) -> str | None:
+    """Fetch a PMC page and extract the CDN URL for the given figure href."""
+    try:
+        req = Request(page_url, headers={"User-Agent": "RadSlice/1.0 (image-sourcing)"})
+        with urlopen(req, timeout=30) as resp:
+            html = resp.read().decode("utf-8", errors="replace")
+    except Exception as e:
+        logger.debug("Failed to fetch %s: %s", page_url, e)
+        return None
+
+    # Look for CDN blob URL
+    match = re.search(r'src="(https://cdn\.ncbi\.nlm\.nih\.gov/pmc/blobs/[^"]+)"', html)
+    if match:
+        return match.group(1)
+
+    # Fallback: look for the href filename in any img src
+    if href:
+        filename = href.rsplit("/", 1)[-1]
+        pattern = rf'src="(https://[^"]*{re.escape(filename)}[^"]*)"'
+        match = re.search(pattern, html)
+        if match:
+            return match.group(1)
+
+    return None
+
+
+def score_caption(caption: str, condition_name: str, modality: str) -> float:
+    """Score a figure caption for relevance to the target condition and modality.
+
+    Returns 0.0–1.0. Higher is better. 0.0 means definite reject.
+    """
+    cap = caption.lower()
+
+    # Reject non-imaging content
+    for term in _REJECT_TERMS:
+        if term in cap:
+            return 0.0
+
+    score = 0.5
+
+    # Low-value content penalty
+    for term in _LOW_TERMS:
+        if term in cap:
+            score = min(score, 0.2)
+            break
+
+    # Composite image penalty
+    is_composite = any(term in cap for term in _COMPOSITE_TERMS) or bool(
+        _COMPOSITE_RE.search(cap)
+    )
+    if is_composite:
+        score -= 0.2
+
+    # Imaging modality boost
+    if any(term in cap for term in _IMAGING_TERMS):
+        score += 0.4
+
+    # Condition name match boost
+    condition_words = re.split(r"[-\s]+", condition_name.lower())
+    matching = sum(1 for w in condition_words if len(w) > 2 and w in cap)
+    if matching > 0:
+        score += 0.3
+
+    return max(0.0, min(1.0, score))
 
 
 def search_europepmc(
@@ -120,11 +228,16 @@ def extract_figures(root: ET.Element, pmcid: str) -> list[dict]:
         if graphic is not None:
             href = graphic.get("{http://www.w3.org/1999/xlink}href", "")
 
-        # Build PMC figure URL
+        # Build PMC figure URL (Europe PMC as fallback)
         url = ""
+        cdn_url = None
         if href:
-            # PMC figure URLs follow this pattern
             url = f"https://europepmc.org/articles/{pmcid}/bin/{href}.jpg"
+            # Try to resolve actual CDN URL from NCBI
+            cdn_url = resolve_cdn_url(pmcid, fig_id, href)
+            time.sleep(NCBI_RATE_LIMIT)
+            if cdn_url:
+                logger.debug("Resolved CDN URL for %s/%s: %s", pmcid, fig_id, cdn_url)
 
         figures.append(
             {
@@ -132,6 +245,7 @@ def extract_figures(root: ET.Element, pmcid: str) -> list[dict]:
                 "label": label,
                 "caption": caption[:500],  # Truncate long captions
                 "url": url,
+                "cdn_url": cdn_url,
                 "href": href,
             }
         )
@@ -139,19 +253,27 @@ def extract_figures(root: ET.Element, pmcid: str) -> list[dict]:
     return figures
 
 
-def filter_figures_by_modality(figures: list[dict], modality: str) -> list[dict]:
-    """Filter figures whose captions mention the target modality."""
-    if modality not in MODALITY_KEYWORDS:
+def filter_figures_by_modality(
+    figures: list[dict], modality: str, condition: str = ""
+) -> list[dict]:
+    """Filter and score figures by caption relevance.
+
+    Uses score_caption() to assign a relevance score to each figure.
+    Figures with score > 0.0 are included, sorted by score descending.
+    Falls back to all figures if none score above 0.0.
+    """
+    for fig in figures:
+        fig["caption_score"] = score_caption(fig["caption"], condition, modality)
+
+    scored = [f for f in figures if f["caption_score"] > 0.0]
+    if not scored:
+        # Fall back to all figures with a default score
+        for fig in figures:
+            fig.setdefault("caption_score", 0.1)
         return figures
 
-    keywords = [k.lower() for k in MODALITY_KEYWORDS[modality]]
-    filtered = []
-    for fig in figures:
-        caption_lower = fig["caption"].lower()
-        if any(kw in caption_lower for kw in keywords):
-            filtered.append(fig)
-
-    return filtered if filtered else figures  # Fall back to all if none match
+    scored.sort(key=lambda f: f["caption_score"], reverse=True)
+    return scored
 
 
 def discover_candidates(
@@ -190,10 +312,10 @@ def discover_candidates(
 
         figures = extract_figures(root, pmcid)
         if modality:
-            figures = filter_figures_by_modality(figures, modality)
+            figures = filter_figures_by_modality(figures, modality, condition)
 
         for fig in figures:
-            if not fig["url"]:
+            if not fig["url"] and not fig.get("cdn_url"):
                 continue
 
             candidates.append(
@@ -203,6 +325,8 @@ def discover_candidates(
                     "title": title,
                     "caption": fig["caption"],
                     "url": fig["url"],
+                    "cdn_url": fig.get("cdn_url"),
+                    "caption_score": fig.get("caption_score", 0.5),
                     "license": license_info or "CC-BY (open access)",
                     "fig_label": fig["label"],
                     "condition": condition,
@@ -213,6 +337,8 @@ def discover_candidates(
         if len(candidates) >= top:
             break
 
+    # Sort by caption_score descending before truncating
+    candidates.sort(key=lambda c: c.get("caption_score", 0), reverse=True)
     return candidates[:top]
 
 
@@ -222,6 +348,9 @@ def format_yaml_entry(candidate: dict, condition_id: str, modality: str) -> dict
     fig_id = candidate.get("source_id", "").split("_")[-1] or "fig1"
     image_ref = f"{modality}/multicare/{condition_id}-{safe_pmcid}-{fig_id}.png"
 
+    # Prefer CDN URL over Europe PMC URL
+    url = candidate.get("cdn_url") or candidate["url"]
+
     return {
         "image_ref": image_ref,
         "entry": {
@@ -229,11 +358,12 @@ def format_yaml_entry(candidate: dict, condition_id: str, modality: str) -> dict
             "source_id": candidate["source_id"],
             "original_format": "png",
             "license": candidate["license"],
-            "url": candidate["url"],
+            "url": url,
             "condition_id": condition_id,
             "task_ids": [],
             "validation_status": "sourced",
             "pathology_confirmed": False,
+            "caption_score": candidate.get("caption_score", 0.5),
             "notes": candidate["caption"][:200],
         },
     }
@@ -357,6 +487,7 @@ def main():
         entry = c["entry"]
         print(f"    source_id: {entry['source_id']}")
         print(f"    url: {entry.get('url', 'N/A')}")
+        print(f"    caption_score: {entry.get('caption_score', 'N/A')}")
         print(f"    notes: {entry.get('notes', '')[:100]}")
         print()
 

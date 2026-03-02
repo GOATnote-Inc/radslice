@@ -257,10 +257,54 @@ def _download_multicare(
                 stats["failed"] += 1
             else:
                 stats["downloaded"] += 1
+                _record_multicare_provenance(image_ref, info, dest)
         else:
             stats["failed"] += 1
 
     return stats
+
+
+def _record_multicare_provenance(
+    image_ref: str, info: dict, dest: Path
+) -> None:
+    """Record provenance for a downloaded MultiCaRe image."""
+    try:
+        import sys
+        sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts"))
+        from audit import append_provenance, build_provenance_record
+
+        sha = compute_sha256(dest)
+        dims = None
+        try:
+            from PIL import Image
+            with Image.open(dest) as img:
+                dims = img.size
+        except Exception:
+            pass
+
+        sid = info.get("source_id", "")
+        has_sep = "_" in sid
+        record = build_provenance_record(
+            image_ref=image_ref,
+            source="multicare",
+            pmcid=sid.split("_")[0] if has_sep else "",
+            figure_id=sid.split("_")[-1] if has_sep else "",
+            cdn_url=info.get("url") if "cdn.ncbi" in info.get("url", "") else None,
+            license_info=info.get("license", "CC-BY-4.0"),
+            article_title="",
+            article_doi="",
+            figure_caption=info.get("notes", ""),
+            caption_score=info.get("caption_score", 0.5),
+            sha256=sha,
+            file_size_bytes=dest.stat().st_size,
+            image_format=dest.suffix.lstrip("."),
+            image_dimensions=dims,
+            condition_id=info.get("condition_id", ""),
+            task_ids=info.get("task_ids", []),
+        )
+        append_provenance(record)
+    except Exception as e:
+        logger.debug("Provenance recording skipped for %s: %s", image_ref, e)
 
 
 def _download_idc(

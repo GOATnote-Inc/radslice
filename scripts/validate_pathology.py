@@ -48,6 +48,11 @@ Then provide an overall assessment:
 - PASS: if >= 50% of required findings are PRESENT
 - FAIL: if < 50% of required findings are PRESENT or image is wrong modality/anatomy
 
+Note: If this image contains multiple panels or is a composite,
+focus on the most clinically relevant panel and note which panel
+you are assessing. A composite image with the target pathology
+in at least one panel should still be assessed for those findings.
+
 Respond in this exact JSON format:
 {{
   "findings": [
@@ -292,6 +297,12 @@ def update_sources_from_results(
     results: list[dict], sources_path: str = "corpus/image_sources.yaml"
 ):
     """Update image_sources.yaml with validation results."""
+    # Lazy import audit trail
+    try:
+        from audit import update_provenance_validation
+    except ImportError:
+        update_provenance_validation = None
+
     sources = load_image_sources(sources_path)
     images = sources.get("images", {})
     updated = 0
@@ -308,6 +319,18 @@ def update_sources_from_results(
         images[image_ref]["validation_status"] = "validated" if passed else "failed"
         images[image_ref]["pathology_confirmed"] = passed
         updated += 1
+
+        # Update provenance audit trail
+        if update_provenance_validation is not None:
+            try:
+                update_provenance_validation(image_ref, {
+                    "model": r.get("model", "unknown"),
+                    "overall": r.get("overall", "FAIL"),
+                    "confidence": r.get("confidence", 0.0),
+                    "notes": r.get("notes", ""),
+                })
+            except Exception as e:
+                logger.debug("Provenance update skipped for %s: %s", image_ref, e)
 
     if updated > 0:
         save_image_sources(sources, sources_path)
