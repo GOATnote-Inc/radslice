@@ -305,8 +305,9 @@ def corpus_download(manifest, output_dir, source, dry_run):
         sources=sources_filter,
         dry_run=dry_run,
     )
-    click.echo(f"Downloaded: {stats['downloaded']}, Skipped: {stats['skipped']}, "
-               f"Failed: {stats['failed']}")
+    click.echo(
+        f"Downloaded: {stats['downloaded']}, Skipped: {stats['skipped']}, Failed: {stats['failed']}"
+    )
 
 
 @corpus.command("discover")
@@ -362,8 +363,10 @@ def corpus_discover(source, condition, modality, batch, collection, top, append,
             candidates = discover_for_collection(client, collection, top)
         elif condition:
             results = query_series(
-                client, modality=modality and modality.upper(),
-                collection=collection, top=top,
+                client,
+                modality=modality and modality.upper(),
+                collection=collection,
+                top=top,
             )
             candidates = [format_yaml_entry(s, condition) for s in results]
         else:
@@ -402,9 +405,7 @@ def corpus_validate_pathology(
         raise click.UsageError("Provide --task-id or --all")
 
     if task_id:
-        result = asyncio.run(
-            validate_single(task_id, tasks_dir, images_dir, model, dry_run)
-        )
+        result = asyncio.run(validate_single(task_id, tasks_dir, images_dir, model, dry_run))
         results = [result]
     else:
         results = asyncio.run(

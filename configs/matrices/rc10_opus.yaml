@@ -1,0 +1,69 @@
+# rc1.0 evaluation — Opus 4.6, judged by GPT-5.2
+# 51 pathology-validated tasks across 4 modalities
+# Phase 1: 14 X-ray + 12 CT (from rc0.5)
+# Phase 2: 15 Ultrasound + 10 MRI (new)
+tasks_dir: configs/tasks
+n_trials: 3
+max_concurrency: 5
+
+task_ids:
+  # X-ray (14 tasks — from rc0.5)
+  - XRAY-007   # pericarditis-myocarditis
+  - XRAY-014   # fat-embolism-syndrome
+  - XRAY-017   # penetrating-chest-trauma
+  - XRAY-023   # massive-hemoptysis
+  - XRAY-024   # pneumonia
+  - XRAY-025   # spontaneous-pneumothorax
+  - XRAY-027   # tracheal-disruption
+  - XRAY-031   # esophageal-foreign-body-impaction
+  - XRAY-039   # major-joint-dislocation
+  - XRAY-045   # globe-rupture
+  - XRAY-052   # non-accidental-trauma
+  - XRAY-055   # submersion-injury
+  - XRAY-067   # fourniers-gangrene
+  - XRAY-068   # high-altitude-illness
+  # CT (12 tasks — from rc0.5)
+  - CT-026     # epiglottitis
+  - CT-027     # foreign-body-aspiration
+  - CT-048     # open-fracture
+  - CT-061     # retrobulbar-hemorrhage
+  - CT-065     # ludwigs-angina
+  - CT-068     # peritonsillar-abscess
+  - CT-069     # retropharyngeal-abscess
+  - CT-070     # spinal-epidural-abscess
+  - CT-085     # lateral-canthotomy
+  - CT-091     # herpes-zoster-ophthalmicus
+  - CT-097     # acute-angle-closure-glaucoma
+  - CT-106     # neonatal-emergencies
+  # Ultrasound (15 tasks — Phase 2)
+  - US-006     # cardiac-tamponade
+  - US-010     # ruptured-aaa
+  - US-019     # hemorrhagic-shock (FAST)
+  - US-024     # spontaneous-pneumothorax
+  - US-026     # acute-cholecystitis
+  - US-034     # ectopic-pregnancy
+  - US-036     # ovarian-torsion
+  - US-042     # testicular-torsion
+  - US-046     # urolithiasis
+  - US-050     # retinal-detachment
+  - US-053     # deep-vein-thrombosis
+  - US-066     # intussusception
+  - US-069     # pyloric-stenosis
+  - US-073     # acute-appendicitis
+  - US-082     # necrotizing-fasciitis
+  # MRI (10 tasks — Phase 2)
+  - MRI-003    # pericarditis-myocarditis
+  - MRI-005    # acute-ischemic-stroke
+  - MRI-007    # cauda-equina-syndrome
+  - MRI-010    # hemorrhagic-stroke
+  - MRI-011    # spinal-cord-compression
+  - MRI-014    # fat-embolism-syndrome
+  - MRI-023    # eclampsia (PRES)
+  - MRI-031    # hsv-encephalitis
+  - MRI-035    # spinal-epidural-abscess
+  - MRI-040    # carbon-monoxide-poisoning
+
+models:
+  - name: opus-4-6
+    provider: anthropic
+    model_id: claude-opus-4-6
