@@ -337,16 +337,28 @@ class TestRubricGrader:
         assert result.detection_layer == 2
 
     @pytest.mark.asyncio
-    async def test_judge_skipped_on_high_confidence_pass(self, sample_task, good_response):
-        """When all required patterns pass (confidence 0.85), judge should NOT be called."""
+    async def test_judge_invoked_even_on_pattern_pass(self, sample_task, good_response):
+        """Judge is always invoked when available — pattern passes are not trusted alone."""
         mock_provider = MagicMock()
+        judge_result = JudgeResult(
+            dimension_scores={
+                "diagnostic_accuracy": 0.95,
+                "finding_detection": 0.9,
+                "anatomic_precision": 0.85,
+                "clinical_relevance": 0.8,
+                "false_positive_control": 1.0,
+            },
+            failure_class=None,
+            reasoning="Correct identification.",
+            judge_model="test-judge",
+        )
         grader = RubricGrader(judge_provider=mock_provider, judge_model="test-judge")
-        grader._run_judge = AsyncMock()
+        grader._run_judge = AsyncMock(return_value=judge_result)
 
         result = await grader.grade(sample_task, good_response, "test-model")
 
-        grader._run_judge.assert_not_called()
-        assert result.detection_layer == 0
+        grader._run_judge.assert_called_once()
+        assert result.detection_layer == 2
 
     @pytest.mark.asyncio
     async def test_judge_invoked_on_low_confidence(self, sample_task):

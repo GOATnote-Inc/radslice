@@ -17,8 +17,6 @@ from radslice.grading.patterns import (
 from radslice.providers.base import Provider
 from radslice.task import Task
 
-LAYER_0_CONFIDENCE_THRESHOLD = 0.8
-
 
 @dataclass(frozen=True)
 class GradeResult:
@@ -49,8 +47,11 @@ class RubricGrader:
     Layer 0: Deterministic pattern checks (fast, free, reproducible).
     Layer 2: LLM radiologist judge (flexible, cross-vendor).
 
-    Judge is only invoked when Layer 0 confidence is below threshold
-    or when pattern_only=False.
+    Judge is always invoked when available and pattern_only=False.
+    Pattern-only grading has documented 85-97% false negative rates
+    and low correlation with clinical correctness. Layer 0 provides
+    signal (dimension scores, failure classification) but the judge
+    is the authoritative grader.
     """
 
     def __init__(
@@ -83,17 +84,11 @@ class RubricGrader:
         judge_data: dict[str, Any] = {}
         failure_class = self._classify_from_patterns(pattern_result, overcalled, response)
 
-        # Layer 2: LLM judge (if needed and available)
-        # Always invoke judge for pattern failures — never trust regex alone
-        # to declare a model has catastrophically failed a diagnostic task.
-        if (
-            not self._pattern_only
-            and self._judge_provider is not None
-            and (
-                pattern_result.confidence < LAYER_0_CONFIDENCE_THRESHOLD
-                or not pattern_result.all_required_pass
-            )
-        ):
+        # Layer 2: LLM judge (always invoked when available)
+        # Pattern-only grading has 85-97% false negative rates and low
+        # correlation with clinical correctness. Regex agreement is not
+        # a reliable proxy for grade accuracy — always defer to judge.
+        if not self._pattern_only and self._judge_provider is not None:
             judge_result = await self._run_judge(task, response)
             if judge_result:
                 dim_scores = self._combine_scores(dim_scores, judge_result)
