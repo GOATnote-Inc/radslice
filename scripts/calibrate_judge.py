@@ -23,11 +23,11 @@ def main():
 
     result = compute_calibration(human_entries, judge_entries)
 
-    print(f"\n--- Calibration Results ---")
+    print("\n--- Calibration Results ---")
     print(f"Tasks compared: {result.n_tasks}")
     print(f"Cohen's kappa: {result.cohens_kappa:.3f}")
     print(f"Percent agreement: {result.percent_agreement:.1%}")
-    print(f"\nPer-dimension correlation:")
+    print("\nPer-dimension correlation:")
     for dim, corr in sorted(result.per_dimension_correlation.items()):
         print(f"  {dim}: {corr:.3f}")
 

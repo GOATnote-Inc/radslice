@@ -32,7 +32,7 @@ import yaml
 # Add project root to path for imports
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
-from radslice.task import load_task, load_tasks_from_dir, validate_task, Task
+from radslice.task import Task, load_tasks_from_dir
 
 logger = logging.getLogger(__name__)
 
@@ -46,26 +46,12 @@ ALL_ERROR_TYPES = [
 
 # Templates for generating synthetic reports with errors
 REPORT_TEMPLATES = {
-    "ct": (
-        "CT {anatomy} {contrast}: {technique_detail}. "
-        "{findings_text} "
-        "IMPRESSION: {impression}"
-    ),
-    "xray": (
-        "PA and lateral {anatomy} radiograph. "
-        "{findings_text} "
-        "IMPRESSION: {impression}"
-    ),
+    "ct": ("CT {anatomy} {contrast}: {technique_detail}. {findings_text} IMPRESSION: {impression}"),
+    "xray": ("PA and lateral {anatomy} radiograph. {findings_text} IMPRESSION: {impression}"),
     "mri": (
-        "MRI {anatomy} {contrast}: {technique_detail}. "
-        "{findings_text} "
-        "IMPRESSION: {impression}"
+        "MRI {anatomy} {contrast}: {technique_detail}. {findings_text} IMPRESSION: {impression}"
     ),
-    "ultrasound": (
-        "{anatomy} ultrasound performed. "
-        "{findings_text} "
-        "IMPRESSION: {impression}"
-    ),
+    "ultrasound": ("{anatomy} ultrasound performed. {findings_text} IMPRESSION: {impression}"),
 }
 
 CONTRAST_OPTIONS = {
@@ -132,17 +118,16 @@ def _generate_report_with_error(
         findings_text = " ".join(findings)
         impression = f"No acute {anatomy} abnormality."
         claim = f"No acute {anatomy} abnormality"
-        correction = (
-            f"{gt.primary_diagnosis} is present"
-            + (f" — {gt.key_findings[0].finding} at {gt.key_findings[0].location}" if gt.key_findings else "")
+        correction = f"{gt.primary_diagnosis} is present" + (
+            f" — {gt.key_findings[0].finding} at {gt.key_findings[0].location}"
+            if gt.key_findings
+            else ""
         )
         severity = "critical"
 
     elif error_type == "wrong_laterality":
         wrong_side = "left" if gt.laterality == "right" else "right"
-        findings = [
-            f"{gt.primary_diagnosis.capitalize()} identified on the {wrong_side} side."
-        ]
+        findings = [f"{gt.primary_diagnosis.capitalize()} identified on the {wrong_side} side."]
         findings += rng.sample(normal_statements, min(2, len(normal_statements)))
         findings_text = " ".join(findings)
         impression = f"{wrong_side.capitalize()}-sided {gt.primary_diagnosis}."
@@ -152,14 +137,16 @@ def _generate_report_with_error(
 
     elif error_type == "severity_underestimate":
         mild_descriptor = rng.choice(["small", "minimal", "trace", "mild", "subtle"])
-        findings = [
-            f"{mild_descriptor.capitalize()} {gt.primary_diagnosis} noted."
-        ]
+        findings = [f"{mild_descriptor.capitalize()} {gt.primary_diagnosis} noted."]
         findings += rng.sample(normal_statements, min(2, len(normal_statements)))
         findings_text = " ".join(findings)
         impression = f"{mild_descriptor.capitalize()} {gt.primary_diagnosis}, likely clinically insignificant."
         claim = f"{mild_descriptor} {gt.primary_diagnosis}"
-        correction = f"{gt.severity} {gt.primary_diagnosis}" if gt.severity else f"Significant {gt.primary_diagnosis}"
+        correction = (
+            f"{gt.severity} {gt.primary_diagnosis}"
+            if gt.severity
+            else f"Significant {gt.primary_diagnosis}"
+        )
         severity = "major"
 
     elif error_type == "hallucinated_finding":
@@ -229,48 +216,60 @@ def generate_audit_task(
     # Build pattern checks for the audit task
     pattern_checks = []
     if error_type == "missed_finding":
-        pattern_checks.append({
-            "name": "identifies_missed_error",
-            "check_type": "regex",
-            "pattern": r"\b(missed|omitted|not.mentioned|failed.to|absent.from.report)\b",
-            "required": True,
-        })
+        pattern_checks.append(
+            {
+                "name": "identifies_missed_error",
+                "check_type": "regex",
+                "pattern": r"\b(missed|omitted|not.mentioned|failed.to|absent.from.report)\b",
+                "required": True,
+            }
+        )
     elif error_type == "wrong_laterality":
-        pattern_checks.append({
-            "name": "identifies_laterality_error",
-            "check_type": "regex",
-            "pattern": r"\b(wrong.side|laterality|incorrect.side|contralateral)\b",
-            "required": True,
-        })
+        pattern_checks.append(
+            {
+                "name": "identifies_laterality_error",
+                "check_type": "regex",
+                "pattern": r"\b(wrong.side|laterality|incorrect.side|contralateral)\b",
+                "required": True,
+            }
+        )
     elif error_type == "severity_underestimate":
-        pattern_checks.append({
-            "name": "identifies_severity_error",
-            "check_type": "regex",
-            "pattern": r"\b(underestimat|understated|underrated|more.severe|significant)\b",
-            "required": True,
-        })
+        pattern_checks.append(
+            {
+                "name": "identifies_severity_error",
+                "check_type": "regex",
+                "pattern": r"\b(underestimat|understated|underrated|more.severe|significant)\b",
+                "required": True,
+            }
+        )
     elif error_type == "hallucinated_finding":
-        pattern_checks.append({
-            "name": "identifies_hallucination",
-            "check_type": "regex",
-            "pattern": r"\b(hallucinated|fabricated|not.present|false.positive|overcall)\b",
-            "required": True,
-        })
+        pattern_checks.append(
+            {
+                "name": "identifies_hallucination",
+                "check_type": "regex",
+                "pattern": r"\b(hallucinated|fabricated|not.present|false.positive|overcall)\b",
+                "required": True,
+            }
+        )
     elif error_type == "wrong_diagnosis":
-        pattern_checks.append({
-            "name": "identifies_wrong_diagnosis",
-            "check_type": "regex",
-            "pattern": r"\b(wrong|incorrect|misdiagnos|should.be)\b",
-            "required": True,
-        })
+        pattern_checks.append(
+            {
+                "name": "identifies_wrong_diagnosis",
+                "check_type": "regex",
+                "pattern": r"\b(wrong|incorrect|misdiagnos|should.be)\b",
+                "required": True,
+            }
+        )
 
     # Always check that the model identifies there IS an error
-    pattern_checks.append({
-        "name": "identifies_error_present",
-        "check_type": "regex",
-        "pattern": r"\b(error|mistake|incorrect|discrepancy|inaccura)\b",
-        "required": True,
-    })
+    pattern_checks.append(
+        {
+            "name": "identifies_error_present",
+            "check_type": "regex",
+            "pattern": r"\b(error|mistake|incorrect|discrepancy|inaccura)\b",
+            "required": True,
+        }
+    )
 
     gt_dict = {
         "primary_diagnosis": source_task.ground_truth.primary_diagnosis,

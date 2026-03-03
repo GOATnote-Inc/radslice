@@ -119,9 +119,7 @@ def save_image_sources(data: dict, path: str = "corpus/image_sources.yaml") -> N
         yaml.dump(data, f, default_flow_style=False, sort_keys=False, width=120)
 
 
-def load_tasks_for_modality(
-    modality: str, tasks_dir: str = "configs/tasks"
-) -> list[dict]:
+def load_tasks_for_modality(modality: str, tasks_dir: str = "configs/tasks") -> list[dict]:
     """Load all task YAMLs for a given modality."""
     tasks_path = Path(tasks_dir) / modality
     tasks = []
@@ -171,6 +169,7 @@ def compute_sha256(file_path: Path) -> str:
 def get_image_dimensions(file_path: Path) -> tuple[int, int] | None:
     try:
         from PIL import Image
+
         with Image.open(file_path) as img:
             return img.size
     except Exception:
@@ -262,9 +261,7 @@ def source_modality(
     tier_filter = None
     if modality == "xray":
         tier_filter = XRAY_TIER1_CONDITIONS
-        tier2_count = sum(
-            1 for cid in seen if cid not in tier_filter and cid not in skip_cids
-        )
+        tier2_count = sum(1 for cid in seen if cid not in tier_filter and cid not in skip_cids)
         if tier2_count:
             logger.info(
                 "Skipping %d Tier 2 conditions (X-ray not primary modality)",
@@ -278,8 +275,7 @@ def source_modality(
     ]
 
     logger.info(
-        "%s: %d tasks, %d unique conditions, %d already sourced, "
-        "%d to source (limit %d)",
+        "%s: %d tasks, %d unique conditions, %d already sourced, %d to source (limit %d)",
         modality,
         len(tasks),
         len(seen),
@@ -397,19 +393,20 @@ def source_modality(
             else:
                 logger.info("  Validating pathology with %s...", model)
                 try:
-                    result = asyncio.run(
-                        run_validation(task_id, tasks_dir, images_dir, model)
-                    )
+                    result = asyncio.run(run_validation(task_id, tasks_dir, images_dir, model))
                     validation_result = result.get("overall", "FAIL")
                     passed = validation_result == "PASS"
 
                     # Update provenance with validation
-                    update_provenance_validation(ref, {
-                        "model": model,
-                        "overall": validation_result,
-                        "confidence": result.get("confidence", 0.0),
-                        "notes": result.get("notes", ""),
-                    })
+                    update_provenance_validation(
+                        ref,
+                        {
+                            "model": model,
+                            "overall": validation_result,
+                            "confidence": result.get("confidence", 0.0),
+                            "notes": result.get("notes", ""),
+                        },
+                    )
                 except Exception as e:
                     logger.error("  Validation error: %s", e)
                     validation_result = "error"
@@ -429,14 +426,16 @@ def source_modality(
                 sourced += 1
                 image_sourced = True
 
-                details.append({
-                    "condition_id": cid,
-                    "status": "sourced",
-                    "image_ref": ref,
-                    "caption_score": candidate.get("caption_score", 0),
-                    "validation": validation_result,
-                    "sha256": sha,
-                })
+                details.append(
+                    {
+                        "condition_id": cid,
+                        "status": "sourced",
+                        "image_ref": ref,
+                        "caption_score": candidate.get("caption_score", 0),
+                        "validation": validation_result,
+                        "sha256": sha,
+                    }
+                )
 
                 logger.info(
                     "  PASS — Sourced %d/%d %s (%.1f%%)",
@@ -472,9 +471,7 @@ def source_modality(
     }
 
 
-def _dry_run(
-    modality: str, unsourced: list[tuple[str, dict]], limit: int
-) -> dict:
+def _dry_run(modality: str, unsourced: list[tuple[str, dict]], limit: int) -> dict:
     """Dry run: discover and score candidates without downloading."""
     details: list[dict] = []
     for i, (cid, task) in enumerate(unsourced[:limit]):
@@ -490,14 +487,16 @@ def _dry_run(
 
         if candidates:
             best = candidates[0]
-            details.append({
-                "condition_id": cid,
-                "status": "dry_run",
-                "n_candidates": len(candidates),
-                "best_score": best.get("caption_score", 0),
-                "best_caption": best.get("caption", "")[:100],
-                "best_url": (best.get("cdn_url") or best.get("url", ""))[:80],
-            })
+            details.append(
+                {
+                    "condition_id": cid,
+                    "status": "dry_run",
+                    "n_candidates": len(candidates),
+                    "best_score": best.get("caption_score", 0),
+                    "best_caption": best.get("caption", "")[:100],
+                    "best_url": (best.get("cdn_url") or best.get("url", ""))[:80],
+                }
+            )
         else:
             details.append({"condition_id": cid, "status": "no_candidates"})
 
@@ -545,9 +544,7 @@ def update_metadata(sources_path: str = "corpus/image_sources.yaml") -> None:
         for info in images.values()
         if info.get("validation_status") in ("sourced", "downloaded", "validated")
     )
-    total_validated = sum(
-        1 for info in images.values() if info.get("pathology_confirmed")
-    )
+    total_validated = sum(1 for info in images.values() if info.get("pathology_confirmed"))
 
     meta = sources.setdefault("metadata", {})
     meta["total_sourced"] = total_sourced
@@ -610,8 +607,7 @@ def main():
         # Split limit proportionally
         total = sum(MODALITY_TARGETS.values())
         limits = {
-            mod: max(1, int(args.limit * MODALITY_TARGETS[mod] / total))
-            for mod in modalities
+            mod: max(1, int(args.limit * MODALITY_TARGETS[mod] / total)) for mod in modalities
         }
     else:
         modalities = [args.modality]

@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import argparse
 import random
-from pathlib import Path
 
 from radslice.task import load_tasks_from_dir
 
@@ -48,11 +47,7 @@ def curate_subset(
         n_norm = max(1, int(target_n * 0.2))
         n_conf = target_n - n_pos - n_norm
 
-        subset = (
-            positives[:n_pos]
-            + normals[:n_norm]
-            + confusion[:n_conf]
-        )
+        subset = positives[:n_pos] + normals[:n_norm] + confusion[:n_conf]
         selected[modality] = subset[:target_n]
 
     return selected

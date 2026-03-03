@@ -264,12 +264,11 @@ def _download_multicare(
     return stats
 
 
-def _record_multicare_provenance(
-    image_ref: str, info: dict, dest: Path
-) -> None:
+def _record_multicare_provenance(image_ref: str, info: dict, dest: Path) -> None:
     """Record provenance for a downloaded MultiCaRe image."""
     try:
         import sys
+
         sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts"))
         from audit import append_provenance, build_provenance_record
 
@@ -277,6 +276,7 @@ def _record_multicare_provenance(
         dims = None
         try:
             from PIL import Image
+
             with Image.open(dest) as img:
                 dims = img.size
         except Exception:
@@ -327,6 +327,7 @@ def _download_idc(
     idc_client = None
     try:
         from idc_index import IDCClient  # type: ignore[import-untyped]
+
         idc_client = IDCClient()
         logger.info("Using idc-index for IDC downloads")
     except ImportError:

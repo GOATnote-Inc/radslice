@@ -136,9 +136,7 @@ def query_series(
         return []
 
 
-def format_yaml_entry(
-    series: dict, condition_id: str, window_preset: str | None = None
-) -> dict:
+def format_yaml_entry(series: dict, condition_id: str, window_preset: str | None = None) -> dict:
     """Format an IDC series as an image_sources.yaml candidate."""
     series_uid = series.get("SeriesInstanceUID", series.get("series_uid", ""))
     collection = series.get("collection_id", "idc")
@@ -250,9 +248,7 @@ def main():
         "--list-curated", action="store_true", help="List curated collections for RadSlice"
     )
     parser.add_argument("--append", action="store_true", help="Append to image_sources.yaml")
-    parser.add_argument(
-        "--sources", default="corpus/image_sources.yaml", help="Image sources YAML"
-    )
+    parser.add_argument("--sources", default="corpus/image_sources.yaml", help="Image sources YAML")
     parser.add_argument("--verbose", "-v", action="store_true")
     args = parser.parse_args()
 

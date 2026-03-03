@@ -69,9 +69,10 @@ def compute_progress(
         by_modality[modality]["total"] += 1
 
         # Check if image is sourced (in image_sources with status != unsourced, or file exists)
-        has_source = image_ref in source_by_ref and source_by_ref[image_ref].get(
-            "validation_status", "unsourced"
-        ) != "unsourced"
+        has_source = (
+            image_ref in source_by_ref
+            and source_by_ref[image_ref].get("validation_status", "unsourced") != "unsourced"
+        )
         has_file = (images_dir_path / image_ref).exists() if image_ref else False
 
         if has_source or has_file:
@@ -128,14 +129,10 @@ def format_text(progress: dict) -> str:
 
 def main():
     parser = argparse.ArgumentParser(description="RadSlice sourcing progress report")
-    parser.add_argument(
-        "--sources", default="corpus/image_sources.yaml", help="Image sources YAML"
-    )
+    parser.add_argument("--sources", default="corpus/image_sources.yaml", help="Image sources YAML")
     parser.add_argument("--tasks-dir", default="configs/tasks", help="Tasks directory")
     parser.add_argument("--images-dir", default="corpus/images", help="Images directory")
-    parser.add_argument(
-        "--format", choices=["text", "json"], default="text", help="Output format"
-    )
+    parser.add_argument("--format", choices=["text", "json"], default="text", help="Output format")
     args = parser.parse_args()
 
     progress = compute_progress(args.sources, args.tasks_dir, args.images_dir)

@@ -1,3 +1,6 @@
+# Evaluation results and corpus images are immutable — never lint or format them.
+exclude: (?x)^(results/|corpus/images/)
+
 repos:
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.9.10

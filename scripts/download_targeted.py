@@ -7,10 +7,8 @@ which had ~84% false positive rate (diagrams/flowcharts instead of imaging).
 
 from __future__ import annotations
 
-import json
 import logging
 import re
-import sys
 import time
 from pathlib import Path
 from urllib.request import Request, urlopen
@@ -25,50 +23,175 @@ NCBI_RATE_LIMIT = 0.5
 # Format: (task_id, condition_id, modality, pmcid, fig_id_hint, notes)
 TARGETS = [
     # === MRI (6 replacements — all CC-BY 4.0) ===
-    ("MRI-005", "acute-ischemic-stroke", "mri", "PMC4548688", "fig-01",
-     "Young stroke patient DWI+FLAIR — CC-BY 4.0"),
-    ("MRI-023", "eclampsia", "mri", "PMC5445265", "Fig1",
-     "PRES+HELLP with FLAIR showing posterior white matter edema — CC-BY 4.0"),
-    ("MRI-040", "carbon-monoxide-poisoning", "mri", "PMC10772852", "fig1",
-     "Filipino household CO case — 6-panel DWI/ADC/T1/T2/FLAIR/GRE — CC-BY 4.0"),
-    ("MRI-011", "spinal-cord-compression", "mri", "PMC7930977", "Fig2",
-     "Plasmacytoma compressing spinal cord — sagittal T2 — CC-BY 4.0"),
-    ("MRI-003", "pericarditis-myocarditis", "mri", "PMC9539345", "fig-01",
-     "Vaccine-related myocarditis — cardiac MRI with LGE — CC-BY 4.0"),
-    ("MRI-014", "fat-embolism-syndrome", "mri", "PMC6450253", "Fig2",
-     "Cerebral fat embolism — DWI starfield pattern — CC-BY 4.0"),
-
+    (
+        "MRI-005",
+        "acute-ischemic-stroke",
+        "mri",
+        "PMC4548688",
+        "fig-01",
+        "Young stroke patient DWI+FLAIR — CC-BY 4.0",
+    ),
+    (
+        "MRI-023",
+        "eclampsia",
+        "mri",
+        "PMC5445265",
+        "Fig1",
+        "PRES+HELLP with FLAIR showing posterior white matter edema — CC-BY 4.0",
+    ),
+    (
+        "MRI-040",
+        "carbon-monoxide-poisoning",
+        "mri",
+        "PMC10772852",
+        "fig1",
+        "Filipino household CO case — 6-panel DWI/ADC/T1/T2/FLAIR/GRE — CC-BY 4.0",
+    ),
+    (
+        "MRI-011",
+        "spinal-cord-compression",
+        "mri",
+        "PMC7930977",
+        "Fig2",
+        "Plasmacytoma compressing spinal cord — sagittal T2 — CC-BY 4.0",
+    ),
+    (
+        "MRI-003",
+        "pericarditis-myocarditis",
+        "mri",
+        "PMC9539345",
+        "fig-01",
+        "Vaccine-related myocarditis — cardiac MRI with LGE — CC-BY 4.0",
+    ),
+    (
+        "MRI-014",
+        "fat-embolism-syndrome",
+        "mri",
+        "PMC6450253",
+        "Fig2",
+        "Cerebral fat embolism — DWI starfield pattern — CC-BY 4.0",
+    ),
     # === Ultrasound (15 — all CC-BY 4.0 unless noted) ===
-    ("US-006", "cardiac-tamponade", "ultrasound", "PMC5965178", "img-0002",
-     "Sub-acute tamponade POCUS — parasternal long axis — CC-BY 4.0"),
-    ("US-010", "ruptured-aaa", "ultrasound", "PMC6876902", "Fig1",
-     "POCUS AAA — transverse+longitudinal 8x9cm — CC-BY"),
-    ("US-024", "spontaneous-pneumothorax", "ultrasound", "PMC6360002", "Fig2",
-     "Pneumothorax barcode sign M-mode + lung point — CC-BY"),
-    ("US-026", "acute-cholecystitis", "ultrasound", "PMC3236129", "Fig1",
-     "Bedside US acalculous cholecystitis — wall thickening >1cm — CC-BY 4.0"),
-    ("US-066", "intussusception", "ultrasound", "PMC10854881", "Fig1",
-     "Colocolic intussusception target sign — CC-BY 4.0"),
-    ("US-073", "acute-appendicitis", "ultrasound", "PMC7676787", "img-0001",
-     "POCUS appendicitis — enlarged >1cm non-compressible — CC-BY 4.0"),
-    ("US-046", "urolithiasis", "ultrasound", "PMC9523545", "Fig1",
-     "Hydronephrosis + perinephric fluid — CC-BY-NC-ND 4.0"),
-    ("US-036", "ovarian-torsion", "ultrasound", "PMC9806735", "Fig1",
-     "Doppler ovarian torsion — restricted flow — CC-BY"),
-    ("US-042", "testicular-torsion", "ultrasound", "PMC7872624", "img-0002",
-     "Monorchid testicular torsion — spectral Doppler — CC-BY 4.0"),
-    ("US-053", "deep-vein-thrombosis", "ultrasound", "PMC9142702", "Fig2",
-     "Two-point compression US — non-compressible popliteal vein — CC-BY-NC-ND"),
-    ("US-050", "retinal-detachment", "ultrasound", "PMC6084687", "Fig1",
-     "Bedside ocular US — hyperechoic undulating membrane — CC-BY"),
-    ("US-082", "necrotizing-fasciitis", "ultrasound", "PMC10332782", "Fig1",
-     "POCUS NF — subcutaneous air + dirty shadowing — CC-BY 4.0"),
-    ("US-069", "pyloric-stenosis", "ultrasound", "PMC5965224", "img-0001",
-     "POCUS pyloric stenosis — elongated channel >17mm — CC-BY 4.0"),
-    ("US-019", "hemorrhagic-shock", "ultrasound", "PMC7676810", "img-0001",
-     "FAST — free fluid Morison's pouch — CC-BY 4.0"),
-    ("US-034", "ectopic-pregnancy", "ultrasound", "PMC9408466", "Fig1",
-     "Transvaginal US — advanced tubal ectopic — CC-BY 4.0"),
+    (
+        "US-006",
+        "cardiac-tamponade",
+        "ultrasound",
+        "PMC5965178",
+        "img-0002",
+        "Sub-acute tamponade POCUS — parasternal long axis — CC-BY 4.0",
+    ),
+    (
+        "US-010",
+        "ruptured-aaa",
+        "ultrasound",
+        "PMC6876902",
+        "Fig1",
+        "POCUS AAA — transverse+longitudinal 8x9cm — CC-BY",
+    ),
+    (
+        "US-024",
+        "spontaneous-pneumothorax",
+        "ultrasound",
+        "PMC6360002",
+        "Fig2",
+        "Pneumothorax barcode sign M-mode + lung point — CC-BY",
+    ),
+    (
+        "US-026",
+        "acute-cholecystitis",
+        "ultrasound",
+        "PMC3236129",
+        "Fig1",
+        "Bedside US acalculous cholecystitis — wall thickening >1cm — CC-BY 4.0",
+    ),
+    (
+        "US-066",
+        "intussusception",
+        "ultrasound",
+        "PMC10854881",
+        "Fig1",
+        "Colocolic intussusception target sign — CC-BY 4.0",
+    ),
+    (
+        "US-073",
+        "acute-appendicitis",
+        "ultrasound",
+        "PMC7676787",
+        "img-0001",
+        "POCUS appendicitis — enlarged >1cm non-compressible — CC-BY 4.0",
+    ),
+    (
+        "US-046",
+        "urolithiasis",
+        "ultrasound",
+        "PMC9523545",
+        "Fig1",
+        "Hydronephrosis + perinephric fluid — CC-BY-NC-ND 4.0",
+    ),
+    (
+        "US-036",
+        "ovarian-torsion",
+        "ultrasound",
+        "PMC9806735",
+        "Fig1",
+        "Doppler ovarian torsion — restricted flow — CC-BY",
+    ),
+    (
+        "US-042",
+        "testicular-torsion",
+        "ultrasound",
+        "PMC7872624",
+        "img-0002",
+        "Monorchid testicular torsion — spectral Doppler — CC-BY 4.0",
+    ),
+    (
+        "US-053",
+        "deep-vein-thrombosis",
+        "ultrasound",
+        "PMC9142702",
+        "Fig2",
+        "Two-point compression US — non-compressible popliteal vein — CC-BY-NC-ND",
+    ),
+    (
+        "US-050",
+        "retinal-detachment",
+        "ultrasound",
+        "PMC6084687",
+        "Fig1",
+        "Bedside ocular US — hyperechoic undulating membrane — CC-BY",
+    ),
+    (
+        "US-082",
+        "necrotizing-fasciitis",
+        "ultrasound",
+        "PMC10332782",
+        "Fig1",
+        "POCUS NF — subcutaneous air + dirty shadowing — CC-BY 4.0",
+    ),
+    (
+        "US-069",
+        "pyloric-stenosis",
+        "ultrasound",
+        "PMC5965224",
+        "img-0001",
+        "POCUS pyloric stenosis — elongated channel >17mm — CC-BY 4.0",
+    ),
+    (
+        "US-019",
+        "hemorrhagic-shock",
+        "ultrasound",
+        "PMC7676810",
+        "img-0001",
+        "FAST — free fluid Morison's pouch — CC-BY 4.0",
+    ),
+    (
+        "US-034",
+        "ectopic-pregnancy",
+        "ultrasound",
+        "PMC9408466",
+        "Fig1",
+        "Transvaginal US — advanced tubal ectopic — CC-BY 4.0",
+    ),
 ]
 
 
@@ -91,14 +214,15 @@ def find_figure_urls(pmcid: str, fig_hint: str) -> list[str]:
         return []
 
     # Find all CDN blob URLs
-    cdn_urls = re.findall(
-        r'src="(https://cdn\.ncbi\.nlm\.nih\.gov/pmc/blobs/[^"]+)"', html
-    )
+    cdn_urls = re.findall(r'src="(https://cdn\.ncbi\.nlm\.nih\.gov/pmc/blobs/[^"]+)"', html)
 
     # Also find figure-specific URLs
     fig_urls = re.findall(
-        r'src="(https://[^"]*(?:' + re.escape(pmcid.lower().replace("pmc", "")) +
-        r'|pmc)[^"]*\.(?:jpg|png|gif|jpeg)[^"]*)"', html, re.IGNORECASE
+        r'src="(https://[^"]*(?:'
+        + re.escape(pmcid.lower().replace("pmc", ""))
+        + r'|pmc)[^"]*\.(?:jpg|png|gif|jpeg)[^"]*)"',
+        html,
+        re.IGNORECASE,
     )
 
     all_urls = list(dict.fromkeys(cdn_urls + fig_urls))  # dedup, preserve order
@@ -154,6 +278,7 @@ def create_symlink(condition_id: str, modality: str, source_filename: str) -> bo
 
 def main():
     import argparse
+
     parser = argparse.ArgumentParser(description="Download targeted PMC figures")
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument("--modality", choices=["mri", "ultrasound"])
@@ -225,7 +350,7 @@ def main():
 
     # Summary
     print(f"\n{'=' * 60}")
-    print(f"Targeted Download Summary")
+    print("Targeted Download Summary")
     print(f"  Sourced: {len(results['sourced'])}")
     print(f"  Skipped: {len(results['skipped'])}")
     print(f"  Failed:  {len(results['failed'])}")

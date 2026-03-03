@@ -133,8 +133,10 @@ def parse_validation_response(text: str) -> dict:
                 pass
 
     return {
-        "overall": "FAIL", "confidence": 0.0,
-        "notes": "Failed to parse response", "findings": [],
+        "overall": "FAIL",
+        "confidence": 0.0,
+        "notes": "Failed to parse response",
+        "findings": [],
     }
 
 
@@ -177,9 +179,7 @@ async def validate_single(
     from radslice.image import load_and_encode
 
     try:
-        encoded = load_and_encode(
-            image_path, window_preset=task.get("window_preset")
-        )
+        encoded = load_and_encode(image_path, window_preset=task.get("window_preset"))
     except Exception as e:
         return {
             "task_id": task_id,
@@ -276,9 +276,7 @@ async def validate_batch(
         if not dry_run and not image_path.exists():
             continue
 
-        result = await validate_single(
-            task_id, tasks_dir, images_dir, model, dry_run
-        )
+        result = await validate_single(task_id, tasks_dir, images_dir, model, dry_run)
         results.append(result)
 
         # Print progress
@@ -323,12 +321,15 @@ def update_sources_from_results(
         # Update provenance audit trail
         if update_provenance_validation is not None:
             try:
-                update_provenance_validation(image_ref, {
-                    "model": r.get("model", "unknown"),
-                    "overall": r.get("overall", "FAIL"),
-                    "confidence": r.get("confidence", 0.0),
-                    "notes": r.get("notes", ""),
-                })
+                update_provenance_validation(
+                    image_ref,
+                    {
+                        "model": r.get("model", "unknown"),
+                        "overall": r.get("overall", "FAIL"),
+                        "confidence": r.get("confidence", 0.0),
+                        "notes": r.get("notes", ""),
+                    },
+                )
             except Exception as e:
                 logger.debug("Provenance update skipped for %s: %s", image_ref, e)
 
@@ -365,9 +366,7 @@ def main():
 
     if args.task_id:
         result = asyncio.run(
-            validate_single(
-                args.task_id, args.tasks_dir, args.images_dir, args.model, args.dry_run
-            )
+            validate_single(args.task_id, args.tasks_dir, args.images_dir, args.model, args.dry_run)
         )
         results = [result]
     else:

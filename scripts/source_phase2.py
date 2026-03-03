@@ -10,9 +10,7 @@ Usage:
 
 from __future__ import annotations
 
-import hashlib
 import logging
-import os
 import sys
 import time
 from pathlib import Path
@@ -22,7 +20,7 @@ import yaml
 
 # Add project root to path
 sys.path.insert(0, str(Path(__file__).parent))
-from discover_multicare import discover_candidates, resolve_cdn_url
+from discover_multicare import discover_candidates
 
 logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
 logger = logging.getLogger("source_phase2")
@@ -34,68 +32,168 @@ CORPUS_DIR = Path("corpus/images")
 TARGETS = [
     # ── Ultrasound (15 tasks) ──
     # Cardiac
-    {"task_id": "US-006", "condition": "cardiac tamponade", "modality": "ultrasound",
-     "search_terms": "cardiac tamponade pericardial effusion echocardiography"},
-    {"task_id": "US-010", "condition": "ruptured aaa", "modality": "ultrasound",
-     "search_terms": "abdominal aortic aneurysm ultrasound POCUS"},
+    {
+        "task_id": "US-006",
+        "condition": "cardiac tamponade",
+        "modality": "ultrasound",
+        "search_terms": "cardiac tamponade pericardial effusion echocardiography",
+    },
+    {
+        "task_id": "US-010",
+        "condition": "ruptured aaa",
+        "modality": "ultrasound",
+        "search_terms": "abdominal aortic aneurysm ultrasound POCUS",
+    },
     # Lung
-    {"task_id": "US-024", "condition": "spontaneous pneumothorax", "modality": "ultrasound",
-     "search_terms": "pneumothorax lung ultrasound absent lung sliding"},
+    {
+        "task_id": "US-024",
+        "condition": "spontaneous pneumothorax",
+        "modality": "ultrasound",
+        "search_terms": "pneumothorax lung ultrasound absent lung sliding",
+    },
     # Abdomen
-    {"task_id": "US-026", "condition": "acute cholecystitis", "modality": "ultrasound",
-     "search_terms": "acute cholecystitis gallbladder ultrasound"},
-    {"task_id": "US-066", "condition": "intussusception", "modality": "ultrasound",
-     "search_terms": "intussusception target sign ultrasound"},
-    {"task_id": "US-073", "condition": "acute appendicitis", "modality": "ultrasound",
-     "search_terms": "acute appendicitis ultrasound graded compression"},
-    {"task_id": "US-046", "condition": "urolithiasis", "modality": "ultrasound",
-     "search_terms": "urolithiasis hydronephrosis renal ultrasound"},
+    {
+        "task_id": "US-026",
+        "condition": "acute cholecystitis",
+        "modality": "ultrasound",
+        "search_terms": "acute cholecystitis gallbladder ultrasound",
+    },
+    {
+        "task_id": "US-066",
+        "condition": "intussusception",
+        "modality": "ultrasound",
+        "search_terms": "intussusception target sign ultrasound",
+    },
+    {
+        "task_id": "US-073",
+        "condition": "acute appendicitis",
+        "modality": "ultrasound",
+        "search_terms": "acute appendicitis ultrasound graded compression",
+    },
+    {
+        "task_id": "US-046",
+        "condition": "urolithiasis",
+        "modality": "ultrasound",
+        "search_terms": "urolithiasis hydronephrosis renal ultrasound",
+    },
     # Pelvis/OB-GYN
-    {"task_id": "US-034", "condition": "ectopic pregnancy", "modality": "ultrasound",
-     "search_terms": "ectopic pregnancy transvaginal ultrasound"},
-    {"task_id": "US-036", "condition": "ovarian torsion", "modality": "ultrasound",
-     "search_terms": "ovarian torsion pelvic ultrasound Doppler"},
-    {"task_id": "US-042", "condition": "testicular torsion", "modality": "ultrasound",
-     "search_terms": "testicular torsion scrotal ultrasound Doppler"},
+    {
+        "task_id": "US-034",
+        "condition": "ectopic pregnancy",
+        "modality": "ultrasound",
+        "search_terms": "ectopic pregnancy transvaginal ultrasound",
+    },
+    {
+        "task_id": "US-036",
+        "condition": "ovarian torsion",
+        "modality": "ultrasound",
+        "search_terms": "ovarian torsion pelvic ultrasound Doppler",
+    },
+    {
+        "task_id": "US-042",
+        "condition": "testicular torsion",
+        "modality": "ultrasound",
+        "search_terms": "testicular torsion scrotal ultrasound Doppler",
+    },
     # Vascular
-    {"task_id": "US-053", "condition": "deep vein thrombosis", "modality": "ultrasound",
-     "search_terms": "deep vein thrombosis DVT compression ultrasound"},
+    {
+        "task_id": "US-053",
+        "condition": "deep vein thrombosis",
+        "modality": "ultrasound",
+        "search_terms": "deep vein thrombosis DVT compression ultrasound",
+    },
     # MSK/Soft tissue
-    {"task_id": "US-050", "condition": "retinal detachment", "modality": "ultrasound",
-     "search_terms": "retinal detachment ocular ultrasound"},
-    {"task_id": "US-082", "condition": "necrotizing fasciitis", "modality": "ultrasound",
-     "search_terms": "necrotizing fasciitis soft tissue ultrasound"},
+    {
+        "task_id": "US-050",
+        "condition": "retinal detachment",
+        "modality": "ultrasound",
+        "search_terms": "retinal detachment ocular ultrasound",
+    },
+    {
+        "task_id": "US-082",
+        "condition": "necrotizing fasciitis",
+        "modality": "ultrasound",
+        "search_terms": "necrotizing fasciitis soft tissue ultrasound",
+    },
     # Pediatric
-    {"task_id": "US-069", "condition": "pyloric stenosis", "modality": "ultrasound",
-     "search_terms": "pyloric stenosis abdominal ultrasound hypertrophic"},
+    {
+        "task_id": "US-069",
+        "condition": "pyloric stenosis",
+        "modality": "ultrasound",
+        "search_terms": "pyloric stenosis abdominal ultrasound hypertrophic",
+    },
     # Trauma
-    {"task_id": "US-019", "condition": "hemorrhagic shock", "modality": "ultrasound",
-     "search_terms": "FAST examination hemoperitoneum free fluid ultrasound trauma"},
+    {
+        "task_id": "US-019",
+        "condition": "hemorrhagic shock",
+        "modality": "ultrasound",
+        "search_terms": "FAST examination hemoperitoneum free fluid ultrasound trauma",
+    },
     # ── MRI (10 tasks) ──
     # Neuro
-    {"task_id": "MRI-005", "condition": "acute ischemic stroke", "modality": "mri",
-     "search_terms": "acute ischemic stroke DWI MRI diffusion weighted"},
-    {"task_id": "MRI-010", "condition": "hemorrhagic stroke", "modality": "mri",
-     "search_terms": "intracerebral hemorrhage brain MRI"},
-    {"task_id": "MRI-023", "condition": "eclampsia", "modality": "mri",
-     "search_terms": "PRES posterior reversible encephalopathy syndrome MRI"},
-    {"task_id": "MRI-031", "condition": "hsv encephalitis", "modality": "mri",
-     "search_terms": "herpes simplex encephalitis HSV MRI temporal lobe"},
-    {"task_id": "MRI-040", "condition": "carbon monoxide poisoning", "modality": "mri",
-     "search_terms": "carbon monoxide poisoning globus pallidus MRI"},
+    {
+        "task_id": "MRI-005",
+        "condition": "acute ischemic stroke",
+        "modality": "mri",
+        "search_terms": "acute ischemic stroke DWI MRI diffusion weighted",
+    },
+    {
+        "task_id": "MRI-010",
+        "condition": "hemorrhagic stroke",
+        "modality": "mri",
+        "search_terms": "intracerebral hemorrhage brain MRI",
+    },
+    {
+        "task_id": "MRI-023",
+        "condition": "eclampsia",
+        "modality": "mri",
+        "search_terms": "PRES posterior reversible encephalopathy syndrome MRI",
+    },
+    {
+        "task_id": "MRI-031",
+        "condition": "hsv encephalitis",
+        "modality": "mri",
+        "search_terms": "herpes simplex encephalitis HSV MRI temporal lobe",
+    },
+    {
+        "task_id": "MRI-040",
+        "condition": "carbon monoxide poisoning",
+        "modality": "mri",
+        "search_terms": "carbon monoxide poisoning globus pallidus MRI",
+    },
     # Spine
-    {"task_id": "MRI-007", "condition": "cauda equina syndrome", "modality": "mri",
-     "search_terms": "cauda equina syndrome lumbar MRI disc herniation"},
-    {"task_id": "MRI-011", "condition": "spinal cord compression", "modality": "mri",
-     "search_terms": "spinal cord compression myelopathy MRI"},
-    {"task_id": "MRI-035", "condition": "spinal epidural abscess", "modality": "mri",
-     "search_terms": "spinal epidural abscess MRI"},
+    {
+        "task_id": "MRI-007",
+        "condition": "cauda equina syndrome",
+        "modality": "mri",
+        "search_terms": "cauda equina syndrome lumbar MRI disc herniation",
+    },
+    {
+        "task_id": "MRI-011",
+        "condition": "spinal cord compression",
+        "modality": "mri",
+        "search_terms": "spinal cord compression myelopathy MRI",
+    },
+    {
+        "task_id": "MRI-035",
+        "condition": "spinal epidural abscess",
+        "modality": "mri",
+        "search_terms": "spinal epidural abscess MRI",
+    },
     # Cardiac
-    {"task_id": "MRI-003", "condition": "pericarditis myocarditis", "modality": "mri",
-     "search_terms": "myocarditis cardiac MRI late gadolinium enhancement"},
+    {
+        "task_id": "MRI-003",
+        "condition": "pericarditis myocarditis",
+        "modality": "mri",
+        "search_terms": "myocarditis cardiac MRI late gadolinium enhancement",
+    },
     # Head special
-    {"task_id": "MRI-014", "condition": "fat embolism syndrome", "modality": "mri",
-     "search_terms": "fat embolism syndrome starfield pattern DWI MRI"},
+    {
+        "task_id": "MRI-014",
+        "condition": "fat embolism syndrome",
+        "modality": "mri",
+        "search_terms": "fat embolism syndrome starfield pattern DWI MRI",
+    },
 ]
 
 
@@ -174,12 +272,18 @@ def source_target(target: dict, top: int = 5, dry_run: bool = False) -> dict | N
 
     logger.info("Found %d candidates for %s", len(candidates), task_id)
     for i, c in enumerate(candidates):
-        logger.info("  [%d] score=%.2f pmcid=%s caption=%s",
-                     i, c.get("caption_score", 0), c["pmcid"], c["caption"][:80])
+        logger.info(
+            "  [%d] score=%.2f pmcid=%s caption=%s",
+            i,
+            c.get("caption_score", 0),
+            c["pmcid"],
+            c["caption"][:80],
+        )
 
     if dry_run:
         return {
-            "task_id": task_id, "status": "dry_run",
+            "task_id": task_id,
+            "status": "dry_run",
             "condition_id": condition_id,
             "n_candidates": len(candidates),
             "top_candidate": candidates[0]["pmcid"] if candidates else None,
@@ -228,7 +332,9 @@ def main():
     parser = argparse.ArgumentParser(description="Phase 2 sourcing: US + MRI")
     parser.add_argument("--dry-run", action="store_true", help="Search only, don't download")
     parser.add_argument("--top", type=int, default=5, help="Max candidates per condition")
-    parser.add_argument("--modality", choices=["ultrasound", "mri"], help="Source only one modality")
+    parser.add_argument(
+        "--modality", choices=["ultrasound", "mri"], help="Source only one modality"
+    )
     args = parser.parse_args()
 
     targets = TARGETS
@@ -248,7 +354,7 @@ def main():
     existing = [r for r in results if r["status"] == "exists"]
 
     print("\n" + "=" * 60)
-    print(f"Phase 2 Sourcing Summary")
+    print("Phase 2 Sourcing Summary")
     print(f"  Sourced: {len(sourced)}")
     print(f"  Already existed: {len(existing)}")
     print(f"  Failed: {len(failed)}")

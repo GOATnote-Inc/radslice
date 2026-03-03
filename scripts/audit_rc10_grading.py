@@ -153,10 +153,19 @@ ALWAYS_FAIL = sorted(IMAGE_REVIEW.keys())  # 14 tasks: both models fail all 3 tr
 
 ALWAYS_PASS_OPUS = [  # 13 tasks: Opus passes all 3 trials
     # Both pass 3/3
-    "MRI-023", "MRI-040", "US-024", "US-036", "US-046",
-    "US-066", "US-069", "XRAY-014", "XRAY-039",
+    "MRI-023",
+    "MRI-040",
+    "US-024",
+    "US-036",
+    "US-046",
+    "US-066",
+    "US-069",
+    "XRAY-014",
+    "XRAY-039",
     # Opus-only 3/3
-    "CT-065", "XRAY-007", "XRAY-027",
+    "CT-065",
+    "XRAY-007",
+    "XRAY-027",
     # Mixed, Opus 3/3
     "MRI-005",
 ]
@@ -246,9 +255,7 @@ def extract_primary_diagnosis(response: str) -> str:
         r"impression",
         r"conclusion",
     ]:
-        match = re.search(
-            rf"(?i)(?:#+\s*)?{label}[:\s]*\**\s*(.+?)(?:\n|$)", response
-        )
+        match = re.search(rf"(?i)(?:#+\s*)?{label}[:\s]*\**\s*(.+?)(?:\n|$)", response)
         if match:
             text = match.group(1).strip().strip("*").strip()
             if len(text) > 5:
@@ -303,9 +310,7 @@ def classify_false_positive(task_id: str, response: str, task_yaml: dict) -> str
     if primary_dx:
         # Extract key clinical terms (>= 4 chars, skip articles/prepositions)
         skip = {"with", "from", "that", "this", "have", "been", "were", "into", "upon", "over"}
-        key_terms = [
-            w for w in re.findall(r"\b\w{4,}\b", primary_dx.lower()) if w not in skip
-        ]
+        key_terms = [w for w in re.findall(r"\b\w{4,}\b", primary_dx.lower()) if w not in skip]
         if key_terms:
             response_lower = response.lower()
             matches = sum(1 for t in key_terms if t in response_lower)
@@ -358,12 +363,9 @@ def analyze_false_negatives(
             "pattern_checks": best_grade.get("pattern_result", {}).get("checks", {}),
             "failure_class": best_grade.get("failure_class"),
             "weighted_score": best_grade.get("weighted_score"),
-            "gpt_all_layer_0": all(
-                g.get("detection_layer") == 0 for g in gpt_trials
-            ),
+            "gpt_all_layer_0": all(g.get("detection_layer") == 0 for g in gpt_trials),
             "opus_all_layer_0": all(
-                g.get("detection_layer") == 0
-                for g in opus_grades.get(task_id, [])
+                g.get("detection_layer") == 0 for g in opus_grades.get(task_id, [])
             ),
         }
         results.append(entry)
@@ -400,9 +402,7 @@ def analyze_false_positives(
             "pattern_confidence": first_grade.get("pattern_result", {}).get("confidence"),
             "pattern_checks": first_grade.get("pattern_result", {}).get("checks", {}),
             "weighted_score": first_grade.get("weighted_score"),
-            "image_reasoning_indicators": {
-                k: v for k, v in reasoning.items() if k != "count"
-            },
+            "image_reasoning_indicators": {k: v for k, v in reasoning.items() if k != "count"},
             "image_reasoning_count": reasoning["count"],
             "response_length": len(opus_short),
         }
@@ -508,14 +508,12 @@ def compute_systemic_findings(gpt_grades: dict, opus_grades: dict) -> dict:
     """Compute Layer 0 dominance statistics for extreme tasks."""
     # Always-fail: count Layer 0 across both models
     fail_l0_gpt = sum(
-        1 for t in ALWAYS_FAIL for g in gpt_grades.get(t, [])
-        if g.get("detection_layer") == 0
+        1 for t in ALWAYS_FAIL for g in gpt_grades.get(t, []) if g.get("detection_layer") == 0
     )
     fail_total_gpt = sum(len(gpt_grades.get(t, [])) for t in ALWAYS_FAIL)
 
     fail_l0_opus = sum(
-        1 for t in ALWAYS_FAIL for g in opus_grades.get(t, [])
-        if g.get("detection_layer") == 0
+        1 for t in ALWAYS_FAIL for g in opus_grades.get(t, []) if g.get("detection_layer") == 0
     )
     fail_total_opus = sum(len(opus_grades.get(t, [])) for t in ALWAYS_FAIL)
 
@@ -524,8 +522,7 @@ def compute_systemic_findings(gpt_grades: dict, opus_grades: dict) -> dict:
 
     # Always-pass Opus: count Layer 0
     pass_l0 = sum(
-        1 for t in ALWAYS_PASS_OPUS for g in opus_grades.get(t, [])
-        if g.get("detection_layer") == 0
+        1 for t in ALWAYS_PASS_OPUS for g in opus_grades.get(t, []) if g.get("detection_layer") == 0
     )
     pass_total = sum(len(opus_grades.get(t, [])) for t in ALWAYS_PASS_OPUS)
 
@@ -538,7 +535,8 @@ def compute_systemic_findings(gpt_grades: dict, opus_grades: dict) -> dict:
             "always_pass_layer_0_pct": pass_pct,
             "always_fail_detail": f"{fail_l0}/{fail_total} (GPT {fail_l0_gpt}/{fail_total_gpt}, Opus {fail_l0_opus}/{fail_total_opus})",
             "always_pass_detail": f"{pass_l0}/{pass_total}",
-            "judge_never_invoked_for_extreme_tasks": fail_l0 == fail_total and pass_l0 == pass_total,
+            "judge_never_invoked_for_extreme_tasks": fail_l0 == fail_total
+            and pass_l0 == pass_total,
             "confidence_threshold": 0.8,
             "recommendation": "Lower LAYER_0_CONFIDENCE_THRESHOLD or force judge for Class A",
         }
@@ -618,9 +616,7 @@ def print_report(audit: dict) -> None:
             continue
         print(f"\n  {label}:")
         for e in tasks:
-            print(
-                f"    {e['task_id']:10s}  {e['condition']:35s}  gap={e['gap_type']}"
-            )
+            print(f"    {e['task_id']:10s}  {e['condition']:35s}  gap={e['gap_type']}")
             print(
                 f"      GPT: {e['gpt_pass_rate']}  mean={e['gpt_mean_score']:.3f}  "
                 f"dx: {e['gpt_primary_diagnosis'][:50]}"
@@ -645,7 +641,9 @@ def print_report(audit: dict) -> None:
         excl_str = f"  (excl: {', '.join(excluded)})" if excluded else ""
         print(f"\n  {label} ({r['n_tasks']} tasks):{excl_str}")
         print(f"    GPT-5.2:   {r['gpt_pass_rate']:5.1f}%  ({r['gpt_passes']}/{r['gpt_trials']})")
-        print(f"    Opus 4.6:  {r['opus_pass_rate']:5.1f}%  ({r['opus_passes']}/{r['opus_trials']})")
+        print(
+            f"    Opus 4.6:  {r['opus_pass_rate']:5.1f}%  ({r['opus_passes']}/{r['opus_trials']})"
+        )
     print()
 
     # -- Summary --
@@ -660,12 +658,8 @@ def print_report(audit: dict) -> None:
         f"  False positives:  {s['fp_valid']} VALID, "
         f"{s['fp_rubric_easy']} RUBRIC_EASY, {s['fp_pattern_leak']} PATTERN_LEAK"
     )
-    print(
-        f"  Corrected GPT pass rate:   {s['estimated_corrected_pass_rate_gpt']}"
-    )
-    print(
-        f"  Corrected Opus pass rate:  {s['estimated_corrected_pass_rate_opus']}"
-    )
+    print(f"  Corrected GPT pass rate:   {s['estimated_corrected_pass_rate_gpt']}")
+    print(f"  Corrected Opus pass rate:  {s['estimated_corrected_pass_rate_opus']}")
     print()
 
     # -- Recommended actions --
@@ -726,9 +720,7 @@ def main():
         and all(not g.get("passed") for g in opus_grades[t])
     )
     computed_always_pass_opus = sorted(
-        t
-        for t in opus_grades
-        if all(g.get("passed") for g in opus_grades[t])
+        t for t in opus_grades if all(g.get("passed") for g in opus_grades[t])
     )
     if set(computed_always_fail) != set(ALWAYS_FAIL):
         extra = set(computed_always_fail) - set(ALWAYS_FAIL)

@@ -49,22 +49,48 @@ MODALITY_KEYWORDS = {
 
 # Caption scoring terms
 _REJECT_TERMS = [
-    "flowchart", "flow chart", "diagram", "schematic",
-    "bar chart", "pie chart", "bar graph", "line graph",
-    "timeline", "prisma", "forest plot",
-    "kaplan-meier", "algorithm", "decision tree",
+    "flowchart",
+    "flow chart",
+    "diagram",
+    "schematic",
+    "bar chart",
+    "pie chart",
+    "bar graph",
+    "line graph",
+    "timeline",
+    "prisma",
+    "forest plot",
+    "kaplan-meier",
+    "algorithm",
+    "decision tree",
 ]
 _LOW_TERMS = [
-    "histology", "pathology specimen", "gross specimen", "clinical photograph",
-    "ecg", "electrocardiogram", "laboratory", "fundus photo", "slit-lamp",
+    "histology",
+    "pathology specimen",
+    "gross specimen",
+    "clinical photograph",
+    "ecg",
+    "electrocardiogram",
+    "laboratory",
+    "fundus photo",
+    "slit-lamp",
     "dermatoscopy",
 ]
 _COMPOSITE_TERMS = ["panels a", "serial", "composite", "comparison"]
 _COMPOSITE_RE = re.compile(r"\([a-f]\)|[a-f]-[a-f]")
 _IMAGING_TERMS = [
-    "radiograph", "chest x-ray", "x-ray", "cxr", "ct scan",
-    "computed tomography", "ctpa", "cta", "mri", "ultrasound",
-    "sonography", "echocardiogram",
+    "radiograph",
+    "chest x-ray",
+    "x-ray",
+    "cxr",
+    "ct scan",
+    "computed tomography",
+    "ctpa",
+    "cta",
+    "mri",
+    "ultrasound",
+    "sonography",
+    "echocardiogram",
 ]
 
 
@@ -135,9 +161,7 @@ def score_caption(caption: str, condition_name: str, modality: str) -> float:
             break
 
     # Composite image penalty
-    is_composite = any(term in cap for term in _COMPOSITE_TERMS) or bool(
-        _COMPOSITE_RE.search(cap)
-    )
+    is_composite = any(term in cap for term in _COMPOSITE_TERMS) or bool(_COMPOSITE_RE.search(cap))
     if is_composite:
         score -= 0.2
 
@@ -369,9 +393,7 @@ def format_yaml_entry(candidate: dict, condition_id: str, modality: str) -> dict
     }
 
 
-def batch_discover(
-    tasks_dir: str, modality: str | None = None, top: int = 3
-) -> list[dict]:
+def batch_discover(tasks_dir: str, modality: str | None = None, top: int = 3) -> list[dict]:
     """Batch discovery for all conditions in a tasks directory."""
     tasks_path = Path(tasks_dir)
     seen_conditions: set[str] = set()
