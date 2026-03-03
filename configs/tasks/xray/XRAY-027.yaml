@@ -25,7 +25,7 @@ ground_truth:
     - "No foreign body"
 pattern_checks:
   - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(tracheal (disruption|injury|rupture|tear)|tracheobronchial|bronchial (disruption|injury|rupture|tear))", required: true }
-  - { name: "pneumomediastinum_finding", check_type: regex, pattern: "(?i)(pneumomediastinum|subcutaneous emphysema|fallen lung|persistent pneumothorax)", required: true }
+  - { name: "pneumomediastinum_finding", check_type: regex, pattern: "(?i)(pneumomediastinum|fallen lung|persistent pneumothorax)", required: true }
 reference_solution: |
   Frontal chest radiograph demonstrates extensive pneumomediastinum and bilateral subcutaneous emphysema. A right-sided pneumothorax persists despite chest tube placement, with the collapsed lung falling to a dependent position (fallen lung sign), which is pathognomonic for tracheobronchial disruption. The continuous diaphragm sign is present. These findings are consistent with a tracheobronchial injury, and urgent bronchoscopy is indicated for localization and surgical planning.
 condition_present: true

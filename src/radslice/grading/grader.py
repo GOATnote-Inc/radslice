@@ -84,10 +84,15 @@ class RubricGrader:
         failure_class = self._classify_from_patterns(pattern_result, overcalled, response)
 
         # Layer 2: LLM judge (if needed and available)
+        # Always invoke judge for pattern failures — never trust regex alone
+        # to declare a model has catastrophically failed a diagnostic task.
         if (
             not self._pattern_only
             and self._judge_provider is not None
-            and pattern_result.confidence < LAYER_0_CONFIDENCE_THRESHOLD
+            and (
+                pattern_result.confidence < LAYER_0_CONFIDENCE_THRESHOLD
+                or not pattern_result.all_required_pass
+            )
         ):
             judge_result = await self._run_judge(task, response)
             if judge_result:

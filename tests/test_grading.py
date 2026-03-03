@@ -5,6 +5,8 @@ from __future__ import annotations
 import pytest
 
 from radslice.grading.dimensions import DIMENSIONS, weighted_score
+from unittest.mock import AsyncMock, MagicMock
+
 from radslice.grading.grader import GradeResult, RubricGrader
 from radslice.grading.judge import JudgeResult, build_judge_prompt, parse_judge_response
 from radslice.grading.patterns import (
@@ -307,3 +309,69 @@ class TestRubricGrader:
         assert isinstance(result.modality_signals, dict)
         # X-ray modality signals should be present
         assert "pneumothorax" in result.modality_signals
+
+    @pytest.mark.asyncio
+    async def test_judge_invoked_on_pattern_failure(self, sample_task):
+        """When all required patterns fail (confidence 0.9), judge must still be called."""
+        mock_provider = MagicMock()
+        judge_result = JudgeResult(
+            dimension_scores={
+                "diagnostic_accuracy": 0.7,
+                "finding_detection": 0.6,
+                "anatomic_precision": 0.8,
+                "clinical_relevance": 0.7,
+                "false_positive_control": 0.9,
+            },
+            failure_class=None,
+            reasoning="Model identified condition using alternate terminology.",
+            judge_model="test-judge",
+        )
+        grader = RubricGrader(judge_provider=mock_provider, judge_model="test-judge")
+        grader._run_judge = AsyncMock(return_value=judge_result)
+
+        # Response that fails all required patterns (no "pneumothorax", no "left", no overcall)
+        response = "Chest radiograph shows no acute abnormality."
+        result = await grader.grade(sample_task, response, "test-model")
+
+        grader._run_judge.assert_called_once()
+        assert result.detection_layer == 2
+
+    @pytest.mark.asyncio
+    async def test_judge_skipped_on_high_confidence_pass(self, sample_task, good_response):
+        """When all required patterns pass (confidence 0.85), judge should NOT be called."""
+        mock_provider = MagicMock()
+        grader = RubricGrader(judge_provider=mock_provider, judge_model="test-judge")
+        grader._run_judge = AsyncMock()
+
+        result = await grader.grade(sample_task, good_response, "test-model")
+
+        grader._run_judge.assert_not_called()
+        assert result.detection_layer == 0
+
+    @pytest.mark.asyncio
+    async def test_judge_invoked_on_low_confidence(self, sample_task):
+        """When patterns are mixed (confidence ~0.6), judge should be called."""
+        mock_provider = MagicMock()
+        judge_result = JudgeResult(
+            dimension_scores={
+                "diagnostic_accuracy": 0.6,
+                "finding_detection": 0.5,
+                "anatomic_precision": 0.7,
+                "clinical_relevance": 0.6,
+                "false_positive_control": 0.8,
+            },
+            failure_class="C",
+            reasoning="Partial identification.",
+            judge_model="test-judge",
+        )
+        grader = RubricGrader(judge_provider=mock_provider, judge_model="test-judge")
+        grader._run_judge = AsyncMock(return_value=judge_result)
+
+        # Matches "pneumothorax" (1 required passes) but not "left" (1 fails),
+        # and doesn't mention "tension pneumothorax" (not_contains passes).
+        # So 2/3 required pass → confidence = 0.5 + 0.3*(2/3) ≈ 0.7 < 0.8
+        response = "There is a pneumothorax on the right side."
+        result = await grader.grade(sample_task, response, "test-model")
+
+        grader._run_judge.assert_called_once()
+        assert result.detection_layer == 2

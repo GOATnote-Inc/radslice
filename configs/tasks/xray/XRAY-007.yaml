@@ -24,7 +24,7 @@ ground_truth:
     - "No focal consolidation"
     - "No pneumothorax"
 pattern_checks:
-  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(pericarditis|myocarditis|pericardial effusion|cardiomegaly)", required: true }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(pericarditis|myocarditis|pericardial effusion)", required: true }
   - { name: "cardiac_finding", check_type: regex, pattern: "(?i)(enlarged cardiac|cardiomegaly|pericardial|globular)", required: true }
 reference_solution: |
   Frontal chest radiograph demonstrates mild to moderate enlargement of the cardiac silhouette with a slightly globular configuration. The lung fields are clear without significant pulmonary edema or consolidation. The findings may represent a small to moderate pericardial effusion in the clinical context of pericarditis or myocarditis. Echocardiography is recommended for further characterization of pericardial fluid and ventricular function.
