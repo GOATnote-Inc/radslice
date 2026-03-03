@@ -20,7 +20,7 @@
 | 0.1.0 | 2026-02-27 | GOATnote | Initial framework implementation: task schema, grading pipeline, CLI |
 | 0.2.0 | 2026-02-28 | GOATnote | Recursive self-improvement architecture: saturation detection, governance |
 | 0.3.0 | 2026-02-28 | GOATnote | DICOM-native image pipeline, corpus provenance mapping, smoke test config |
-| 1.0.0-rc | Pending | — | First end-to-end evaluation run with image-backed tasks |
+| 1.0.0-rc | 2026-03-03 | GOATnote | First 4-modality evaluation: 51 tasks × 2 models × 3 trials; grading red-team audit |
 
 ---
 
@@ -63,15 +63,17 @@ RadSlice is an **evaluation tool**. It is not a medical device, does not perform
 
 ### 2.1 Task Specification
 
-RadSlice defines 320 evaluation tasks spanning 133 unique clinical conditions from the OpenEM emergency medicine corpus. Each task specifies a clinical condition, imaging modality, ground truth diagnosis, expected radiological findings, and grading criteria. Tasks are organized by modality:
+RadSlice defines 330 evaluation tasks spanning 133 unique clinical conditions from the OpenEM emergency medicine corpus. Each task specifies a clinical condition, imaging modality, ground truth diagnosis, expected radiological findings, and grading criteria. Tasks are organized by modality and type:
 
-| Modality | Tasks | Unique Conditions | Difficulty Distribution |
+| Modality / Type | Tasks | Unique Conditions | Difficulty Distribution |
 |---|---|---|---|
 | X-ray | 72 | 72 | 8 basic / 20 intermediate / 39 advanced / 5 expert |
 | CT | 106 | 106 | 3 basic / 28 intermediate / 64 advanced / 11 expert |
 | MRI | 53 | 53 | 1 basic / 6 intermediate / 40 advanced / 6 expert |
 | Ultrasound | 89 | 89 | 9 basic / 31 intermediate / 30 advanced / 19 expert |
-| **Total** | **320** | **133 unique** | 21 basic / 85 intermediate / 175 advanced / 39 expert |
+| Incidental Detection | 5 | 5 | 0 basic / 2 intermediate / 3 advanced / 0 expert |
+| Report Audit | 5 | 5 | 0 basic / 0 intermediate / 5 advanced / 0 expert |
+| **Total** | **330** | **133 unique** | 21 basic / 85 intermediate / 185 advanced / 39 expert |
 
 65 tasks include cross-references to LostBench safety persistence scenarios (e.g., `MTR-016`), enabling cross-benchmark analysis of whether models that correctly identify emergency findings on imaging also maintain those recommendations under conversational pressure.
 
@@ -107,6 +109,56 @@ Three-layer grading with documented determinism properties:
 **Inter-rater reliability:** Physician-adjudicated calibration methodology achieving Cohen's kappa = 1.000 on calibration set, validated across the GOATnote evaluation program (LostBench, OpenEM).
 
 **Metrics:** pass@k (probability at least 1 of k trials passes), pass^k (probability all k trials pass — deployment safety gate), Wilson confidence intervals on all proportions, 10,000-sample bootstrap CI for composite scores, two-proportion z-test for regression detection between runs.
+
+### 2.4 Initial Evaluation Results (rc1.0)
+
+First 4-modality evaluation campaign: 51 image-backed tasks × 2 models (GPT-5.2, Opus 4.6) × 3 trials per task, with cross-vendor LLM judge (GPT-5.2 judges Opus; Opus 4.6 judges GPT). 306 total graded responses.
+
+**Corrected pass rates** (45-task denominator, excluding 6 IMAGE_MISMATCH tasks per Section 2.5): GPT-5.2 **63.7%** (86/135), Opus 4.6 **35.6%** (48/135).
+
+Raw pass rates by modality (51-task denominator):
+
+| Modality | Tasks | GPT-5.2 | Opus 4.6 |
+|---|---|---|---|
+| X-ray | 14 | 64.3% (27/42) | 33.3% (14/42) |
+| CT | 12 | 30.6% (11/36) | 8.3% (3/36) |
+| Ultrasound | 15 | 66.7% (30/45) | 42.2% (19/45) |
+| MRI | 10 | 60.0% (18/30) | 40.0% (12/30) |
+| **Overall** | **51** | **56.2% (86/153)** | **31.4% (48/153)** |
+
+Key findings:
+
+- **GPT-5.2 outperforms Opus 4.6 across all four modalities** (+24.8 percentage points overall). The gap is largest on CT (+22.3pp) and smallest on MRI (+20.0pp).
+- **CT is the weakest modality for both models** (GPT 30.6%, Opus 8.3%). CT interpretation requires cross-sectional spatial reasoning that current VLMs handle less reliably than projection radiography.
+- **14 tasks unsolved by either model** across all 6 trials. 19 tasks passed by GPT only; 3 passed by Opus only. 15 tasks passed by both at least once.
+- **Cross-model divergence reveals style bias in grading** — 3 Opus-only tasks (CT-065, XRAY-007, XRAY-027) involve associated-finding patterns where GPT uses terminology that fails Layer 0 regex despite correct interpretation.
+
+Configs: `configs/matrices/rc10_opus.yaml`, `configs/matrices/rc10_gpt.yaml`. Results: `results/eval-20260303-opus46-rc10/`, `results/eval-20260303-gpt52-rc10/`. Summary: `results/eval-20260303-rc10-summary.json`.
+
+### 2.5 Measurement Validity
+
+A red-team audit of the rc1.0 grading pipeline examined all 14 false-negative tasks (always-fail for both models) and 13 false-positive tasks (always-pass for at least one model) to characterize instrument error. Full audit data: `results/rc10-grading-audit.json`.
+
+**Finding 1: Layer 0 dominance.** 100% of GPT always-fail grades (42/42) were decided by Layer 0 regex alone — the LLM judge was never invoked. For Opus, 25/42 always-fail grades were Layer 0 only. Root cause: the confidence threshold for Layer 0 bypass (0.8) is below the default pattern-fail confidence (0.9), so any task that fails pattern matching is never escalated to the judge.
+
+**Finding 2: Image-condition mismatch.** 6 of 14 always-fail tasks have sourced images that do not exhibit the target pathology — the image shows a different condition entirely. An additional 5 tasks have ambiguous images where the target pathology is present but not deterministically distinguishable.
+
+| Category | Count | Tasks | Action |
+|---|---|---|---|
+| IMAGE_MISMATCH | 6 | CT-027, CT-048, CT-097, MRI-007, MRI-031, MRI-035 | Excluded from corrected denominator; requires re-sourcing |
+| AMBIGUOUS | 5 | CT-026, CT-085, CT-106, US-034, XRAY-045 | Retained in denominator; flagged for clinical review |
+| GENUINE | 3 | US-010, US-073, US-082 | Retained — model errors on valid images |
+| VALID (always-pass) | 11 | MRI-023, MRI-040, US-024, US-036, US-046, US-066, US-069, XRAY-014, XRAY-039, CT-065, MRI-005 | Confirmed correct — pattern + image alignment verified |
+| RUBRIC_EASY | 2 | XRAY-007, XRAY-027 | Patterns match associated findings (e.g., "cardiomegaly" for pericarditis) — technically correct but lower diagnostic specificity |
+
+**Finding 3: Pattern false positives.** 2 tasks (XRAY-007, XRAY-027) pass Layer 0 via patterns that match associated findings rather than the primary diagnosis. For example, XRAY-007 (pericarditis) passes when the model mentions "cardiomegaly" — a valid associated finding but not the target diagnosis. These represent rubric specificity gaps rather than grading errors.
+
+**Corrective actions:**
+
+1. Re-source 6 IMAGE_MISMATCH tasks with pathology-confirmed images
+2. Lower `LAYER_0_CONFIDENCE_THRESHOLD` or mandate Layer 2 judge invocation for all Class A failure candidates
+3. Tighten 2 RUBRIC_EASY patterns to require primary diagnosis terminology
+4. Clinical review of 5 AMBIGUOUS tasks with radiologist adjudication
 
 ---
 
@@ -160,9 +212,11 @@ All corpus images are sourced from established, peer-reviewed, government-funded
 
 | Component | Status | Detail |
 |---|---|---|
-| Task specifications (YAML) | 320/320 authored | All 133 OpenEM imaging-relevant conditions covered |
-| Image-backed tasks (validated) | 7/320 (smoke test) | Smoke test covers 4 modalities; see `corpus/image_sources.yaml` |
-| Full corpus target | 320 images | One validated image per task, sourced per Sections 3.2-3.4 |
+| Task specifications (YAML) | 330/330 authored | All 133 OpenEM imaging-relevant conditions covered |
+| Image-backed tasks (sourced) | 44/330 | MultiCaRe CC-BY-4.0 + IDC open-access; see `corpus/image_sources.yaml` |
+| Image-backed tasks (validated) | 27/44 | Pathology confirmed against ground truth |
+| rc1.0 evaluation set | 51 tasks | 14 X-ray, 12 CT, 15 US, 10 MRI — evaluated across 2 models × 3 trials |
+| Full corpus target | 330 images | One validated image per task, sourced per Sections 3.2-3.4 |
 
 **Image source mapping** is maintained in `corpus/image_sources.yaml`. Each entry includes: image path, source repository, source-specific identifier, SHA-256 checksum, original format, license identifier, and window preset (for DICOM CT).
 
@@ -255,7 +309,7 @@ Datasets requiring credentialed access (PhysioNet VinDr-CXR, MIMIC-CXR) are neve
 
 | Gap | Detail | Status |
 |---|---|---|
-| 52 of 185 OpenEM conditions lack imaging workup | Non-imaging conditions (e.g., anaphylaxis, DKA) excluded by design | By design — RadSlice evaluates imaging interpretation only |
+| 230 of 363 OpenEM conditions lack imaging workup | Non-imaging conditions (e.g., anaphylaxis, DKA) excluded by design | By design — RadSlice evaluates imaging interpretation only |
 | Pediatric imaging underrepresented in open-access sources | Most open DICOM repositories contain adult imaging | Actively sourcing pediatric collections from TCIA and IDC |
 | 3D volumetric evaluation not yet implemented | Current pipeline evaluates single-slice or single-frame images | Planned for v2.0; architecture supports multi-frame DICOM |
 
@@ -270,8 +324,8 @@ RadSlice maintains independent version tracking for three components:
 | Component | Version Source | Current |
 |---|---|---|
 | Pipeline (code) | Git commit SHA + semantic version in `pyproject.toml` | 0.3.0 |
-| Corpus (images + task specs) | SHA-256 hash of `corpus/image_sources.yaml` | Pre-release |
-| Evaluation runs | Run ID (timestamp + model + config hash) in `results/index.yaml` | No completed runs |
+| Corpus (images + task specs) | SHA-256 hash of `corpus/image_sources.yaml` | 44 images sourced, 27 validated |
+| Evaluation runs | Run ID (timestamp + model + config hash) in `results/index.yaml` | 7 runs logged |
 
 ### 7.2 Authoritative Records
 
@@ -293,7 +347,7 @@ RadSlice is part of the GOATnote Evaluation Program, a suite of benchmarks evalu
 |---|---|---|
 | [LostBench](https://github.com/GOATnote-Inc/lostbench) | Multi-turn safety persistence benchmark | 65 RadSlice tasks cross-reference LostBench scenarios via `lostbench_scenario_id` |
 | [ScribeGoat2](https://github.com/GOATnote-Inc/scribegoat2) | Multi-agent clinical triage research framework | Shares clinical condition taxonomy and grading methodology |
-| [OpenEM](https://github.com/GOATnote-Inc/openem-corpus) | Emergency medicine knowledge base | RadSlice conditions derive from OpenEM's 185-condition corpus via `condition_id` |
+| [OpenEM](https://github.com/GOATnote-Inc/openem-corpus) | Emergency medicine knowledge base (363 conditions) | 133 of 363 conditions have RadSlice imaging tasks, linked via `condition_id` |
 | [SafeShift](https://github.com/GOATnote-Inc/safeshift) | Inference optimization safety benchmark | Evaluates whether quantization/batching degrades RadSlice task performance |
 
 Architecture documentation: [CROSS_REPO_ARCHITECTURE.md](https://github.com/GOATnote-Inc/scribegoat2/blob/main/docs/CROSS_REPO_ARCHITECTURE.md)
@@ -348,6 +402,8 @@ radslice analyze --results results/eval-YYYYMMDD-model-description/ \
 | `radslice report` | Generate comparison reports between runs |
 | `radslice corpus validate` | Validate task YAMLs against schema |
 | `radslice corpus download` | Fetch corpus images with checksum verification |
+| `radslice saturation` | Detect saturated tasks across evaluation runs |
+| `radslice calibration` | Check calibration drift (Layer 0 vs Layer 2 kappa) |
 
 ---
 
@@ -377,6 +433,8 @@ src/radslice/
 
 configs/
   tasks/{xray,ct,mri,ultrasound}/   320 task YAMLs (OpenEM-grounded)
+  tasks/incidental/                  5 incidental detection tasks
+  tasks/audit/                       5 report audit tasks
   models/                            Per-model configs
   matrices/                          Sweep configs
   rubrics/                           Grading rubric
@@ -385,7 +443,7 @@ corpus/
   image_sources.yaml                 Per-image provenance mapping
   download.py                        Per-source downloaders
 
-tests/                               1,305+ tests (no API keys required)
+tests/                               1,365 tests (no API keys required)
 
 results/
   index.yaml                         Run history
@@ -396,7 +454,7 @@ results/
 
 ## 11.0 Test Suite
 
-1,305+ automated tests covering framework plumbing, scoring mathematics, grading logic, task schema validation, DICOM loading, windowing, and image pipeline routing. All tests run without API keys or network access using synthetic DICOM fixtures.
+1,365 automated tests covering framework plumbing, scoring mathematics, grading logic, task schema validation, DICOM loading, windowing, image pipeline routing, incidental detection scoring, and report audit grading. All tests run without API keys or network access using synthetic DICOM fixtures.
 
 ```bash
 make test        # Full suite
