@@ -94,3 +94,38 @@ experiments:
     pipeline_version: "0.3.0"
     corpus_note: "26 pathology-validated MultiCaRe CC-BY-4.0 images (14 X-ray, 12 CT)"
     notes: "rc0.5 rerun after corpus fixes. 0% judge-only pass rate (0/23 LLM-judged grades). 34.6% all-grades is entirely pattern-only. GPT outperforms Opus on pattern metric (49.1% vs 33.3%). Cross-model: 5 both pass, 12 both fail, 2 Opus-only, 7 GPT-only."
+
+  - id: eval-20260303-opus46-rc10
+    date: "2026-03-03"
+    model: opus-4-6
+    model_id: claude-opus-4-6
+    judge_model: gpt-5.2
+    modality: xray+ct+ultrasound+mri
+    n_tasks: 51
+    n_trials: 3
+    pass_rate: 0.314
+    class_a_count: 67
+    class_b_count: 38
+    decision: CLEAR
+    results_dir: results/eval-20260303-opus46-rc10/
+    pipeline_version: "0.3.0"
+    corpus_note: "51 pathology-validated MultiCaRe CC-BY images (14 X-ray, 12 CT, 15 US, 10 MRI)"
+    notes: "rc1.0 first 4-modality eval. 31.4% overall pass rate. By modality: X-ray 33.3%, CT 8.3%, US 42.2%, MRI 40.0%. CT is weakest. 13 tasks always pass, 33 always fail. 3 tasks pass for Opus but not GPT (CT-065, XRAY-007, XRAY-027)."
+
+  - id: eval-20260303-gpt52-rc10
+    date: "2026-03-03"
+    model: gpt-5.2
+    model_id: gpt-5.2
+    judge_model: claude-opus-4-6
+    modality: xray+ct+ultrasound+mri
+    n_tasks: 51
+    n_trials: 3
+    pass_rate: 0.562
+    class_a_count: 37
+    class_c_count: 29
+    class_d_count: 1
+    decision: CLEAR
+    results_dir: results/eval-20260303-gpt52-rc10/
+    pipeline_version: "0.3.0"
+    corpus_note: "51 pathology-validated MultiCaRe CC-BY images (14 X-ray, 12 CT, 15 US, 10 MRI)"
+    notes: "rc1.0 first 4-modality eval. 56.2% overall pass rate. By modality: X-ray 64.3%, CT 30.6%, US 66.7%, MRI 60.0%. GPT outperforms Opus across all modalities (+24.8pp overall). 24 tasks always pass, 17 always fail. 19 GPT-only pass tasks vs 3 Opus-only. 14 tasks unsolved by either model."
