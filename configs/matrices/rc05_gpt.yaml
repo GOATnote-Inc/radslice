@@ -1,5 +1,5 @@
 # rc0.5 evaluation — GPT-5.2, judged by Opus 4.6
-# 27 pathology-validated tasks (14 X-ray + 13 CT) from Phase 1 sourcing
+# 26 pathology-validated tasks (14 X-ray + 12 CT) from Phase 1 sourcing
 tasks_dir: configs/tasks
 n_trials: 3
 max_concurrency: 5
@@ -20,11 +20,11 @@ task_ids:
   - XRAY-055   # submersion-injury
   - XRAY-067   # fourniers-gangrene
   - XRAY-068   # high-altitude-illness
-  # CT (13 tasks)
+  # CT (12 tasks)
   - CT-026     # epiglottitis
   - CT-027     # foreign-body-aspiration
   - CT-048     # open-fracture
-  - CT-058     # urolithiasis
+  # CT-058 excluded — sourced image is ultrasound, not CT; no CC-BY replacement found
   - CT-061     # retrobulbar-hemorrhage
   - CT-065     # ludwigs-angina
   - CT-068     # peritonsillar-abscess

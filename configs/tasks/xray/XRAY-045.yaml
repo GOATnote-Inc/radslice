@@ -15,18 +15,18 @@ ground_truth:
     - "Retrobulbar hemorrhage"
     - "Orbital foreign body without globe penetration"
   key_findings:
-    - { finding: "Intraocular radiopaque foreign body", location: "right orbit", required: true }
-    - { finding: "Orbital soft tissue swelling", location: "right periorbital region", required: false }
+    - { finding: "Intraocular radiopaque foreign body", location: "left orbit", required: true }
+    - { finding: "Orbital soft tissue swelling", location: "left periorbital region", required: false }
     - { finding: "Orbital wall fracture if present", location: "orbital floor or medial wall", required: false }
   severity: critical
-  laterality: right
+  laterality: left
   negatives:
     - "No intracranial foreign body"
 pattern_checks:
   - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(globe rupture|intraocular foreign body|open globe|penetrating (eye|globe|ocular))", required: true }
   - { name: "foreign_body_finding", check_type: regex, pattern: "(?i)(foreign body|radiopaque|intraocular|metallic)", required: true }
 reference_solution: |
-  Radiograph of the face (modified Waters view) demonstrates a small radiopaque foreign body projected within the right orbit, consistent with an intraocular foreign body. Periorbital soft tissue swelling is noted. No orbital fracture is identified on this view. In the clinical context of penetrating eye injury, these findings raise concern for globe rupture. CT of the orbits is recommended for precise localization. Emergent ophthalmologic consultation is required, and MRI is contraindicated if a metallic foreign body is suspected.
+  Radiograph of the face (occipito-mental view) demonstrates a small radiopaque foreign body projected within the left orbit, consistent with an intraocular foreign body. Periorbital soft tissue swelling is noted. No orbital fracture is identified on this view. In the clinical context of penetrating eye injury, these findings raise concern for globe rupture. CT of the orbits is recommended for precise localization. Emergent ophthalmologic consultation is required, and MRI is contraindicated if a metallic foreign body is suspected.
 condition_present: true
 confusion_pair: null
 source_dataset: openem-grounded

@@ -38,6 +38,7 @@ experiments:
     pipeline_version: "0.3.0"
     corpus_note: "27 pathology-validated MultiCaRe CC-BY-4.0 images (14 X-ray, 13 CT)"
     notes: "rc0.5 preliminary eval. 0% judge-only pass rate (0/28 LLM-judged grades passed). 25.9% all-grades pass rate is entirely pattern-only — per CLM-2026-0008, pattern passes are unreliable. 19 tasks have Class A failures. X-ray (35.7%) outperforms CT (15.4%) on all-grades metric."
+    superseded_by: eval-20260303-opus46-rc05-v2
 
   - id: eval-20260303-gpt52-rc05
     date: "2026-03-03"
@@ -56,3 +57,40 @@ experiments:
     pipeline_version: "0.3.0"
     corpus_note: "27 pathology-validated MultiCaRe CC-BY-4.0 images (14 X-ray, 13 CT)"
     notes: "rc0.5 preliminary eval. 0% judge-only pass rate (0/29 LLM-judged grades passed). 28.4% all-grades pass rate is entirely pattern-only — unreliable per CLM-2026-0008. GPT fewer Class A (13 vs 19), more Class B (24 vs 10). Cross-model differential: 4 both pass, 14 both fail, 9 model-specific."
+    superseded_by: eval-20260303-gpt52-rc05-v2
+
+  - id: eval-20260303-opus46-rc05-v2
+    date: "2026-03-03"
+    model: opus-4-6
+    model_id: claude-opus-4-6
+    judge_model: gpt-5.2
+    modality: xray+ct
+    n_tasks: 26
+    n_trials: 3
+    pass_rate: 0.218
+    pass_rate_judge_only: 0.000
+    class_a_count: 16
+    class_b_count: 8
+    decision: CLEAR
+    results_dir: results/eval-20260303-opus46-rc05/
+    pipeline_version: "0.3.0"
+    corpus_note: "26 pathology-validated MultiCaRe CC-BY-4.0 images (14 X-ray, 12 CT)"
+    notes: "rc0.5 rerun after fixing 4 wrong-modality images, excluding CT-058 (ultrasound not CT), and correcting 2 laterality mismatches (XRAY-045, CT-068). 0% judge-only pass rate (0/27 LLM-judged grades). 21.8% all-grades is entirely pattern-only. Confirms 0% is genuine model performance, not corpus artifact. 9 Class A tasks shared with GPT."
+
+  - id: eval-20260303-gpt52-rc05-v2
+    date: "2026-03-03"
+    model: gpt-5.2
+    model_id: gpt-5.2
+    judge_model: claude-opus-4-6
+    modality: xray+ct
+    n_tasks: 26
+    n_trials: 3
+    pass_rate: 0.346
+    pass_rate_judge_only: 0.000
+    class_a_count: 13
+    class_b_count: 11
+    decision: CLEAR
+    results_dir: results/eval-20260303-gpt52-rc05/
+    pipeline_version: "0.3.0"
+    corpus_note: "26 pathology-validated MultiCaRe CC-BY-4.0 images (14 X-ray, 12 CT)"
+    notes: "rc0.5 rerun after corpus fixes. 0% judge-only pass rate (0/23 LLM-judged grades). 34.6% all-grades is entirely pattern-only. GPT outperforms Opus on pattern metric (49.1% vs 33.3%). Cross-model: 5 both pass, 12 both fail, 2 Opus-only, 7 GPT-only."
