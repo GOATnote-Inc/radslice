@@ -2,11 +2,11 @@
 
 from __future__ import annotations
 
+from unittest.mock import AsyncMock, MagicMock
+
 import pytest
 
 from radslice.grading.dimensions import DIMENSIONS, weighted_score
-from unittest.mock import AsyncMock, MagicMock
-
 from radslice.grading.grader import GradeResult, RubricGrader
 from radslice.grading.judge import JudgeResult, build_judge_prompt, parse_judge_response
 from radslice.grading.patterns import (
