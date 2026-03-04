@@ -29,6 +29,7 @@ Benchmarks frontier multimodal LLMs (GPT-5.2, Claude Opus/Sonnet 4.6, Gemini 2.5
 - **Task-type-aware grading**: `incidental_detection` and `report_audit` use specialized judge prompts and scoring
 - **Scoring**: pass@k, pass^k, Wilson CI, bootstrap CI, two-proportion z-test
 - **Analysis**: per-modality, per-anatomy breakdowns, regression detection
+- **v2 roadmap** (`docs/RADSLICE_V2_ARCHITECTURE.md`, draft): 5 difficulty levels (0–4) from single-image interpretation to agentic DICOM workflows with 7 MCP-compatible tools, deterministic tool-use auditing, IDC-based DICOM sourcing. Current: rc1.0 (Level 0). Next: v2-alpha (Level 1, real DICOM volumes).
 
 ## Install Extras
 - `pip install -e .` — Core install (uncompressed DICOMs work out of the box)
