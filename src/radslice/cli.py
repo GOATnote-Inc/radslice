@@ -69,7 +69,7 @@ def run(
     """Execute evaluation matrix."""
     from radslice.cache import ResponseCache
     from radslice.executor import MatrixConfig, MatrixExecutor
-    from radslice.grading.grader import RubricGrader
+    from radslice.grading.grader import RubricGrader, validate_judge_coverage
     from radslice.providers.cached import CachedProvider
 
     # Build config
@@ -125,6 +125,18 @@ def run(
     )
 
     result = asyncio.run(executor.run(config))
+
+    # Validate judge coverage
+    ok, judged, total = validate_judge_coverage(result.grades, pattern_only)
+    if not ok:
+        click.echo(
+            f"\nJUDGE COVERAGE FAILURE: {judged}/{total} grades have judge results. "
+            f"{total - judged} grades fell back to pattern-only.\n"
+            "Results are unreliable without cross-vendor judge validation.\n"
+            "Use --pattern-only to explicitly opt into pattern-only grading.",
+            err=True,
+        )
+        raise SystemExit(2)
 
     # Summary
     click.echo(f"\nResults: {len(result.grades)} grades, {len(result.errors)} errors")

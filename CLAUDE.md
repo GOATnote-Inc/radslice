@@ -46,6 +46,7 @@ Benchmarks frontier multimodal LLMs (GPT-5.2, Claude Opus/Sonnet 4.6, Gemini 2.5
 - `radslice report` — Compare runs, generate reports
 - `radslice corpus download` — Fetch corpus images
 - `radslice corpus validate` — Validate task YAMLs
+- `radslice run` validates 100% judge coverage post-run (exit code 2 on failure). Use `--pattern-only` to explicitly skip the judge.
 
 ## Conventions
 - Frozen dataclasses for all domain objects (Task, GradeResult, etc.)

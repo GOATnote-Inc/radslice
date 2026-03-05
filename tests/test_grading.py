@@ -7,7 +7,7 @@ from unittest.mock import AsyncMock, MagicMock
 import pytest
 
 from radslice.grading.dimensions import DIMENSIONS, weighted_score
-from radslice.grading.grader import GradeResult, RubricGrader
+from radslice.grading.grader import GradeResult, RubricGrader, validate_judge_coverage
 from radslice.grading.judge import JudgeResult, build_judge_prompt, parse_judge_response
 from radslice.grading.patterns import (
     PatternResult,
@@ -387,3 +387,43 @@ class TestRubricGrader:
 
         grader._run_judge.assert_called_once()
         assert result.detection_layer == 2
+
+
+# --- Judge Coverage Validation ---
+
+
+def _make_grade(detection_layer: int) -> GradeResult:
+    """Helper to create a minimal GradeResult with a given detection_layer."""
+    return GradeResult(
+        task_id="TEST-001",
+        model="test-model",
+        trial=0,
+        passed=True,
+        weighted_score=0.8,
+        dimension_scores={},
+        failure_class=None,
+        detection_layer=detection_layer,
+    )
+
+
+class TestJudgeCoverageValidation:
+    def test_judge_coverage_all_judged(self):
+        grades = [_make_grade(2), _make_grade(2), _make_grade(2)]
+        ok, judged, total = validate_judge_coverage(grades, pattern_only=False)
+        assert ok is True
+        assert judged == 3
+        assert total == 3
+
+    def test_judge_coverage_partial(self):
+        grades = [_make_grade(2), _make_grade(0), _make_grade(2)]
+        ok, judged, total = validate_judge_coverage(grades, pattern_only=False)
+        assert ok is False
+        assert judged == 2
+        assert total == 3
+
+    def test_judge_coverage_pattern_only(self):
+        grades = [_make_grade(0), _make_grade(0)]
+        ok, judged, total = validate_judge_coverage(grades, pattern_only=True)
+        assert ok is True
+        assert judged == 0
+        assert total == 2

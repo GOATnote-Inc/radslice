@@ -41,6 +41,17 @@ class GradeResult:
         return asdict(self)
 
 
+def validate_judge_coverage(grades: list[GradeResult], pattern_only: bool) -> tuple[bool, int, int]:
+    """Validate that all grades have judge results when expected.
+
+    Returns (ok, judged_count, total_count).
+    """
+    if pattern_only or not grades:
+        return True, 0, len(grades)
+    judged = sum(1 for g in grades if g.detection_layer == 2)
+    return judged == len(grades), judged, len(grades)
+
+
 class RubricGrader:
     """3-layer radiology grading engine.
 
