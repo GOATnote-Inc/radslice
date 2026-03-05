@@ -1,0 +1,58 @@
+{
+  "date": "2026-03-06",
+  "analysis": "l0_false_pass_reduction",
+  "method": "Context-aware pattern matching: non-diagnosis patterns scoped to Primary Diagnosis + Key Findings sections only, excluding Differential Diagnoses and Recommendations. Falls back to full text when section headers are not detected.",
+  "total_l0_grades_analyzed": 244,
+  "section_headers_detected": 201,
+  "section_not_detected_fallback": 43,
+  "l0_pattern_level_changes": {
+    "description": "Grades where all_required_pass changed from True to False",
+    "total_flipped": 18,
+    "all_confirmed_l2_failures": true,
+    "regressions": 0,
+    "flipped_grades": [
+      "US-019:0:opus", "US-019:1:opus",
+      "US-046:0:opus", "US-046:1:opus", "US-046:2:opus",
+      "US-050:1:opus", "US-050:2:opus",
+      "XRAY-024:1:opus", "XRAY-024:2:opus",
+      "XRAY-027:0:opus", "XRAY-027:1:opus", "XRAY-027:2:opus",
+      "CT-070:1:gpt",
+      "MRI-011:0:gpt", "MRI-011:2:gpt",
+      "US-046:0:gpt",
+      "XRAY-055:1:gpt", "XRAY-055:2:gpt"
+    ],
+    "by_task": {
+      "US-046": 4,
+      "XRAY-027": 3,
+      "US-019": 2,
+      "US-050": 2,
+      "XRAY-024": 2,
+      "XRAY-055": 2,
+      "MRI-011": 2,
+      "CT-070": 1
+    }
+  },
+  "grader_level_impact": {
+    "description": "Comparison of grader-level pass/fail using L2 judge as ground truth. Note: grader pass/fail uses scoring + failure class override, not just L0 patterns.",
+    "old_false_pass_rate": 0.4343,
+    "new_false_pass_rate": 0.1869,
+    "false_pass_reduction": "43.4% -> 18.7% (-24.7pp)",
+    "old_false_passes": 86,
+    "new_false_passes": 37,
+    "false_passes_eliminated": 49
+  },
+  "root_cause_examples": [
+    {
+      "task": "US-019",
+      "pattern": "multiple_quadrants",
+      "old_match_context": "Recommendations section: 'Complete all four FAST windows (LUQ, pelvis, subxiphoid)'",
+      "new_match_context": "Not matched — keyword only in excluded section"
+    },
+    {
+      "task": "US-046",
+      "pattern": "stone_finding",
+      "old_match_context": "Differential section: 'ureteral calculus, UPJ obstruction'",
+      "new_match_context": "Not matched — keyword only in excluded section"
+    }
+  ]
+}

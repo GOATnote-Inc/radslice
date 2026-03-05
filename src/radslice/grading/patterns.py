@@ -32,16 +32,62 @@ class PatternResult:
         return passed / total
 
 
+# Patterns matching section headers where models discuss concepts speculatively
+# (differential diagnoses, recommendations) rather than confirmed findings.
+# Models use "## N. Title" or "## N) Title" format consistently.
+_EXCLUDE_SECTIONS_HEADER = re.compile(
+    r"^#{1,3}\s*(?:\d[\.\)]\s*)?"
+    r"(?:Differential|Severity\s+Assessment|Recommend|Treatment|Management"
+    r"|Clinical\s+Correlation|Next\s+Steps|Additional\s+(?:Imaging|considerations)"
+    r"|Supportive|Surgical|Immediate|Urgent|Follow)",
+    re.IGNORECASE | re.MULTILINE,
+)
+
+
+def extract_diagnostic_sections(response: str) -> str | None:
+    """Extract sections 1 (Primary Diagnosis) and 2 (Key Findings) only.
+
+    Strips everything from the first differential/recommendations header onward.
+    Returns None if no such sections are detected (response is unstructured).
+    """
+    m = _EXCLUDE_SECTIONS_HEADER.search(response)
+    if not m:
+        return None
+    return response[: m.start()]
+
+
+def _is_finding_pattern(name: str) -> bool:
+    """Return True if this pattern checks for an imaging finding (not diagnosis).
+
+    All patterns except diagnosis-related ones are scoped to the diagnostic
+    sections (Primary Diagnosis + Key Findings), excluding differentials
+    and recommendations where models mention concepts speculatively.
+    """
+    return "diagnosis" not in name
+
+
 def run_task_patterns(task: Task, response: str) -> PatternResult:
-    """Run all pattern checks defined in a task YAML against the response."""
+    """Run all pattern checks defined in a task YAML against the response.
+
+    Finding-specific patterns (names starting with 'key_finding' or 'finding_')
+    are restricted to the Key Findings section of the response when that section
+    can be detected. This prevents false passes from keywords appearing in the
+    differential diagnosis or recommendations sections.
+    """
     checks = {}
     req_passed = 0
     req_total = 0
     opt_passed = 0
     opt_total = 0
 
+    diagnostic_text = extract_diagnostic_sections(response)
+
     for pc in task.pattern_checks:
-        passed = pc.check(response)
+        # Scope finding patterns to diagnostic sections when available
+        if _is_finding_pattern(pc.name) and diagnostic_text is not None:
+            passed = pc.check(diagnostic_text)
+        else:
+            passed = pc.check(response)
         checks[pc.name] = passed
         if pc.required:
             req_total += 1
