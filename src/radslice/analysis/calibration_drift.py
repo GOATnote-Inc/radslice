@@ -86,8 +86,12 @@ def compute_calibration_drift(
         if not pattern_result or not judge_result:
             continue
 
-        # Layer 0: pass if all_required_pass, else failure class from patterns
-        l0_class = "PASS" if pattern_result.get("all_required_pass", False) else "FAIL"
+        # Layer 0: use stored failure_class, fall back to all_required_pass
+        l0_failure = pattern_result.get("failure_class")
+        if l0_failure is None:
+            l0_class = "PASS" if pattern_result.get("all_required_pass", False) else "FAIL"
+        else:
+            l0_class = l0_failure
 
         # Layer 2: pass if no failure_class from judge
         l2_failure = judge_result.get("failure_class")
