@@ -1,0 +1,43 @@
+{
+  "date": "2026-03-06",
+  "analysis": "Manual validation of Class A judge labels on high-scoring unsolved tasks",
+  "conclusion": "All Class A labels are CORRECT. Judge is not inflating failure counts.",
+  "tasks": [
+    {
+      "task_id": "US-019",
+      "condition": "Hemorrhagic Shock (FAST)",
+      "opus_scores": [0.568, 0.605, 0.605],
+      "judge_label": "A",
+      "judge_correct": true,
+      "reasoning": "Model identifies Morison pouch free fluid from a single RUQ view but never describes multi-compartment hemoperitoneum. Ground truth requires pelvic free fluid (required finding #2). The L0 pattern matched 'LUQ, pelvis' in the RECOMMENDATIONS section ('Complete all four FAST windows (LUQ, pelvis, subxiphoid)'), not in actual findings. Model tells clinician to GO LOOK AT the pelvis rather than reporting it SAW pelvic fluid. For hemorrhagic shock FAST, documenting multi-compartment fluid is the critical finding that triggers the trauma team. Single-view positive FAST is clinically incomplete.",
+      "l0_false_pass_mechanism": "Regex matched keyword in recommendations section, not findings section. L0 cannot distinguish 'I observed X' from 'clinician should check for X'.",
+      "clinical_significance": "In a real trauma bay, incomplete FAST documentation could delay OR activation. The model correctly identified RUQ fluid but stopped short of the full FAST interpretation."
+    },
+    {
+      "task_id": "US-046",
+      "condition": "Obstructive Urolithiasis",
+      "opus_scores": [0.493, 0.510, 0.465],
+      "judge_label": "A",
+      "judge_correct": true,
+      "reasoning": "Model describes moderate-to-severe hydronephrosis and correctly lists 'ureteral calculus' as the most likely cause in the differential, but never directly identifies the stone on imaging. Ground truth requires 'echogenic focus with posterior acoustic shadowing in the renal pelvis or UPJ' (required finding #1). The L0 pattern matched 'calcul' and 'stone' in the differential diagnosis text, not in imaging findings. The model infers the stone exists from the hydronephrosis pattern rather than directly visualizing it.",
+      "l0_false_pass_mechanism": "Regex matched keyword in differential diagnosis list, not imaging findings. L0 cannot distinguish 'I see a stone' from 'the most likely cause is a stone'.",
+      "clinical_significance": "Missing the stone on imaging means it could be missed on follow-up. The model correctly identifies the downstream effect (hydronephrosis) but not the causative finding."
+    },
+    {
+      "task_id": "MRI-040",
+      "condition": "Carbon Monoxide Poisoning",
+      "opus_scores": [0.647, 0.683, 0.693],
+      "judge_label": "B",
+      "judge_correct": true,
+      "reasoning": "Model diagnoses 'bilateral basal ganglia infarction (acute ischemic stroke)' and mentions 'toxic/metabolic encephalopathy' only as a secondary consideration. The correct diagnosis is carbon monoxide poisoning with globus pallidus necrosis. The model identifies the correct imaging findings (bilateral globus pallidus DWI restriction) but gives the wrong primary diagnosis. Class B (wrong diagnosis, confidently stated) is correct — the model is confident about ischemic stroke when the pathognomonic bilateral GP pattern should trigger CO poisoning.",
+      "l0_false_pass_mechanism": "N/A — L0 patterns require 'carbon monoxide' which the model does not mention. L0 correctly failed this task.",
+      "clinical_significance": "CO poisoning requires specific treatment (hyperbaric oxygen). Diagnosing as ischemic stroke would lead to anticoagulation workup and miss the need for CO levels and HBO therapy."
+    }
+  ],
+  "implications": {
+    "judge_asymmetry": "The GPT-5.2 judge's Class A/B labels on Opus responses are accurate, not over-strict. The 59 flips from the Opus judge on GPT grades (separate analysis) may have a similar validation profile but would need independent review.",
+    "l0_false_pass_root_cause": "Layer 0 regex patterns cannot distinguish between keywords appearing in (1) imaging findings, (2) differential diagnosis, or (3) clinical recommendations. This is a fundamental limitation of pattern-only grading.",
+    "corrected_pass_rates_stand": "Opus corrected pass rate of 21/153 (13.7%) is accurate. US-019 and US-046 should NOT be flipped to pass.",
+    "rc11_recommendation": "Add context-aware pattern matching (e.g., only match within 'Findings' sections) or require the judge for all grades regardless of L0 confidence."
+  }
+}
