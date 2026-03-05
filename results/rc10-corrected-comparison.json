@@ -1,0 +1,82 @@
+{
+  "date": "2026-03-06",
+  "original": {
+    "gpt52": {
+      "pass": 86,
+      "total": 153,
+      "rate": 0.562
+    },
+    "opus46": {
+      "pass": 48,
+      "total": 153,
+      "rate": 0.314
+    },
+    "ratio": 1.79,
+    "note": "All grades from Layer 0 patterns only. No LLM judge validation."
+  },
+  "corrected": {
+    "gpt52": {
+      "pass": 27,
+      "total": 153,
+      "rate": 0.1765,
+      "judge": "claude-opus-4-6",
+      "flipped": 59
+    },
+    "opus46": {
+      "pass": 21,
+      "total": 153,
+      "rate": 0.1373,
+      "judge": "gpt-5.2",
+      "flipped": 27
+    },
+    "ratio": 1.29
+  },
+  "task_level": {
+    "both_pass": 5,
+    "both_fail": 40,
+    "gpt_only_pass": 4,
+    "opus_only_pass": 2,
+    "unsolved_tasks": [
+      "CT-026",
+      "CT-027",
+      "CT-048",
+      "CT-061",
+      "CT-068",
+      "CT-069",
+      "CT-070",
+      "CT-085",
+      "CT-091",
+      "CT-097",
+      "CT-106",
+      "MRI-003",
+      "MRI-007",
+      "MRI-010",
+      "MRI-011",
+      "MRI-014",
+      "MRI-031",
+      "MRI-035",
+      "MRI-040",
+      "US-006",
+      "US-010",
+      "US-019",
+      "US-034",
+      "US-042",
+      "US-046",
+      "US-053",
+      "US-073",
+      "US-082",
+      "XRAY-007",
+      "XRAY-014",
+      "XRAY-017",
+      "XRAY-023",
+      "XRAY-024",
+      "XRAY-025",
+      "XRAY-027",
+      "XRAY-031",
+      "XRAY-045",
+      "XRAY-052",
+      "XRAY-055",
+      "XRAY-068"
+    ]
+  }
+}
