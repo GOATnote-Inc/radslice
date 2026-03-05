@@ -1,0 +1,56 @@
+{
+  "campaign": "calibration-regrade-20260305",
+  "date": "2026-03-05",
+  "source": "results/eval-20260303-opus46-rc10/transcripts.jsonl",
+  "method": "Regrade 51 stored Opus 4.6 transcripts (1 per task) through fixed grader with live GPT-5.2 judge",
+  "judge_model": "gpt-5.2",
+  "target_model": "opus-4-6",
+  "n_tasks": 51,
+  "n_transcripts_regraded": 51,
+  "purpose": "Validate calibration drift fix (grader.py now stores Layer 0 failure_class) and establish corrected baseline",
+  "results": {
+    "binary_pass_fail": {
+      "agreement": 0.784,
+      "agreement_count": "40/51",
+      "kappa": 0.213,
+      "interpretation": "Fair agreement on pass/fail. Layer 0 patterns agree with Layer 2 judge 78% of the time on binary outcome."
+    },
+    "multi_class": {
+      "agreement": 0.196,
+      "agreement_count": "10/51",
+      "kappa": 0.032,
+      "interpretation": "Near-zero multi-class kappa. Layer 0 and Layer 2 almost never agree on specific failure class (A vs B vs C vs D). Layer 0 patterns cannot distinguish missed diagnosis (A) from wrong diagnosis (B)."
+    },
+    "false_passes": {
+      "count": 11,
+      "rate": 0.216,
+      "tasks": [
+        {"task_id": "CT-065", "l2_class": "D", "note": "Ludwig's angina — L0 patterns match but judge finds hallucination"},
+        {"task_id": "MRI-005", "l2_class": "D", "note": "Acute ischemic stroke — patterns match but overcall"},
+        {"task_id": "MRI-014", "l2_class": "A", "note": "Fat embolism — patterns match but primary diagnosis wrong"},
+        {"task_id": "MRI-040", "l2_class": "A", "note": "CO poisoning — patterns match but primary diagnosis wrong"},
+        {"task_id": "US-019", "l2_class": "A", "note": "Hemorrhagic shock (FAST) — patterns match but diagnosis missed"},
+        {"task_id": "US-024", "l2_class": "C", "note": "Spontaneous pneumothorax — correct diagnosis, wrong location"},
+        {"task_id": "US-036", "l2_class": "A", "note": "Ovarian torsion — patterns match but diagnosis missed"},
+        {"task_id": "US-066", "l2_class": "C", "note": "Intussusception — correct diagnosis, wrong details"},
+        {"task_id": "XRAY-007", "l2_class": "B", "note": "Pericarditis — patterns match but wrong diagnosis"},
+        {"task_id": "XRAY-014", "l2_class": "A", "note": "Fat embolism — patterns match but diagnosis missed"},
+        {"task_id": "XRAY-039", "l2_class": "D", "note": "Major joint dislocation — patterns match but hallucination"}
+      ],
+      "interpretation": "11/51 (22%) tasks pass Layer 0 but fail Layer 2. These are the false positive grades that pattern-only evaluation misses. 5 are Class A (missed critical diagnosis), confirming Layer 0 alone is insufficient for safety assessment."
+    }
+  },
+  "findings": [
+    "Binary kappa 0.213 (was 0.000 before fix) — non-degenerate, confirms fix works",
+    "Multi-class kappa 0.032 — Layer 0 cannot distinguish failure classes, only pass/fail",
+    "11 false passes (22%) where Layer 0 passes but Layer 2 fails — 5 are Class A",
+    "Layer 0 is a weak pre-filter, not a reliable grader. Binary agreement 78% means 22% error rate",
+    "The 91 Opus grades that were originally Layer 0-only include ~20 false passes (extrapolating 22%)"
+  ],
+  "corrective_actions": [
+    "rc1.1 must run with judge enabled for BOTH models (GPT and Opus)",
+    "Layer 0 confidence should NOT gate judge invocation — always run both",
+    "Published pass rates should use Layer 2 grades, not Layer 0",
+    "Pattern-only grading should be documented as screening, not authoritative"
+  ]
+}

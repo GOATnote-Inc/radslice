@@ -12,9 +12,15 @@ audits:
       mri: 0.20754716981132076
       ultrasound: 0.1797752808988764
   calibration:
-    kappa: 0.0
-    agreement: 0.0
+    kappa_binary: 0.213
+    kappa_multiclass: 0.032
+    agreement_binary: 0.784
+    agreement_multiclass: 0.196
     drift_detected: true
+    false_pass_rate: 0.216
+    false_pass_count: 11
+    note: Corrected baseline from 51-task regrade with GPT-5.2 judge (2026-03-05).
+      Binary kappa 0.213 replaces degenerate 0.000 from pre-fix code.
   saturation:
     saturated_tasks: 0
     saturation_rate: 0.0
@@ -24,9 +30,13 @@ audits:
   governance_review_counter: 7
   findings:
   - Over 50% of tasks (274/330) have never been evaluated
-  - 'Calibration drift detected: kappa=0.000, agreement=0.0%'
+  - 'Calibration drift: binary kappa=0.213, multi-class kappa=0.032. Layer 0 patterns
+    are a weak pre-filter (78% binary agreement, 20% multi-class)'
+  - "11/51 tasks (22%) pass Layer 0 but fail Layer 2 judge \u2014 5 are Class A (missed\
+    \ critical diagnosis)"
   - 24 critical risk debt entries unresolved
   recommendations:
   - Run full-corpus evaluation for coverage
-  - Review grading patterns and judge alignment
+  - "Always run Layer 2 judge \u2014 Layer 0 alone has 22% false positive rate"
+  - rc1.1 must enable cross-vendor judge for BOTH models
   - Prioritize Class A failure resolution
