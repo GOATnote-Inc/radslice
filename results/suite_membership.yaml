@@ -1,17 +1,19 @@
 # Suite Membership Tracking
-# Tracks which tasks belong to capability vs regression suites.
+# Tracks which tasks belong to capability vs regression vs blocked suites.
 # Managed by eval-lead agent (proposals from corpus-strategist).
+# Updated: 2026-03-06 (rc1.1 remediation plan)
 
 # All 320 tasks start in capability suite.
 # Tasks promoted to regression when they discriminate between models.
 # Tasks retired from capability when saturated (pass@5 > 0.95 all models, 3+ runs).
+# Tasks blocked when data quality prevents valid evaluation (return to capability when fixed).
 
 capability:
   xray: 72
-  ct: 106
-  mri: 53
+  ct: 103  # 3 blocked (CT-027, CT-048, CT-097)
+  mri: 50  # 3 blocked (MRI-007, MRI-031, MRI-035)
   ultrasound: 89
-  total: 320
+  total: 314
 
 regression:
   xray: 0
@@ -20,6 +22,13 @@ regression:
   ultrasound: 0
   total: 0
 
+blocked:
+  # IMAGE_MISMATCH: image does not match task clinical scenario.
+  # Return to capability once images are re-sourced and validated.
+  ct: 3
+  mri: 3
+  total: 6
+
 retired:
   xray: 0
   ct: 0
@@ -27,12 +36,90 @@ retired:
   ultrasound: 0
   total: 0
 
-# Per-task tracking populated by radslice suite-update
-tasks: {}
-# Format:
-# XRAY-001:
-#   suite: capability  # capability | regression | retired
-#   consecutive_all_pass: 0
-#   consecutive_any_fail: 0
-#   promoted_date: null
-#   retired_date: null
+# Per-task tracking
+# suite: capability | regression | retired | blocked
+# blocked_reason: IMAGE_MISMATCH | null
+# near_threshold: true if any trial scored 0.40-0.50 in corrected rc1.0
+# prompt_priority: true if near_threshold and remediation planned for rc1.1
+tasks:
+  # --- BLOCKED: IMAGE_MISMATCH (6 tasks) ---
+  CT-027:
+    suite: blocked
+    blocked_reason: IMAGE_MISMATCH
+    blocked_date: "2026-03-06"
+    condition: foreign-body-aspiration
+    note: "Image does not show intraluminal bronchial foreign body"
+  CT-048:
+    suite: blocked
+    blocked_reason: IMAGE_MISMATCH
+    blocked_date: "2026-03-06"
+    condition: open-fracture
+    note: "Image does not show soft tissue disruption communicating with fracture"
+  CT-097:
+    suite: blocked
+    blocked_reason: IMAGE_MISMATCH
+    blocked_date: "2026-03-06"
+    condition: acute-angle-closure-glaucoma
+    note: "Orbital CT does not show shallow anterior chamber vs contralateral eye"
+  MRI-007:
+    suite: blocked
+    blocked_reason: IMAGE_MISMATCH
+    blocked_date: "2026-03-06"
+    condition: cauda-equina-syndrome
+    note: "MRI does not show large central disc extrusion compressing cauda equina"
+  MRI-031:
+    suite: blocked
+    blocked_reason: IMAGE_MISMATCH
+    blocked_date: "2026-03-06"
+    condition: hsv-encephalitis
+    note: "Image does not show temporal lobe FLAIR hyperintensity pattern"
+  MRI-035:
+    suite: blocked
+    blocked_reason: IMAGE_MISMATCH
+    blocked_date: "2026-03-06"
+    condition: spinal-epidural-abscess
+    note: "MRI does not show rim-enhancing epidural collection"
+
+  # --- NEAR-THRESHOLD: prompt engineering priority for rc1.1 (7 tasks) ---
+  MRI-011:
+    suite: capability
+    near_threshold: true
+    prompt_priority: true
+    best_score: {gpt: 0.53, opus: 0.03}
+    note: "GPT nearly passes (0.53). Review pattern_checks for over-strict matching."
+  MRI-014:
+    suite: capability
+    near_threshold: true
+    prompt_priority: true
+    best_score: {gpt: 0.41, opus: 0.40}
+    note: "Both models close. Review if starfield pattern terminology too specific."
+  US-019:
+    suite: capability
+    near_threshold: true
+    prompt_priority: true
+    best_score: {gpt: 0.44, opus: 0.68}
+    note: "Opus scores 0.68 but Class A override. Review judge failure classification."
+  US-042:
+    suite: capability
+    near_threshold: true
+    prompt_priority: true
+    best_score: {gpt: 0.43, opus: 0.01}
+    note: "GPT nearly passes (Class C). Review anatomic precision weights."
+  US-046:
+    suite: capability
+    near_threshold: true
+    prompt_priority: true
+    best_score: {gpt: 0.51, opus: 0.51}
+    note: "Both at threshold but Class A override. Review primary diagnosis criteria."
+  XRAY-027:
+    suite: capability
+    near_threshold: true
+    prompt_priority: true
+    best_score: {gpt: 0.15, opus: 0.42}
+    note: "Opus nearly passes. Review pattern overlap with pneumothorax."
+  XRAY-068:
+    suite: capability
+    near_threshold: true
+    prompt_priority: true
+    best_score: {gpt: 0.18, opus: 0.42}
+    note: "Opus nearly passes. Review HAPE vs HACE distinction."

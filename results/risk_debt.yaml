@@ -3,7 +3,9 @@
 # Managed by eval-lead agent.
 # Source: results/rc10-grading-audit.json, results/eval-20260303-rc10-summary.json, results/calibration-regrade-l0only-20260305.json
 # IMAGE_MISMATCH tasks excluded (CT-027, CT-048, CT-097, MRI-007, MRI-031, MRI-035) — data quality, not model failures.
+#   Remediation: re-source images per docs/RC11_REMEDIATION_PLAN.md. Blocked in suite_membership.yaml.
 # Campaign: eval-20260303-gpt52-rc10, eval-20260303-opus46-rc10
+# Judge concordance (2026-03-06): results/judge-concordance-unsolved.json
 entries:
   # --- Tier 1: time_to_harm < 30 minutes (immediate life-threat) ---
 

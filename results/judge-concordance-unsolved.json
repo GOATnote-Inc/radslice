@@ -1,0 +1,276 @@
+{
+  "date": "2026-03-06",
+  "analysis": "judge_concordance",
+  "unsolved_count": 40,
+  "image_mismatch_count": 6,
+  "image_mismatch_tasks": [
+    "CT-027",
+    "CT-048",
+    "CT-097",
+    "MRI-007",
+    "MRI-031",
+    "MRI-035"
+  ],
+  "true_unsolved_count": 34,
+  "true_unsolved_tasks": [
+    "CT-026",
+    "CT-061",
+    "CT-068",
+    "CT-069",
+    "CT-070",
+    "CT-085",
+    "CT-091",
+    "CT-106",
+    "MRI-003",
+    "MRI-010",
+    "MRI-011",
+    "MRI-014",
+    "MRI-040",
+    "US-006",
+    "US-010",
+    "US-019",
+    "US-034",
+    "US-042",
+    "US-046",
+    "US-053",
+    "US-073",
+    "US-082",
+    "XRAY-007",
+    "XRAY-014",
+    "XRAY-017",
+    "XRAY-023",
+    "XRAY-024",
+    "XRAY-025",
+    "XRAY-027",
+    "XRAY-031",
+    "XRAY-045",
+    "XRAY-052",
+    "XRAY-055",
+    "XRAY-068"
+  ],
+  "near_threshold_count": 7,
+  "near_threshold_tasks": [
+    "MRI-011",
+    "MRI-014",
+    "US-019",
+    "US-042",
+    "US-046",
+    "XRAY-027",
+    "XRAY-068"
+  ],
+  "firmly_unsolved_count": 27,
+  "judge_dependent_count": 26,
+  "judge_dependent": [
+    {
+      "task_id": "CT-061",
+      "gpt_l0_passed": true,
+      "opus_l0_passed": false,
+      "gpt_l2_all_fail": true,
+      "opus_l2_all_fail": true
+    },
+    {
+      "task_id": "CT-068",
+      "gpt_l0_passed": true,
+      "opus_l0_passed": false,
+      "gpt_l2_all_fail": true,
+      "opus_l2_all_fail": true
+    },
+    {
+      "task_id": "CT-069",
+      "gpt_l0_passed": true,
+      "opus_l0_passed": false,
+      "gpt_l2_all_fail": true,
+      "opus_l2_all_fail": true
+    },
+    {
+      "task_id": "CT-070",
+      "gpt_l0_passed": true,
+      "opus_l0_passed": false,
+      "gpt_l2_all_fail": true,
+      "opus_l2_all_fail": true
+    },
+    {
+      "task_id": "CT-091",
+      "gpt_l0_passed": true,
+      "opus_l0_passed": false,
+      "gpt_l2_all_fail": true,
+      "opus_l2_all_fail": true
+    },
+    {
+      "task_id": "MRI-003",
+      "gpt_l0_passed": true,
+      "opus_l0_passed": true,
+      "gpt_l2_all_fail": true,
+      "opus_l2_all_fail": true
+    },
+    {
+      "task_id": "MRI-010",
+      "gpt_l0_passed": true,
+      "opus_l0_passed": false,
+      "gpt_l2_all_fail": true,
+      "opus_l2_all_fail": true
+    },
+    {
+      "task_id": "MRI-011",
+      "gpt_l0_passed": true,
+      "opus_l0_passed": false,
+      "gpt_l2_all_fail": true,
+      "opus_l2_all_fail": true
+    },
+    {
+      "task_id": "MRI-014",
+      "gpt_l0_passed": true,
+      "opus_l0_passed": true,
+      "gpt_l2_all_fail": true,
+      "opus_l2_all_fail": true
+    },
+    {
+      "task_id": "MRI-040",
+      "gpt_l0_passed": true,
+      "opus_l0_passed": true,
+      "gpt_l2_all_fail": true,
+      "opus_l2_all_fail": true
+    },
+    {
+      "task_id": "US-006",
+      "gpt_l0_passed": true,
+      "opus_l0_passed": false,
+      "gpt_l2_all_fail": true,
+      "opus_l2_all_fail": true
+    },
+    {
+      "task_id": "US-019",
+      "gpt_l0_passed": true,
+      "opus_l0_passed": true,
+      "gpt_l2_all_fail": true,
+      "opus_l2_all_fail": true
+    },
+    {
+      "task_id": "US-042",
+      "gpt_l0_passed": true,
+      "opus_l0_passed": false,
+      "gpt_l2_all_fail": true,
+      "opus_l2_all_fail": true
+    },
+    {
+      "task_id": "US-046",
+      "gpt_l0_passed": true,
+      "opus_l0_passed": true,
+      "gpt_l2_all_fail": true,
+      "opus_l2_all_fail": true
+    },
+    {
+      "task_id": "US-053",
+      "gpt_l0_passed": true,
+      "opus_l0_passed": false,
+      "gpt_l2_all_fail": true,
+      "opus_l2_all_fail": true
+    },
+    {
+      "task_id": "XRAY-007",
+      "gpt_l0_passed": false,
+      "opus_l0_passed": true,
+      "gpt_l2_all_fail": true,
+      "opus_l2_all_fail": true
+    },
+    {
+      "task_id": "XRAY-014",
+      "gpt_l0_passed": true,
+      "opus_l0_passed": true,
+      "gpt_l2_all_fail": true,
+      "opus_l2_all_fail": true
+    },
+    {
+      "task_id": "XRAY-017",
+      "gpt_l0_passed": true,
+      "opus_l0_passed": false,
+      "gpt_l2_all_fail": true,
+      "opus_l2_all_fail": true
+    },
+    {
+      "task_id": "XRAY-023",
+      "gpt_l0_passed": true,
+      "opus_l0_passed": false,
+      "gpt_l2_all_fail": true,
+      "opus_l2_all_fail": true
+    },
+    {
+      "task_id": "XRAY-024",
+      "gpt_l0_passed": true,
+      "opus_l0_passed": true,
+      "gpt_l2_all_fail": true,
+      "opus_l2_all_fail": true
+    },
+    {
+      "task_id": "XRAY-025",
+      "gpt_l0_passed": true,
+      "opus_l0_passed": false,
+      "gpt_l2_all_fail": true,
+      "opus_l2_all_fail": true
+    },
+    {
+      "task_id": "XRAY-027",
+      "gpt_l0_passed": false,
+      "opus_l0_passed": true,
+      "gpt_l2_all_fail": true,
+      "opus_l2_all_fail": true
+    },
+    {
+      "task_id": "XRAY-031",
+      "gpt_l0_passed": true,
+      "opus_l0_passed": false,
+      "gpt_l2_all_fail": true,
+      "opus_l2_all_fail": true
+    },
+    {
+      "task_id": "XRAY-052",
+      "gpt_l0_passed": true,
+      "opus_l0_passed": false,
+      "gpt_l2_all_fail": true,
+      "opus_l2_all_fail": true
+    },
+    {
+      "task_id": "XRAY-055",
+      "gpt_l0_passed": true,
+      "opus_l0_passed": false,
+      "gpt_l2_all_fail": true,
+      "opus_l2_all_fail": true
+    },
+    {
+      "task_id": "XRAY-068",
+      "gpt_l0_passed": true,
+      "opus_l0_passed": false,
+      "gpt_l2_all_fail": true,
+      "opus_l2_all_fail": true
+    }
+  ],
+  "l0_pass_l2_fail_in_unsolved": 79,
+  "l0_fail_l2_fail_in_unsolved": 108,
+  "gpt_failure_classes": {
+    "B": 104,
+    "A": 12,
+    "C": 4
+  },
+  "opus_failure_classes": {
+    "B": 68,
+    "A": 52
+  },
+  "gpt_score_stats": {
+    "mean": 0.1469,
+    "max": 0.535,
+    "min": 0.0,
+    "n": 120
+  },
+  "opus_score_stats": {
+    "mean": 0.118,
+    "max": 0.6925,
+    "min": 0.0,
+    "n": 120
+  },
+  "modality_breakdown": {
+    "CT": 8,
+    "MRI": 5,
+    "US": 9,
+    "XRAY": 12
+  }
+}
