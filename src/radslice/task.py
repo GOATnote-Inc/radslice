@@ -205,7 +205,18 @@ class TaskValidationError(ValueError):
     pass
 
 
-def validate_task(task: Task) -> list[str]:
+def validate_condition_id(
+    condition_id: str, openem_map: dict[str, list[str]] | None = None
+) -> str | None:
+    """Validate condition_id resolves in OpenEM. Returns error string or None."""
+    if openem_map is None:
+        return None
+    if condition_id not in openem_map:
+        return f"condition_id '{condition_id}' not found in OpenEM condition map"
+    return None
+
+
+def validate_task(task: Task, openem_map: dict[str, list[str]] | None = None) -> list[str]:
     """Validate a task and return list of error messages (empty = valid)."""
     errors = []
     if not task.id:
@@ -244,10 +255,15 @@ def validate_task(task: Task) -> list[str]:
     for pc in task.pattern_checks:
         if pc.check_type not in {"regex", "contains", "not_contains"}:
             errors.append(f"Invalid check_type '{pc.check_type}' in pattern '{pc.name}'")
+    # Validate condition_id against OpenEM if map provided
+    if task.condition_id:
+        cid_err = validate_condition_id(task.condition_id, openem_map)
+        if cid_err:
+            errors.append(cid_err)
     return errors
 
 
-def load_task(path: str | Path) -> Task:
+def load_task(path: str | Path, openem_map: dict[str, list[str]] | None = None) -> Task:
     """Load a single task from a YAML file."""
     path = Path(path)
     with open(path) as f:
@@ -277,7 +293,7 @@ def load_task(path: str | Path) -> Task:
         dicom_metadata=raw.get("dicom_metadata"),
     )
 
-    errors = validate_task(task)
+    errors = validate_task(task, openem_map)
     if errors:
         raise TaskValidationError(f"Task {path}: {'; '.join(errors)}")
 
