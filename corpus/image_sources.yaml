@@ -1,8 +1,8 @@
 schema_version: '2.1'
 metadata:
   total_tasks: 205
-  total_sourced: 39
-  total_validated: 27
+  total_sourced: 44
+  total_validated: 32
   last_updated: '2026-03-06'
   notes: "v2.1 \u2014 added license_tier field, new dataset sources, revised task counts after US trim"
 images:
@@ -454,6 +454,22 @@ images:
       \ cavitation due to Actinomyces viscosus.Note: Arrows indicate chest wall sinus tract."
     sha256: e85b95a65db3556737d173ffb12e7a997d91fd352eac30da55d8dba23099801d
     license_tier: research_only
+  ct/multicare/foreign-body-aspiration-pmc12444646-Fig2.jpg:
+    source: multicare
+    source_id: PMC12444646_Fig2
+    original_format: jpg
+    license: CC-BY 4.0
+    url: https://cdn.ncbi.nlm.nih.gov/pmc/blobs/a12f/12444646/293fc0921e59/RCR2-13-e70346-g002.jpg
+    condition_id: foreign-body-aspiration
+    task_ids:
+    - CT-027
+    validation_status: validated
+    pathology_confirmed: true
+    caption_score: 1.0
+    notes: Non-contrast chest CT showing high-density nodule in right bronchus intermedius (mukago foreign body).
+      Axial and coronal reformats with red arrows indicating endobronchial FB.
+    sha256: c9100066cb7f67a18a20236ce9f561074cf155a68cebfd9fdb015428edcabf11
+    license_tier: commercial_safe
   ct/multicare/open-fracture-pmc5935655-fig3.png:
     source: multicare
     source_id: PMC5935655_fig3
@@ -469,6 +485,23 @@ images:
       (A). Anteroposterior (AP) and lateral X-rays of the tibia illustrating osteolysis (whit
     sha256: f240490a82fe04e732a54de85e3a2852699797bb29e0ead4aeab2f755eb1ee7f
     license_tier: research_only
+  ct/multicare/open-fracture-pmc12686621-Fig1.jpg:
+    source: multicare
+    source_id: PMC12686621_Fig1
+    original_format: jpg
+    license: CC-BY 4.0
+    url: https://cdn.ncbi.nlm.nih.gov/pmc/blobs/e26d/12686621/e262b547c787/gr1.jpg
+    condition_id: open-fracture
+    task_ids:
+    - CT-048
+    validation_status: validated
+    pathology_confirmed: true
+    caption_score: 1.0
+    notes: Gustilo IIIB open tibial fracture. Composite showing (a,b) clinical wound photos with soft tissue
+      defect, (c) AP radiograph showing diaphyseal tibial fracture, (d) 3D CTA showing posterior
+      tibial artery interruption at fracture level.
+    sha256: f66e1311df8c0c4c73db9dc24970aa0dc53516a64b4a4029610c9fc727202ae4
+    license_tier: commercial_safe
   ct/multicare/urolithiasis-pmc10535984-viruses-15-01847-f020.png:
     source: multicare
     source_id: PMC10535984_viruses-15-01847-f020
@@ -562,6 +595,55 @@ images:
     notes: Sagittal CT reformation (a) shows multiple lytic and blastic metastatic breast cancer lesions in the thoracic spine
       with a compression fracture in the upper thoracic spine (yellow arrow). Sagittal T1-
     sha256: 74cad7ccd9bb679684a2051e863f7d8a3f132f18b775ac6ec3934f870e4cb685
+    license_tier: commercial_safe
+  mri/multicare/cauda-equina-syndrome-pmc12854390-Fig1.jpg:
+    source: multicare
+    source_id: PMC12854390_Fig1
+    original_format: jpg
+    license: CC-BY 4.0
+    url: https://cdn.ncbi.nlm.nih.gov/pmc/blobs/bb7f/12854390/fce4b37897da/cureus-0017-00000100428-i01.jpg
+    condition_id: cauda-equina-syndrome
+    task_ids:
+    - MRI-007
+    validation_status: validated
+    pathology_confirmed: true
+    caption_score: 1.0
+    notes: Sagittal T2-weighted MRI showing massive central disc extrusion at L5-S1 with cranio-caudal
+      migration causing severe compression of the cauda equina and bilateral S1 nerve roots.
+    sha256: fbce8337cdd1cdecab33bf2aabff96fc7b5ed44e026ac36eabeede7872b36725
+    license_tier: commercial_safe
+  mri/multicare/hsv-encephalitis-pmc12126961-Fig1.jpg:
+    source: multicare
+    source_id: PMC12126961_Fig1
+    original_format: jpg
+    license: CC-BY 4.0
+    url: https://cdn.ncbi.nlm.nih.gov/pmc/blobs/6c41/12126961/8b814060601b/cureus-0017-00000083346-i01.jpg
+    condition_id: hsv-encephalitis
+    task_ids:
+    - MRI-031
+    validation_status: validated
+    pathology_confirmed: true
+    caption_score: 1.0
+    notes: Brain MRI showing diffuse abnormal T2/FLAIR hyperintense signal in bilateral temporal lobes
+      and bilateral hippocampi. HSV-1 encephalitis with characteristic temporal involvement.
+    sha256: 6bbef2abe9e5cd1048ea14a5418cd928091e75988a694b6f725049972d57e5ce
+    license_tier: commercial_safe
+  mri/multicare/spinal-epidural-abscess-pmc8723735-Fig1.jpg:
+    source: multicare
+    source_id: PMC8723735_Fig1
+    original_format: jpg
+    license: CC-BY 4.0
+    url: https://cdn.ncbi.nlm.nih.gov/pmc/blobs/c9e9/8723735/3ea73a476846/cureus-0013-00000020100-i01.jpg
+    condition_id: spinal-epidural-abscess
+    task_ids:
+    - MRI-035
+    validation_status: validated
+    pathology_confirmed: true
+    caption_score: 1.0
+    notes: Cervical spine MRI sagittal planes. (A) T1WI, (B) T2WI, (C) T1W FS with gadolinium enhancement
+      showing rim-enhancing anterior spinal epidural abscess at C5-C6 with cord compression
+      and spondylodiscitis.
+    sha256: ad519ff0155c861348c974e50f3c8d5a3babcd92fbb648b90969d42ca9d312d5
     license_tier: commercial_safe
   ct/multicare/lateral-canthotomy-pmc3884541-F7.png:
     source: multicare

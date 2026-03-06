@@ -7,11 +7,16 @@ which had ~84% false positive rate (diagrams/flowcharts instead of imaging).
 
 from __future__ import annotations
 
+import hashlib
 import logging
 import re
+import sys
 import time
 from pathlib import Path
 from urllib.request import Request, urlopen
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from audit import append_provenance, build_provenance_record
 
 logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
 logger = logging.getLogger("download_targeted")
@@ -195,6 +200,67 @@ TARGETS = [
 ]
 
 
+# rc1.1 IMAGE_MISMATCH remediation: 5 re-sourced images (CT-097 deferred)
+# All CC-BY 4.0 or CC-BY. Manually curated from Europe PMC search.
+# Format: (task_id, condition_id, modality, pmcid, fig_hint, cdn_url, notes)
+TARGETS_RC11 = [
+    (
+        "CT-027",
+        "foreign-body-aspiration",
+        "ct",
+        "PMC12444646",
+        "Fig2",
+        "https://cdn.ncbi.nlm.nih.gov/pmc/blobs/a12f/12444646/293fc0921e59/RCR2-13-e70346-g002.jpg",
+        "Chest CT endobronchial mukago in R bronchus intermedius — CC-BY 4.0",
+    ),
+    (
+        "CT-048",
+        "open-fracture",
+        "ct",
+        "PMC12686621",
+        "Fig1",
+        "https://cdn.ncbi.nlm.nih.gov/pmc/blobs/e26d/12686621/e262b547c787/gr1.jpg",
+        "Gustilo IIIB open tibial fracture: clinical + XR + 3D CTA — CC-BY 4.0",
+    ),
+    (
+        "MRI-007",
+        "cauda-equina-syndrome",
+        "mri",
+        "PMC12854390",
+        "Fig1",
+        "https://cdn.ncbi.nlm.nih.gov/pmc/blobs/bb7f/12854390/fce4b37897da/cureus-0017-00000100428-i01.jpg",
+        "Sagittal T2 massive L5-S1 disc extrusion compressing cauda equina — CC-BY 4.0",
+    ),
+    (
+        "MRI-031",
+        "hsv-encephalitis",
+        "mri",
+        "PMC12126961",
+        "Fig1",
+        "https://cdn.ncbi.nlm.nih.gov/pmc/blobs/6c41/12126961/8b814060601b/cureus-0017-00000083346-i01.jpg",
+        "Axial FLAIR bilateral temporal lobe hyperintensity HSV-1 — CC-BY 4.0",
+    ),
+    (
+        "MRI-035",
+        "spinal-epidural-abscess",
+        "mri",
+        "PMC8723735",
+        "Fig1",
+        "https://cdn.ncbi.nlm.nih.gov/pmc/blobs/c9e9/8723735/3ea73a476846/cureus-0013-00000020100-i01.jpg",
+        "Cervical T1/T2/post-gad: rim-enhancing epidural abscess + cord compression — CC-BY 4.0",
+    ),
+]
+
+
+def compute_sha256(path: Path) -> str:
+    """Compute SHA-256 hex digest of a file."""
+    h = hashlib.sha256()
+    with open(path, "rb") as f:
+        for chunk in iter(lambda: f.read(8192), b""):
+            h.update(chunk)
+    return h.hexdigest()
+
+
 def fetch_page(url: str) -> str | None:
     """Fetch a web page and return its HTML."""
     try:
@@ -281,26 +347,49 @@ def main():
 
     parser = argparse.ArgumentParser(description="Download targeted PMC figures")
     parser.add_argument("--dry-run", action="store_true")
-    parser.add_argument("--modality", choices=["mri", "ultrasound"])
+    parser.add_argument("--modality", choices=["mri", "ultrasound", "ct"])
     parser.add_argument("--task", help="Download only this task_id")
+    parser.add_argument(
+        "--rc11",
+        action="store_true",
+        help="Use rc1.1 IMAGE_MISMATCH remediation target list (5 tasks)",
+    )
     args = parser.parse_args()
 
-    targets = TARGETS
+    if args.rc11:
+        targets_raw = TARGETS_RC11
+    else:
+        targets_raw = TARGETS
+
     if args.modality:
-        targets = [t for t in targets if t[2] == args.modality]
+        targets_raw = [t for t in targets_raw if t[2] == args.modality]
     if args.task:
-        targets = [t for t in targets if t[0] == args.task]
+        targets_raw = [t for t in targets_raw if t[0] == args.task]
 
     results = {"sourced": [], "failed": [], "skipped": []}
 
-    for task_id, condition_id, modality, pmcid, fig_hint, notes in targets:
+    for entry in targets_raw:
+        if args.rc11:
+            task_id, condition_id, modality, pmcid, fig_hint, cdn_url, notes = entry
+        else:
+            task_id, condition_id, modality, pmcid, fig_hint, notes = entry
+            cdn_url = None
+
         logger.info("=" * 60)
         logger.info("%s: %s (%s) — %s", task_id, condition_id, modality, pmcid)
 
-        # Check if already exists
-        openem_path = CORPUS_DIR / modality / "openem" / f"{condition_id}.png"
-        if openem_path.exists() and not openem_path.is_symlink():
-            logger.info("Already exists (non-symlink): %s", openem_path)
+        pmcid_lower = pmcid.lower()
+        ext = "jpg"
+        filename = f"{condition_id}-{pmcid_lower}-{fig_hint}.{ext}"
+        dest = CORPUS_DIR / modality / "multicare" / filename
+
+        # Check if already downloaded
+        if dest.exists():
+            logger.info("Already downloaded: %s", dest)
+            create_symlink(condition_id, modality, filename)
+            if args.rc11:
+                sha = compute_sha256(dest)
+                logger.info("SHA-256: %s", sha)
             results["skipped"].append(task_id)
             continue
 
@@ -308,7 +397,41 @@ def main():
             logger.info("[DRY RUN] Would download from %s", pmcid)
             continue
 
-        # Find figure URLs
+        # rc11 mode: use pre-verified CDN URL directly
+        if args.rc11 and cdn_url:
+            success = download_image(cdn_url, dest)
+            if success:
+                sha = compute_sha256(dest)
+                logger.info("SHA-256: %s", sha)
+                create_symlink(condition_id, modality, filename)
+                # Record provenance
+                image_ref = f"{modality}/multicare/{filename}"
+                record = build_provenance_record(
+                    image_ref=image_ref,
+                    source="multicare",
+                    pmcid=pmcid,
+                    figure_id=fig_hint,
+                    cdn_url=cdn_url,
+                    license_info="CC-BY 4.0",
+                    article_title=notes,
+                    article_doi="",
+                    figure_caption=notes,
+                    caption_score=1.0,
+                    sha256=sha,
+                    file_size_bytes=dest.stat().st_size,
+                    image_format=ext,
+                    image_dimensions=None,
+                    condition_id=condition_id,
+                    task_ids=[task_id],
+                )
+                append_provenance(record)
+                results["sourced"].append(task_id)
+            else:
+                results["failed"].append(task_id)
+            time.sleep(1.0)
+            continue
+
+        # Original mode: discover figure URLs from article page
         urls = find_figure_urls(pmcid, fig_hint)
         if not urls:
             logger.warning("No figure URLs found for %s", pmcid)
@@ -320,15 +443,9 @@ def main():
         for i, u in enumerate(urls[:5]):
             logger.info("  [%d] %s", i, u[:120])
 
-        # Download first (largest) figure
         # Try each URL until one works
         success = False
         for url in urls:
-            pmcid_lower = pmcid.lower()
-            ext = "png" if ".png" in url.lower() else "jpg"
-            filename = f"{condition_id}-{pmcid_lower}-{fig_hint}.{ext}"
-            dest = CORPUS_DIR / modality / "multicare" / filename
-
             if dest.exists():
                 logger.info("Already downloaded: %s", dest)
                 success = True

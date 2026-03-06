@@ -11,10 +11,10 @@
 
 capability:
   xray: 72
-  ct: 103  # 3 blocked (CT-027, CT-048, CT-097)
-  mri: 50  # 3 blocked (MRI-007, MRI-031, MRI-035)
+  ct: 105  # 1 blocked (CT-097)
+  mri: 53
   ultrasound: 18  # 71 retired (unsourceable_zero_login)
-  total: 243
+  total: 248
 
 regression:
   xray: 0
@@ -26,9 +26,9 @@ regression:
 blocked:
   # IMAGE_MISMATCH: image does not match task clinical scenario.
   # Return to capability once images are re-sourced and validated.
-  ct: 3
-  mri: 3
-  total: 6
+  ct: 1  # CT-097 only — no CC-BY orbital CT of angle-closure glaucoma exists
+  mri: 0
+  total: 1
 
 retired:
   xray: 0
@@ -46,41 +46,38 @@ retired:
 tasks:
   # --- BLOCKED: IMAGE_MISMATCH (6 tasks) ---
   CT-027:
-    suite: blocked
-    blocked_reason: IMAGE_MISMATCH
-    blocked_date: "2026-03-06"
+    suite: capability
     condition: foreign-body-aspiration
-    note: "Image does not show intraluminal bronchial foreign body"
+    unblocked_date: "2026-03-06"
+    note: "Re-sourced: PMC12444646 Fig2 — chest CT endobronchial mukago in R bronchus intermedius (CC-BY 4.0)"
   CT-048:
-    suite: blocked
-    blocked_reason: IMAGE_MISMATCH
-    blocked_date: "2026-03-06"
+    suite: capability
     condition: open-fracture
-    note: "Image does not show soft tissue disruption communicating with fracture"
+    unblocked_date: "2026-03-06"
+    note: "Re-sourced: PMC12686621 Fig1 — Gustilo IIIB open tibial fracture composite (CC-BY 4.0)"
   CT-097:
     suite: blocked
     blocked_reason: IMAGE_MISMATCH
     blocked_date: "2026-03-06"
     condition: acute-angle-closure-glaucoma
-    note: "Orbital CT does not show shallow anterior chamber vs contralateral eye"
+    note: "Deferred to rc1.2. No CC-BY orbital CT showing shallow anterior chamber exists in PMC.
+      Searched Europe PMC for angle-closure + CT + orbit — all results use OCT/slit lamp, not CT.
+      CT of this condition is extremely rare in published literature."
   MRI-007:
-    suite: blocked
-    blocked_reason: IMAGE_MISMATCH
-    blocked_date: "2026-03-06"
+    suite: capability
     condition: cauda-equina-syndrome
-    note: "MRI does not show large central disc extrusion compressing cauda equina"
+    unblocked_date: "2026-03-06"
+    note: "Re-sourced: PMC12854390 Fig1 — sagittal T2 massive L5-S1 disc extrusion compressing CES (CC-BY 4.0)"
   MRI-031:
-    suite: blocked
-    blocked_reason: IMAGE_MISMATCH
-    blocked_date: "2026-03-06"
+    suite: capability
     condition: hsv-encephalitis
-    note: "Image does not show temporal lobe FLAIR hyperintensity pattern"
+    unblocked_date: "2026-03-06"
+    note: "Re-sourced: PMC12126961 Fig1 — axial FLAIR bilateral temporal lobe hyperintensity HSV-1 (CC-BY 4.0)"
   MRI-035:
-    suite: blocked
-    blocked_reason: IMAGE_MISMATCH
-    blocked_date: "2026-03-06"
+    suite: capability
     condition: spinal-epidural-abscess
-    note: "MRI does not show rim-enhancing epidural collection"
+    unblocked_date: "2026-03-06"
+    note: "Re-sourced: PMC8723735 Fig1 — cervical T1/T2/post-gad rim-enhancing epidural abscess (CC-BY 4.0)"
 
   # --- NEAR-THRESHOLD: prompt engineering priority for rc1.1 ---
   MRI-011:
