@@ -309,7 +309,7 @@ Datasets requiring credentialed access (PhysioNet VinDr-CXR, MIMIC-CXR) are neve
 
 | Gap | Detail | Status |
 |---|---|---|
-| 230 of 363 OpenEM conditions lack imaging workup | Non-imaging conditions (e.g., anaphylaxis, DKA) excluded by design | By design — RadSlice evaluates imaging interpretation only |
+| 237 of 370 OpenEM conditions lack imaging workup | Non-imaging conditions (e.g., anaphylaxis, DKA) excluded by design | By design — RadSlice evaluates imaging interpretation only |
 | Pediatric imaging underrepresented in open-access sources | Most open DICOM repositories contain adult imaging | Actively sourcing pediatric collections from TCIA and IDC |
 | 3D volumetric evaluation not yet implemented | Current pipeline evaluates single-slice or single-frame images | Planned for v2.0; architecture supports multi-frame DICOM |
 
@@ -347,7 +347,7 @@ RadSlice is part of the GOATnote Evaluation Program, a suite of benchmarks evalu
 |---|---|---|
 | [LostBench](https://github.com/GOATnote-Inc/lostbench) | Multi-turn safety persistence benchmark | 65 RadSlice tasks cross-reference LostBench scenarios via `lostbench_scenario_id` |
 | [ScribeGoat2](https://github.com/GOATnote-Inc/scribegoat2) | Multi-agent clinical triage research framework | Shares clinical condition taxonomy and grading methodology |
-| [OpenEM](https://github.com/GOATnote-Inc/openem-corpus) | Emergency medicine knowledge base (363 conditions) | 133 of 363 conditions have RadSlice imaging tasks, linked via `condition_id` |
+| [OpenEM](https://github.com/GOATnote-Inc/openem-corpus) | Emergency medicine knowledge base (370 conditions) | 133 of 370 conditions have RadSlice imaging tasks, linked via `condition_id` |
 | [SafeShift](https://github.com/GOATnote-Inc/safeshift) | Inference optimization safety benchmark | Evaluates whether quantization/batching degrades RadSlice task performance |
 
 Architecture documentation: [CROSS_REPO_ARCHITECTURE.md](https://github.com/GOATnote-Inc/scribegoat2/blob/main/docs/CROSS_REPO_ARCHITECTURE.md)
