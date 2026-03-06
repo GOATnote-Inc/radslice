@@ -129,3 +129,41 @@ experiments:
     pipeline_version: "0.3.0"
     corpus_note: "51 pathology-validated MultiCaRe CC-BY images (14 X-ray, 12 CT, 15 US, 10 MRI)"
     notes: "rc1.0 first 4-modality eval. 56.2% overall pass rate. By modality: X-ray 64.3%, CT 30.6%, US 66.7%, MRI 60.0%. GPT outperforms Opus across all modalities (+24.8pp overall). 24 tasks always pass, 17 always fail. 19 GPT-only pass tasks vs 3 Opus-only. 14 tasks unsolved by either model."
+
+  - id: eval-20260307-gpt52-rc11
+    date: "2026-03-07"
+    model: gpt-5.2
+    model_id: gpt-5.2
+    judge_model: claude-opus-4-6
+    modality: xray+ct+ultrasound+mri
+    n_tasks: 44
+    n_trials: 3
+    pass_rate: 0.250
+    class_a_count: 10
+    class_b_count: 84
+    class_c_count: 14
+    class_d_count: 5
+    decision: CLEAR
+    results_dir: results/eval-20260307-gpt52-rc11/
+    pipeline_version: "0.3.0"
+    corpus_note: "44 pathology-validated MultiCaRe/OpenEM CC-BY images (14 X-ray, 11 CT, 9 US, 10 MRI). 5 re-sourced (CT-027, CT-048, MRI-007, MRI-031, MRI-035). 6 US retired, 1 CT blocked."
+    notes: "rc1.1 comparable set. Judge always invoked (no L0 short-circuit), 100% Layer 2 coverage. By modality: X-ray 16.7%, CT 18.2%, US 48.1%, MRI 23.3%. Re-sourced tasks now produce non-zero scores. US-042 laterality fix active."
+
+  - id: eval-20260307-opus46-rc11
+    date: "2026-03-07"
+    model: opus-4-6
+    model_id: claude-opus-4-6
+    judge_model: gpt-5.2
+    modality: xray+ct+ultrasound+mri
+    n_tasks: 44
+    n_trials: 3
+    pass_rate: 0.174
+    class_a_count: 45
+    class_b_count: 61
+    class_c_count: 12
+    class_d_count: 8
+    decision: CLEAR
+    results_dir: results/eval-20260307-opus46-rc11/
+    pipeline_version: "0.3.0"
+    corpus_note: "44 pathology-validated MultiCaRe/OpenEM CC-BY images (14 X-ray, 11 CT, 9 US, 10 MRI). 5 re-sourced (CT-027, CT-048, MRI-007, MRI-031, MRI-035). 6 US retired, 1 CT blocked."
+    notes: "rc1.1 comparable set. Judge always invoked (no L0 short-circuit), 100% Layer 2 coverage. By modality: X-ray 7.1%, CT 9.1%, US 22.2%, MRI 36.7%. GPT outperforms Opus (+7.6pp overall). Both models decline vs rc1.0 under full-judge grading — confirms rc1.0 pattern-only passes were inflating rates."
