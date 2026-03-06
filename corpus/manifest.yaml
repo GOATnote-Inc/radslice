@@ -1,55 +1,243 @@
-version: "1.0"
+version: "2.0"
 description: RadSlice corpus manifest — curated radiology tasks across 4 modalities
+
+# License tier definitions
+# commercial_safe: CC0, CC-BY, CC-BY-SA, MIT — safe for commercial use
+# research_only:   CC-BY-NC, CC-BY-NC-SA, CC-BY-NC-ND, competition terms — re-evaluate before commercial use
+license_tiers:
+  commercial_safe:
+    description: Safe for commercial use
+    license_types: [CC0, CC-BY, CC-BY-SA, MIT]
+  research_only:
+    description: Research and evaluation only — re-evaluate before commercial use
+    license_types: [CC-BY-NC, CC-BY-NC-SA, CC-BY-NC-ND, competition]
 
 sources:
   omnimedvqa-open:
     name: OmniMedVQA (open-access subsets)
     url: https://huggingface.co/datasets/foreverbeliever/OmniMedVQA
     license: CC-BY (varies by source dataset)
+    license_tier: commercial_safe
     modalities: [xray, ct, mri, ultrasound]
+    login_required: false
+    dicom_native: false
     notes: Curated VQA tasks from open-access medical imaging datasets
 
   mediconfusion:
     name: MediConfusion
     url: https://github.com/MShahabSepehri/MediConfusion
     license: MIT
+    license_tier: commercial_safe
     modalities: [xray, ct, mri]
+    login_required: false
+    dicom_native: false
     notes: Confusion-pair tasks — same question, two images, different correct answers
 
   eurorad:
     name: Eurorad
     url: https://eurorad.org
     license: CC BY-NC-SA 4.0
+    license_tier: research_only
     modalities: [ct, mri]
+    login_required: false
+    dicom_native: false
     notes: Peer-reviewed case reports with structured findings
 
   radimagenet:
     name: RadImageNet
     url: https://radimagenet.com
     license: CC BY 4.0
+    license_tier: commercial_safe
     modalities: [ultrasound, ct, mri]
+    login_required: false
+    dicom_native: false
     notes: 1.35M labeled images across 11 anatomies
 
   vindr-cxr:
     name: VinDr-CXR
     url: https://physionet.org/content/vindr-cxr/
     license: PhysioNet License 1.0
+    license_tier: research_only
     modalities: [xray]
-    notes: 18K CXRs with bounding boxes from 17 radiologists
+    login_required: true
+    dicom_native: true
+    notes: 18K CXRs with bounding boxes from 17 radiologists. Deferred — requires PhysioNet credentials.
 
   multicare:
     name: MultiCaRe (PubMed Central)
     url: https://zenodo.org/records/10079370
     license: CC-BY-4.0
+    license_tier: commercial_safe
     modalities: [xray, ct, mri, ultrasound]
+    login_required: false
+    dicom_native: false
     notes: Open-access clinical case images curated from PubMed Central articles
 
   idc:
     name: NCI Imaging Data Commons
     url: https://portal.imaging.datacommons.cancer.gov/
     license: CC-BY-4.0
+    license_tier: commercial_safe
     modalities: [xray, ct, mri]
+    login_required: false
+    dicom_native: true
     notes: 85+ TB CC-BY DICOM data via public GCS/AWS buckets. Uses idc-index package when available.
+
+  # --- New zero-login sources (v2.0) ---
+
+  nih-chestxray14:
+    name: NIH ChestX-ray14
+    url: https://nihcc.app.box.com/v/ChestXray-NIHCC
+    license: CC0
+    license_tier: commercial_safe
+    modalities: [xray]
+    login_required: false
+    dicom_native: false
+    size: 112000
+    notes: 112K CXRs, 14 pathology labels, public domain. Direct download via Box links.
+
+  padchest:
+    name: PadChest
+    url: https://bimcv.cipf.es/bimcv-projects/padchest/
+    license: CC-BY-SA-4.0
+    license_tier: commercial_safe
+    modalities: [xray]
+    login_required: false
+    dicom_native: false
+    size: 160000
+    notes: 160K CXRs, 174 findings, richest label set. Direct download.
+
+  rsna-ich:
+    name: RSNA Intracranial Hemorrhage Detection
+    url: https://www.kaggle.com/c/rsna-intracranial-hemorrhage-detection
+    license: CC-BY-SA
+    license_tier: commercial_safe
+    modalities: [ct]
+    login_required: false
+    dicom_native: true
+    size: 25000
+    notes: 25K head CTs, 5 hemorrhage subtypes. Kaggle API (instant accept). Highest EM relevance for TBI/stroke.
+
+  rsna-pe:
+    name: RSNA Pulmonary Embolism Detection
+    url: https://www.kaggle.com/c/rsna-str-pulmonary-embolism-detection
+    license: CC-BY-SA
+    license_tier: commercial_safe
+    modalities: [ct]
+    login_required: false
+    dicom_native: true
+    size: 7000
+    notes: 7K CTPA studies. Kaggle API (instant accept). PE detection, vessel analysis.
+
+  rsna-cspine:
+    name: RSNA Cervical Spine Fracture Detection
+    url: https://www.kaggle.com/c/rsna-2022-cervical-spine-fracture-detection
+    license: CC-BY-NC-SA
+    license_tier: research_only
+    modalities: [ct]
+    login_required: false
+    dicom_native: true
+    size: 12000
+    notes: 12K CT c-spine. Kaggle API (instant accept). Trauma — cervical spine fractures.
+
+  rsna-abd-trauma:
+    name: RSNA Abdominal Trauma Detection
+    url: https://www.kaggle.com/c/rsna-2023-abdominal-trauma-detection
+    license: CC-BY-NC-SA
+    license_tier: research_only
+    modalities: [ct]
+    login_required: false
+    dicom_native: true
+    size: 4000
+    notes: 4K CT abd/pelvis. Kaggle API (instant accept). Solid organ injury.
+
+  rsna-pneumonia:
+    name: RSNA Pneumonia Detection Challenge
+    url: https://www.kaggle.com/c/rsna-pneumonia-detection-challenge
+    license: CC-BY-SA
+    license_tier: commercial_safe
+    modalities: [xray]
+    login_required: false
+    dicom_native: true
+    size: 8000
+    notes: 8K CXR DICOM with pneumonia detection + bounding boxes.
+
+  deeplesion:
+    name: DeepLesion (NIH)
+    url: https://nihcc.app.box.com/v/DeepLesion
+    license: CC-BY-4.0
+    license_tier: commercial_safe
+    modalities: [ct]
+    login_required: false
+    dicom_native: false
+    size: 32000
+    notes: 32K CT key images with RECIST annotations. Disease-agnostic anomaly detection.
+
+  brats:
+    name: BraTS 2023+
+    url: https://www.synapse.org/#!Synapse:syn51156910
+    license: CC-BY-SA-4.0
+    license_tier: commercial_safe
+    modalities: [mri]
+    login_required: false
+    dicom_native: false
+    size: 2000
+    notes: 2K+ brain MRI (T1/T1ce/T2/FLAIR). Brain tumors. NIfTI format. Synapse (free instant registration).
+
+  camus:
+    name: CAMUS (Cardiac Acquisitions for Multi-structure Ultrasound Segmentation)
+    url: https://www.creatis.insa-lyon.fr/Challenge/camus/
+    license: Open access
+    license_tier: commercial_safe
+    modalities: [ultrasound]
+    login_required: false
+    dicom_native: false
+    size: 500
+    notes: 500 patients cardiac echo (2/4-chamber). Only zero-login cardiac US source.
+
+  kits23:
+    name: KiTS23
+    url: https://github.com/neheller/kits23
+    license: CC-BY-NC-SA-4.0
+    license_tier: research_only
+    modalities: [ct]
+    login_required: false
+    dicom_native: true
+    size: 599
+    notes: 599 CT kidney tumor studies with segmentation masks.
+
+  amos:
+    name: AMOS (Abdominal Multi-Organ Segmentation)
+    url: https://zenodo.org/records/7262581
+    license: CC-BY-SA-4.0
+    license_tier: commercial_safe
+    modalities: [ct, mri]
+    login_required: false
+    dicom_native: false
+    size: 500
+    notes: 500 CT/MRI, 15-organ segmentation. NIfTI. Zenodo (instant). v2 volumetric reasoning.
+
+  ct-rate:
+    name: CT-RATE
+    url: https://huggingface.co/datasets/ibrahimhamamci/CT-RATE
+    license: CC-BY-NC-SA-4.0
+    license_tier: research_only
+    modalities: [ct]
+    login_required: false
+    dicom_native: true
+    size: 50000
+    notes: 50K+ chest CTs with radiology reports. HuggingFace (instant). v2 Level 3 structured reporting.
+
+  medpix:
+    name: MedPix (NIH/NLM)
+    url: https://medpix.nlm.nih.gov/
+    license: Public domain (USG)
+    license_tier: commercial_safe
+    modalities: [xray, ct, mri, ultrasound]
+    login_required: false
+    dicom_native: false
+    size: 60000
+    notes: ~60K teaching case images with differentials. Public domain. Clinical reasoning.
 
 target_counts:
   phase_1:
@@ -60,25 +248,32 @@ target_counts:
     ultrasound: 0
     total: 100
   phase_2:
-    description: "1.0.0 — all modalities"
+    description: "1.1.0 — all modalities (post US trim)"
     xray: 60
     ct: 80
     mri: 35
-    ultrasound: 25
-    total: 200
+    ultrasound: 18
+    total: 193
   full:
-    description: "Full corpus coverage"
+    description: "Full sourceable corpus (zero-login only)"
+    xray: 60
+    ct: 80
+    mri: 35
+    ultrasound: 18
+    total: 193
+  stretch:
+    description: "Stretch goal — additional coverage with advanced sources"
     xray: 72
     ct: 106
     mri: 53
-    ultrasound: 89
-    total: 330
+    ultrasound: 18
+    total: 249
 
 balance:
   xray: { positive: 50, normal: 15, confusion_pair: 15 }
   ct: { positive: 36, normal: 12, confusion_pair: 12 }
   mri: { positive: 24, normal: 8, confusion_pair: 8 }
-  ultrasound: { positive: 12, normal: 4, confusion_pair: 4 }
+  ultrasound: { positive: 12, normal: 4, confusion_pair: 2 }
 
 images_dir: images/
 annotations_dir: annotations/

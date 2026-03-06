@@ -44,7 +44,7 @@ from discover_multicare import (
 logger = logging.getLogger("source_phase1")
 
 # Default split when --modality all
-MODALITY_TARGETS = {"xray": 40, "ct": 60}
+MODALITY_TARGETS = {"xray": 40, "ct": 60, "mri": 25, "ultrasound": 12}
 
 # Tier 1: conditions where X-ray is the primary or confirmatory diagnostic modality.
 # These have key_findings that describe radiographically visible pathology.
@@ -104,6 +104,61 @@ XRAY_TIER1_CONDITIONS = {
     "tracheal-disruption",
     "urolithiasis",
 }  # 53 of 72 X-ray conditions
+
+# Tier 1 MRI conditions: conditions where MRI is the primary diagnostic modality.
+# IDC MRI collections (TCGA-GBM/LGG, Duke-Breast, PROSTATEx, ReMIND) + BraTS are
+# the primary zero-login sources.
+MRI_TIER1_CONDITIONS = {
+    "aortic-dissection",
+    "cauda-equina-syndrome",
+    "cerebral-venous-thrombosis",
+    "encephalitis",
+    "epidural-hematoma",
+    "hemorrhagic-stroke",
+    "hsv-encephalitis",
+    "intracranial-abscess",
+    "meningitis",
+    "multiple-sclerosis-relapse",
+    "necrotizing-fasciitis",
+    "osteomyelitis",
+    "spinal-cord-compression",
+    "spinal-cord-injury",
+    "spinal-epidural-abscess",
+    "status-epilepticus",
+    "stroke-tpa-eligible",
+    "subdural-hematoma",
+    "subarachnoid-hemorrhage",
+    "traumatic-brain-injury",
+}  # ~20 MRI conditions with zero-login sources
+
+# Tier 1 US conditions: conditions sourceable from CAMUS (cardiac echo),
+# IDC B-mode-CEUS-Liver (hepatic), HC18 (fetal), or MultiCaRe case reports.
+# All other US tasks are retired as unsourceable_zero_login.
+US_TIER1_CONDITIONS = {
+    # Cardiac echo (CAMUS)
+    "acute-heart-failure",
+    "cardiac-tamponade",
+    "pericarditis-myocarditis",
+    "peripartum-cardiomyopathy",
+    "stemi",
+    "hypertensive-emergency",
+    # Normal echo studies
+    "panic-attack",
+    "benign-palpitations",
+    # Hepatic/biliary (IDC)
+    "acute-cholecystitis",
+    "ascending-cholangitis",
+    # OB/fetal (HC18 + MultiCaRe)
+    "ectopic-pregnancy",
+    "neonatal-emergencies",
+    # Other sourceable (MultiCaRe case reports)
+    "testicular-torsion",
+    "urolithiasis",
+    "retinal-detachment",
+    "intussusception",
+    "pyloric-stenosis",
+    "acute-appendicitis",
+}  # 18 US conditions kept (71 retired)
 
 
 def load_image_sources(path: str = "corpus/image_sources.yaml") -> dict:
@@ -257,15 +312,21 @@ def source_modality(
     else:
         skip_cids = get_sourced_condition_ids(sources)
 
-    # For X-ray, only source Tier 1 conditions (X-ray is diagnostic)
+    # Apply tier filtering per modality
     tier_filter = None
-    if modality == "xray":
-        tier_filter = XRAY_TIER1_CONDITIONS
+    tier_map = {
+        "xray": XRAY_TIER1_CONDITIONS,
+        "mri": MRI_TIER1_CONDITIONS,
+        "ultrasound": US_TIER1_CONDITIONS,
+    }
+    if modality in tier_map:
+        tier_filter = tier_map[modality]
         tier2_count = sum(1 for cid in seen if cid not in tier_filter and cid not in skip_cids)
         if tier2_count:
             logger.info(
-                "Skipping %d Tier 2 conditions (X-ray not primary modality)",
+                "Skipping %d Tier 2 conditions (%s not primary/sourceable modality)",
                 tier2_count,
+                modality,
             )
 
     unsourced = [
@@ -561,9 +622,9 @@ def main():
     )
     parser.add_argument(
         "--modality",
-        choices=["xray", "ct", "all"],
+        choices=["xray", "ct", "mri", "ultrasound", "all"],
         required=True,
-        help="Target modality (or 'all' for both xray+ct)",
+        help="Target modality (or 'all' for all 4 modalities)",
     )
     parser.add_argument(
         "--limit",

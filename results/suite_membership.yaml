@@ -1,19 +1,20 @@
 # Suite Membership Tracking
-# Tracks which tasks belong to capability vs regression vs blocked suites.
+# Tracks which tasks belong to capability vs regression vs retired vs blocked suites.
 # Managed by eval-lead agent (proposals from corpus-strategist).
-# Updated: 2026-03-06 (rc1.1 remediation plan)
+# Updated: 2026-03-06 (US trim + sourcing strategy overhaul)
 
-# All 320 tasks start in capability suite.
+# All tasks start in capability suite.
 # Tasks promoted to regression when they discriminate between models.
-# Tasks retired from capability when saturated (pass@5 > 0.95 all models, 3+ runs).
+# Tasks retired from capability when saturated (pass@5 > 0.95 all models, 3+ runs)
+#   OR when unsourceable (no zero-login dataset available).
 # Tasks blocked when data quality prevents valid evaluation (return to capability when fixed).
 
 capability:
   xray: 72
   ct: 103  # 3 blocked (CT-027, CT-048, CT-097)
   mri: 50  # 3 blocked (MRI-007, MRI-031, MRI-035)
-  ultrasound: 89
-  total: 314
+  ultrasound: 18  # 71 retired (unsourceable_zero_login)
+  total: 243
 
 regression:
   xray: 0
@@ -33,12 +34,13 @@ retired:
   xray: 0
   ct: 0
   mri: 0
-  ultrasound: 0
-  total: 0
+  ultrasound: 71  # unsourceable_zero_login — no open dataset without login/DUA
+  total: 71
 
 # Per-task tracking
 # suite: capability | regression | retired | blocked
 # blocked_reason: IMAGE_MISMATCH | null
+# retired_reason: unsourceable_zero_login | saturated | null
 # near_threshold: true if any trial scored 0.40-0.50 in corrected rc1.0
 # prompt_priority: true if near_threshold and remediation planned for rc1.1
 tasks:
@@ -80,7 +82,7 @@ tasks:
     condition: spinal-epidural-abscess
     note: "MRI does not show rim-enhancing epidural collection"
 
-  # --- NEAR-THRESHOLD: prompt engineering priority for rc1.1 (7 tasks) ---
+  # --- NEAR-THRESHOLD: prompt engineering priority for rc1.1 ---
   MRI-011:
     suite: capability
     near_threshold: true
@@ -93,24 +95,18 @@ tasks:
     prompt_priority: true
     best_score: {gpt: 0.41, opus: 0.40}
     note: "Both models close. Review if starfield pattern terminology too specific."
-  US-019:
-    suite: capability
-    near_threshold: true
-    prompt_priority: true
-    best_score: {gpt: 0.44, opus: 0.68}
-    note: "Opus scores 0.68 but Class A override. Review judge failure classification."
   US-042:
     suite: capability
     near_threshold: true
     prompt_priority: true
     best_score: {gpt: 0.43, opus: 0.01}
-    note: "GPT nearly passes (Class C). Review anatomic precision weights."
+    note: "GPT nearly passes (Class C). Review anatomic precision weights. Kept — testicular-torsion sourceable."
   US-046:
     suite: capability
     near_threshold: true
     prompt_priority: true
     best_score: {gpt: 0.51, opus: 0.51}
-    note: "Both at threshold but Class A override. Review primary diagnosis criteria."
+    note: "Both at threshold but Class A override. Kept — urolithiasis sourceable."
   XRAY-027:
     suite: capability
     near_threshold: true
@@ -123,3 +119,442 @@ tasks:
     prompt_priority: true
     best_score: {gpt: 0.18, opus: 0.42}
     note: "Opus nearly passes. Review HAPE vs HACE distinction."
+
+  # --- RETIRED: unsourceable_zero_login (71 US tasks) ---
+  # No zero-login open dataset exists for these US examination types.
+  # Categories retired: FAST exam, lung US, aortic US, DVT compression,
+  # soft tissue/MSK US, most cardiac tasks beyond CAMUS coverage,
+  # most OB/GYN US, carotid/transcranial Doppler, intraoral US,
+  # intraoperative US, extremity Doppler, splenic US, adrenal US.
+  #
+  # Kept (18 tasks): US-001, US-006, US-008, US-009, US-012, US-026, US-027,
+  # US-034, US-042, US-046, US-050, US-066, US-069, US-070, US-073, US-080,
+  # US-088, US-089
+  #
+  # Retired tasks listed below with condition for traceability.
+  US-002:
+    suite: retired
+    retired_reason: unsourceable_zero_login
+    retired_date: "2026-03-06"
+    condition: acute-limb-ischemia
+    note: "Arterial Doppler — no zero-login US dataset"
+  US-003:
+    suite: retired
+    retired_reason: unsourceable_zero_login
+    retired_date: "2026-03-06"
+    condition: acute-valvular-emergency
+    note: "Valvular echo beyond CAMUS coverage"
+  US-004:
+    suite: retired
+    retired_reason: unsourceable_zero_login
+    retired_date: "2026-03-06"
+    condition: aortic-dissection
+    note: "TEE — no zero-login dataset"
+  US-005:
+    suite: retired
+    retired_reason: unsourceable_zero_login
+    retired_date: "2026-03-06"
+    condition: atrial-fibrillation-rvr
+    note: "Rhythm-specific echo beyond CAMUS"
+  US-007:
+    suite: retired
+    retired_reason: unsourceable_zero_login
+    retired_date: "2026-03-06"
+    condition: infective-endocarditis
+    note: "Vegetation detection beyond CAMUS"
+  US-010:
+    suite: retired
+    retired_reason: unsourceable_zero_login
+    retired_date: "2026-03-06"
+    condition: ruptured-aaa
+    note: "Aortic US — no zero-login dataset"
+  US-011:
+    suite: retired
+    retired_reason: unsourceable_zero_login
+    retired_date: "2026-03-06"
+    condition: spontaneous-coronary-artery-dissection
+    note: "Coronary echo beyond CAMUS"
+  US-013:
+    suite: retired
+    retired_reason: unsourceable_zero_login
+    retired_date: "2026-03-06"
+    condition: unstable-angina
+    note: "Wall motion echo beyond CAMUS specificity"
+  US-014:
+    suite: retired
+    retired_reason: unsourceable_zero_login
+    retired_date: "2026-03-06"
+    condition: unstable-bradycardia
+    note: "Rhythm-specific echo beyond CAMUS"
+  US-015:
+    suite: retired
+    retired_reason: unsourceable_zero_login
+    retired_date: "2026-03-06"
+    condition: acute-ischemic-stroke
+    note: "Carotid Doppler — no zero-login dataset"
+  US-016:
+    suite: retired
+    retired_reason: unsourceable_zero_login
+    retired_date: "2026-03-06"
+    condition: hemorrhagic-stroke
+    note: "Transcranial Doppler — no zero-login dataset"
+  US-017:
+    suite: retired
+    retired_reason: unsourceable_zero_login
+    retired_date: "2026-03-06"
+    condition: aortic-transection
+    note: "FAST/TEE — no zero-login dataset"
+  US-018:
+    suite: retired
+    retired_reason: unsourceable_zero_login
+    retired_date: "2026-03-06"
+    condition: fat-embolism-syndrome
+    note: "RV strain echo beyond CAMUS"
+  US-019:
+    suite: retired
+    retired_reason: unsourceable_zero_login
+    retired_date: "2026-03-06"
+    condition: hemorrhagic-shock
+    note: "FAST exam — no zero-login dataset"
+  US-020:
+    suite: retired
+    retired_reason: unsourceable_zero_login
+    retired_date: "2026-03-06"
+    condition: pelvic-fracture
+    note: "FAST exam — no zero-login dataset"
+  US-021:
+    suite: retired
+    retired_reason: unsourceable_zero_login
+    retired_date: "2026-03-06"
+    condition: penetrating-chest-trauma
+    note: "eFAST — no zero-login dataset"
+  US-022:
+    suite: retired
+    retired_reason: unsourceable_zero_login
+    retired_date: "2026-03-06"
+    condition: pneumonia
+    note: "Lung US — no zero-login dataset"
+  US-023:
+    suite: retired
+    retired_reason: unsourceable_zero_login
+    retired_date: "2026-03-06"
+    condition: pulmonary-embolism
+    note: "RV dilation + DVT combo — no single zero-login dataset"
+  US-024:
+    suite: retired
+    retired_reason: unsourceable_zero_login
+    retired_date: "2026-03-06"
+    condition: spontaneous-pneumothorax
+    note: "Lung US — no zero-login dataset"
+  US-025:
+    suite: retired
+    retired_reason: unsourceable_zero_login
+    retired_date: "2026-03-06"
+    condition: tension-pneumothorax
+    note: "Lung US / POCUS — no zero-login dataset"
+  US-028:
+    suite: retired
+    retired_reason: unsourceable_zero_login
+    retired_date: "2026-03-06"
+    condition: gi-hemorrhage
+    note: "Abdominal US GI bleed — no zero-login dataset"
+  US-029:
+    suite: retired
+    retired_reason: unsourceable_zero_login
+    retired_date: "2026-03-06"
+    condition: acute-pancreatitis
+    note: "Pancreatic US — no zero-login dataset"
+  US-030:
+    suite: retired
+    retired_reason: unsourceable_zero_login
+    retired_date: "2026-03-06"
+    condition: acute-gout
+    note: "MSK US — no zero-login dataset"
+  US-031:
+    suite: retired
+    retired_reason: unsourceable_zero_login
+    retired_date: "2026-03-06"
+    condition: septic-arthritis
+    note: "Joint US — no zero-login dataset"
+  US-032:
+    suite: retired
+    retired_reason: unsourceable_zero_login
+    retired_date: "2026-03-06"
+    condition: amniotic-fluid-embolism
+    note: "OB echo — no zero-login dataset"
+  US-033:
+    suite: retired
+    retired_reason: unsourceable_zero_login
+    retired_date: "2026-03-06"
+    condition: eclampsia
+    note: "OB US — no zero-login dataset"
+  US-035:
+    suite: retired
+    retired_reason: unsourceable_zero_login
+    retired_date: "2026-03-06"
+    condition: hellp-syndrome
+    note: "Abdominal US — no zero-login dataset"
+  US-036:
+    suite: retired
+    retired_reason: unsourceable_zero_login
+    retired_date: "2026-03-06"
+    condition: ovarian-torsion
+    note: "Pelvic Doppler — no zero-login dataset"
+  US-037:
+    suite: retired
+    retired_reason: unsourceable_zero_login
+    retired_date: "2026-03-06"
+    condition: placental-abruption
+    note: "OB US — no zero-login dataset"
+  US-038:
+    suite: retired
+    retired_reason: unsourceable_zero_login
+    retired_date: "2026-03-06"
+    condition: postpartum-hemorrhage
+    note: "Pelvic US — no zero-login dataset"
+  US-039:
+    suite: retired
+    retired_reason: unsourceable_zero_login
+    retired_date: "2026-03-06"
+    condition: pprom
+    note: "OB US — no zero-login dataset"
+  US-040:
+    suite: retired
+    retired_reason: unsourceable_zero_login
+    retired_date: "2026-03-06"
+    condition: threatened-abortion
+    note: "TVS — no zero-login dataset"
+  US-041:
+    suite: retired
+    retired_reason: unsourceable_zero_login
+    retired_date: "2026-03-06"
+    condition: uterine-rupture
+    note: "OB US — no zero-login dataset"
+  US-043:
+    suite: retired
+    retired_reason: unsourceable_zero_login
+    retired_date: "2026-03-06"
+    condition: acute-urinary-retention
+    note: "Bladder US — no zero-login dataset"
+  US-044:
+    suite: retired
+    retired_reason: unsourceable_zero_login
+    retired_date: "2026-03-06"
+    condition: complicated-uti
+    note: "Renal US — no zero-login dataset with UTI pathology"
+  US-045:
+    suite: retired
+    retired_reason: unsourceable_zero_login
+    retired_date: "2026-03-06"
+    condition: pyelonephritis
+    note: "Renal US — no zero-login dataset with pyelo"
+  US-047:
+    suite: retired
+    retired_reason: unsourceable_zero_login
+    retired_date: "2026-03-06"
+    condition: acute-angle-closure-glaucoma
+    note: "Ocular US — no zero-login dataset"
+  US-048:
+    suite: retired
+    retired_reason: unsourceable_zero_login
+    retired_date: "2026-03-06"
+    condition: central-retinal-artery-occlusion
+    note: "Ocular US — no zero-login dataset"
+  US-049:
+    suite: retired
+    retired_reason: unsourceable_zero_login
+    retired_date: "2026-03-06"
+    condition: globe-rupture
+    note: "Ocular US — no zero-login dataset"
+  US-051:
+    suite: retired
+    retired_reason: unsourceable_zero_login
+    retired_date: "2026-03-06"
+    condition: temporal-arteritis
+    note: "Temporal artery US — no zero-login dataset"
+  US-052:
+    suite: retired
+    retired_reason: unsourceable_zero_login
+    retired_date: "2026-03-06"
+    condition: peritonsillar-abscess
+    note: "Intraoral US — no zero-login dataset"
+  US-053:
+    suite: retired
+    retired_reason: unsourceable_zero_login
+    retired_date: "2026-03-06"
+    condition: deep-vein-thrombosis
+    note: "Compression US — no zero-login dataset"
+  US-054:
+    suite: retired
+    retired_reason: unsourceable_zero_login
+    retired_date: "2026-03-06"
+    condition: sickle-cell-crisis
+    note: "Splenic US — no zero-login dataset"
+  US-055:
+    suite: retired
+    retired_reason: unsourceable_zero_login
+    retired_date: "2026-03-06"
+    condition: superficial-thrombophlebitis
+    note: "Venous US — no zero-login dataset"
+  US-056:
+    suite: retired
+    retired_reason: unsourceable_zero_login
+    retired_date: "2026-03-06"
+    condition: pheochromocytoma-crisis
+    note: "Adrenal US — no zero-login dataset"
+  US-057:
+    suite: retired
+    retired_reason: unsourceable_zero_login
+    retired_date: "2026-03-06"
+    condition: active-shooter-response
+    note: "FAST exam — no zero-login dataset"
+  US-058:
+    suite: retired
+    retired_reason: unsourceable_zero_login
+    retired_date: "2026-03-06"
+    condition: blast-injury
+    note: "FAST exam — no zero-login dataset"
+  US-059:
+    suite: retired
+    retired_reason: unsourceable_zero_login
+    retired_date: "2026-03-06"
+    condition: crush-syndrome-mci
+    note: "Extremity US — no zero-login dataset"
+  US-060:
+    suite: retired
+    retired_reason: unsourceable_zero_login
+    retired_date: "2026-03-06"
+    condition: lateral-canthotomy
+    note: "Ocular US — no zero-login dataset"
+  US-061:
+    suite: retired
+    retired_reason: unsourceable_zero_login
+    retired_date: "2026-03-06"
+    condition: reboa
+    note: "POCUS guidance — no zero-login dataset"
+  US-062:
+    suite: retired
+    retired_reason: unsourceable_zero_login
+    retired_date: "2026-03-06"
+    condition: air-embolism
+    note: "Echo air embolism — no zero-login dataset"
+  US-063:
+    suite: retired
+    retired_reason: unsourceable_zero_login
+    retired_date: "2026-03-06"
+    condition: cellulitis-abscess
+    note: "Soft tissue US — no zero-login dataset"
+  US-064:
+    suite: retired
+    retired_reason: unsourceable_zero_login
+    retired_date: "2026-03-06"
+    condition: dengue-hemorrhagic-fever
+    note: "Abdominal US — no zero-login dataset with dengue"
+  US-065:
+    suite: retired
+    retired_reason: unsourceable_zero_login
+    retired_date: "2026-03-06"
+    condition: bronchiolitis
+    note: "Lung US — no zero-login dataset"
+  US-067:
+    suite: retired
+    retired_reason: unsourceable_zero_login
+    retired_date: "2026-03-06"
+    condition: kawasaki-disease
+    note: "Coronary echo — no zero-login dataset"
+  US-068:
+    suite: retired
+    retired_reason: unsourceable_zero_login
+    retired_date: "2026-03-06"
+    condition: necrotizing-enterocolitis
+    note: "Neonatal abdominal US — no zero-login dataset"
+  US-071:
+    suite: retired
+    retired_reason: unsourceable_zero_login
+    retired_date: "2026-03-06"
+    condition: tumor-lysis-syndrome
+    note: "Renal US — no zero-login dataset with TLS"
+  US-072:
+    suite: retired
+    retired_reason: unsourceable_zero_login
+    retired_date: "2026-03-06"
+    condition: sepsis
+    note: "POCUS sepsis — no zero-login dataset"
+  US-074:
+    suite: retired
+    retired_reason: unsourceable_zero_login
+    retired_date: "2026-03-06"
+    condition: hip-fracture
+    note: "Hip POCUS — no zero-login dataset"
+  US-075:
+    suite: retired
+    retired_reason: unsourceable_zero_login
+    retired_date: "2026-03-06"
+    condition: knee-osteoarthritis
+    note: "Joint US — no zero-login dataset"
+  US-076:
+    suite: retired
+    retired_reason: unsourceable_zero_login
+    retired_date: "2026-03-06"
+    condition: acute-muscle-strain
+    note: "MSK US — no zero-login dataset"
+  US-077:
+    suite: retired
+    retired_reason: unsourceable_zero_login
+    retired_date: "2026-03-06"
+    condition: spinal-cord-compression
+    note: "Intraoperative US — no zero-login dataset"
+  US-078:
+    suite: retired
+    retired_reason: unsourceable_zero_login
+    retired_date: "2026-03-06"
+    condition: compartment-syndrome
+    note: "Extremity US — no zero-login dataset"
+  US-079:
+    suite: retired
+    retired_reason: unsourceable_zero_login
+    retired_date: "2026-03-06"
+    condition: benign-positional-vertigo
+    note: "Normal US study — retired with FAST/lung group"
+  US-081:
+    suite: retired
+    retired_reason: unsourceable_zero_login
+    retired_date: "2026-03-06"
+    condition: acute-low-back-pain-red-flags
+    note: "Spinal US — no zero-login dataset"
+  US-082:
+    suite: retired
+    retired_reason: unsourceable_zero_login
+    retired_date: "2026-03-06"
+    condition: necrotizing-fasciitis
+    note: "Soft tissue US — no zero-login dataset"
+  US-083:
+    suite: retired
+    retired_reason: unsourceable_zero_login
+    retired_date: "2026-03-06"
+    condition: pediatric-acute-otitis-media
+    note: "Otitis US — no zero-login dataset"
+  US-084:
+    suite: retired
+    retired_reason: unsourceable_zero_login
+    retired_date: "2026-03-06"
+    condition: open-fracture
+    note: "POCUS fracture — no zero-login dataset"
+  US-085:
+    suite: retired
+    retired_reason: unsourceable_zero_login
+    retired_date: "2026-03-06"
+    condition: major-joint-dislocation
+    note: "POCUS dislocation — no zero-login dataset"
+  US-086:
+    suite: retired
+    retired_reason: unsourceable_zero_login
+    retired_date: "2026-03-06"
+    condition: fourniers-gangrene
+    note: "Perineal US — no zero-login dataset"
+  US-087:
+    suite: retired
+    retired_reason: unsourceable_zero_login
+    retired_date: "2026-03-06"
+    condition: tension-headache
+    note: "Normal transcranial US — retired with Doppler group"

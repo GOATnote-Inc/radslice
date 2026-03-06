@@ -1,9 +1,10 @@
-schema_version: '2.0'
+schema_version: '2.1'
 metadata:
-  total_tasks: 330
+  total_tasks: 205
   total_sourced: 39
   total_validated: 27
-  last_updated: '2026-03-02'
+  last_updated: '2026-03-06'
+  notes: "v2.1 \u2014 added license_tier field, new dataset sources, revised task counts after US trim"
 images:
   xray/openem/acute-heart-failure.png:
     source: omnimedvqa-open
@@ -15,6 +16,7 @@ images:
     validation_status: downloaded
     pathology_confirmed: false
     notes: Chest X-ray showing cardiomegaly and bilateral pulmonary edema
+    license_tier: research_only
   xray/openem/pneumonia.png:
     source: omnimedvqa-open
     source_id: omnimedvqa_chestxray_pneumonia_001
@@ -25,6 +27,7 @@ images:
     validation_status: downloaded
     pathology_confirmed: false
     notes: Chest X-ray with focal consolidation
+    license_tier: research_only
   ct/openem/acute-limb-ischemia.png:
     source: omnimedvqa-open
     source_id: omnimedvqa_ct_ali_001
@@ -36,6 +39,7 @@ images:
     validation_status: downloaded
     pathology_confirmed: false
     notes: CTA lower extremity showing arterial occlusion
+    license_tier: research_only
   ct/openem/pulmonary-embolism.png:
     source: omnimedvqa-open
     source_id: omnimedvqa_ct_pe_001
@@ -47,6 +51,7 @@ images:
     validation_status: downloaded
     pathology_confirmed: false
     notes: CTPA showing filling defect in pulmonary artery
+    license_tier: research_only
   mri/openem/aortic-dissection.png:
     source: omnimedvqa-open
     source_id: omnimedvqa_mri_aortic_001
@@ -57,6 +62,7 @@ images:
     validation_status: downloaded
     pathology_confirmed: false
     notes: MRI showing intimal flap in aorta
+    license_tier: research_only
   ultrasound/openem/acute-heart-failure.png:
     source: omnimedvqa-open
     source_id: omnimedvqa_us_echo_chf_001
@@ -67,6 +73,7 @@ images:
     validation_status: downloaded
     pathology_confirmed: false
     notes: Echocardiogram showing reduced ejection fraction
+    license_tier: research_only
   ultrasound/openem/ectopic-pregnancy.png:
     source: omnimedvqa-open
     source_id: omnimedvqa_us_pelvic_ectopic_001
@@ -77,6 +84,7 @@ images:
     validation_status: downloaded
     pathology_confirmed: false
     notes: Pelvic ultrasound showing adnexal mass with empty uterus
+    license_tier: research_only
   ct/multicare/hepatic-steatosis.png:
     source: multicare
     source_id: TODO
@@ -88,6 +96,7 @@ images:
     validation_status: unsourced
     pathology_confirmed: false
     notes: Abdominal CT showing diffuse hepatic steatosis (Hounsfield attenuation < 40 HU)
+    license_tier: commercial_safe
   ct/multicare/pulmonary-nodule.png:
     source: multicare
     source_id: TODO
@@ -100,6 +109,7 @@ images:
     validation_status: unsourced
     pathology_confirmed: false
     notes: Chest CT showing solitary pulmonary nodule in RUL
+    license_tier: commercial_safe
   ct/multicare/renal-cyst.png:
     source: multicare
     source_id: TODO
@@ -112,6 +122,7 @@ images:
     validation_status: unsourced
     pathology_confirmed: false
     notes: Abdominal CT showing simple renal cyst, Bosniak I
+    license_tier: commercial_safe
   ct/multicare/adrenal-adenoma.png:
     source: multicare
     source_id: TODO
@@ -124,6 +135,7 @@ images:
     validation_status: unsourced
     pathology_confirmed: false
     notes: Abdominal CT showing adrenal adenoma (< 10 HU on unenhanced CT)
+    license_tier: commercial_safe
   xray/multicare/cardiomegaly.png:
     source: multicare
     source_id: TODO
@@ -135,6 +147,7 @@ images:
     validation_status: unsourced
     pathology_confirmed: false
     notes: PA chest radiograph with cardiomegaly (CTR > 0.5)
+    license_tier: commercial_safe
   ct/idc/chest-ct-nodule.dcm:
     source: idc
     source_id: LIDC-IDRI-0001
@@ -148,6 +161,7 @@ images:
     validation_status: downloaded
     pathology_confirmed: false
     notes: LIDC-IDRI chest CT with annotated lung nodule
+    license_tier: commercial_safe
   ct/idc/abdomen-ct-liver.dcm:
     source: idc
     source_id: TCGA-LIHC-0001
@@ -161,6 +175,7 @@ images:
     validation_status: downloaded
     pathology_confirmed: false
     notes: TCGA-LIHC abdominal CT with hepatic lesion
+    license_tier: commercial_safe
   xray/idc/chest-xray-pneumonia.dcm:
     source: idc
     source_id: NLST-0001
@@ -173,6 +188,7 @@ images:
     validation_status: downloaded
     pathology_confirmed: false
     notes: NLST chest X-ray
+    license_tier: commercial_safe
   ct/idc/head-ct-stroke.dcm:
     source: idc
     source_id: CQ500-0001
@@ -186,6 +202,7 @@ images:
     validation_status: downloaded
     pathology_confirmed: false
     notes: Head CT for hemorrhagic stroke evaluation
+    license_tier: commercial_safe
   ct/idc/chest-ct-pe.dcm:
     source: idc
     source_id: RSPECT-0001
@@ -199,6 +216,7 @@ images:
     validation_status: downloaded
     pathology_confirmed: false
     notes: CTPA for pulmonary embolism evaluation
+    license_tier: commercial_safe
   xray/multicare/pericarditis-myocarditis-pmc6798500-Fig2.png:
     source: multicare
     source_id: PMC6798500_Fig2
@@ -213,6 +231,7 @@ images:
     notes: Chest X-ray of patient 2. Chest X-ray performed at in the emergency department showing cardiomegaly. Note the right
       tumoural lung opacity
     sha256: 0cfd293cc744865c61b3582007fac31e7dabea3adaeddfb2f1a3706bd8a47dac
+    license_tier: commercial_safe
   xray/multicare/fat-embolism-syndrome-pmc2760911-F0001.png:
     source: multicare
     source_id: PMC2760911_F0001
@@ -226,6 +245,7 @@ images:
     caption_score: 0.9
     notes: AP radiograph of chest showing bilateral basal air space filling lesions consolidation
     sha256: b484afbe66dd70adbb27ff719fb679bef38fb08811dbc9955e79bad77d38ce96
+    license_tier: commercial_safe
   xray/multicare/spontaneous-pneumothorax-pmc7862973-Fig1.png:
     source: multicare
     source_id: PMC7862973_Fig1
@@ -240,6 +260,7 @@ images:
     notes: Chest radiograph at admission a showing bilateral diffuse infiltrates and cardiomegaly. In the third week of hospitalization,
       a cavity with intracavitary content b can be seen in the right upper zone
     sha256: 4f7bf80c0533fc58888b9489b659150dc950f8b30a28a2c05f12f094624edf27
+    license_tier: commercial_safe
   xray/multicare/penetrating-chest-trauma-pmc10156565-F5.png:
     source: multicare
     source_id: PMC10156565_F5
@@ -254,6 +275,7 @@ images:
     notes: Computed tomography imaging of a patient with penetrating thoracic trauma; bullet core, haemothorax and accompanying
       lung contusion and atelectasis on the left
     sha256: 3cff75f7d2f31e0d858bd4d37ee28e5af9576d753aafeabe3f5f7cba66c0959f
+    license_tier: research_only
   xray/multicare/tracheal-disruption-pmc2556736-F1.png:
     source: multicare
     source_id: PMC2556736_F1
@@ -268,6 +290,7 @@ images:
     notes: Bedside chest radiography performed immediately after admission. Bilateral pneumothorax (large arrows), pneumomediastinum
       (thin arrows) and extensive subcutaneous emphysema are visible.
     sha256: 65a32e60e85ef291a5bdbd83626b813ebef147ab0b751bea552344dd277dc987
+    license_tier: commercial_safe
   xray/multicare/major-joint-dislocation-pmc4844497-F1.png:
     source: multicare
     source_id: PMC4844497_F1
@@ -281,6 +304,7 @@ images:
     caption_score: 1.0
     notes: Radiograph of Right shoulder (A) and Left Shoulder (B) showing anterior dislocation with greater
     sha256: 0f450fc879e1052f18d8d2a8b426184e4757be18714f96a66a1dba8e10049f6d
+    license_tier: research_only
   xray/multicare/globe-rupture-pmc7398978-fig2.png:
     source: multicare
     source_id: PMC7398978_fig2
@@ -295,6 +319,7 @@ images:
     notes: 'Radiological Findings: A). Ocular ultrasonography presenting a discontinuity of the inferior wall of the eyeball
       (arrows). B). Plain skull x-ray (anteroposterior and lateral view) showing the homemade'
     sha256: e2ecac7254ea474eba8861fb85ce911adcb3388fa26cdbcd9a1afa500623f223
+    license_tier: commercial_safe
   xray/multicare/non-accidental-trauma-pmc3465174-F3.png:
     source: multicare
     source_id: PMC3465174_F3
@@ -309,6 +334,7 @@ images:
     notes: "Changes in radiographic findings of the left femur over the course of observation (age 2\u2009weeks to 1\u2009\
       year). A. 2\u2009weeks: antero-lateral bowing, widened and irregular metaphyses with flaring and medial b"
     sha256: 61d480ecd17e7c90b7d6921738d880287f9381f0cded2a93b540bb6a6393f077
+    license_tier: commercial_safe
   xray/multicare/submersion-injury-pmc1065025-F2.png:
     source: multicare
     source_id: PMC1065025_F2
@@ -323,6 +349,7 @@ images:
     notes: 'The girl: computed tomography of the thorax, done shortly after admission to hospital, showing infiltrations in
       the basal dorsal thorax following aspiration.'
     sha256: f11ad5071d606419cd3a9f10f41f080be8eca0d11793ad4cb65a7674c8fda35c
+    license_tier: commercial_safe
   xray/multicare/massive-hemoptysis-pmc7227539-fig3.png:
     source: multicare
     source_id: PMC7227539_fig3
@@ -337,6 +364,7 @@ images:
     notes: 'Peak stage COVID-19 CT findings: axial CT images of the mediastinum (A) and lungs (B) of a 54-year-old Chinese
       man on day 13 of onset of symptoms exhibiting large bilateral pleural effusions with dens'
     sha256: e249287ccb4f3c32bdf0a5529bfba5d8c4d3e63c170e920b05d972d1886c25dc
+    license_tier: commercial_safe
   xray/multicare/pneumonia-pmc7092802-f3.png:
     source: multicare
     source_id: PMC7092802_f3
@@ -351,6 +379,7 @@ images:
     notes: Posteroanterior and Lateral Chest Radiographs, January 22, 2020 (Illness Day 7, Hospital Day 3).No acute intrathoracic
       plain-film abnormality was noted.
     sha256: 679a4c10ffee7237d0cf5531a8169d7d18a7d3c9f0a1776c99396385955c712a
+    license_tier: commercial_safe
   xray/multicare/esophageal-foreign-body-impaction-pmc3089779-F1.png:
     source: multicare
     source_id: PMC3089779_F1
@@ -364,6 +393,7 @@ images:
     caption_score: 0.8
     notes: Chest X ray; arrow pointing at the foreign body in the mid esophagus.
     sha256: b2df90655ddaf200fcab5f1db84f411a427131d0236bf2503c2072e7a2e0cb7b
+    license_tier: commercial_safe
   xray/multicare/fourniers-gangrene-pmc10799674-FIG1.png:
     source: multicare
     source_id: PMC10799674_FIG1
@@ -378,6 +408,7 @@ images:
     notes: CT (axial view) with contrast of the abdomen and pelvisCT with contrast of the abdomen and pelvis showed extensive
       subcutaneous gas collections in the right labia, right adductors, and perineum.
     sha256: d753e31adef66b7b69d9efbdebdda8bed7270f93558e43ca93430b1c502755bd
+    license_tier: commercial_safe
   xray/multicare/high-altitude-illness-pmc3984695-F1.png:
     source: multicare
     source_id: PMC3984695_F1
@@ -392,6 +423,7 @@ images:
     notes: Initial Chest x-ray showing pulmonary infiltrates in the right lung especially in the right mid and lower lung
       zones indicative of pulmonary edema.
     sha256: ca02cae83397d63bf45c2fd918a6e26e8c834b14455da93815e6999dac5518c5
+    license_tier: commercial_safe
   ct/multicare/epiglottitis-pmc9908088-fig2.png:
     source: multicare
     source_id: PMC9908088_fig2
@@ -406,6 +438,7 @@ images:
     notes: CT images on day 3 of this admissionSagittal view (A) and cross-sectional view with the arrows pointing to the
       floor of mouth areas (B).
     sha256: 49799735e7a636f96ae59c8d64e3f11c85ac8ab5fd405580838a59734d45ab13
+    license_tier: commercial_safe
   ct/multicare/foreign-body-aspiration-pmc4094581-f2-idr-7-183.png:
     source: multicare
     source_id: PMC4094581_f2-idr-7-183
@@ -420,6 +453,7 @@ images:
     notes: "Chest X-ray (A) and thorax computed tomography scan (B\u2013C) revealing multifocal pneumonia with right pleural\
       \ cavitation due to Actinomyces viscosus.Note: Arrows indicate chest wall sinus tract."
     sha256: e85b95a65db3556737d173ffb12e7a997d91fd352eac30da55d8dba23099801d
+    license_tier: research_only
   ct/multicare/open-fracture-pmc5935655-fig3.png:
     source: multicare
     source_id: PMC5935655_fig3
@@ -434,6 +468,7 @@ images:
     notes: Male patient (age 19 years old) with infected non-union after intramedullary nailing of an open tibial fracture.
       (A). Anteroposterior (AP) and lateral X-rays of the tibia illustrating osteolysis (whit
     sha256: f240490a82fe04e732a54de85e3a2852699797bb29e0ead4aeab2f755eb1ee7f
+    license_tier: research_only
   ct/multicare/urolithiasis-pmc10535984-viruses-15-01847-f020.png:
     source: multicare
     source_id: PMC10535984_viruses-15-01847-f020
@@ -448,6 +483,7 @@ images:
     notes: Ultrasonogram of a cat with FIP and renomegaly with a loss of normal renal architecture; ultrasonography might
       be useful to guide fine-needle aspirate or tissue core-biopsy sampling of organs by targe
     sha256: c56a249b734033582f3039818cb1ea53290f10da0359c02391ed0228fb735f46
+    license_tier: commercial_safe
   ct/multicare/retrobulbar-hemorrhage-pmc6844234-F0001.png:
     source: multicare
     source_id: PMC6844234_F0001
@@ -462,6 +498,7 @@ images:
     notes: (A, B) A patient with left orbital compartment syndrome secondary to orbital emphysema (a). Axial CT image at the
       level of the optic nerve demonstrating intraorbital and subcutaneous emphysema.
     sha256: 4c4b83156f8f03be23fea895663ba4be68ac23b4c12a6b8302e0da0ecbf46281
+    license_tier: research_only
   ct/multicare/ludwigs-angina-pmc7233510-FIG1.png:
     source: multicare
     source_id: PMC7233510_FIG1
@@ -476,6 +513,7 @@ images:
     notes: Contrast-enhanced computed tomography of the soft tissues of the neck showed rightward displacement of the hypopharyngeal
       airway (a, blue arrow, axial image). Also noted were abscesses of the left mas
     sha256: 36d5d6e922c5169c2993e88df90c7bd284c93ad0709f9385a66b13fdd928a220
+    license_tier: commercial_safe
   ct/multicare/peritonsillar-abscess-pmc4015694-F1.png:
     source: multicare
     source_id: PMC4015694_F1
@@ -494,6 +532,7 @@ images:
 
       ) seen on the transverse (a) and coronal (b) views.'
     sha256: 4bd94ce12f09017d2fbc8208b29d6a6d0feee74f8b533d091b9dbfa7df53b4c2
+    license_tier: commercial_safe
   ct/multicare/retropharyngeal-abscess-pmc5704790-F2.png:
     source: multicare
     source_id: PMC5704790_F2
@@ -508,6 +547,7 @@ images:
     notes: The x-ray revealed diffuse swelling on the retropharyngeal space. Neck CT showed calcific deposit on C1-2 joint.
       MRI showed a nodular lesion which located the insertion site of superior oblique tendon
     sha256: 25961efb24fbf344aa6db02d3837c75d628d55d4df653dd736279eeb66802384
+    license_tier: research_only
   ct/multicare/spinal-epidural-abscess-pmc3263660-fig8.png:
     source: multicare
     source_id: PMC3263660_fig8
@@ -522,6 +562,7 @@ images:
     notes: Sagittal CT reformation (a) shows multiple lytic and blastic metastatic breast cancer lesions in the thoracic spine
       with a compression fracture in the upper thoracic spine (yellow arrow). Sagittal T1-
     sha256: 74cad7ccd9bb679684a2051e863f7d8a3f132f18b775ac6ec3934f870e4cb685
+    license_tier: commercial_safe
   ct/multicare/lateral-canthotomy-pmc3884541-F7.png:
     source: multicare
     source_id: PMC3884541_F7
@@ -536,6 +577,7 @@ images:
     notes: Detail of an axial CT scan outlining the contour of the right sided eye globe in red. The respective patient had
       been subjected to an ineffective decompression procedure for a retrobulbar orbital hema
     sha256: fb0b87d8c59da4f79bef5ff4da5812b4eaafa2c148ce6cf68ab5d483c058b2b7
+    license_tier: research_only
   ct/multicare/herpes-zoster-ophthalmicus-pmc8875181-vaccines-10-00342-f001.png:
     source: multicare
     source_id: PMC8875181_vaccines-10-00342-f001
@@ -550,6 +592,7 @@ images:
     notes: Clinical presentation of the vaccine-induced prothrombotic immune thrombocytopenic disorder (VIPIT) and superior
       ophthalmic vein (SOV) thrombosis after ChAdOx1 nCoV-19 vaccination. (A) patient present
     sha256: 09525a054a82fa5e9d277c2a4b24d163f4a708ba5d1fb4cef9c5439a941c752e
+    license_tier: commercial_safe
   ct/multicare/acute-angle-closure-glaucoma-pmc4625431-Fig3.png:
     source: multicare
     source_id: PMC4625431_Fig3
@@ -564,6 +607,7 @@ images:
     notes: Optical coherence tomography (OCT) and B scan ultrasonography of both eyes. Choroidal thickening with effusion
       (white arrow) were found in both eyes. Using OCT, serous retinal detachment (yellow arrow
     sha256: 270c033e3ee8eca8aab82770ab7bbcc13e9ba11659bdbbb2ffc3af3a26160bcb
+    license_tier: commercial_safe
   ct/multicare/neonatal-emergencies-pmc12395432-f0030.png:
     source: multicare
     source_id: PMC12395432_f0030
@@ -578,3 +622,4 @@ images:
     notes: The axial CT scan of the brain shows no evidence of intracranial lesions and demonstrates normal cerebrospinal
       fluid (CSF) circulation. The lateral ventricles (blue arrow), third ventricle (red arrow)
     sha256: fe0d34fa7315f0e81f6ccc6705f9874cc3212985d9692e361559568941051cd9
+    license_tier: research_only

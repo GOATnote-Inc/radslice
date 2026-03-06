@@ -1,7 +1,8 @@
 """Fetch corpus images from sources with checksum verification.
 
 Supports per-source downloaders for OmniMedVQA, MediConfusion, VinDr-CXR,
-Eurorad, and RadImageNet. For the smoke test, OmniMedVQA covers all 4 modalities.
+Eurorad, RadImageNet, MultiCaRe, IDC, and new zero-login sources:
+RSNA (Kaggle API), NIH ChestXray14, PadChest, BraTS, CAMUS, DeepLesion.
 """
 
 from __future__ import annotations
@@ -387,6 +388,314 @@ def _download_idc(
     return stats
 
 
+# --- New zero-login source downloaders ---
+
+
+def _download_kaggle_rsna(
+    images: dict[str, dict],
+    output_dir: Path,
+    dry_run: bool = False,
+    source_key: str = "rsna-ich",
+) -> dict[str, int]:
+    """Download DICOM images from RSNA Kaggle competitions.
+
+    Requires: pip install kaggle (and ~/.kaggle/kaggle.json API token).
+    Kaggle RSNA datasets are "instant accept" — no approval queue.
+    """
+    stats = {"downloaded": 0, "skipped": 0, "failed": 0}
+    entries = {k: v for k, v in images.items() if v.get("source") == source_key}
+
+    if not entries:
+        return stats
+
+    logger.info("RSNA (%s): %d images to fetch", source_key, len(entries))
+
+    # Competition name mapping
+    competition_map = {
+        "rsna-ich": "rsna-intracranial-hemorrhage-detection",
+        "rsna-pe": "rsna-str-pulmonary-embolism-detection",
+        "rsna-cspine": "rsna-2022-cervical-spine-fracture-detection",
+        "rsna-abd-trauma": "rsna-2023-abdominal-trauma-detection",
+        "rsna-pneumonia": "rsna-pneumonia-detection-challenge",
+    }
+    competition = competition_map.get(source_key, source_key)
+
+    try:
+        import kaggle  # type: ignore[import-untyped]  # noqa: F401
+    except ImportError:
+        logger.warning(
+            "kaggle package not installed. Install with: pip install kaggle\n"
+            "Then place API token at ~/.kaggle/kaggle.json"
+        )
+        stats["failed"] = len(entries)
+        return stats
+
+    for image_ref, info in entries.items():
+        dest = output_dir / image_ref
+        if dest.exists():
+            expected = info.get("sha256")
+            if expected and verify_checksum(dest, expected):
+                stats["skipped"] += 1
+                continue
+            elif not expected:
+                stats["skipped"] += 1
+                continue
+
+        if dry_run:
+            logger.info("  [dry-run] Would download from %s: %s", competition, image_ref)
+            stats["skipped"] += 1
+            continue
+
+        try:
+            from kaggle.api.kaggle_api_extended import KaggleApi
+
+            api = KaggleApi()
+            api.authenticate()
+            dest.parent.mkdir(parents=True, exist_ok=True)
+
+            # Download specific file from competition dataset
+            file_name = info.get("kaggle_file", "")
+            if file_name:
+                api.competition_download_file(
+                    competition, file_name, path=str(dest.parent), quiet=True
+                )
+                stats["downloaded"] += 1
+            else:
+                logger.warning("No kaggle_file specified for %s", image_ref)
+                stats["failed"] += 1
+        except Exception as e:
+            logger.error("Kaggle download failed for %s: %s", image_ref, e)
+            stats["failed"] += 1
+
+    return stats
+
+
+def _download_nih_chestxray14(
+    images: dict[str, dict], output_dir: Path, dry_run: bool = False
+) -> dict[str, int]:
+    """Download images from NIH ChestX-ray14 (CC0, zero-login).
+
+    Direct download via NIH Box links. No credentials required.
+    """
+    stats = {"downloaded": 0, "skipped": 0, "failed": 0}
+    entries = {k: v for k, v in images.items() if v.get("source") == "nih-chestxray14"}
+
+    if not entries:
+        return stats
+
+    logger.info("NIH ChestXray14: %d images to fetch", len(entries))
+
+    for image_ref, info in entries.items():
+        dest = output_dir / image_ref
+        if dest.exists():
+            expected = info.get("sha256")
+            if expected and verify_checksum(dest, expected):
+                stats["skipped"] += 1
+                continue
+            elif not expected:
+                stats["skipped"] += 1
+                continue
+
+        if dry_run:
+            logger.info("  [dry-run] Would download: %s", image_ref)
+            stats["skipped"] += 1
+            continue
+
+        url = info.get("url")
+        if url and _download_url(url, dest):
+            stats["downloaded"] += 1
+        else:
+            stats["failed"] += 1
+
+    return stats
+
+
+def _download_padchest(
+    images: dict[str, dict], output_dir: Path, dry_run: bool = False
+) -> dict[str, int]:
+    """Download images from PadChest (CC-BY-SA-4.0, zero-login).
+
+    Direct download from BIMCV servers.
+    """
+    stats = {"downloaded": 0, "skipped": 0, "failed": 0}
+    entries = {k: v for k, v in images.items() if v.get("source") == "padchest"}
+
+    if not entries:
+        return stats
+
+    logger.info("PadChest: %d images to fetch", len(entries))
+
+    for image_ref, info in entries.items():
+        dest = output_dir / image_ref
+        if dest.exists():
+            expected = info.get("sha256")
+            if expected and verify_checksum(dest, expected):
+                stats["skipped"] += 1
+                continue
+            elif not expected:
+                stats["skipped"] += 1
+                continue
+
+        if dry_run:
+            logger.info("  [dry-run] Would download: %s", image_ref)
+            stats["skipped"] += 1
+            continue
+
+        url = info.get("url")
+        if url and _download_url(url, dest):
+            stats["downloaded"] += 1
+        else:
+            stats["failed"] += 1
+
+    return stats
+
+
+def _download_brats(
+    images: dict[str, dict], output_dir: Path, dry_run: bool = False
+) -> dict[str, int]:
+    """Download brain MRI from BraTS 2023+ (CC-BY-SA-4.0).
+
+    Synapse registration is free and instant. NIfTI format.
+    """
+    stats = {"downloaded": 0, "skipped": 0, "failed": 0}
+    entries = {k: v for k, v in images.items() if v.get("source") == "brats"}
+
+    if not entries:
+        return stats
+
+    logger.info("BraTS: %d images to fetch", len(entries))
+
+    for image_ref, info in entries.items():
+        dest = output_dir / image_ref
+        if dest.exists():
+            stats["skipped"] += 1
+            continue
+
+        if dry_run:
+            logger.info("  [dry-run] Would download: %s", image_ref)
+            stats["skipped"] += 1
+            continue
+
+        url = info.get("url")
+        if url and _download_url(url, dest):
+            stats["downloaded"] += 1
+        else:
+            logger.warning("BraTS download requires Synapse CLI. See: https://www.synapse.org/")
+            stats["failed"] += 1
+
+    return stats
+
+
+def _download_camus(
+    images: dict[str, dict], output_dir: Path, dry_run: bool = False
+) -> dict[str, int]:
+    """Download cardiac echo images from CAMUS (open access, zero-login).
+
+    500 patients, 2/4-chamber views. Direct download from CREATIS.
+    """
+    stats = {"downloaded": 0, "skipped": 0, "failed": 0}
+    entries = {k: v for k, v in images.items() if v.get("source") == "camus"}
+
+    if not entries:
+        return stats
+
+    logger.info("CAMUS: %d images to fetch", len(entries))
+
+    for image_ref, info in entries.items():
+        dest = output_dir / image_ref
+        if dest.exists():
+            stats["skipped"] += 1
+            continue
+
+        if dry_run:
+            logger.info("  [dry-run] Would download: %s", image_ref)
+            stats["skipped"] += 1
+            continue
+
+        url = info.get("url")
+        if url and _download_url(url, dest):
+            stats["downloaded"] += 1
+        else:
+            stats["failed"] += 1
+
+    return stats
+
+
+def _download_deeplesion(
+    images: dict[str, dict], output_dir: Path, dry_run: bool = False
+) -> dict[str, int]:
+    """Download CT key images from DeepLesion (CC-BY-4.0, zero-login).
+
+    32K CT lesion images with RECIST annotations from NIH Box.
+    """
+    stats = {"downloaded": 0, "skipped": 0, "failed": 0}
+    entries = {k: v for k, v in images.items() if v.get("source") == "deeplesion"}
+
+    if not entries:
+        return stats
+
+    logger.info("DeepLesion: %d images to fetch", len(entries))
+
+    for image_ref, info in entries.items():
+        dest = output_dir / image_ref
+        if dest.exists():
+            expected = info.get("sha256")
+            if expected and verify_checksum(dest, expected):
+                stats["skipped"] += 1
+                continue
+            elif not expected:
+                stats["skipped"] += 1
+                continue
+
+        if dry_run:
+            logger.info("  [dry-run] Would download: %s", image_ref)
+            stats["skipped"] += 1
+            continue
+
+        url = info.get("url")
+        if url and _download_url(url, dest):
+            stats["downloaded"] += 1
+        else:
+            stats["failed"] += 1
+
+    return stats
+
+
+def _download_medpix(
+    images: dict[str, dict], output_dir: Path, dry_run: bool = False
+) -> dict[str, int]:
+    """Download teaching case images from MedPix (public domain, zero-login).
+
+    ~60K images from NIH/NLM with clinical differentials.
+    """
+    stats = {"downloaded": 0, "skipped": 0, "failed": 0}
+    entries = {k: v for k, v in images.items() if v.get("source") == "medpix"}
+
+    if not entries:
+        return stats
+
+    logger.info("MedPix: %d images to fetch", len(entries))
+
+    for image_ref, info in entries.items():
+        dest = output_dir / image_ref
+        if dest.exists():
+            stats["skipped"] += 1
+            continue
+
+        if dry_run:
+            logger.info("  [dry-run] Would download: %s", image_ref)
+            stats["skipped"] += 1
+            continue
+
+        url = info.get("url")
+        if url and _download_url(url, dest):
+            stats["downloaded"] += 1
+        else:
+            stats["failed"] += 1
+
+    return stats
+
+
 # --- Main entry point ---
 
 _DOWNLOADERS: dict[str, Any] = {
@@ -397,6 +706,21 @@ _DOWNLOADERS: dict[str, Any] = {
     "radimagenet": _download_radimagenet,
     "multicare": _download_multicare,
     "idc": _download_idc,
+    "rsna-ich": lambda i, o, dry_run=False: _download_kaggle_rsna(i, o, dry_run, "rsna-ich"),
+    "rsna-pe": lambda i, o, dry_run=False: _download_kaggle_rsna(i, o, dry_run, "rsna-pe"),
+    "rsna-cspine": lambda i, o, dry_run=False: _download_kaggle_rsna(i, o, dry_run, "rsna-cspine"),
+    "rsna-abd-trauma": lambda i, o, dry_run=False: _download_kaggle_rsna(
+        i, o, dry_run, "rsna-abd-trauma"
+    ),
+    "rsna-pneumonia": lambda i, o, dry_run=False: _download_kaggle_rsna(
+        i, o, dry_run, "rsna-pneumonia"
+    ),
+    "nih-chestxray14": _download_nih_chestxray14,
+    "padchest": _download_padchest,
+    "brats": _download_brats,
+    "camus": _download_camus,
+    "deeplesion": _download_deeplesion,
+    "medpix": _download_medpix,
 }
 
 

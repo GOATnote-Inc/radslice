@@ -30,6 +30,7 @@ logger = logging.getLogger("discover_idc")
 
 # Collections with known acute pathology useful for RadSlice
 CURATED_COLLECTIONS = {
+    # --- CT collections ---
     "CQ500": {
         "description": "Head CT — hemorrhage, fractures, mass effect",
         "modality": "CT",
@@ -55,16 +56,87 @@ CURATED_COLLECTIONS = {
         "conditions": ["pulmonary-embolism"],
     },
     "NLST": {
-        "description": "National Lung Screening Trial — CXR and CT",
+        "description": "National Lung Screening Trial — CXR and CT (longitudinal)",
         "modality": "CT",
         "anatomy": "CHEST",
         "conditions": ["pneumonia", "pulmonary-nodule"],
+        "v2_levels": [1, 2, 4],  # L4: longitudinal comparison
     },
     "MIDRC-RICORD": {
         "description": "COVID-19 CXR and CT",
         "modality": "CT",
         "anatomy": "CHEST",
         "conditions": ["pneumonia", "ards"],
+    },
+    "CT-ORG": {
+        "description": "CT organ segmentation — multi-organ",
+        "modality": "CT",
+        "anatomy": "ABDOMEN",
+        "conditions": ["mesenteric-ischemia", "bowel-obstruction"],
+        "v2_levels": [1, 2],
+    },
+    "CPTAC": {
+        "description": "Clinical Proteomic Tumor Analysis Consortium — multi-organ CT",
+        "modality": "CT",
+        "anatomy": "ABDOMEN",
+        "conditions": ["hepatic-steatosis", "renal-cyst"],
+    },
+    # --- MRI collections (new for v2.0) ---
+    "TCGA-GBM": {
+        "description": "Brain MRI — glioblastoma (262 subjects, DICOM)",
+        "modality": "MR",
+        "anatomy": "BRAIN",
+        "conditions": [
+            "hemorrhagic-stroke",
+            "traumatic-brain-injury",
+            "status-epilepticus",
+        ],
+        "v2_levels": [1, 2],
+    },
+    "TCGA-LGG": {
+        "description": "Brain MRI — low-grade glioma (199 subjects, DICOM)",
+        "modality": "MR",
+        "anatomy": "BRAIN",
+        "conditions": [
+            "hemorrhagic-stroke",
+            "status-epilepticus",
+        ],
+        "v2_levels": [1, 2],
+    },
+    "Duke-Breast-Cancer-MRI": {
+        "description": "Breast MRI — dynamic contrast-enhanced (922 subjects, DICOM)",
+        "modality": "MR",
+        "anatomy": "BREAST",
+        "conditions": [],
+        "v2_levels": [2],  # Multi-sequence correlation
+    },
+    "PROSTATEx": {
+        "description": "Prostate MRI — multiparametric (346 subjects, DICOM)",
+        "modality": "MR",
+        "anatomy": "PROSTATE",
+        "conditions": [],
+        "v2_levels": [2],
+    },
+    "ReMIND": {
+        "description": "Brain MRI — pre/intra-operative (114 subjects, DICOM)",
+        "modality": "MR",
+        "anatomy": "BRAIN",
+        "conditions": ["traumatic-brain-injury"],
+        "v2_levels": [1, 2],
+    },
+    "RIDER-Neuro-MRI": {
+        "description": "Brain MRI — longitudinal repeat scans (DICOM)",
+        "modality": "MR",
+        "anatomy": "BRAIN",
+        "conditions": [],
+        "v2_levels": [4],  # Longitudinal comparison
+    },
+    # --- Ultrasound collections ---
+    "B-mode-CEUS-Liver": {
+        "description": "Liver ultrasound — B-mode and contrast-enhanced (DICOM)",
+        "modality": "US",
+        "anatomy": "LIVER",
+        "conditions": ["acute-cholecystitis", "ascending-cholangitis"],
     },
 }
 
@@ -141,9 +213,14 @@ def format_yaml_entry(series: dict, condition_id: str, window_preset: str | None
     series_uid = series.get("SeriesInstanceUID", series.get("series_uid", ""))
     collection = series.get("collection_id", "idc")
     patient_id = series.get("PatientID", "unknown")
+    modality = series.get("Modality", "CT").upper()
 
     safe_name = f"{condition_id}-{collection}-{patient_id}".lower().replace(" ", "-")
-    image_ref = f"ct/idc/{safe_name}.dcm"
+
+    # Map DICOM modality to directory
+    modality_dir_map = {"CT": "ct", "MR": "mri", "US": "ultrasound", "CR": "xray", "DX": "xray"}
+    mod_dir = modality_dir_map.get(modality, "ct")
+    image_ref = f"{mod_dir}/idc/{safe_name}.dcm"
 
     entry = {
         "source": "idc",
@@ -151,6 +228,7 @@ def format_yaml_entry(series: dict, condition_id: str, window_preset: str | None
         "series_uid": series_uid,
         "original_format": "dicom",
         "license": "CC-BY-4.0",
+        "license_tier": "commercial_safe",
         "condition_id": condition_id,
         "task_ids": [],
         "validation_status": "sourced",
@@ -231,6 +309,100 @@ def append_to_sources(candidates: list[dict], sources_path: str = "corpus/image_
     return added
 
 
+def batch_download_s5cmd(
+    series_uids: list[str],
+    output_dir: str = "corpus/images",
+    dry_run: bool = False,
+) -> dict[str, int]:
+    """Batch download DICOM series from IDC via s5cmd (GCS public buckets).
+
+    s5cmd is ~40x faster than gsutil for bulk downloads.
+    Install: https://github.com/peak/s5cmd
+
+    Falls back to idc-index download_from_selection if s5cmd is not available.
+    """
+    import subprocess
+
+    stats = {"downloaded": 0, "skipped": 0, "failed": 0}
+
+    if not series_uids:
+        return stats
+
+    # Check for s5cmd
+    s5cmd_available = False
+    try:
+        result = subprocess.run(["s5cmd", "version"], capture_output=True, timeout=5)
+        s5cmd_available = result.returncode == 0
+    except (FileNotFoundError, subprocess.TimeoutExpired):
+        pass
+
+    if s5cmd_available:
+        logger.info("Using s5cmd for batch download of %d series", len(series_uids))
+
+        if dry_run:
+            for uid in series_uids:
+                logger.info("  [dry-run] Would download series: %s", uid[:60])
+                stats["skipped"] += 1
+            return stats
+
+        # Get GCS paths from idc-index
+        try:
+            client = get_idc_client()
+            for uid in series_uids:
+                try:
+                    # Query for GCS path
+                    sql = f"SELECT gcs_url FROM index WHERE SeriesInstanceUID = '{uid}' LIMIT 1"
+                    df = client.sql_query(sql)
+                    if df is not None and not df.empty:
+                        gcs_url = df.iloc[0]["gcs_url"]
+                        dest_dir = Path(output_dir) / "dicom"
+                        dest_dir.mkdir(parents=True, exist_ok=True)
+
+                        cmd = ["s5cmd", "--no-sign-request", "cp", f"{gcs_url}/*", str(dest_dir)]
+                        result = subprocess.run(cmd, capture_output=True, timeout=300)
+                        if result.returncode == 0:
+                            stats["downloaded"] += 1
+                        else:
+                            stderr = result.stderr.decode()[:200]
+                            logger.error("s5cmd failed for %s: %s", uid[:40], stderr)
+                            stats["failed"] += 1
+                    else:
+                        stats["failed"] += 1
+                except Exception as e:
+                    logger.error("Download failed for series %s: %s", uid[:40], e)
+                    stats["failed"] += 1
+        except ImportError:
+            logger.error("idc-index required for GCS path resolution")
+            stats["failed"] = len(series_uids)
+    else:
+        logger.info(
+            "s5cmd not available, falling back to idc-index for %d series",
+            len(series_uids),
+        )
+        try:
+            client = get_idc_client()
+            for uid in series_uids:
+                if dry_run:
+                    stats["skipped"] += 1
+                    continue
+                try:
+                    dest_dir = Path(output_dir) / "dicom"
+                    dest_dir.mkdir(parents=True, exist_ok=True)
+                    client.download_from_selection(
+                        seriesInstanceUID=uid,
+                        downloadDir=str(dest_dir),
+                    )
+                    stats["downloaded"] += 1
+                except Exception as e:
+                    logger.error("IDC download failed for %s: %s", uid[:40], e)
+                    stats["failed"] += 1
+        except ImportError:
+            logger.error("Neither s5cmd nor idc-index available for batch download")
+            stats["failed"] = len(series_uids)
+
+    return stats
+
+
 def main():
     parser = argparse.ArgumentParser(
         description="Discover condition-matched DICOM images from NCI IDC"
@@ -248,6 +420,13 @@ def main():
         "--list-curated", action="store_true", help="List curated collections for RadSlice"
     )
     parser.add_argument("--append", action="store_true", help="Append to image_sources.yaml")
+    parser.add_argument(
+        "--batch-download",
+        action="store_true",
+        help="Batch download discovered series via s5cmd (or idc-index fallback)",
+    )
+    parser.add_argument("--output-dir", default="corpus/images", help="Download output directory")
+    parser.add_argument("--dry-run", action="store_true", help="Show what would be downloaded")
     parser.add_argument("--sources", default="corpus/image_sources.yaml", help="Image sources YAML")
     parser.add_argument("--verbose", "-v", action="store_true")
     args = parser.parse_args()
@@ -310,6 +489,17 @@ def main():
     if args.append:
         added = append_to_sources(candidates, args.sources)
         print(f"Added {added} entries to {args.sources}")
+
+    if args.batch_download:
+        uids = [
+            c["entry"].get("series_uid", "") for c in candidates if c["entry"].get("series_uid")
+        ]
+        if uids:
+            print(f"\nBatch downloading {len(uids)} series...")
+            stats = batch_download_s5cmd(uids, args.output_dir, dry_run=args.dry_run)
+            print(f"Download stats: {stats}")
+        else:
+            print("No series UIDs to download.")
 
 
 if __name__ == "__main__":
