@@ -79,43 +79,53 @@ tasks:
     unblocked_date: "2026-03-06"
     note: "Re-sourced: PMC8723735 Fig1 — cervical T1/T2/post-gad rim-enhancing epidural abscess (CC-BY 4.0)"
 
-  # --- NEAR-THRESHOLD: prompt engineering priority for rc1.1 ---
+  # --- NEAR-THRESHOLD: audited 2026-03-07 ---
   MRI-011:
     suite: capability
     near_threshold: true
-    prompt_priority: true
-    best_score: {gpt: 0.53, opus: 0.03}
-    note: "GPT nearly passes (0.53). Review pattern_checks for over-strict matching."
+    prompt_priority: false
+    best_score: {gpt: 0.775, opus: 0.03}
+    note: "GPT passes 3/3 (L0). Opus misidentifies level + pathology (schwannoma vs metastatic).
+      Genuine Opus capability gap — no task changes warranted."
   MRI-014:
     suite: capability
     near_threshold: true
-    prompt_priority: true
+    prompt_priority: false
     best_score: {gpt: 0.41, opus: 0.40}
-    note: "Both models close. Review if starfield pattern terminology too specific."
+    note: "L0 false pass confirmed. Both models call 'embolic stroke' not 'fat embolism.'
+      Judge correctly Class A/C overrides. Genuine diagnostic miss — no task changes warranted."
   US-042:
     suite: capability
     near_threshold: true
     prompt_priority: true
-    best_score: {gpt: 0.43, opus: 0.01}
-    note: "GPT nearly passes (Class C). Review anatomic precision weights. Kept — testicular-torsion sourceable."
+    best_score: {gpt: 0.925, opus: 0.01}
+    note: "GPT 1/3 pass. All 3 trials diagnose 'Right testicular torsion' (should be left).
+      Trial 1 laterality false positive fixed — (?i)(left) was too broad, matched incidental
+      'compare with the left side.' Tightened to require adjacent anatomy term.
+      Genuine laterality error by model, but L0 pattern corrected for eval accuracy."
   US-046:
     suite: capability
     near_threshold: true
     prompt_priority: true
     best_score: {gpt: 0.51, opus: 0.51}
-    note: "Both at threshold but Class A override. Kept — urolithiasis sourceable."
+    note: "L0 false pass confirmed. Models identify stone + hydronephrosis individually but fail
+      synthesis into 'obstructive uropathy' diagnosis. Judge correctly overrides.
+      Synthesis gap — no task changes warranted. Kept prompt_priority for model upgrade tracking."
   XRAY-027:
     suite: capability
     near_threshold: true
-    prompt_priority: true
+    prompt_priority: false
     best_score: {gpt: 0.15, opus: 0.42}
-    note: "Opus nearly passes. Review pattern overlap with pneumothorax."
+    note: "Both models fail all trials (Class A). Tracheobronchial disruption is expert-level,
+      rare diagnosis. Genuine capability gap — no task changes warranted."
   XRAY-068:
     suite: capability
     near_threshold: true
-    prompt_priority: true
-    best_score: {gpt: 0.18, opus: 0.42}
-    note: "Opus nearly passes. Review HAPE vs HACE distinction."
+    prompt_priority: false
+    best_score: {gpt: 0.892, opus: 0.42}
+    note: "GPT diagnoses 'pneumonia' in all 3 trials — never identifies HAPE. Trial 1 grade has
+      diagnosis_mentioned=true (L0 false positive, transcript confirms no HAPE text).
+      Opus Class A/B all trials. Genuine capability gap — no pattern fix warranted."
 
   # --- RETIRED: unsourceable_zero_login (71 US tasks) ---
   # No zero-login open dataset exists for these US examination types.

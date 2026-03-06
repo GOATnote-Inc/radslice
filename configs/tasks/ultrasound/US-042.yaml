@@ -27,7 +27,7 @@ ground_truth:
 pattern_checks:
   - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(testicular torsion|torsion.{0,20}testi|spermatic cord torsion)", required: true }
   - { name: "doppler_finding", check_type: regex, pattern: "(?i)(absent (blood flow|flow|vascularity|Doppler)|no (intratesticular )?flow|avascular)", required: true }
-  - { name: "laterality", check_type: regex, pattern: "(?i)(left)", required: true }
+  - { name: "laterality", check_type: regex, pattern: "(?i)(left\\s+test|left\\s+scrotal|left\\s+spermatic|left-sided)", required: true }
 reference_solution: |
   Scrotal Doppler ultrasound demonstrates an enlarged and heterogeneous left testis measuring 4.5 x 3.0 cm. Color and power Doppler reveal absent intratesticular blood flow in the left testis. A whirlpool sign is identified in the left spermatic cord consistent with twisting of the vascular pedicle. A small reactive hydrocele surrounds the left testis. The right testis demonstrates normal echogenicity, size, and robust intratesticular blood flow. The epididymis appears normal bilaterally. These findings are diagnostic of left testicular torsion requiring emergent surgical exploration and detorsion.
 condition_present: true
