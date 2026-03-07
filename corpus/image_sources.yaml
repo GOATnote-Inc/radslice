@@ -2,7 +2,7 @@ schema_version: '2.1'
 metadata:
   total_tasks: 205
   total_sourced: 80
-  total_validated: 32
+  total_validated: 33
   last_updated: '2026-03-07'
   notes: v2.1 — added license_tier field, new dataset sources, revised task counts
     after US trim
@@ -1183,7 +1183,9 @@ images:
     task_ids:
     - CT-017
     validation_status: validated
-    pathology_confirmed: false
+    pathology_confirmed: true
+    pathology_confirmed_by: "Brandon Dent, MD"
+    pathology_confirmed_date: "2026-03-07"
     license_tier: commercial_safe
     url: https://cdn.ncbi.nlm.nih.gov/pmc/blobs/3e0b/10200024/5d65bdc2be7b/cureus-0015-00000037917-i02.jpg
     sha256: d64d38255fe8f31beb275a34e01ad3166f6ba7384206637134d34148b18f152b
