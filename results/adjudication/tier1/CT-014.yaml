@@ -1,0 +1,27 @@
+adjudication_tier: 1
+task_id: CT-014
+image_ref: "ct/multicare/hemorrhagic-stroke-pmc6138459-Fig1.jpg"
+source_article: PMC6138459
+date: "2026-03-07"
+
+reviewer:
+  name: "Brandon Dent, MD"
+  credential: MD
+  specialty: emergency_medicine
+
+target:
+  condition_id: hemorrhagic-stroke
+  primary_diagnosis: "Acute hypertensive intracerebral hemorrhage"
+  modality: ct
+  anatomy: head
+
+pathology_visible: present
+image_quality: adequate
+correct_modality: true
+correct_anatomy: true
+confounders: []
+verdict: CONFIRMED
+reviewer_notes: |
+  Arrows are diagnostic aids, not confounders. Black and red arrows point
+  to the bleed (ICH and IVH respectively). Blue arrows indicate ventricles.
+  Pathology clearly visible.

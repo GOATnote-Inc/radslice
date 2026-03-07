@@ -19,10 +19,9 @@ pathology_visible: present
 image_quality: adequate
 correct_modality: true
 correct_anatomy: true
-confounders:
-  - "Yellow arrow annotation pointing to the SDH"
+confounders: []
 verdict: CONFIRMED
 reviewer_notes: |
   Classic left convexity acute subdural hematoma with rightward midline shift.
-  Pathology is unambiguous. Arrow annotation is a minor confounder but the
-  hyperdense extra-axial collection is obvious without it.
+  Pathology is unambiguous. Arrow annotation is a diagnostic aid (per RD-001),
+  not a confounder. Hyperdense extra-axial collection is obvious without it.

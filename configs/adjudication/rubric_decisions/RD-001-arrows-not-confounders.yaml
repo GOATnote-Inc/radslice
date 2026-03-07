@@ -1,0 +1,44 @@
+decision_id: RD-001
+title: "Annotation arrows are diagnostic aids, not confounders"
+date: "2026-03-07"
+decided_by: "Brandon Dent, MD"
+status: active
+
+scope: all_modalities
+
+decision: |
+  Arrows, circles, asterisks, and other annotation marks commonly present
+  in published medical images from case reports are diagnostic aids placed
+  by the original authors to highlight relevant findings. They are NOT
+  confounders for adjudication purposes.
+
+  A confounder is an image feature that could mislead interpretation or
+  obscure pathology (e.g., overlapping hardware, motion artifact, poor
+  windowing). Annotations that point AT the pathology do the opposite —
+  they make interpretation easier, not harder.
+
+rationale: |
+  PMC case report images routinely include annotation arrows. Classifying
+  these as confounders would:
+  1. Flag nearly every sourced image as having confounders
+  2. Inflate perceived difficulty inappropriately
+  3. Misrepresent the image quality for evaluation purposes
+
+  For LLM evaluation, arrows may actually make tasks slightly easier
+  (the model can follow them to the finding). This is acceptable at
+  Tier 1 — if arrow-dependence needs to be measured, it belongs in a
+  separate controlled experiment, not in the confounder field.
+
+applies_to:
+  - field: confounders
+  - context: "Any annotation mark (arrow, circle, asterisk, letter label) placed by article authors"
+
+examples:
+  - image: "ct/multicare/subdural-hematoma-acute-pmc10200024-Fig1.jpg"
+    task_id: CT-017
+    annotation: "Yellow arrow pointing to SDH"
+    classification: NOT_CONFOUNDER
+  - image: "ct/multicare/hemorrhagic-stroke-pmc6138459-Fig1.jpg"
+    task_id: CT-014
+    annotation: "Black arrows (ICH), red arrows (IVH), blue arrows (ventricles)"
+    classification: NOT_CONFOUNDER

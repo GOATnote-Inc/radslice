@@ -2,7 +2,7 @@ schema_version: '2.1'
 metadata:
   total_tasks: 205
   total_sourced: 80
-  total_validated: 33
+  total_validated: 36
   last_updated: '2026-03-07'
   notes: v2.1 — added license_tier field, new dataset sources, revised task counts
     after US trim
@@ -1169,7 +1169,9 @@ images:
     task_ids:
     - CT-014
     validation_status: validated
-    pathology_confirmed: false
+    pathology_confirmed: true
+    pathology_confirmed_by: "Brandon Dent, MD"
+    pathology_confirmed_date: "2026-03-07"
     license_tier: commercial_safe
     url: https://cdn.ncbi.nlm.nih.gov/pmc/blobs/1ad7/6138459/d1f569bb6601/cureus-0010-00000002976-i01.jpg
     sha256: e36815871a1d5e5b7d1e1fc7e05fed40c487d0865a6d4341874852a969791889
@@ -1200,7 +1202,9 @@ images:
     task_ids:
     - CT-034
     validation_status: validated
-    pathology_confirmed: false
+    pathology_confirmed: true
+    pathology_confirmed_by: "Brandon Dent, MD"
+    pathology_confirmed_date: "2026-03-07"
     license_tier: commercial_safe
     url: https://cdn.ncbi.nlm.nih.gov/pmc/blobs/6a89/11350477/d6168d238903/cureus-0016-00000065622-i02.jpg
     sha256: 78007eedf4de44280f57e881bf8885d348e8b43324c5e6e28565b8e5290a4ee9
@@ -1229,7 +1233,9 @@ images:
     task_ids:
     - CT-036
     validation_status: validated
-    pathology_confirmed: false
+    pathology_confirmed: true
+    pathology_confirmed_by: "Brandon Dent, MD"
+    pathology_confirmed_date: "2026-03-07"
     license_tier: commercial_safe
     url: https://cdn.ncbi.nlm.nih.gov/pmc/blobs/1619/8971073/109e2f5e8058/cureus-0014-00000022749-i01.jpg
     sha256: b6c0b354a941d85a63df3a0a3babea538ca3379a8a94af28c4d3cf0a4cb43928

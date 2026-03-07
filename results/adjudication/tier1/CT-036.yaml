@@ -1,0 +1,27 @@
+adjudication_tier: 1
+task_id: CT-036
+image_ref: "ct/multicare/acute-pancreatitis-pmc8971073-Fig1.jpg"
+source_article: PMC8971073
+date: "2026-03-07"
+
+reviewer:
+  name: "Brandon Dent, MD"
+  credential: MD
+  specialty: emergency_medicine
+
+target:
+  condition_id: acute-pancreatitis
+  primary_diagnosis: "Acute interstitial edematous pancreatitis"
+  modality: ct
+  anatomy: abdomen
+
+pathology_visible: present
+image_quality: adequate
+correct_modality: true
+correct_anatomy: true
+confounders: []
+verdict: CONFIRMED
+reviewer_notes: |
+  Peripancreatic inflammatory change clearly visible. Specifically:
+  peripancreatic fluid, fat stranding, loss of normal pancreatic contour.
+  Arrows are diagnostic aids.
