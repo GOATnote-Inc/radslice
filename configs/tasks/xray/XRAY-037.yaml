@@ -4,7 +4,7 @@ modality: xray
 anatomy: hip
 task_type: diagnosis
 difficulty: intermediate
-image_ref: "xray/openem/hip-fracture.png"
+image_ref: "xray/multicare/hip-fracture-pmc9650937-Fig1.jpg"
 prompt_template: diagnosis
 condition_id: "hip-fracture"
 lostbench_scenario_id: ""

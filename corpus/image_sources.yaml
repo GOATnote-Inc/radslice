@@ -1,7 +1,7 @@
 schema_version: '2.1'
 metadata:
   total_tasks: 205
-  total_sourced: 64
+  total_sourced: 70
   total_validated: 32
   last_updated: '2026-03-07'
   notes: v2.1 — added license_tier field, new dataset sources, revised task counts
@@ -1028,3 +1028,92 @@ images:
     validation_status: validated
     pathology_confirmed: false
     license_tier: commercial_safe
+  xray/multicare/croup-pmc5259656-Fig1.jpg:
+    source: multicare
+    source_id: PMC5259656_Fig1
+    original_format: jpg
+    license: CC-BY-4.0
+    condition_id: croup
+    task_ids:
+    - XRAY-049
+    validation_status: validated
+    pathology_confirmed: false
+    license_tier: commercial_safe
+    url: https://cdn.ncbi.nlm.nih.gov/pmc/blobs/a8bc/5259656/56d7a9a5981b/CRICC2017-9870762.001.jpg
+    sha256: f3c021eb0974f8968bd6f1723cc0a866af3105a66d8059bf3a02cd4e983f00cd
+    notes: PA chest X-ray showing subglottic narrowing (steeple sign) in adult croup
+      from RSV infection
+  xray/multicare/bowel-obstruction-pmc10590477-Fig1.jpg:
+    source: multicare
+    source_id: PMC10590477_Fig1
+    original_format: jpg
+    license: CC-BY-4.0
+    condition_id: bowel-obstruction
+    task_ids:
+    - XRAY-030
+    validation_status: validated
+    pathology_confirmed: false
+    license_tier: commercial_safe
+    url: https://cdn.ncbi.nlm.nih.gov/pmc/blobs/947f/10590477/1faea3ca8a55/cureus-0015-00000045753-i01.jpg
+    sha256: ffb4c61bcd3543db4b17f6f4c5f633fa121feed1e38b94b48e5a30fb06727b86
+    notes: AP and lateral abdominal X-ray showing dilated gas-filled cecum (cecal
+      volvulus)
+  xray/multicare/hip-fracture-pmc9650937-Fig1.jpg:
+    source: multicare
+    source_id: PMC9650937_Fig1
+    original_format: jpg
+    license: CC-BY-4.0
+    condition_id: hip-fracture
+    task_ids:
+    - XRAY-037
+    validation_status: validated
+    pathology_confirmed: false
+    license_tier: commercial_safe
+    url: https://cdn.ncbi.nlm.nih.gov/pmc/blobs/3d84/9650937/1b3079bdfc96/cureus-0014-00000030245-i01.jpg
+    sha256: 43bd3ec8e488c0cc5b8404c6807506aee865b2095f5e9b766685370678836cc3
+    notes: Pelvic X-ray showing right intertrochanteric fracture of femur
+  xray/multicare/pelvic-fracture-pmc11293434-Fig2.jpg:
+    source: multicare
+    source_id: PMC11293434_Fig2
+    original_format: jpg
+    license: CC-BY-4.0
+    condition_id: pelvic-fracture
+    task_ids:
+    - XRAY-016
+    validation_status: validated
+    pathology_confirmed: false
+    license_tier: commercial_safe
+    url: https://cdn.ncbi.nlm.nih.gov/pmc/blobs/7e7a/11293434/7dbdfcb5a3c4/cureus-0016-00000063669-i02.jpg
+    sha256: cc02c7bf1426696dff846e33b5cccca16d7e3110e88a08c1e5e3cd5e2cc85c70
+    notes: AP pelvis X-ray showing open-book pelvic fracture with bilateral pubic
+      rami fractures and SI diastasis
+  xray/multicare/sepsis-pmc8570451-Fig1.jpg:
+    source: multicare
+    source_id: PMC8570451_Fig1
+    original_format: jpg
+    license: CC-BY-4.0
+    condition_id: sepsis
+    task_ids:
+    - XRAY-062
+    validation_status: validated
+    pathology_confirmed: false
+    license_tier: commercial_safe
+    url: https://cdn.ncbi.nlm.nih.gov/pmc/blobs/648c/8570451/1816246861c2/cureus-0013-00000018539-i01.jpg
+    sha256: 18bc805422b1b64a8a08d7ea1c35647657e9af6362dac2098bc55c03dd7fa306
+    notes: Chest X-ray showing bilateral pulmonary infiltrates with right predominance
+      (ARDS from sepsis)
+  xray/multicare/knee-osteoarthritis-pmc10671051-Fig2.jpg:
+    source: multicare
+    source_id: PMC10671051_Fig2
+    original_format: jpg
+    license: CC-BY-4.0
+    condition_id: knee-osteoarthritis
+    task_ids:
+    - XRAY-038
+    validation_status: validated
+    pathology_confirmed: false
+    license_tier: commercial_safe
+    url: https://cdn.ncbi.nlm.nih.gov/pmc/blobs/02e6/10671051/84ad54acf53d/healthcare-11-02999-g002.jpg
+    sha256: 2715de592b672dbc8e45f1e70829d41c3b6f7eb2c9db70bce60c99f00aa979af
+    notes: Bilateral knee X-ray (AP + lateral) showing KL grade IV lateral, II medial,
+      III PF OA

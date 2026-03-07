@@ -4,7 +4,7 @@ modality: xray
 anatomy: pelvis
 task_type: diagnosis
 difficulty: intermediate
-image_ref: "xray/openem/pelvic-fracture.png"
+image_ref: "xray/multicare/pelvic-fracture-pmc11293434-Fig2.jpg"
 prompt_template: diagnosis
 condition_id: "pelvic-fracture"
 lostbench_scenario_id: ""

@@ -4,7 +4,7 @@ modality: xray
 anatomy: chest
 task_type: diagnosis
 difficulty: intermediate
-image_ref: "xray/openem/sepsis.png"
+image_ref: "xray/multicare/sepsis-pmc8570451-Fig1.jpg"
 prompt_template: diagnosis
 condition_id: "sepsis"
 lostbench_scenario_id: ""

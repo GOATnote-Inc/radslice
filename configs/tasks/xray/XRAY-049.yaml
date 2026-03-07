@@ -4,7 +4,7 @@ modality: xray
 anatomy: neck
 task_type: diagnosis
 difficulty: basic
-image_ref: "xray/openem/croup.png"
+image_ref: "xray/multicare/croup-pmc5259656-Fig1.jpg"
 prompt_template: diagnosis
 condition_id: "croup"
 lostbench_scenario_id: ""

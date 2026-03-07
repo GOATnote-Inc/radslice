@@ -4,7 +4,7 @@ modality: xray
 anatomy: abdomen
 task_type: diagnosis
 difficulty: intermediate
-image_ref: "xray/openem/bowel-obstruction.png"
+image_ref: "xray/multicare/bowel-obstruction-pmc10590477-Fig1.jpg"
 prompt_template: diagnosis
 condition_id: "bowel-obstruction"
 lostbench_scenario_id: ""

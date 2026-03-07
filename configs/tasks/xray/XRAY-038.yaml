@@ -4,7 +4,7 @@ modality: xray
 anatomy: knee
 task_type: diagnosis
 difficulty: basic
-image_ref: "xray/openem/knee-osteoarthritis.png"
+image_ref: "xray/multicare/knee-osteoarthritis-pmc10671051-Fig2.jpg"
 prompt_template: diagnosis
 condition_id: "knee-osteoarthritis"
 lostbench_scenario_id: "DEF-001"
