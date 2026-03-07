@@ -4,7 +4,7 @@ modality: mri
 anatomy: spine
 task_type: diagnosis
 difficulty: intermediate
-image_ref: "mri/openem/spinal-cord-compression.png"
+image_ref: "mri/multicare/spinal-cord-compression-pmc7930977-Fig2.jpg"
 prompt_template: diagnosis
 condition_id: "spinal-cord-compression"
 lostbench_scenario_id: "MTR-030"

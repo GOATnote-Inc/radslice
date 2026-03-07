@@ -4,7 +4,7 @@ modality: mri
 anatomy: head
 task_type: diagnosis
 difficulty: expert
-image_ref: "mri/openem/fat-embolism-syndrome.png"
+image_ref: "mri/multicare/fat-embolism-syndrome-pmc6450253-Fig2.jpg"
 prompt_template: diagnosis
 condition_id: "fat-embolism-syndrome"
 lostbench_scenario_id: "MTR-065"

@@ -4,7 +4,7 @@ modality: ultrasound
 anatomy: abdomen
 task_type: diagnosis
 difficulty: advanced
-image_ref: "ultrasound/openem/acute-appendicitis.png"
+image_ref: "ultrasound/multicare/acute-appendicitis-pmc7676787-img-0001.jpg"
 prompt_template: diagnosis
 condition_id: "acute-appendicitis"
 lostbench_scenario_id: "MTR-021"

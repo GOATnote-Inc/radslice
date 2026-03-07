@@ -4,7 +4,7 @@ modality: xray
 anatomy: chest
 task_type: diagnosis
 difficulty: advanced
-image_ref: "xray/openem/fat-embolism-syndrome.png"
+image_ref: "xray/multicare/fat-embolism-syndrome-pmc2760911-F0001.png"
 prompt_template: diagnosis
 condition_id: "fat-embolism-syndrome"
 lostbench_scenario_id: "MTR-065"

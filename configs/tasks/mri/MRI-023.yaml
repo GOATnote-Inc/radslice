@@ -4,7 +4,7 @@ modality: mri
 anatomy: head
 task_type: diagnosis
 difficulty: advanced
-image_ref: "mri/openem/eclampsia.png"
+image_ref: "mri/multicare/eclampsia-pmc5445265-Fig1.jpg"
 prompt_template: diagnosis
 condition_id: "eclampsia"
 lostbench_scenario_id: "MTR-045"

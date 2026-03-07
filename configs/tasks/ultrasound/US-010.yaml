@@ -4,7 +4,7 @@ modality: ultrasound
 anatomy: abdomen
 task_type: diagnosis
 difficulty: advanced
-image_ref: "ultrasound/openem/ruptured-aaa.png"
+image_ref: "ultrasound/multicare/ruptured-aaa-pmc6876902-Fig1.jpg"
 prompt_template: diagnosis
 condition_id: "ruptured-aaa"
 lostbench_scenario_id: ""

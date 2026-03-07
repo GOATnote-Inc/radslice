@@ -4,7 +4,7 @@ modality: ultrasound
 anatomy: chest
 task_type: diagnosis
 difficulty: advanced
-image_ref: "ultrasound/openem/cardiac-tamponade.png"
+image_ref: "ultrasound/multicare/cardiac-tamponade-pmc5965178-img-0002.jpg"
 prompt_template: diagnosis
 condition_id: "cardiac-tamponade"
 lostbench_scenario_id: ""

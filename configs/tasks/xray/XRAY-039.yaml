@@ -4,7 +4,7 @@ modality: xray
 anatomy: shoulder
 task_type: diagnosis
 difficulty: intermediate
-image_ref: "xray/openem/major-joint-dislocation.png"
+image_ref: "xray/multicare/major-joint-dislocation-pmc4844497-F1.png"
 prompt_template: diagnosis
 condition_id: "major-joint-dislocation"
 lostbench_scenario_id: ""

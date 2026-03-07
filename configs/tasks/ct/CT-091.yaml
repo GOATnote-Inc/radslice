@@ -4,7 +4,7 @@ modality: ct
 anatomy: face
 task_type: diagnosis
 difficulty: advanced
-image_ref: "ct/openem/herpes-zoster-ophthalmicus.png"
+image_ref: "ct/multicare/herpes-zoster-ophthalmicus-pmc8875181-vaccines-10-00342-f001.png"
 prompt_template: diagnosis
 condition_id: "herpes-zoster-ophthalmicus"
 lostbench_scenario_id: ""

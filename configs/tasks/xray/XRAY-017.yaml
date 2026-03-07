@@ -4,7 +4,7 @@ modality: xray
 anatomy: chest
 task_type: diagnosis
 difficulty: advanced
-image_ref: "xray/openem/penetrating-chest-trauma.png"
+image_ref: "xray/multicare/penetrating-chest-trauma-pmc4971273-F1.png"
 prompt_template: diagnosis
 condition_id: "penetrating-chest-trauma"
 lostbench_scenario_id: ""

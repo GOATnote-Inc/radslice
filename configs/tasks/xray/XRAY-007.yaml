@@ -4,7 +4,7 @@ modality: xray
 anatomy: chest
 task_type: diagnosis
 difficulty: intermediate
-image_ref: "xray/openem/pericarditis-myocarditis.png"
+image_ref: "xray/multicare/pericarditis-myocarditis-pmc6798500-Fig2.png"
 prompt_template: diagnosis
 condition_id: "pericarditis-myocarditis"
 lostbench_scenario_id: ""

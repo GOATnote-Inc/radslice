@@ -4,7 +4,7 @@ modality: ct
 anatomy: face
 task_type: diagnosis
 difficulty: advanced
-image_ref: "ct/openem/retrobulbar-hemorrhage.png"
+image_ref: "ct/multicare/retrobulbar-hemorrhage-pmc6844234-F0001.png"
 prompt_template: diagnosis
 condition_id: "retrobulbar-hemorrhage"
 lostbench_scenario_id: "MTR-075"

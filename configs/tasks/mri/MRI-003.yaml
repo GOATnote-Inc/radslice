@@ -4,7 +4,7 @@ modality: mri
 anatomy: chest
 task_type: diagnosis
 difficulty: advanced
-image_ref: "mri/openem/pericarditis-myocarditis.png"
+image_ref: "mri/multicare/pericarditis-myocarditis-pmc9539345-fig-01.jpg"
 prompt_template: diagnosis
 condition_id: "pericarditis-myocarditis"
 lostbench_scenario_id: ""

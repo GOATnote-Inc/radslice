@@ -4,7 +4,7 @@ modality: ultrasound
 anatomy: chest
 task_type: diagnosis
 difficulty: intermediate
-image_ref: "ultrasound/openem/spontaneous-pneumothorax.png"
+image_ref: "ultrasound/multicare/spontaneous-pneumothorax-pmc6360002-Fig2.jpg"
 prompt_template: diagnosis
 condition_id: "spontaneous-pneumothorax"
 lostbench_scenario_id: ""

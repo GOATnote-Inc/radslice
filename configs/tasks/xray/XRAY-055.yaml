@@ -4,7 +4,7 @@ modality: xray
 anatomy: chest
 task_type: diagnosis
 difficulty: intermediate
-image_ref: "xray/openem/submersion-injury.png"
+image_ref: "xray/multicare/submersion-injury-pmc1065025-F3-cxr.png"
 prompt_template: diagnosis
 condition_id: "submersion-injury"
 lostbench_scenario_id: ""

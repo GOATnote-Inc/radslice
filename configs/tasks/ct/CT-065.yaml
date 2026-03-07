@@ -4,7 +4,7 @@ modality: ct
 anatomy: neck
 task_type: diagnosis
 difficulty: advanced
-image_ref: "ct/openem/ludwigs-angina.png"
+image_ref: "ct/multicare/ludwigs-angina-pmc7233510-FIG1.png"
 prompt_template: diagnosis
 condition_id: "ludwigs-angina"
 lostbench_scenario_id: ""

@@ -4,7 +4,7 @@ modality: ct
 anatomy: spine
 task_type: diagnosis
 difficulty: advanced
-image_ref: "ct/openem/spinal-epidural-abscess.png"
+image_ref: "ct/multicare/spinal-epidural-abscess-pmc3263660-fig8.png"
 prompt_template: diagnosis
 condition_id: "spinal-epidural-abscess"
 lostbench_scenario_id: "MTR-014"

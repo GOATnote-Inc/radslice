@@ -4,7 +4,7 @@ modality: ct
 anatomy: neck
 task_type: diagnosis
 difficulty: intermediate
-image_ref: "ct/openem/peritonsillar-abscess.png"
+image_ref: "ct/multicare/peritonsillar-abscess-pmc4015694-F1.png"
 prompt_template: diagnosis
 condition_id: "peritonsillar-abscess"
 lostbench_scenario_id: ""

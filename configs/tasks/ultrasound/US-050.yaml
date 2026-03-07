@@ -4,7 +4,7 @@ modality: ultrasound
 anatomy: face
 task_type: diagnosis
 difficulty: advanced
-image_ref: "ultrasound/openem/retinal-detachment.png"
+image_ref: "ultrasound/multicare/retinal-detachment-pmc6084687-Fig1.jpg"
 prompt_template: diagnosis
 condition_id: "retinal-detachment"
 lostbench_scenario_id: ""

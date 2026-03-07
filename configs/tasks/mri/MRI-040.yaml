@@ -4,7 +4,7 @@ modality: mri
 anatomy: head
 task_type: diagnosis
 difficulty: advanced
-image_ref: "mri/openem/carbon-monoxide-poisoning.png"
+image_ref: "mri/multicare/carbon-monoxide-poisoning-pmc10772852-fig1.jpg"
 prompt_template: diagnosis
 condition_id: "carbon-monoxide-poisoning"
 lostbench_scenario_id: ""

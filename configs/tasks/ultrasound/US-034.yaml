@@ -4,7 +4,7 @@ modality: ultrasound
 anatomy: pelvis
 task_type: diagnosis
 difficulty: intermediate
-image_ref: "ultrasound/openem/ectopic-pregnancy.png"
+image_ref: "ultrasound/multicare/ectopic-pregnancy-pmc9408466-Fig1.jpg"
 prompt_template: diagnosis
 condition_id: "ectopic-pregnancy"
 lostbench_scenario_id: "MTR-009"

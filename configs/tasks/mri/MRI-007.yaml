@@ -4,7 +4,7 @@ modality: mri
 anatomy: spine
 task_type: diagnosis
 difficulty: advanced
-image_ref: "mri/openem/cauda-equina-syndrome.png"
+image_ref: "mri/multicare/cauda-equina-syndrome-pmc12854390-Fig1.jpg"
 prompt_template: diagnosis
 condition_id: "cauda-equina-syndrome"
 lostbench_scenario_id: "MTR-020"

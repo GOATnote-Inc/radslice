@@ -4,7 +4,7 @@ modality: ultrasound
 anatomy: pelvis
 task_type: diagnosis
 difficulty: advanced
-image_ref: "ultrasound/openem/ovarian-torsion.png"
+image_ref: "ultrasound/multicare/ovarian-torsion-pmc9806735-Fig1.jpg"
 prompt_template: diagnosis
 condition_id: "ovarian-torsion"
 lostbench_scenario_id: "MTR-026"

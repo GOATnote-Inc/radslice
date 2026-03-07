@@ -4,7 +4,7 @@ modality: ultrasound
 anatomy: abdomen
 task_type: diagnosis
 difficulty: intermediate
-image_ref: "ultrasound/openem/urolithiasis.png"
+image_ref: "ultrasound/multicare/urolithiasis-pmc9523545-Fig1.jpg"
 prompt_template: diagnosis
 condition_id: "urolithiasis"
 lostbench_scenario_id: ""

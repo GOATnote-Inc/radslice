@@ -4,7 +4,7 @@ modality: ct
 anatomy: head
 task_type: diagnosis
 difficulty: advanced
-image_ref: "ct/openem/neonatal-emergencies.png"
+image_ref: "ct/multicare/neonatal-emergencies-pmc12395432-f0030.png"
 prompt_template: diagnosis
 condition_id: "neonatal-emergencies"
 lostbench_scenario_id: "MTR-001"

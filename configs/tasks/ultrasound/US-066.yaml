@@ -4,7 +4,7 @@ modality: ultrasound
 anatomy: abdomen
 task_type: diagnosis
 difficulty: intermediate
-image_ref: "ultrasound/openem/intussusception.png"
+image_ref: "ultrasound/multicare/intussusception-pmc10854881-Fig1.jpg"
 prompt_template: diagnosis
 condition_id: "intussusception"
 lostbench_scenario_id: "MTR-031"

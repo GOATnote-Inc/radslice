@@ -4,7 +4,7 @@ modality: ultrasound
 anatomy: extremity
 task_type: diagnosis
 difficulty: intermediate
-image_ref: "ultrasound/openem/deep-vein-thrombosis.png"
+image_ref: "ultrasound/multicare/deep-vein-thrombosis-pmc9142702-Fig2.jpg"
 prompt_template: diagnosis
 condition_id: "deep-vein-thrombosis"
 lostbench_scenario_id: ""

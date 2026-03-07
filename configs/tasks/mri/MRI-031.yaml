@@ -4,7 +4,7 @@ modality: mri
 anatomy: head
 task_type: diagnosis
 difficulty: advanced
-image_ref: "mri/openem/hsv-encephalitis.png"
+image_ref: "mri/multicare/hsv-encephalitis-pmc12126961-Fig1.jpg"
 prompt_template: diagnosis
 condition_id: "hsv-encephalitis"
 lostbench_scenario_id: ""

@@ -4,7 +4,7 @@ modality: ct
 anatomy: extremity
 task_type: diagnosis
 difficulty: intermediate
-image_ref: "ct/openem/open-fracture.png"
+image_ref: "ct/multicare/open-fracture-pmc12686621-Fig1.jpg"
 prompt_template: diagnosis
 condition_id: "open-fracture"
 lostbench_scenario_id: ""

@@ -4,7 +4,7 @@ modality: ct
 anatomy: face
 task_type: diagnosis
 difficulty: advanced
-image_ref: "ct/openem/acute-angle-closure-glaucoma.png"
+image_ref: "ct/multicare/acute-angle-closure-glaucoma-pmc4625431-Fig3.png"
 prompt_template: diagnosis
 condition_id: "acute-angle-closure-glaucoma"
 lostbench_scenario_id: "MTR-029"

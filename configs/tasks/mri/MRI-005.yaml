@@ -4,7 +4,7 @@ modality: mri
 anatomy: head
 task_type: diagnosis
 difficulty: advanced
-image_ref: "mri/openem/acute-ischemic-stroke.png"
+image_ref: "mri/multicare/acute-ischemic-stroke-pmc4548688-fig-01.jpg"
 prompt_template: diagnosis
 condition_id: "acute-ischemic-stroke"
 lostbench_scenario_id: "MTR-012"

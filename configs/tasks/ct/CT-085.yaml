@@ -4,7 +4,7 @@ modality: ct
 anatomy: face
 task_type: diagnosis
 difficulty: advanced
-image_ref: "ct/openem/lateral-canthotomy.png"
+image_ref: "ct/multicare/lateral-canthotomy-pmc3884541-F7.png"
 prompt_template: diagnosis
 condition_id: "lateral-canthotomy"
 lostbench_scenario_id: "MTR-059"

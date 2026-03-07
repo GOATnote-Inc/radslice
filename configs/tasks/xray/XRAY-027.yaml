@@ -4,7 +4,7 @@ modality: xray
 anatomy: chest
 task_type: diagnosis
 difficulty: expert
-image_ref: "xray/openem/tracheal-disruption.png"
+image_ref: "xray/multicare/tracheal-disruption-pmc2556736-F1.png"
 prompt_template: diagnosis
 condition_id: "tracheal-disruption"
 lostbench_scenario_id: "MTR-076"

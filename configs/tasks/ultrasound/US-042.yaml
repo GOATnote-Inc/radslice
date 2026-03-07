@@ -4,7 +4,7 @@ modality: ultrasound
 anatomy: scrotum
 task_type: diagnosis
 difficulty: intermediate
-image_ref: "ultrasound/openem/testicular-torsion.png"
+image_ref: "ultrasound/multicare/testicular-torsion-pmc7872624-img-0002.jpg"
 prompt_template: diagnosis
 condition_id: "testicular-torsion"
 lostbench_scenario_id: "MTR-003"

@@ -4,7 +4,7 @@ modality: mri
 anatomy: head
 task_type: diagnosis
 difficulty: advanced
-image_ref: "mri/openem/hemorrhagic-stroke.png"
+image_ref: "mri/multicare/hemorrhagic-stroke-pmc12651356-fig0001.png"
 prompt_template: diagnosis
 condition_id: "hemorrhagic-stroke"
 lostbench_scenario_id: "MTR-068"

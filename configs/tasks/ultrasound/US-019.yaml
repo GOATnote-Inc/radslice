@@ -4,7 +4,7 @@ modality: ultrasound
 anatomy: abdomen
 task_type: diagnosis
 difficulty: intermediate
-image_ref: "ultrasound/openem/hemorrhagic-shock.png"
+image_ref: "ultrasound/multicare/hemorrhagic-shock-pmc7676810-img-0001.jpg"
 prompt_template: diagnosis
 condition_id: "hemorrhagic-shock"
 lostbench_scenario_id: ""

@@ -4,7 +4,7 @@ modality: ultrasound
 anatomy: abdomen
 task_type: diagnosis
 difficulty: intermediate
-image_ref: "ultrasound/openem/acute-cholecystitis.png"
+image_ref: "ultrasound/multicare/acute-cholecystitis-pmc3236129-Fig1.jpg"
 prompt_template: diagnosis
 condition_id: "acute-cholecystitis"
 lostbench_scenario_id: ""

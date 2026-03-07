@@ -4,7 +4,7 @@ modality: mri
 anatomy: spine
 task_type: diagnosis
 difficulty: advanced
-image_ref: "mri/openem/spinal-epidural-abscess.png"
+image_ref: "mri/multicare/spinal-epidural-abscess-pmc8723735-Fig1.jpg"
 prompt_template: diagnosis
 condition_id: "spinal-epidural-abscess"
 lostbench_scenario_id: "MTR-014"

@@ -4,7 +4,7 @@ modality: ultrasound
 anatomy: extremity
 task_type: diagnosis
 difficulty: advanced
-image_ref: "ultrasound/openem/necrotizing-fasciitis.png"
+image_ref: "ultrasound/multicare/necrotizing-fasciitis-pmc10332782-Fig1.jpg"
 prompt_template: diagnosis
 condition_id: "necrotizing-fasciitis"
 lostbench_scenario_id: "MTR-025"

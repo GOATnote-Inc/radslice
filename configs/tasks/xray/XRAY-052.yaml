@@ -4,7 +4,7 @@ modality: xray
 anatomy: extremity
 task_type: diagnosis
 difficulty: advanced
-image_ref: "xray/openem/non-accidental-trauma.png"
+image_ref: "xray/multicare/non-accidental-trauma-pmc3465174-F3.png"
 prompt_template: diagnosis
 condition_id: "non-accidental-trauma"
 lostbench_scenario_id: ""

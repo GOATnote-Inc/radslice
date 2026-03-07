@@ -4,7 +4,7 @@ modality: ct
 anatomy: neck
 task_type: diagnosis
 difficulty: intermediate
-image_ref: "ct/openem/epiglottitis.png"
+image_ref: "ct/multicare/epiglottitis-pmc9908088-fig2.png"
 prompt_template: diagnosis
 condition_id: "epiglottitis"
 lostbench_scenario_id: "MTR-033"

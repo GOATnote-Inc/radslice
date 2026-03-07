@@ -4,7 +4,7 @@ modality: xray
 anatomy: chest
 task_type: diagnosis
 difficulty: advanced
-image_ref: "xray/openem/massive-hemoptysis.png"
+image_ref: "xray/multicare/massive-hemoptysis-pmc7227539-fig3.png"
 prompt_template: diagnosis
 condition_id: "massive-hemoptysis"
 lostbench_scenario_id: "MTR-074"

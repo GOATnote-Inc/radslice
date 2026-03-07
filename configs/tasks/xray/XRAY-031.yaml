@@ -4,7 +4,7 @@ modality: xray
 anatomy: chest
 task_type: diagnosis
 difficulty: intermediate
-image_ref: "xray/openem/esophageal-foreign-body-impaction.png"
+image_ref: "xray/multicare/esophageal-foreign-body-impaction-pmc3089779-F1.png"
 prompt_template: diagnosis
 condition_id: "esophageal-foreign-body-impaction"
 lostbench_scenario_id: "MTR-077"

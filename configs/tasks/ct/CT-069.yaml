@@ -4,7 +4,7 @@ modality: ct
 anatomy: neck
 task_type: diagnosis
 difficulty: intermediate
-image_ref: "ct/openem/retropharyngeal-abscess.png"
+image_ref: "ct/multicare/retropharyngeal-abscess-pmc5704790-F2.png"
 prompt_template: diagnosis
 condition_id: "retropharyngeal-abscess"
 lostbench_scenario_id: ""

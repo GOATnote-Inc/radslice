@@ -4,7 +4,7 @@ modality: ultrasound
 anatomy: abdomen
 task_type: diagnosis
 difficulty: intermediate
-image_ref: "ultrasound/openem/pyloric-stenosis.png"
+image_ref: "ultrasound/multicare/pyloric-stenosis-pmc5965224-img-0001.jpg"
 prompt_template: diagnosis
 condition_id: "pyloric-stenosis"
 lostbench_scenario_id: "MTR-032"

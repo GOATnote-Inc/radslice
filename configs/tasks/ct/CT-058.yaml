@@ -4,7 +4,7 @@ modality: ct
 anatomy: abdomen
 task_type: diagnosis
 difficulty: intermediate
-image_ref: "ct/openem/urolithiasis.png"
+image_ref: "ct/multicare/urolithiasis-pmc10535984-viruses-15-01847-f020.png"
 prompt_template: diagnosis
 condition_id: "urolithiasis"
 lostbench_scenario_id: ""

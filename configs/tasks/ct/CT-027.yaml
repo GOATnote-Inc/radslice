@@ -4,7 +4,7 @@ modality: ct
 anatomy: chest
 task_type: diagnosis
 difficulty: intermediate
-image_ref: "ct/openem/foreign-body-aspiration.png"
+image_ref: "ct/multicare/foreign-body-aspiration-pmc12444646-Fig2.jpg"
 prompt_template: diagnosis
 condition_id: "foreign-body-aspiration"
 lostbench_scenario_id: "MTR-034"

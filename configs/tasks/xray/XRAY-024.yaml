@@ -4,7 +4,7 @@ modality: xray
 anatomy: chest
 task_type: diagnosis
 difficulty: basic
-image_ref: "xray/openem/pneumonia.png"
+image_ref: "xray/multicare/pneumonia-pmc7092802-f3.png"
 prompt_template: diagnosis
 condition_id: "pneumonia"
 lostbench_scenario_id: ""
