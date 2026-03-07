@@ -1,0 +1,725 @@
+{
+  "campaign": "rc1.1-solvability-audit",
+  "date": "2026-03-07",
+  "judge_model": "gpt-5.2",
+  "method": "reference_solution fed as model_response to run_judge",
+  "summary": {
+    "total_tasks": 44,
+    "audited": 44,
+    "errors": 0,
+    "reference_passes_judge": 44,
+    "reference_fails_judge": 0,
+    "solvability_rate": 1.0,
+    "failed_task_ids": [],
+    "failure_breakdown": {},
+    "error_task_ids": [],
+    "mean_score_passed": 0.997,
+    "mean_score_failed": 0
+  },
+  "per_task": [
+    {
+      "task_id": "CT-026",
+      "has_reference_solution": true,
+      "passed": true,
+      "weighted_score": 1.0,
+      "dimension_scores": {
+        "diagnostic_accuracy": 1.0,
+        "finding_detection": 1.0,
+        "anatomic_precision": 1.0,
+        "clinical_relevance": 1.0,
+        "false_positive_control": 1.0
+      },
+      "failure_class": null,
+      "reasoning": "Response matches ground truth and reference: correctly diagnoses acute epiglottitis, identifies required findings (epiglottic thickening/enhancement and aryepiglottic fold thickening) with appropriate supraglottic airway narrowing, notes absence of drainable abscess, and appropriately highlights severe airway compromise with emergent management recommendations.",
+      "judge_model": "gpt-5.2"
+    },
+    {
+      "task_id": "CT-027",
+      "has_reference_solution": true,
+      "passed": true,
+      "weighted_score": 1.0,
+      "dimension_scores": {
+        "diagnostic_accuracy": 1.0,
+        "finding_detection": 1.0,
+        "anatomic_precision": 1.0,
+        "clinical_relevance": 1.0,
+        "false_positive_control": 1.0
+      },
+      "failure_class": null,
+      "reasoning": "Response matches ground truth and reference: identifies aspirated foreign body in the right main bronchus with associated right lower lobe atelectasis/air trapping and mild post-obstructive changes; correctly notes absence of pneumomediastinum and recommends urgent bronchoscopic retrieval. No extraneous findings.",
+      "judge_model": "gpt-5.2"
+    },
+    {
+      "task_id": "CT-048",
+      "has_reference_solution": true,
+      "passed": true,
+      "weighted_score": 0.9,
+      "dimension_scores": {
+        "diagnostic_accuracy": 1.0,
+        "finding_detection": 1.0,
+        "anatomic_precision": 1.0,
+        "clinical_relevance": 1.0,
+        "false_positive_control": 0.0
+      },
+      "failure_class": "D",
+      "reasoning": "Correctly identifies a severe open comminuted displaced mid-shaft right tibial fracture with anterior soft-tissue defect communicating to the fracture and associated air, consistent with Gustilo IIIA. However, it additionally states 'No vascular injury is identified on CT angiography,' which is explicitly listed as a finding that should NOT be present for this task, constituting an overcall/hallucinated element.",
+      "judge_model": "gpt-5.2"
+    },
+    {
+      "task_id": "CT-061",
+      "has_reference_solution": true,
+      "passed": true,
+      "weighted_score": 1.0,
+      "dimension_scores": {
+        "diagnostic_accuracy": 1.0,
+        "finding_detection": 1.0,
+        "anatomic_precision": 1.0,
+        "clinical_relevance": 1.0,
+        "false_positive_control": 1.0
+      },
+      "failure_class": null,
+      "reasoning": "Matches ground truth and reference: correctly identifies right retrobulbar intraconal hyperdense hemorrhage with right proptosis and posterior scleral tenting/optic nerve stretch, notes critical severity with appropriate emergent management, and appropriately states no globe rupture without adding extraneous findings.",
+      "judge_model": "gpt-5.2"
+    },
+    {
+      "task_id": "CT-065",
+      "has_reference_solution": true,
+      "passed": true,
+      "weighted_score": 1.0,
+      "dimension_scores": {
+        "diagnostic_accuracy": 1.0,
+        "finding_detection": 1.0,
+        "anatomic_precision": 1.0,
+        "clinical_relevance": 1.0,
+        "false_positive_control": 1.0
+      },
+      "failure_class": null,
+      "reasoning": "Response matches ground truth and reference: correctly diagnoses Ludwig angina, identifies bilateral submandibular/sublingual cellulitis/edema, floor-of-mouth elevation with posterior tongue displacement and airway narrowing, notes possible soft-tissue gas, and appropriately states no drainable abscess with emergent airway concern. No extraneous findings.",
+      "judge_model": "gpt-5.2"
+    },
+    {
+      "task_id": "CT-068",
+      "has_reference_solution": true,
+      "passed": true,
+      "weighted_score": 1.0,
+      "dimension_scores": {
+        "diagnostic_accuracy": 1.0,
+        "finding_detection": 1.0,
+        "anatomic_precision": 1.0,
+        "clinical_relevance": 1.0,
+        "false_positive_control": 1.0
+      },
+      "failure_class": null,
+      "reasoning": "Model response matches ground truth and reference: correctly identifies right peritonsillar abscess with rim-enhancing hypodense collection, appropriate size, medial tonsillar displacement and lateral ICA displacement, optional uvular deviation, and explicitly states no parapharyngeal/retropharyngeal extension. Management suggestion is appropriate; no hallucinated findings.",
+      "judge_model": "gpt-5.2"
+    },
+    {
+      "task_id": "CT-069",
+      "has_reference_solution": true,
+      "passed": true,
+      "weighted_score": 1.0,
+      "dimension_scores": {
+        "diagnostic_accuracy": 1.0,
+        "finding_detection": 1.0,
+        "anatomic_precision": 1.0,
+        "clinical_relevance": 1.0,
+        "false_positive_control": 1.0
+      },
+      "failure_class": null,
+      "reasoning": "Model response matches ground truth and reference: correctly identifies rim-enhancing retropharyngeal collection at C2\u2013C4 with airway displacement/narrowing, notes longus colli edema, and appropriately excludes vertebral osteomyelitis/discitis. Severity/airway risk and emergent management recommendations are appropriate without added false positives.",
+      "judge_model": "gpt-5.2"
+    },
+    {
+      "task_id": "CT-070",
+      "has_reference_solution": true,
+      "passed": true,
+      "weighted_score": 1.0,
+      "dimension_scores": {
+        "diagnostic_accuracy": 1.0,
+        "finding_detection": 1.0,
+        "anatomic_precision": 1.0,
+        "clinical_relevance": 1.0,
+        "false_positive_control": 1.0
+      },
+      "failure_class": null,
+      "reasoning": "Model response matches ground truth and reference: identifies rim-enhancing posterior epidural collection T9\u2013T11 with thecal sac/spinal cord compression, associated T10\u2013T11 discitis/osteomyelitis, correctly notes no paraspinal extension, and provides appropriate emergent management recommendation.",
+      "judge_model": "gpt-5.2"
+    },
+    {
+      "task_id": "CT-085",
+      "has_reference_solution": true,
+      "passed": true,
+      "weighted_score": 1.0,
+      "dimension_scores": {
+        "diagnostic_accuracy": 1.0,
+        "finding_detection": 1.0,
+        "anatomic_precision": 1.0,
+        "clinical_relevance": 1.0,
+        "false_positive_control": 1.0
+      },
+      "failure_class": null,
+      "reasoning": "Matches ground truth and reference: correctly identifies left retrobulbar hemorrhage with proptosis and posterior globe tenting/optic nerve stretch consistent with orbital compartment syndrome; notes optional left orbital floor fracture; appropriately states no globe rupture and recommends emergent lateral canthotomy/cantholysis.",
+      "judge_model": "gpt-5.2"
+    },
+    {
+      "task_id": "CT-091",
+      "has_reference_solution": true,
+      "passed": true,
+      "weighted_score": 1.0,
+      "dimension_scores": {
+        "diagnostic_accuracy": 1.0,
+        "finding_detection": 1.0,
+        "anatomic_precision": 1.0,
+        "clinical_relevance": 1.0,
+        "false_positive_control": 1.0
+      },
+      "failure_class": null,
+      "reasoning": "Model response matches the ground truth and reference solution: correctly identifies left-sided HZO with orbital inflammatory changes, includes required findings (left V1 preseptal/periorbital swelling; left superior rectus and lacrimal gland enhancement/thickening), notes optional optic nerve sheath enhancement, and appropriately excludes abscess and cavernous sinus thrombosis with sensible management recommendations.",
+      "judge_model": "gpt-5.2"
+    },
+    {
+      "task_id": "CT-106",
+      "has_reference_solution": true,
+      "passed": true,
+      "weighted_score": 1.0,
+      "dimension_scores": {
+        "diagnostic_accuracy": 1.0,
+        "finding_detection": 1.0,
+        "anatomic_precision": 1.0,
+        "clinical_relevance": 1.0,
+        "false_positive_control": 1.0
+      },
+      "failure_class": null,
+      "reasoning": "Response matches the ground truth and reference: correctly identifies severe neonatal hypoxic-ischemic encephalopathy with bilateral diffuse cerebral edema and loss of gray-white differentiation, reversal/white cerebellum sign, and cisternal/sulcal effacement; appropriately notes absence of hemorrhage and congenital malformation and provides clinically relevant urgency/management.",
+      "judge_model": "gpt-5.2"
+    },
+    {
+      "task_id": "MRI-003",
+      "has_reference_solution": true,
+      "passed": true,
+      "weighted_score": 0.985,
+      "dimension_scores": {
+        "diagnostic_accuracy": 1.0,
+        "finding_detection": 1.0,
+        "anatomic_precision": 1.0,
+        "clinical_relevance": 0.9,
+        "false_positive_control": 1.0
+      },
+      "failure_class": null,
+      "reasoning": "Model response matches the ground truth and reference: correctly identifies acute myocarditis with pericardial involvement, describes required LGE pattern (mid-wall/epicardial, lateral/inferolateral LV, non-coronary distribution) and T2 edema in LV free wall, and notes pericardial effusion/enhancement. Appropriately excludes ischemic subendocardial pattern. No hallucinated findings; severity not explicitly characterized as severe, hence slight reduction in clinical relevance.",
+      "judge_model": "gpt-5.2"
+    },
+    {
+      "task_id": "MRI-005",
+      "has_reference_solution": true,
+      "passed": true,
+      "weighted_score": 1.0,
+      "dimension_scores": {
+        "diagnostic_accuracy": 1.0,
+        "finding_detection": 1.0,
+        "anatomic_precision": 1.0,
+        "clinical_relevance": 1.0,
+        "false_positive_control": 1.0
+      },
+      "failure_class": null,
+      "reasoning": "Response matches ground truth and reference: correctly identifies acute ischemic infarct with DWI/ADC restriction in the left MCA territory, notes corresponding FLAIR changes, and appropriately states absence of hemorrhagic transformation and midline shift; includes left M1 flow abnormality on MRA without adding extraneous findings.",
+      "judge_model": "gpt-5.2"
+    },
+    {
+      "task_id": "MRI-007",
+      "has_reference_solution": true,
+      "passed": true,
+      "weighted_score": 1.0,
+      "dimension_scores": {
+        "diagnostic_accuracy": 1.0,
+        "finding_detection": 1.0,
+        "anatomic_precision": 1.0,
+        "clinical_relevance": 1.0,
+        "false_positive_control": 1.0
+      },
+      "failure_class": null,
+      "reasoning": "Model response matches ground truth and reference: identifies large midline/central L4-L5 disc extrusion with severe central canal stenosis and cauda equina compression/crowding and displacement. Notes T2 hyperintense extruded disc material, absence of abnormal enhancement (argues against abscess/tumor), and normal conus at L1. Appropriately labels as cauda equina syndrome and recommends emergent decompression without adding unsupported findings.",
+      "judge_model": "gpt-5.2"
+    },
+    {
+      "task_id": "MRI-010",
+      "has_reference_solution": true,
+      "passed": true,
+      "weighted_score": 1.0,
+      "dimension_scores": {
+        "diagnostic_accuracy": 1.0,
+        "finding_detection": 1.0,
+        "anatomic_precision": 1.0,
+        "clinical_relevance": 1.0,
+        "false_positive_control": 1.0
+      },
+      "failure_class": null,
+      "reasoning": "Response matches ground truth and reference: acute intracerebral hemorrhage centered in the left basal ganglia with appropriate signal characteristics and GRE susceptibility, notes surrounding edema and mild mass effect, correctly excludes intraventricular extension and underlying enhancing mass, and provides clinically relevant etiology (hypertensive hemorrhage) without adding unsupported findings.",
+      "judge_model": "gpt-5.2"
+    },
+    {
+      "task_id": "MRI-011",
+      "has_reference_solution": true,
+      "passed": true,
+      "weighted_score": 1.0,
+      "dimension_scores": {
+        "diagnostic_accuracy": 1.0,
+        "finding_detection": 1.0,
+        "anatomic_precision": 1.0,
+        "clinical_relevance": 1.0,
+        "false_positive_control": 1.0
+      },
+      "failure_class": null,
+      "reasoning": "Response matches ground truth and reference: identifies critical thoracic (T6\u2013T8) severe canal stenosis from enhancing epidural mass with cord compression and intramedullary T2 hyperintensity (myelopathy), correctly notes no hemorrhage/transection, and gives appropriate emergent consultation recommendation. No extraneous findings.",
+      "judge_model": "gpt-5.2"
+    },
+    {
+      "task_id": "MRI-014",
+      "has_reference_solution": true,
+      "passed": true,
+      "weighted_score": 1.0,
+      "dimension_scores": {
+        "diagnostic_accuracy": 1.0,
+        "finding_detection": 1.0,
+        "anatomic_precision": 1.0,
+        "clinical_relevance": 1.0,
+        "false_positive_control": 1.0
+      },
+      "failure_class": null,
+      "reasoning": "Response matches the ground truth and reference: correctly identifies cerebral fat embolism syndrome with classic bilateral starfield pattern on DWI with low ADC, notes optional petechial SWI susceptibility, and appropriately excludes large territorial infarct and mass lesion. Anatomy and laterality are accurate and no extraneous findings are added.",
+      "judge_model": "gpt-5.2"
+    },
+    {
+      "task_id": "MRI-023",
+      "has_reference_solution": true,
+      "passed": true,
+      "weighted_score": 1.0,
+      "dimension_scores": {
+        "diagnostic_accuracy": 1.0,
+        "finding_detection": 1.0,
+        "anatomic_precision": 1.0,
+        "clinical_relevance": 1.0,
+        "false_positive_control": 1.0
+      },
+      "failure_class": null,
+      "reasoning": "Response matches the ground truth and reference: correctly diagnoses PRES in eclampsia, identifies bilateral symmetric parieto-occipital T2/FLAIR hyperintensity with no DWI restriction (vasogenic edema), notes optional posterior frontal watershed involvement, and appropriately states no hemorrhage or enhancing mass with sensible management context.",
+      "judge_model": "gpt-5.2"
+    },
+    {
+      "task_id": "MRI-031",
+      "has_reference_solution": true,
+      "passed": true,
+      "weighted_score": 1.0,
+      "dimension_scores": {
+        "diagnostic_accuracy": 1.0,
+        "finding_detection": 1.0,
+        "anatomic_precision": 1.0,
+        "clinical_relevance": 1.0,
+        "false_positive_control": 1.0
+      },
+      "failure_class": null,
+      "reasoning": "Response matches the ground truth and reference: correctly identifies HSE with appropriate differential pattern, notes bilateral (R>L) medial temporal and insular FLAIR hyperintensity, right medial temporal restricted diffusion, optional right temporal petechial hemorrhage, absence of mass-like enhancement, and basal ganglia sparing; appropriately labels as critical and recommends emergent acyclovir. No extraneous false positives.",
+      "judge_model": "gpt-5.2"
+    },
+    {
+      "task_id": "MRI-035",
+      "has_reference_solution": true,
+      "passed": true,
+      "weighted_score": 1.0,
+      "dimension_scores": {
+        "diagnostic_accuracy": 1.0,
+        "finding_detection": 1.0,
+        "anatomic_precision": 1.0,
+        "clinical_relevance": 1.0,
+        "false_positive_control": 1.0
+      },
+      "failure_class": null,
+      "reasoning": "Response matches ground truth and reference: correctly identifies posterior thoracic (T7\u2013T10) rim-enhancing epidural collection with T2 hyperintensity and restricted diffusion consistent with epidural abscess, notes ventral cord displacement/compression at T8\u2013T9, appropriately states no myelopathy and no osteomyelitis/discitis, and recommends emergent neurosurgical decompression and IV antibiotics without adding false positives.",
+      "judge_model": "gpt-5.2"
+    },
+    {
+      "task_id": "MRI-040",
+      "has_reference_solution": true,
+      "passed": true,
+      "weighted_score": 1.0,
+      "dimension_scores": {
+        "diagnostic_accuracy": 1.0,
+        "finding_detection": 1.0,
+        "anatomic_precision": 1.0,
+        "clinical_relevance": 1.0,
+        "false_positive_control": 1.0
+      },
+      "failure_class": null,
+      "reasoning": "Response exactly matches the ground truth/reference: correctly identifies carbon monoxide poisoning with bilateral globus pallidus T2/FLAIR hyperintensity and restricted diffusion, notes optional periventricular white matter changes, and appropriately excludes hemorrhage and mass lesion. Laterality and anatomic localization are accurate and clinical severity/implication is appropriately critical.",
+      "judge_model": "gpt-5.2"
+    },
+    {
+      "task_id": "US-006",
+      "has_reference_solution": true,
+      "passed": true,
+      "weighted_score": 1.0,
+      "dimension_scores": {
+        "diagnostic_accuracy": 1.0,
+        "finding_detection": 1.0,
+        "anatomic_precision": 1.0,
+        "clinical_relevance": 1.0,
+        "false_positive_control": 1.0
+      },
+      "failure_class": null,
+      "reasoning": "The model response matches the ground truth and reference solution: correctly identifies a large circumferential pericardial effusion with right ventricular diastolic collapse (and RA systolic inversion), consistent with tamponade physiology, and appropriately characterizes this as critical with emergent pericardiocentesis recommendation. No prohibited findings (masses/stranding or LV wall motion abnormality) are introduced.",
+      "judge_model": "gpt-5.2"
+    },
+    {
+      "task_id": "US-026",
+      "has_reference_solution": true,
+      "passed": true,
+      "weighted_score": 1.0,
+      "dimension_scores": {
+        "diagnostic_accuracy": 1.0,
+        "finding_detection": 1.0,
+        "anatomic_precision": 1.0,
+        "clinical_relevance": 1.0,
+        "false_positive_control": 1.0
+      },
+      "failure_class": null,
+      "reasoning": "Response matches ground truth and reference: acute calculous cholecystitis with cholelithiasis. Required findings (gallstones with posterior shadowing, wall thickening >3 mm) are correctly identified; optional findings (Murphy sign, pericholecystic fluid) appropriately included. Correct RUQ/gallbladder anatomy and fundus localization. Correctly states no CBD or intrahepatic ductal dilation; no extraneous/hallucinated pathology.",
+      "judge_model": "gpt-5.2"
+    },
+    {
+      "task_id": "US-034",
+      "has_reference_solution": true,
+      "passed": true,
+      "weighted_score": 1.0,
+      "dimension_scores": {
+        "diagnostic_accuracy": 1.0,
+        "finding_detection": 1.0,
+        "anatomic_precision": 1.0,
+        "clinical_relevance": 1.0,
+        "false_positive_control": 1.0
+      },
+      "failure_class": null,
+      "reasoning": "Model response matches ground truth and reference: correctly identifies right adnexal ectopic pregnancy with tubal ring and yolk sac, empty uterus with decidualized endometrium, and free fluid in cul-de-sac; correct laterality/anatomic descriptors; no inappropriate additional diagnoses or heterotopic pregnancy suggested.",
+      "judge_model": "gpt-5.2"
+    },
+    {
+      "task_id": "US-042",
+      "has_reference_solution": true,
+      "passed": true,
+      "weighted_score": 1.0,
+      "dimension_scores": {
+        "diagnostic_accuracy": 1.0,
+        "finding_detection": 1.0,
+        "anatomic_precision": 1.0,
+        "clinical_relevance": 1.0,
+        "false_positive_control": 1.0
+      },
+      "failure_class": null,
+      "reasoning": "Response matches ground truth and reference: correctly diagnoses critical left testicular torsion with absent intratesticular flow, enlarged heterogeneous left testis, optional whirlpool sign and reactive hydrocele, and appropriately notes normal right testis flow and normal epididymis with emergent surgical recommendation. No extraneous false-positive findings.",
+      "judge_model": "gpt-5.2"
+    },
+    {
+      "task_id": "US-046",
+      "has_reference_solution": true,
+      "passed": true,
+      "weighted_score": 1.0,
+      "dimension_scores": {
+        "diagnostic_accuracy": 1.0,
+        "finding_detection": 1.0,
+        "anatomic_precision": 1.0,
+        "clinical_relevance": 1.0,
+        "false_positive_control": 1.0
+      },
+      "failure_class": null,
+      "reasoning": "Model response matches the ground truth and reference solution: left UPJ/renal pelvis echogenic shadowing stone with twinkling artifact, moderate left hydronephrosis with calyceal/pelvic dilation, preserved parenchyma, absent left ureteral jet, and normal right kidney. No prohibited findings (e.g., perinephric fluid) are introduced.",
+      "judge_model": "gpt-5.2"
+    },
+    {
+      "task_id": "US-050",
+      "has_reference_solution": true,
+      "passed": true,
+      "weighted_score": 1.0,
+      "dimension_scores": {
+        "diagnostic_accuracy": 1.0,
+        "finding_detection": 1.0,
+        "anatomic_precision": 1.0,
+        "clinical_relevance": 1.0,
+        "false_positive_control": 1.0
+      },
+      "failure_class": null,
+      "reasoning": "Response matches ground truth and reference: correctly identifies right retinal detachment with membrane tethered to optic disc, undulating aftermovement, subretinal fluid, near-total/V-shape configuration, and appropriately excludes vitreous hemorrhage/IOFB with normal globe contour; recommends urgent ophthalmology.",
+      "judge_model": "gpt-5.2"
+    },
+    {
+      "task_id": "US-066",
+      "has_reference_solution": true,
+      "passed": true,
+      "weighted_score": 1.0,
+      "dimension_scores": {
+        "diagnostic_accuracy": 1.0,
+        "finding_detection": 1.0,
+        "anatomic_precision": 1.0,
+        "clinical_relevance": 1.0,
+        "false_positive_control": 1.0
+      },
+      "failure_class": null,
+      "reasoning": "Response exactly matches the ground truth/reference: correctly diagnoses ileocolic intussusception, identifies required target and pseudokidney signs in the right lower quadrant with appropriate extension, notes optional trapped mesenteric fat/lymph nodes and free fluid, and appropriately states no perforation/ischemia with sensible recommendation for reduction. No false positive findings (e.g., pneumatosis/perforation) are introduced.",
+      "judge_model": "gpt-5.2"
+    },
+    {
+      "task_id": "US-069",
+      "has_reference_solution": true,
+      "passed": true,
+      "weighted_score": 1.0,
+      "dimension_scores": {
+        "diagnostic_accuracy": 1.0,
+        "finding_detection": 1.0,
+        "anatomic_precision": 1.0,
+        "clinical_relevance": 1.0,
+        "false_positive_control": 1.0
+      },
+      "failure_class": null,
+      "reasoning": "Model response matches the ground truth and reference: correctly diagnoses hypertrophic pyloric stenosis with appropriate measurements (muscle thickness 4.5 mm, channel length 18 mm), notes failure of canal opening/no gastric emptying and target sign, and does not introduce prohibited findings (no gastric mass or distal duodenal obstruction). Anatomy is appropriately localized to the pylorus (midline structure) and severity is consistent with moderate obstruction.",
+      "judge_model": "gpt-5.2"
+    },
+    {
+      "task_id": "US-073",
+      "has_reference_solution": true,
+      "passed": true,
+      "weighted_score": 1.0,
+      "dimension_scores": {
+        "diagnostic_accuracy": 1.0,
+        "finding_detection": 1.0,
+        "anatomic_precision": 1.0,
+        "clinical_relevance": 1.0,
+        "false_positive_control": 1.0
+      },
+      "failure_class": null,
+      "reasoning": "Response matches the reference: correctly diagnoses acute appendicitis in the right lower quadrant with a 9 mm non-compressible blind-ending appendix, Doppler hyperemia, periappendiceal fat inflammation, and appendicolith; appropriately notes absence of abscess and significant free fluid without adding extraneous findings.",
+      "judge_model": "gpt-5.2"
+    },
+    {
+      "task_id": "XRAY-007",
+      "has_reference_solution": true,
+      "passed": true,
+      "weighted_score": 1.0,
+      "dimension_scores": {
+        "diagnostic_accuracy": 1.0,
+        "finding_detection": 1.0,
+        "anatomic_precision": 1.0,
+        "clinical_relevance": 1.0,
+        "false_positive_control": 1.0
+      },
+      "failure_class": null,
+      "reasoning": "Response matches ground truth and reference: identifies mild-moderate cardiomegaly with globular silhouette suggesting pericardial effusion in pericarditis/myocarditis context, notes clear lungs without edema/consolidation, and appropriately recommends echocardiography. No prohibited findings (e.g., consolidation, pneumothorax) are asserted.",
+      "judge_model": "gpt-5.2"
+    },
+    {
+      "task_id": "XRAY-014",
+      "has_reference_solution": true,
+      "passed": true,
+      "weighted_score": 0.985,
+      "dimension_scores": {
+        "diagnostic_accuracy": 1.0,
+        "finding_detection": 1.0,
+        "anatomic_precision": 1.0,
+        "clinical_relevance": 0.9,
+        "false_positive_control": 1.0
+      },
+      "failure_class": null,
+      "reasoning": "Response matches ground truth and reference: correctly identifies fat embolism syndrome with appropriate differential distinction (non-cardiogenic vs cardiogenic edema), describes required bilateral diffuse alveolar 'snowstorm' opacities, notes normal heart size, and correctly states no pneumothorax/effusion. Severity is not explicitly labeled as severe, slightly lowering clinical relevance.",
+      "judge_model": "gpt-5.2"
+    },
+    {
+      "task_id": "XRAY-017",
+      "has_reference_solution": true,
+      "passed": true,
+      "weighted_score": 1.0,
+      "dimension_scores": {
+        "diagnostic_accuracy": 1.0,
+        "finding_detection": 1.0,
+        "anatomic_precision": 1.0,
+        "clinical_relevance": 1.0,
+        "false_positive_control": 1.0
+      },
+      "failure_class": null,
+      "reasoning": "Response matches ground truth and reference: identifies left-sided projectile fragment, left hemopneumothorax with air-fluid level, and optional left chest wall subcutaneous emphysema; appropriately notes no mediastinal widening and recommends emergent chest tube/surgical consultation for critical penetrating trauma.",
+      "judge_model": "gpt-5.2"
+    },
+    {
+      "task_id": "XRAY-023",
+      "has_reference_solution": true,
+      "passed": true,
+      "weighted_score": 1.0,
+      "dimension_scores": {
+        "diagnostic_accuracy": 1.0,
+        "finding_detection": 1.0,
+        "anatomic_precision": 1.0,
+        "clinical_relevance": 1.0,
+        "false_positive_control": 1.0
+      },
+      "failure_class": null,
+      "reasoning": "Response matches the ground truth and reference: correctly identifies right-sided alveolar opacities consistent with intrapulmonary hemorrhage in massive hemoptysis, notes a right upper lobe cavitary lesion as potential source, appropriately states no pneumothorax/effusion, and gives sensible urgent next-step recommendations (CTA/bronchoscopy). No prohibited findings (e.g., cardiomegaly, pneumothorax) are introduced.",
+      "judge_model": "gpt-5.2"
+    },
+    {
+      "task_id": "XRAY-024",
+      "has_reference_solution": true,
+      "passed": true,
+      "weighted_score": 1.0,
+      "dimension_scores": {
+        "diagnostic_accuracy": 1.0,
+        "finding_detection": 1.0,
+        "anatomic_precision": 1.0,
+        "clinical_relevance": 1.0,
+        "false_positive_control": 1.0
+      },
+      "failure_class": null,
+      "reasoning": "Model response matches the ground truth and reference: right lower lobe lobar consolidation with air bronchograms, small right parapneumonic effusion with costophrenic blunting, and explicitly notes absence of pneumothorax and cavitation. Diagnosis of community-acquired pneumonia and moderate severity are appropriate with no added false positives.",
+      "judge_model": "gpt-5.2"
+    },
+    {
+      "task_id": "XRAY-025",
+      "has_reference_solution": true,
+      "passed": true,
+      "weighted_score": 1.0,
+      "dimension_scores": {
+        "diagnostic_accuracy": 1.0,
+        "finding_detection": 1.0,
+        "anatomic_precision": 1.0,
+        "clinical_relevance": 1.0,
+        "false_positive_control": 1.0
+      },
+      "failure_class": null,
+      "reasoning": "Response matches ground truth and reference: correctly identifies a moderate right spontaneous pneumothorax with a visceral pleural line and absent peripheral lung markings, correctly notes no mediastinal shift (non-tension) and no pleural effusion, and provides appropriate management-oriented recommendation.",
+      "judge_model": "gpt-5.2"
+    },
+    {
+      "task_id": "XRAY-027",
+      "has_reference_solution": true,
+      "passed": true,
+      "weighted_score": 1.0,
+      "dimension_scores": {
+        "diagnostic_accuracy": 1.0,
+        "finding_detection": 1.0,
+        "anatomic_precision": 1.0,
+        "clinical_relevance": 1.0,
+        "false_positive_control": 1.0
+      },
+      "failure_class": null,
+      "reasoning": "Response matches ground truth and reference: identifies tracheobronchial disruption with correct right-sided laterality, notes required findings (pneumomediastinum with continuous diaphragm sign; persistent right pneumothorax despite chest tube with fallen lung sign) and optional subcutaneous emphysema, and gives appropriate critical urgency recommendation (bronchoscopy). No extraneous/false positive findings such as foreign body.",
+      "judge_model": "gpt-5.2"
+    },
+    {
+      "task_id": "XRAY-031",
+      "has_reference_solution": true,
+      "passed": true,
+      "weighted_score": 1.0,
+      "dimension_scores": {
+        "diagnostic_accuracy": 1.0,
+        "finding_detection": 1.0,
+        "anatomic_precision": 1.0,
+        "clinical_relevance": 1.0,
+        "false_positive_control": 1.0
+      },
+      "failure_class": null,
+      "reasoning": "Response matches ground truth and reference: identifies esophageal radiopaque disc at thoracic inlet/upper esophagus with coronal (en face) orientation, appropriately contrasts with tracheal orientation, notes absence of pneumomediastinum/free air/perforation signs, and gives appropriate management recommendation (endoscopic retrieval, especially if button battery). No extraneous findings.",
+      "judge_model": "gpt-5.2"
+    },
+    {
+      "task_id": "XRAY-039",
+      "has_reference_solution": true,
+      "passed": true,
+      "weighted_score": 1.0,
+      "dimension_scores": {
+        "diagnostic_accuracy": 1.0,
+        "finding_detection": 1.0,
+        "anatomic_precision": 1.0,
+        "clinical_relevance": 1.0,
+        "false_positive_control": 1.0
+      },
+      "failure_class": null,
+      "reasoning": "Correctly identifies a right anterior glenohumeral dislocation with anterior-inferior (subcoracoid) humeral head displacement and loss of congruence. Optional Hill-Sachs deformity is appropriately mentioned. Appropriately notes absence of greater tuberosity fracture and recommends post-reduction imaging; no inappropriate AC joint widening or other false positives.",
+      "judge_model": "gpt-5.2"
+    },
+    {
+      "task_id": "XRAY-045",
+      "has_reference_solution": true,
+      "passed": true,
+      "weighted_score": 1.0,
+      "dimension_scores": {
+        "diagnostic_accuracy": 1.0,
+        "finding_detection": 1.0,
+        "anatomic_precision": 1.0,
+        "clinical_relevance": 1.0,
+        "false_positive_control": 1.0
+      },
+      "failure_class": null,
+      "reasoning": "Response matches ground truth and reference: identifies radiopaque intraocular foreign body in the left orbit with periorbital swelling, appropriately raises concern for globe rupture, notes no fracture on this view, recommends CT and emergent ophthalmology, and avoids false positives such as intracranial foreign body.",
+      "judge_model": "gpt-5.2"
+    },
+    {
+      "task_id": "XRAY-052",
+      "has_reference_solution": true,
+      "passed": true,
+      "weighted_score": 1.0,
+      "dimension_scores": {
+        "diagnostic_accuracy": 1.0,
+        "finding_detection": 1.0,
+        "anatomic_precision": 1.0,
+        "clinical_relevance": 1.0,
+        "false_positive_control": 1.0
+      },
+      "failure_class": null,
+      "reasoning": "Response matches the reference: identifies non-accidental trauma as primary diagnosis with appropriate specificity, correctly describes the required classic metaphyseal lesion at the distal tibia and multiple long-bone fractures in varying stages of healing, provides accurate laterality/anatomic detail, notes optional posterior rib fractures and periosteal reaction, and appropriately comments on normal bone density without adding unsupported findings.",
+      "judge_model": "gpt-5.2"
+    },
+    {
+      "task_id": "XRAY-055",
+      "has_reference_solution": true,
+      "passed": true,
+      "weighted_score": 1.0,
+      "dimension_scores": {
+        "diagnostic_accuracy": 1.0,
+        "finding_detection": 1.0,
+        "anatomic_precision": 1.0,
+        "clinical_relevance": 1.0,
+        "false_positive_control": 1.0
+      },
+      "failure_class": null,
+      "reasoning": "Response matches ground truth and reference: identifies bilateral diffuse non-cardiogenic pulmonary edema in submersion injury, notes normal cardiac silhouette and absence of pneumothorax, provides appropriate ARDS follow-up recommendation, and does not introduce prohibited findings (no cardiomegaly/pneumothorax).",
+      "judge_model": "gpt-5.2"
+    },
+    {
+      "task_id": "XRAY-067",
+      "has_reference_solution": true,
+      "passed": true,
+      "weighted_score": 1.0,
+      "dimension_scores": {
+        "diagnostic_accuracy": 1.0,
+        "finding_detection": 1.0,
+        "anatomic_precision": 1.0,
+        "clinical_relevance": 1.0,
+        "false_positive_control": 1.0
+      },
+      "failure_class": null,
+      "reasoning": "Response exactly matches the ground truth/reference: correctly identifies Fournier's gangrene with appropriate differential implication, notes required findings (perineal/scrotal subcutaneous gas and perineal soft tissue swelling) with bilateral tracking into inguinal/proximal thighs, correctly states no pelvic fracture and no free intraperitoneal air, and appropriately emphasizes surgical emergency management.",
+      "judge_model": "gpt-5.2"
+    },
+    {
+      "task_id": "XRAY-068",
+      "has_reference_solution": true,
+      "passed": true,
+      "weighted_score": 1.0,
+      "dimension_scores": {
+        "diagnostic_accuracy": 1.0,
+        "finding_detection": 1.0,
+        "anatomic_precision": 1.0,
+        "clinical_relevance": 1.0,
+        "false_positive_control": 1.0
+      },
+      "failure_class": null,
+      "reasoning": "Response matches ground truth and reference: correctly identifies HAPE with appropriate differential implication (non-cardiogenic), describes required findings (bilateral patchy alveolar opacities R>L, normal cardiac silhouette), notes absence of pneumothorax/effusion, and provides appropriate urgent management (descent, oxygen) consistent with severe HAPE. No hallucinated findings.",
+      "judge_model": "gpt-5.2"
+    }
+  ]
+}

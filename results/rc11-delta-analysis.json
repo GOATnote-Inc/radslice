@@ -1,0 +1,2868 @@
+{
+  "campaign": "rc11-delta-analysis",
+  "date": "2026-03-07",
+  "description": "Per-task comparison of rc1.0 (L0 pattern-only) vs rc1.1 (L2 judge always invoked)",
+  "summary": {
+    "gpt52": {
+      "n_tasks": 44,
+      "STABLE_PASS": 10,
+      "STABLE_FAIL": 11,
+      "DEGRADED": 20,
+      "IMPROVED": 3,
+      "degraded_from_l0_only": 20,
+      "degraded_task_ids": [
+        "CT-061",
+        "CT-068",
+        "CT-070",
+        "CT-091",
+        "MRI-003",
+        "MRI-005",
+        "MRI-010",
+        "MRI-011",
+        "MRI-014",
+        "MRI-040",
+        "US-006",
+        "US-046",
+        "XRAY-014",
+        "XRAY-017",
+        "XRAY-023",
+        "XRAY-024",
+        "XRAY-025",
+        "XRAY-031",
+        "XRAY-055",
+        "XRAY-068"
+      ],
+      "improved_task_ids": [
+        "CT-048",
+        "MRI-007",
+        "MRI-031"
+      ],
+      "mean_score_delta": -0.2383
+    },
+    "opus46": {
+      "n_tasks": 44,
+      "STABLE_PASS": 6,
+      "STABLE_FAIL": 27,
+      "DEGRADED": 9,
+      "IMPROVED": 2,
+      "degraded_from_l0_only": 9,
+      "degraded_task_ids": [
+        "MRI-003",
+        "MRI-014",
+        "MRI-040",
+        "US-046",
+        "US-050",
+        "XRAY-007",
+        "XRAY-014",
+        "XRAY-024",
+        "XRAY-027"
+      ],
+      "improved_task_ids": [
+        "MRI-007",
+        "MRI-031"
+      ],
+      "mean_score_delta": -0.1168
+    },
+    "both_degraded": [
+      "MRI-003",
+      "MRI-014",
+      "MRI-040",
+      "US-046",
+      "XRAY-014",
+      "XRAY-024"
+    ],
+    "gpt_only_degraded": [
+      "CT-061",
+      "CT-068",
+      "CT-070",
+      "CT-091",
+      "MRI-005",
+      "MRI-010",
+      "MRI-011",
+      "US-006",
+      "XRAY-017",
+      "XRAY-023",
+      "XRAY-025",
+      "XRAY-031",
+      "XRAY-055",
+      "XRAY-068"
+    ],
+    "opus_only_degraded": [
+      "US-050",
+      "XRAY-007",
+      "XRAY-027"
+    ],
+    "always_fail_both_rc11": [
+      "CT-026",
+      "CT-027",
+      "CT-061",
+      "CT-068",
+      "CT-070",
+      "CT-085",
+      "CT-091",
+      "CT-106",
+      "MRI-003",
+      "MRI-010",
+      "MRI-011",
+      "MRI-014",
+      "MRI-035",
+      "MRI-040",
+      "US-006",
+      "US-034",
+      "US-046",
+      "US-073",
+      "XRAY-007",
+      "XRAY-014",
+      "XRAY-017",
+      "XRAY-023",
+      "XRAY-024",
+      "XRAY-025",
+      "XRAY-027",
+      "XRAY-031",
+      "XRAY-045",
+      "XRAY-055",
+      "XRAY-068"
+    ],
+    "excluded_from_rc11": [
+      "CT-097",
+      "US-010",
+      "US-019",
+      "US-024",
+      "US-036",
+      "US-053",
+      "US-082"
+    ]
+  },
+  "gpt52_deltas": [
+    {
+      "task_id": "CT-026",
+      "model": "gpt-5.2",
+      "category": "STABLE_FAIL",
+      "rc10_passes": "0/3",
+      "rc11_passes": "0/3",
+      "rc10_detection_layers": [
+        0,
+        0,
+        0
+      ],
+      "rc11_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc10_mean_score": 0.225,
+      "rc11_mean_score": 0.12,
+      "score_delta": -0.105,
+      "rc10_failure_classes": [
+        "A",
+        "A",
+        "A"
+      ],
+      "rc11_failure_classes": [
+        "B",
+        "B",
+        "B"
+      ],
+      "rc10_passes_were_l0_only": false
+    },
+    {
+      "task_id": "CT-027",
+      "model": "gpt-5.2",
+      "category": "STABLE_FAIL",
+      "rc10_passes": "0/3",
+      "rc11_passes": "0/3",
+      "rc10_detection_layers": [
+        0,
+        0,
+        0
+      ],
+      "rc11_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc10_mean_score": 0.175,
+      "rc11_mean_score": 0.045,
+      "score_delta": -0.13,
+      "rc10_failure_classes": [
+        "A",
+        "A",
+        "A"
+      ],
+      "rc11_failure_classes": [
+        "B",
+        "B",
+        "B"
+      ],
+      "rc10_passes_were_l0_only": false
+    },
+    {
+      "task_id": "CT-048",
+      "model": "gpt-5.2",
+      "category": "IMPROVED",
+      "rc10_passes": "0/3",
+      "rc11_passes": "3/3",
+      "rc10_detection_layers": [
+        0,
+        0,
+        0
+      ],
+      "rc11_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc10_mean_score": 0.175,
+      "rc11_mean_score": 0.7317,
+      "score_delta": 0.5567,
+      "rc10_failure_classes": [
+        "A",
+        "A",
+        "A"
+      ],
+      "rc11_failure_classes": [
+        "C",
+        "C",
+        "C"
+      ],
+      "rc10_passes_were_l0_only": false
+    },
+    {
+      "task_id": "CT-061",
+      "model": "gpt-5.2",
+      "category": "DEGRADED",
+      "rc10_passes": "3/3",
+      "rc11_passes": "0/3",
+      "rc10_detection_layers": [
+        0,
+        0,
+        0
+      ],
+      "rc11_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc10_mean_score": 0.875,
+      "rc11_mean_score": 0.1333,
+      "score_delta": -0.7417,
+      "rc10_failure_classes": [
+        null,
+        null,
+        null
+      ],
+      "rc11_failure_classes": [
+        "B",
+        "B",
+        "B"
+      ],
+      "rc10_passes_were_l0_only": true
+    },
+    {
+      "task_id": "CT-065",
+      "model": "gpt-5.2",
+      "category": "STABLE_FAIL",
+      "rc10_passes": "0/3",
+      "rc11_passes": "0/3",
+      "rc10_detection_layers": [
+        0,
+        0,
+        0
+      ],
+      "rc11_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc10_mean_score": 0.175,
+      "rc11_mean_score": 0.18,
+      "score_delta": 0.005,
+      "rc10_failure_classes": [
+        "A",
+        "A",
+        "A"
+      ],
+      "rc11_failure_classes": [
+        "B",
+        "B",
+        "B"
+      ],
+      "rc10_passes_were_l0_only": false
+    },
+    {
+      "task_id": "CT-068",
+      "model": "gpt-5.2",
+      "category": "DEGRADED",
+      "rc10_passes": "1/3",
+      "rc11_passes": "0/3",
+      "rc10_detection_layers": [
+        0,
+        0,
+        0
+      ],
+      "rc11_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc10_mean_score": 0.525,
+      "rc11_mean_score": 0.02,
+      "score_delta": -0.505,
+      "rc10_failure_classes": [
+        "C",
+        "C",
+        "C"
+      ],
+      "rc11_failure_classes": [
+        "B",
+        "B",
+        "B"
+      ],
+      "rc10_passes_were_l0_only": true
+    },
+    {
+      "task_id": "CT-069",
+      "model": "gpt-5.2",
+      "category": "STABLE_PASS",
+      "rc10_passes": "3/3",
+      "rc11_passes": "3/3",
+      "rc10_detection_layers": [
+        0,
+        0,
+        0
+      ],
+      "rc11_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc10_mean_score": 0.775,
+      "rc11_mean_score": 0.7833,
+      "score_delta": 0.0083,
+      "rc10_failure_classes": [
+        null,
+        null,
+        null
+      ],
+      "rc11_failure_classes": [
+        "D",
+        "D",
+        "D"
+      ],
+      "rc10_passes_were_l0_only": true
+    },
+    {
+      "task_id": "CT-070",
+      "model": "gpt-5.2",
+      "category": "DEGRADED",
+      "rc10_passes": "1/3",
+      "rc11_passes": "0/3",
+      "rc10_detection_layers": [
+        0,
+        0,
+        0
+      ],
+      "rc11_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc10_mean_score": 0.575,
+      "rc11_mean_score": 0.1667,
+      "score_delta": -0.4083,
+      "rc10_failure_classes": [
+        "C",
+        null,
+        "C"
+      ],
+      "rc11_failure_classes": [
+        "B",
+        "B",
+        "B"
+      ],
+      "rc10_passes_were_l0_only": true
+    },
+    {
+      "task_id": "CT-085",
+      "model": "gpt-5.2",
+      "category": "STABLE_FAIL",
+      "rc10_passes": "0/3",
+      "rc11_passes": "0/3",
+      "rc10_detection_layers": [
+        0,
+        0,
+        0
+      ],
+      "rc11_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc10_mean_score": 0.175,
+      "rc11_mean_score": 0.0,
+      "score_delta": -0.175,
+      "rc10_failure_classes": [
+        "A",
+        "A",
+        "A"
+      ],
+      "rc11_failure_classes": [
+        "B",
+        "B",
+        "B"
+      ],
+      "rc10_passes_were_l0_only": false
+    },
+    {
+      "task_id": "CT-091",
+      "model": "gpt-5.2",
+      "category": "DEGRADED",
+      "rc10_passes": "3/3",
+      "rc11_passes": "0/3",
+      "rc10_detection_layers": [
+        0,
+        0,
+        0
+      ],
+      "rc11_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc10_mean_score": 0.625,
+      "rc11_mean_score": 0.2525,
+      "score_delta": -0.3725,
+      "rc10_failure_classes": [
+        "C",
+        "C",
+        "C"
+      ],
+      "rc11_failure_classes": [
+        "B",
+        "B",
+        "B"
+      ],
+      "rc10_passes_were_l0_only": true
+    },
+    {
+      "task_id": "CT-106",
+      "model": "gpt-5.2",
+      "category": "STABLE_FAIL",
+      "rc10_passes": "0/3",
+      "rc11_passes": "0/3",
+      "rc10_detection_layers": [
+        0,
+        0,
+        0
+      ],
+      "rc11_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc10_mean_score": 0.175,
+      "rc11_mean_score": 0.0175,
+      "score_delta": -0.1575,
+      "rc10_failure_classes": [
+        "A",
+        "A",
+        "A"
+      ],
+      "rc11_failure_classes": [
+        "B",
+        "B",
+        "B"
+      ],
+      "rc10_passes_were_l0_only": false
+    },
+    {
+      "task_id": "MRI-003",
+      "model": "gpt-5.2",
+      "category": "DEGRADED",
+      "rc10_passes": "2/3",
+      "rc11_passes": "0/3",
+      "rc10_detection_layers": [
+        0,
+        0,
+        0
+      ],
+      "rc11_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc10_mean_score": 0.5083,
+      "rc11_mean_score": 0.2825,
+      "score_delta": -0.2258,
+      "rc10_failure_classes": [
+        "C",
+        "C",
+        "C"
+      ],
+      "rc11_failure_classes": [
+        "B",
+        "B",
+        "B"
+      ],
+      "rc10_passes_were_l0_only": true
+    },
+    {
+      "task_id": "MRI-005",
+      "model": "gpt-5.2",
+      "category": "DEGRADED",
+      "rc10_passes": "2/3",
+      "rc11_passes": "0/3",
+      "rc10_detection_layers": [
+        0,
+        0,
+        0
+      ],
+      "rc11_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc10_mean_score": 0.5083,
+      "rc11_mean_score": 0.4658,
+      "score_delta": -0.0425,
+      "rc10_failure_classes": [
+        "C",
+        "C",
+        "C"
+      ],
+      "rc11_failure_classes": [
+        "C",
+        "C",
+        "C"
+      ],
+      "rc10_passes_were_l0_only": true
+    },
+    {
+      "task_id": "MRI-007",
+      "model": "gpt-5.2",
+      "category": "IMPROVED",
+      "rc10_passes": "0/3",
+      "rc11_passes": "3/3",
+      "rc10_detection_layers": [
+        0,
+        0,
+        0
+      ],
+      "rc11_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc10_mean_score": 0.3083,
+      "rc11_mean_score": 0.8365,
+      "score_delta": 0.5282,
+      "rc10_failure_classes": [
+        "A",
+        "C",
+        "C"
+      ],
+      "rc11_failure_classes": [
+        null,
+        null,
+        null
+      ],
+      "rc10_passes_were_l0_only": false
+    },
+    {
+      "task_id": "MRI-010",
+      "model": "gpt-5.2",
+      "category": "DEGRADED",
+      "rc10_passes": "2/3",
+      "rc11_passes": "0/3",
+      "rc10_detection_layers": [
+        0,
+        0,
+        0
+      ],
+      "rc11_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc10_mean_score": 0.5083,
+      "rc11_mean_score": 0.115,
+      "score_delta": -0.3933,
+      "rc10_failure_classes": [
+        "C",
+        "C",
+        "C"
+      ],
+      "rc11_failure_classes": [
+        "B",
+        "B",
+        "B"
+      ],
+      "rc10_passes_were_l0_only": true
+    },
+    {
+      "task_id": "MRI-011",
+      "model": "gpt-5.2",
+      "category": "DEGRADED",
+      "rc10_passes": "3/3",
+      "rc11_passes": "0/3",
+      "rc10_detection_layers": [
+        0,
+        0,
+        0
+      ],
+      "rc11_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc10_mean_score": 0.7083,
+      "rc11_mean_score": 0.3892,
+      "score_delta": -0.3192,
+      "rc10_failure_classes": [
+        null,
+        "C",
+        null
+      ],
+      "rc11_failure_classes": [
+        "B",
+        "B",
+        "B"
+      ],
+      "rc10_passes_were_l0_only": true
+    },
+    {
+      "task_id": "MRI-014",
+      "model": "gpt-5.2",
+      "category": "DEGRADED",
+      "rc10_passes": "3/3",
+      "rc11_passes": "0/3",
+      "rc10_detection_layers": [
+        0,
+        0,
+        0
+      ],
+      "rc11_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc10_mean_score": 0.725,
+      "rc11_mean_score": 0.3875,
+      "score_delta": -0.3375,
+      "rc10_failure_classes": [
+        "C",
+        "C",
+        "C"
+      ],
+      "rc11_failure_classes": [
+        "A",
+        "B",
+        "A"
+      ],
+      "rc10_passes_were_l0_only": true
+    },
+    {
+      "task_id": "MRI-023",
+      "model": "gpt-5.2",
+      "category": "STABLE_PASS",
+      "rc10_passes": "3/3",
+      "rc11_passes": "3/3",
+      "rc10_detection_layers": [
+        0,
+        0,
+        0
+      ],
+      "rc11_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc10_mean_score": 0.925,
+      "rc11_mean_score": 0.878,
+      "score_delta": -0.047,
+      "rc10_failure_classes": [
+        null,
+        null,
+        null
+      ],
+      "rc11_failure_classes": [
+        null,
+        null,
+        null
+      ],
+      "rc10_passes_were_l0_only": true
+    },
+    {
+      "task_id": "MRI-031",
+      "model": "gpt-5.2",
+      "category": "IMPROVED",
+      "rc10_passes": "0/3",
+      "rc11_passes": "1/3",
+      "rc10_detection_layers": [
+        0,
+        0,
+        0
+      ],
+      "rc11_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc10_mean_score": 0.375,
+      "rc11_mean_score": 0.6742,
+      "score_delta": 0.2992,
+      "rc10_failure_classes": [
+        "C",
+        "C",
+        "C"
+      ],
+      "rc11_failure_classes": [
+        null,
+        "A",
+        "A"
+      ],
+      "rc10_passes_were_l0_only": false
+    },
+    {
+      "task_id": "MRI-035",
+      "model": "gpt-5.2",
+      "category": "STABLE_FAIL",
+      "rc10_passes": "0/3",
+      "rc11_passes": "0/3",
+      "rc10_detection_layers": [
+        0,
+        0,
+        0
+      ],
+      "rc11_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc10_mean_score": 0.175,
+      "rc11_mean_score": 0.0375,
+      "score_delta": -0.1375,
+      "rc10_failure_classes": [
+        "A",
+        "A",
+        "A"
+      ],
+      "rc11_failure_classes": [
+        "B",
+        "B",
+        "B"
+      ],
+      "rc10_passes_were_l0_only": false
+    },
+    {
+      "task_id": "MRI-040",
+      "model": "gpt-5.2",
+      "category": "DEGRADED",
+      "rc10_passes": "3/3",
+      "rc11_passes": "0/3",
+      "rc10_detection_layers": [
+        0,
+        0,
+        0
+      ],
+      "rc11_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc10_mean_score": 0.525,
+      "rc11_mean_score": 0.0867,
+      "score_delta": -0.4383,
+      "rc10_failure_classes": [
+        "C",
+        "C",
+        "C"
+      ],
+      "rc11_failure_classes": [
+        "B",
+        "B",
+        "B"
+      ],
+      "rc10_passes_were_l0_only": true
+    },
+    {
+      "task_id": "US-006",
+      "model": "gpt-5.2",
+      "category": "DEGRADED",
+      "rc10_passes": "2/3",
+      "rc11_passes": "0/3",
+      "rc10_detection_layers": [
+        0,
+        0,
+        0
+      ],
+      "rc11_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc10_mean_score": 0.5083,
+      "rc11_mean_score": 0.0492,
+      "score_delta": -0.4592,
+      "rc10_failure_classes": [
+        "A",
+        null,
+        "C"
+      ],
+      "rc11_failure_classes": [
+        "B",
+        "B",
+        "B"
+      ],
+      "rc10_passes_were_l0_only": true
+    },
+    {
+      "task_id": "US-026",
+      "model": "gpt-5.2",
+      "category": "STABLE_PASS",
+      "rc10_passes": "3/3",
+      "rc11_passes": "3/3",
+      "rc10_detection_layers": [
+        0,
+        0,
+        0
+      ],
+      "rc11_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc10_mean_score": 0.875,
+      "rc11_mean_score": 0.8275,
+      "score_delta": -0.0475,
+      "rc10_failure_classes": [
+        null,
+        null,
+        null
+      ],
+      "rc11_failure_classes": [
+        null,
+        null,
+        null
+      ],
+      "rc10_passes_were_l0_only": true
+    },
+    {
+      "task_id": "US-034",
+      "model": "gpt-5.2",
+      "category": "STABLE_FAIL",
+      "rc10_passes": "0/3",
+      "rc11_passes": "0/3",
+      "rc10_detection_layers": [
+        0,
+        0,
+        0
+      ],
+      "rc11_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc10_mean_score": 0.375,
+      "rc11_mean_score": 0.0175,
+      "score_delta": -0.3575,
+      "rc10_failure_classes": [
+        "C",
+        "C",
+        "C"
+      ],
+      "rc11_failure_classes": [
+        "B",
+        "B",
+        "B"
+      ],
+      "rc10_passes_were_l0_only": false
+    },
+    {
+      "task_id": "US-042",
+      "model": "gpt-5.2",
+      "category": "STABLE_PASS",
+      "rc10_passes": "3/3",
+      "rc11_passes": "1/3",
+      "rc10_detection_layers": [
+        0,
+        0,
+        0
+      ],
+      "rc11_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc10_mean_score": 0.6917,
+      "rc11_mean_score": 0.3308,
+      "score_delta": -0.3608,
+      "rc10_failure_classes": [
+        "C",
+        null,
+        "C"
+      ],
+      "rc11_failure_classes": [
+        "C",
+        "B",
+        "C"
+      ],
+      "rc10_passes_were_l0_only": true
+    },
+    {
+      "task_id": "US-046",
+      "model": "gpt-5.2",
+      "category": "DEGRADED",
+      "rc10_passes": "3/3",
+      "rc11_passes": "0/3",
+      "rc10_detection_layers": [
+        0,
+        0,
+        0
+      ],
+      "rc11_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc10_mean_score": 0.825,
+      "rc11_mean_score": 0.4358,
+      "score_delta": -0.3892,
+      "rc10_failure_classes": [
+        null,
+        null,
+        null
+      ],
+      "rc11_failure_classes": [
+        "A",
+        "A",
+        "A"
+      ],
+      "rc10_passes_were_l0_only": true
+    },
+    {
+      "task_id": "US-050",
+      "model": "gpt-5.2",
+      "category": "STABLE_PASS",
+      "rc10_passes": "3/3",
+      "rc11_passes": "3/3",
+      "rc10_detection_layers": [
+        0,
+        0,
+        0
+      ],
+      "rc11_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc10_mean_score": 0.6917,
+      "rc11_mean_score": 0.845,
+      "score_delta": 0.1533,
+      "rc10_failure_classes": [
+        "C",
+        null,
+        "C"
+      ],
+      "rc11_failure_classes": [
+        null,
+        null,
+        null
+      ],
+      "rc10_passes_were_l0_only": true
+    },
+    {
+      "task_id": "US-066",
+      "model": "gpt-5.2",
+      "category": "STABLE_PASS",
+      "rc10_passes": "3/3",
+      "rc11_passes": "3/3",
+      "rc10_detection_layers": [
+        0,
+        0,
+        0
+      ],
+      "rc11_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc10_mean_score": 0.775,
+      "rc11_mean_score": 0.735,
+      "score_delta": -0.04,
+      "rc10_failure_classes": [
+        null,
+        null,
+        null
+      ],
+      "rc11_failure_classes": [
+        "C",
+        "C",
+        "C"
+      ],
+      "rc10_passes_were_l0_only": true
+    },
+    {
+      "task_id": "US-069",
+      "model": "gpt-5.2",
+      "category": "STABLE_PASS",
+      "rc10_passes": "3/3",
+      "rc11_passes": "3/3",
+      "rc10_detection_layers": [
+        0,
+        0,
+        0
+      ],
+      "rc11_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc10_mean_score": 0.775,
+      "rc11_mean_score": 0.9157,
+      "score_delta": 0.1407,
+      "rc10_failure_classes": [
+        null,
+        null,
+        null
+      ],
+      "rc11_failure_classes": [
+        null,
+        null,
+        null
+      ],
+      "rc10_passes_were_l0_only": true
+    },
+    {
+      "task_id": "US-073",
+      "model": "gpt-5.2",
+      "category": "STABLE_FAIL",
+      "rc10_passes": "0/3",
+      "rc11_passes": "0/3",
+      "rc10_detection_layers": [
+        0,
+        0,
+        0
+      ],
+      "rc11_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc10_mean_score": 0.375,
+      "rc11_mean_score": 0.0108,
+      "score_delta": -0.3642,
+      "rc10_failure_classes": [
+        "C",
+        "C",
+        "C"
+      ],
+      "rc11_failure_classes": [
+        "B",
+        "B",
+        "B"
+      ],
+      "rc10_passes_were_l0_only": false
+    },
+    {
+      "task_id": "XRAY-007",
+      "model": "gpt-5.2",
+      "category": "STABLE_FAIL",
+      "rc10_passes": "0/3",
+      "rc11_passes": "0/3",
+      "rc10_detection_layers": [
+        0,
+        0,
+        0
+      ],
+      "rc11_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc10_mean_score": 0.1583,
+      "rc11_mean_score": 0.0125,
+      "score_delta": -0.1458,
+      "rc10_failure_classes": [
+        "D",
+        "A",
+        "A"
+      ],
+      "rc11_failure_classes": [
+        "B",
+        "B",
+        "B"
+      ],
+      "rc10_passes_were_l0_only": false
+    },
+    {
+      "task_id": "XRAY-014",
+      "model": "gpt-5.2",
+      "category": "DEGRADED",
+      "rc10_passes": "3/3",
+      "rc11_passes": "0/3",
+      "rc10_detection_layers": [
+        0,
+        0,
+        0
+      ],
+      "rc11_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc10_mean_score": 0.925,
+      "rc11_mean_score": 0.2608,
+      "score_delta": -0.6642,
+      "rc10_failure_classes": [
+        null,
+        null,
+        null
+      ],
+      "rc11_failure_classes": [
+        "A",
+        "B",
+        "B"
+      ],
+      "rc10_passes_were_l0_only": true
+    },
+    {
+      "task_id": "XRAY-017",
+      "model": "gpt-5.2",
+      "category": "DEGRADED",
+      "rc10_passes": "3/3",
+      "rc11_passes": "0/3",
+      "rc10_detection_layers": [
+        0,
+        0,
+        0
+      ],
+      "rc11_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc10_mean_score": 0.875,
+      "rc11_mean_score": 0.0992,
+      "score_delta": -0.7758,
+      "rc10_failure_classes": [
+        null,
+        null,
+        null
+      ],
+      "rc11_failure_classes": [
+        "B",
+        "B",
+        "C"
+      ],
+      "rc10_passes_were_l0_only": true
+    },
+    {
+      "task_id": "XRAY-023",
+      "model": "gpt-5.2",
+      "category": "DEGRADED",
+      "rc10_passes": "1/3",
+      "rc11_passes": "0/3",
+      "rc10_detection_layers": [
+        0,
+        0,
+        0
+      ],
+      "rc11_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc10_mean_score": 0.425,
+      "rc11_mean_score": 0.0883,
+      "score_delta": -0.3367,
+      "rc10_failure_classes": [
+        "A",
+        "C",
+        "A"
+      ],
+      "rc11_failure_classes": [
+        "B",
+        "B",
+        "B"
+      ],
+      "rc10_passes_were_l0_only": true
+    },
+    {
+      "task_id": "XRAY-024",
+      "model": "gpt-5.2",
+      "category": "DEGRADED",
+      "rc10_passes": "3/3",
+      "rc11_passes": "0/3",
+      "rc10_detection_layers": [
+        0,
+        0,
+        0
+      ],
+      "rc11_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc10_mean_score": 0.8917,
+      "rc11_mean_score": 0.24,
+      "score_delta": -0.6517,
+      "rc10_failure_classes": [
+        "D",
+        "D",
+        null
+      ],
+      "rc11_failure_classes": [
+        "B",
+        "B",
+        "B"
+      ],
+      "rc10_passes_were_l0_only": true
+    },
+    {
+      "task_id": "XRAY-025",
+      "model": "gpt-5.2",
+      "category": "DEGRADED",
+      "rc10_passes": "3/3",
+      "rc11_passes": "0/3",
+      "rc10_detection_layers": [
+        0,
+        0,
+        0
+      ],
+      "rc11_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc10_mean_score": 0.625,
+      "rc11_mean_score": 0.0075,
+      "score_delta": -0.6175,
+      "rc10_failure_classes": [
+        "C",
+        "C",
+        "C"
+      ],
+      "rc11_failure_classes": [
+        "B",
+        "B",
+        "B"
+      ],
+      "rc10_passes_were_l0_only": true
+    },
+    {
+      "task_id": "XRAY-027",
+      "model": "gpt-5.2",
+      "category": "STABLE_FAIL",
+      "rc10_passes": "0/3",
+      "rc11_passes": "0/3",
+      "rc10_detection_layers": [
+        0,
+        0,
+        0
+      ],
+      "rc11_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc10_mean_score": 0.325,
+      "rc11_mean_score": 0.13,
+      "score_delta": -0.195,
+      "rc10_failure_classes": [
+        "A",
+        "A",
+        "A"
+      ],
+      "rc11_failure_classes": [
+        "B",
+        "B",
+        "B"
+      ],
+      "rc10_passes_were_l0_only": false
+    },
+    {
+      "task_id": "XRAY-031",
+      "model": "gpt-5.2",
+      "category": "DEGRADED",
+      "rc10_passes": "1/3",
+      "rc11_passes": "0/3",
+      "rc10_detection_layers": [
+        0,
+        0,
+        0
+      ],
+      "rc11_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc10_mean_score": 0.525,
+      "rc11_mean_score": 0.0375,
+      "score_delta": -0.4875,
+      "rc10_failure_classes": [
+        "C",
+        "C",
+        "C"
+      ],
+      "rc11_failure_classes": [
+        "B",
+        "B",
+        "B"
+      ],
+      "rc10_passes_were_l0_only": true
+    },
+    {
+      "task_id": "XRAY-039",
+      "model": "gpt-5.2",
+      "category": "STABLE_PASS",
+      "rc10_passes": "3/3",
+      "rc11_passes": "3/3",
+      "rc10_detection_layers": [
+        0,
+        0,
+        0
+      ],
+      "rc11_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc10_mean_score": 0.775,
+      "rc11_mean_score": 0.7598,
+      "score_delta": -0.0152,
+      "rc10_failure_classes": [
+        null,
+        null,
+        null
+      ],
+      "rc11_failure_classes": [
+        null,
+        "D",
+        "D"
+      ],
+      "rc10_passes_were_l0_only": true
+    },
+    {
+      "task_id": "XRAY-045",
+      "model": "gpt-5.2",
+      "category": "STABLE_FAIL",
+      "rc10_passes": "0/3",
+      "rc11_passes": "0/3",
+      "rc10_detection_layers": [
+        0,
+        0,
+        0
+      ],
+      "rc11_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc10_mean_score": 0.475,
+      "rc11_mean_score": 0.0833,
+      "score_delta": -0.3917,
+      "rc10_failure_classes": [
+        "C",
+        "C",
+        "C"
+      ],
+      "rc11_failure_classes": [
+        "B",
+        "B",
+        "B"
+      ],
+      "rc10_passes_were_l0_only": false
+    },
+    {
+      "task_id": "XRAY-052",
+      "model": "gpt-5.2",
+      "category": "STABLE_PASS",
+      "rc10_passes": "1/3",
+      "rc11_passes": "1/3",
+      "rc10_detection_layers": [
+        0,
+        0,
+        0
+      ],
+      "rc11_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc10_mean_score": 0.575,
+      "rc11_mean_score": 0.42,
+      "score_delta": -0.155,
+      "rc10_failure_classes": [
+        "C",
+        "C",
+        null
+      ],
+      "rc11_failure_classes": [
+        "A",
+        "A",
+        "C"
+      ],
+      "rc10_passes_were_l0_only": true
+    },
+    {
+      "task_id": "XRAY-055",
+      "model": "gpt-5.2",
+      "category": "DEGRADED",
+      "rc10_passes": "3/3",
+      "rc11_passes": "0/3",
+      "rc10_detection_layers": [
+        0,
+        0,
+        0
+      ],
+      "rc11_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc10_mean_score": 0.925,
+      "rc11_mean_score": 0.2375,
+      "score_delta": -0.6875,
+      "rc10_failure_classes": [
+        null,
+        null,
+        null
+      ],
+      "rc11_failure_classes": [
+        "B",
+        "B",
+        "B"
+      ],
+      "rc10_passes_were_l0_only": true
+    },
+    {
+      "task_id": "XRAY-067",
+      "model": "gpt-5.2",
+      "category": "STABLE_PASS",
+      "rc10_passes": "3/3",
+      "rc11_passes": "3/3",
+      "rc10_detection_layers": [
+        0,
+        0,
+        0
+      ],
+      "rc11_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc10_mean_score": 0.775,
+      "rc11_mean_score": 0.849,
+      "score_delta": 0.074,
+      "rc10_failure_classes": [
+        null,
+        null,
+        null
+      ],
+      "rc11_failure_classes": [
+        "C",
+        null,
+        null
+      ],
+      "rc10_passes_were_l0_only": true
+    },
+    {
+      "task_id": "XRAY-068",
+      "model": "gpt-5.2",
+      "category": "DEGRADED",
+      "rc10_passes": "3/3",
+      "rc11_passes": "0/3",
+      "rc10_detection_layers": [
+        0,
+        0,
+        0
+      ],
+      "rc11_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc10_mean_score": 0.6917,
+      "rc11_mean_score": 0.12,
+      "score_delta": -0.5717,
+      "rc10_failure_classes": [
+        "D",
+        "D",
+        "D"
+      ],
+      "rc11_failure_classes": [
+        "B",
+        "B",
+        "B"
+      ],
+      "rc10_passes_were_l0_only": true
+    }
+  ],
+  "opus46_deltas": [
+    {
+      "task_id": "CT-026",
+      "model": "opus-4-6",
+      "category": "STABLE_FAIL",
+      "rc10_passes": "0/3",
+      "rc11_passes": "0/3",
+      "rc10_detection_layers": [
+        0,
+        0,
+        0
+      ],
+      "rc11_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc10_mean_score": 0.225,
+      "rc11_mean_score": 0.035,
+      "score_delta": -0.19,
+      "rc10_failure_classes": [
+        "A",
+        "A",
+        "A"
+      ],
+      "rc11_failure_classes": [
+        "B",
+        "B",
+        "B"
+      ],
+      "rc10_passes_were_l0_only": false
+    },
+    {
+      "task_id": "CT-027",
+      "model": "opus-4-6",
+      "category": "STABLE_FAIL",
+      "rc10_passes": "0/3",
+      "rc11_passes": "0/3",
+      "rc10_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc11_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc10_mean_score": 0.025,
+      "rc11_mean_score": 0.0,
+      "score_delta": -0.025,
+      "rc10_failure_classes": [
+        "B",
+        "B",
+        "B"
+      ],
+      "rc11_failure_classes": [
+        "B",
+        "A",
+        "B"
+      ],
+      "rc10_passes_were_l0_only": false
+    },
+    {
+      "task_id": "CT-048",
+      "model": "opus-4-6",
+      "category": "STABLE_FAIL",
+      "rc10_passes": "0/3",
+      "rc11_passes": "0/3",
+      "rc10_detection_layers": [
+        0,
+        0,
+        0
+      ],
+      "rc11_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc10_mean_score": 0.175,
+      "rc11_mean_score": 0.0292,
+      "score_delta": -0.1458,
+      "rc10_failure_classes": [
+        "A",
+        "A",
+        "A"
+      ],
+      "rc11_failure_classes": [
+        "B",
+        "B",
+        "B"
+      ],
+      "rc10_passes_were_l0_only": false
+    },
+    {
+      "task_id": "CT-061",
+      "model": "opus-4-6",
+      "category": "STABLE_FAIL",
+      "rc10_passes": "0/3",
+      "rc11_passes": "0/3",
+      "rc10_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc11_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc10_mean_score": 0.03,
+      "rc11_mean_score": 0.03,
+      "score_delta": 0.0,
+      "rc10_failure_classes": [
+        "B",
+        "B",
+        "B"
+      ],
+      "rc11_failure_classes": [
+        "A",
+        "B",
+        "A"
+      ],
+      "rc10_passes_were_l0_only": false
+    },
+    {
+      "task_id": "CT-065",
+      "model": "opus-4-6",
+      "category": "STABLE_PASS",
+      "rc10_passes": "3/3",
+      "rc11_passes": "3/3",
+      "rc10_detection_layers": [
+        0,
+        0,
+        0
+      ],
+      "rc11_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc10_mean_score": 0.875,
+      "rc11_mean_score": 0.625,
+      "score_delta": -0.25,
+      "rc10_failure_classes": [
+        null,
+        null,
+        null
+      ],
+      "rc11_failure_classes": [
+        "D",
+        "D",
+        "D"
+      ],
+      "rc10_passes_were_l0_only": true
+    },
+    {
+      "task_id": "CT-068",
+      "model": "opus-4-6",
+      "category": "STABLE_FAIL",
+      "rc10_passes": "0/3",
+      "rc11_passes": "0/3",
+      "rc10_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc11_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc10_mean_score": 0.285,
+      "rc11_mean_score": 0.2867,
+      "score_delta": 0.0017,
+      "rc10_failure_classes": [
+        "B",
+        "B",
+        "B"
+      ],
+      "rc11_failure_classes": [
+        "B",
+        "B",
+        "B"
+      ],
+      "rc10_passes_were_l0_only": false
+    },
+    {
+      "task_id": "CT-069",
+      "model": "opus-4-6",
+      "category": "STABLE_FAIL",
+      "rc10_passes": "0/3",
+      "rc11_passes": "0/3",
+      "rc10_detection_layers": [
+        0,
+        0,
+        0
+      ],
+      "rc11_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc10_mean_score": 0.175,
+      "rc11_mean_score": 0.0,
+      "score_delta": -0.175,
+      "rc10_failure_classes": [
+        "A",
+        "A",
+        "A"
+      ],
+      "rc11_failure_classes": [
+        "B",
+        "B",
+        "B"
+      ],
+      "rc10_passes_were_l0_only": false
+    },
+    {
+      "task_id": "CT-070",
+      "model": "opus-4-6",
+      "category": "STABLE_FAIL",
+      "rc10_passes": "0/3",
+      "rc11_passes": "0/3",
+      "rc10_detection_layers": [
+        0,
+        0,
+        0
+      ],
+      "rc11_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc10_mean_score": 0.175,
+      "rc11_mean_score": 0.0492,
+      "score_delta": -0.1258,
+      "rc10_failure_classes": [
+        "A",
+        "A",
+        "A"
+      ],
+      "rc11_failure_classes": [
+        "B",
+        "B",
+        "A"
+      ],
+      "rc10_passes_were_l0_only": false
+    },
+    {
+      "task_id": "CT-085",
+      "model": "opus-4-6",
+      "category": "STABLE_FAIL",
+      "rc10_passes": "0/3",
+      "rc11_passes": "0/3",
+      "rc10_detection_layers": [
+        0,
+        0,
+        0
+      ],
+      "rc11_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc10_mean_score": 0.175,
+      "rc11_mean_score": 0.0,
+      "score_delta": -0.175,
+      "rc10_failure_classes": [
+        "A",
+        "A",
+        "A"
+      ],
+      "rc11_failure_classes": [
+        "B",
+        "B",
+        "A"
+      ],
+      "rc10_passes_were_l0_only": false
+    },
+    {
+      "task_id": "CT-091",
+      "model": "opus-4-6",
+      "category": "STABLE_FAIL",
+      "rc10_passes": "0/3",
+      "rc11_passes": "0/3",
+      "rc10_detection_layers": [
+        0,
+        0,
+        0
+      ],
+      "rc11_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc10_mean_score": 0.325,
+      "rc11_mean_score": 0.03,
+      "score_delta": -0.295,
+      "rc10_failure_classes": [
+        "A",
+        "A",
+        "A"
+      ],
+      "rc11_failure_classes": [
+        "B",
+        "B",
+        "B"
+      ],
+      "rc10_passes_were_l0_only": false
+    },
+    {
+      "task_id": "CT-106",
+      "model": "opus-4-6",
+      "category": "STABLE_FAIL",
+      "rc10_passes": "0/3",
+      "rc11_passes": "0/3",
+      "rc10_detection_layers": [
+        0,
+        0,
+        0
+      ],
+      "rc11_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc10_mean_score": 0.175,
+      "rc11_mean_score": 0.035,
+      "score_delta": -0.14,
+      "rc10_failure_classes": [
+        "A",
+        "A",
+        "A"
+      ],
+      "rc11_failure_classes": [
+        "B",
+        "B",
+        "B"
+      ],
+      "rc10_passes_were_l0_only": false
+    },
+    {
+      "task_id": "MRI-003",
+      "model": "opus-4-6",
+      "category": "DEGRADED",
+      "rc10_passes": "1/3",
+      "rc11_passes": "0/3",
+      "rc10_detection_layers": [
+        2,
+        2,
+        0
+      ],
+      "rc11_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc10_mean_score": 0.3058,
+      "rc11_mean_score": 0.085,
+      "score_delta": -0.2208,
+      "rc10_failure_classes": [
+        "B",
+        "B",
+        null
+      ],
+      "rc11_failure_classes": [
+        "B",
+        "A",
+        "B"
+      ],
+      "rc10_passes_were_l0_only": true
+    },
+    {
+      "task_id": "MRI-005",
+      "model": "opus-4-6",
+      "category": "STABLE_PASS",
+      "rc10_passes": "3/3",
+      "rc11_passes": "3/3",
+      "rc10_detection_layers": [
+        0,
+        0,
+        0
+      ],
+      "rc11_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc10_mean_score": 0.925,
+      "rc11_mean_score": 0.7542,
+      "score_delta": -0.1708,
+      "rc10_failure_classes": [
+        null,
+        null,
+        null
+      ],
+      "rc11_failure_classes": [
+        "D",
+        "D",
+        "D"
+      ],
+      "rc10_passes_were_l0_only": true
+    },
+    {
+      "task_id": "MRI-007",
+      "model": "opus-4-6",
+      "category": "IMPROVED",
+      "rc10_passes": "0/3",
+      "rc11_passes": "2/3",
+      "rc10_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc11_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc10_mean_score": 0.005,
+      "rc11_mean_score": 0.6908,
+      "score_delta": 0.6858,
+      "rc10_failure_classes": [
+        "B",
+        "B",
+        "B"
+      ],
+      "rc11_failure_classes": [
+        "A",
+        "C",
+        "C"
+      ],
+      "rc10_passes_were_l0_only": false
+    },
+    {
+      "task_id": "MRI-010",
+      "model": "opus-4-6",
+      "category": "STABLE_FAIL",
+      "rc10_passes": "0/3",
+      "rc11_passes": "0/3",
+      "rc10_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc11_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc10_mean_score": 0.0025,
+      "rc11_mean_score": 0.0,
+      "score_delta": -0.0025,
+      "rc10_failure_classes": [
+        "B",
+        "B",
+        "B"
+      ],
+      "rc11_failure_classes": [
+        "B",
+        "B",
+        "B"
+      ],
+      "rc10_passes_were_l0_only": false
+    },
+    {
+      "task_id": "MRI-011",
+      "model": "opus-4-6",
+      "category": "STABLE_FAIL",
+      "rc10_passes": "0/3",
+      "rc11_passes": "0/3",
+      "rc10_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc11_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc10_mean_score": 0.02,
+      "rc11_mean_score": 0.05,
+      "score_delta": 0.03,
+      "rc10_failure_classes": [
+        "B",
+        "B",
+        "A"
+      ],
+      "rc11_failure_classes": [
+        "B",
+        "A",
+        "A"
+      ],
+      "rc10_passes_were_l0_only": false
+    },
+    {
+      "task_id": "MRI-014",
+      "model": "opus-4-6",
+      "category": "DEGRADED",
+      "rc10_passes": "2/3",
+      "rc11_passes": "0/3",
+      "rc10_detection_layers": [
+        2,
+        0,
+        0
+      ],
+      "rc11_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc10_mean_score": 0.7258,
+      "rc11_mean_score": 0.3267,
+      "score_delta": -0.3992,
+      "rc10_failure_classes": [
+        "A",
+        null,
+        null
+      ],
+      "rc11_failure_classes": [
+        "A",
+        "A",
+        "B"
+      ],
+      "rc10_passes_were_l0_only": true
+    },
+    {
+      "task_id": "MRI-023",
+      "model": "opus-4-6",
+      "category": "STABLE_PASS",
+      "rc10_passes": "3/3",
+      "rc11_passes": "3/3",
+      "rc10_detection_layers": [
+        0,
+        0,
+        0
+      ],
+      "rc11_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc10_mean_score": 0.925,
+      "rc11_mean_score": 0.9075,
+      "score_delta": -0.0175,
+      "rc10_failure_classes": [
+        null,
+        null,
+        null
+      ],
+      "rc11_failure_classes": [
+        null,
+        null,
+        null
+      ],
+      "rc10_passes_were_l0_only": true
+    },
+    {
+      "task_id": "MRI-031",
+      "model": "opus-4-6",
+      "category": "IMPROVED",
+      "rc10_passes": "0/3",
+      "rc11_passes": "3/3",
+      "rc10_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc11_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc10_mean_score": 0.0125,
+      "rc11_mean_score": 0.5775,
+      "score_delta": 0.565,
+      "rc10_failure_classes": [
+        "B",
+        "B",
+        "B"
+      ],
+      "rc11_failure_classes": [
+        "C",
+        "C",
+        "C"
+      ],
+      "rc10_passes_were_l0_only": false
+    },
+    {
+      "task_id": "MRI-035",
+      "model": "opus-4-6",
+      "category": "STABLE_FAIL",
+      "rc10_passes": "0/3",
+      "rc11_passes": "0/3",
+      "rc10_detection_layers": [
+        0,
+        0,
+        0
+      ],
+      "rc11_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc10_mean_score": 0.175,
+      "rc11_mean_score": 0.3433,
+      "score_delta": 0.1683,
+      "rc10_failure_classes": [
+        "A",
+        "A",
+        "A"
+      ],
+      "rc11_failure_classes": [
+        "C",
+        "C",
+        "C"
+      ],
+      "rc10_passes_were_l0_only": false
+    },
+    {
+      "task_id": "MRI-040",
+      "model": "opus-4-6",
+      "category": "DEGRADED",
+      "rc10_passes": "3/3",
+      "rc11_passes": "0/3",
+      "rc10_detection_layers": [
+        0,
+        0,
+        0
+      ],
+      "rc11_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc10_mean_score": 0.925,
+      "rc11_mean_score": 0.5717,
+      "score_delta": -0.3533,
+      "rc10_failure_classes": [
+        null,
+        null,
+        null
+      ],
+      "rc11_failure_classes": [
+        "A",
+        "B",
+        "A"
+      ],
+      "rc10_passes_were_l0_only": true
+    },
+    {
+      "task_id": "US-006",
+      "model": "opus-4-6",
+      "category": "STABLE_FAIL",
+      "rc10_passes": "0/3",
+      "rc11_passes": "0/3",
+      "rc10_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc11_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc10_mean_score": 0.1,
+      "rc11_mean_score": 0.1,
+      "score_delta": 0.0,
+      "rc10_failure_classes": [
+        "A",
+        "A",
+        "A"
+      ],
+      "rc11_failure_classes": [
+        "A",
+        "A",
+        "A"
+      ],
+      "rc10_passes_were_l0_only": false
+    },
+    {
+      "task_id": "US-026",
+      "model": "opus-4-6",
+      "category": "STABLE_FAIL",
+      "rc10_passes": "0/3",
+      "rc11_passes": "0/3",
+      "rc10_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc11_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc10_mean_score": 0.5842,
+      "rc11_mean_score": 0.5725,
+      "score_delta": -0.0117,
+      "rc10_failure_classes": [
+        "A",
+        "A",
+        "A"
+      ],
+      "rc11_failure_classes": [
+        "A",
+        "A",
+        "A"
+      ],
+      "rc10_passes_were_l0_only": false
+    },
+    {
+      "task_id": "US-034",
+      "model": "opus-4-6",
+      "category": "STABLE_FAIL",
+      "rc10_passes": "0/3",
+      "rc11_passes": "0/3",
+      "rc10_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc11_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc10_mean_score": 0.0025,
+      "rc11_mean_score": 0.0067,
+      "score_delta": 0.0042,
+      "rc10_failure_classes": [
+        "B",
+        "B",
+        "A"
+      ],
+      "rc11_failure_classes": [
+        "B",
+        "B",
+        "B"
+      ],
+      "rc10_passes_were_l0_only": false
+    },
+    {
+      "task_id": "US-042",
+      "model": "opus-4-6",
+      "category": "STABLE_FAIL",
+      "rc10_passes": "0/3",
+      "rc11_passes": "0/3",
+      "rc10_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc11_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc10_mean_score": 0.005,
+      "rc11_mean_score": 0.005,
+      "score_delta": 0.0,
+      "rc10_failure_classes": [
+        "B",
+        "B",
+        "B"
+      ],
+      "rc11_failure_classes": [
+        "A",
+        "B",
+        "B"
+      ],
+      "rc10_passes_were_l0_only": false
+    },
+    {
+      "task_id": "US-046",
+      "model": "opus-4-6",
+      "category": "DEGRADED",
+      "rc10_passes": "3/3",
+      "rc11_passes": "0/3",
+      "rc10_detection_layers": [
+        0,
+        0,
+        0
+      ],
+      "rc11_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc10_mean_score": 0.7417,
+      "rc11_mean_score": 0.4475,
+      "score_delta": -0.2942,
+      "rc10_failure_classes": [
+        "D",
+        null,
+        "D"
+      ],
+      "rc11_failure_classes": [
+        "A",
+        "A",
+        "A"
+      ],
+      "rc10_passes_were_l0_only": true
+    },
+    {
+      "task_id": "US-050",
+      "model": "opus-4-6",
+      "category": "DEGRADED",
+      "rc10_passes": "2/3",
+      "rc11_passes": "0/3",
+      "rc10_detection_layers": [
+        2,
+        0,
+        0
+      ],
+      "rc11_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc10_mean_score": 0.67,
+      "rc11_mean_score": 0.445,
+      "score_delta": -0.225,
+      "rc10_failure_classes": [
+        "A",
+        null,
+        null
+      ],
+      "rc11_failure_classes": [
+        "A",
+        "A",
+        "A"
+      ],
+      "rc10_passes_were_l0_only": true
+    },
+    {
+      "task_id": "US-066",
+      "model": "opus-4-6",
+      "category": "STABLE_PASS",
+      "rc10_passes": "3/3",
+      "rc11_passes": "3/3",
+      "rc10_detection_layers": [
+        0,
+        0,
+        0
+      ],
+      "rc11_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc10_mean_score": 0.775,
+      "rc11_mean_score": 0.6008,
+      "score_delta": -0.1742,
+      "rc10_failure_classes": [
+        null,
+        null,
+        null
+      ],
+      "rc11_failure_classes": [
+        "C",
+        "C",
+        "C"
+      ],
+      "rc10_passes_were_l0_only": true
+    },
+    {
+      "task_id": "US-069",
+      "model": "opus-4-6",
+      "category": "STABLE_PASS",
+      "rc10_passes": "3/3",
+      "rc11_passes": "3/3",
+      "rc10_detection_layers": [
+        0,
+        0,
+        0
+      ],
+      "rc11_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc10_mean_score": 0.775,
+      "rc11_mean_score": 0.9142,
+      "score_delta": 0.1392,
+      "rc10_failure_classes": [
+        null,
+        null,
+        null
+      ],
+      "rc11_failure_classes": [
+        null,
+        null,
+        null
+      ],
+      "rc10_passes_were_l0_only": true
+    },
+    {
+      "task_id": "US-073",
+      "model": "opus-4-6",
+      "category": "STABLE_FAIL",
+      "rc10_passes": "0/3",
+      "rc11_passes": "0/3",
+      "rc10_detection_layers": [
+        0,
+        0,
+        0
+      ],
+      "rc11_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc10_mean_score": 0.325,
+      "rc11_mean_score": 0.0,
+      "score_delta": -0.325,
+      "rc10_failure_classes": [
+        "A",
+        "A",
+        "A"
+      ],
+      "rc11_failure_classes": [
+        "B",
+        "B",
+        "B"
+      ],
+      "rc10_passes_were_l0_only": false
+    },
+    {
+      "task_id": "XRAY-007",
+      "model": "opus-4-6",
+      "category": "DEGRADED",
+      "rc10_passes": "3/3",
+      "rc11_passes": "0/3",
+      "rc10_detection_layers": [
+        0,
+        0,
+        0
+      ],
+      "rc11_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc10_mean_score": 0.775,
+      "rc11_mean_score": 0.3375,
+      "score_delta": -0.4375,
+      "rc10_failure_classes": [
+        null,
+        null,
+        null
+      ],
+      "rc11_failure_classes": [
+        "B",
+        "B",
+        "B"
+      ],
+      "rc10_passes_were_l0_only": true
+    },
+    {
+      "task_id": "XRAY-014",
+      "model": "opus-4-6",
+      "category": "DEGRADED",
+      "rc10_passes": "3/3",
+      "rc11_passes": "0/3",
+      "rc10_detection_layers": [
+        0,
+        0,
+        0
+      ],
+      "rc11_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc10_mean_score": 0.925,
+      "rc11_mean_score": 0.5475,
+      "score_delta": -0.3775,
+      "rc10_failure_classes": [
+        null,
+        null,
+        null
+      ],
+      "rc11_failure_classes": [
+        "A",
+        "A",
+        "A"
+      ],
+      "rc10_passes_were_l0_only": true
+    },
+    {
+      "task_id": "XRAY-017",
+      "model": "opus-4-6",
+      "category": "STABLE_FAIL",
+      "rc10_passes": "0/3",
+      "rc11_passes": "0/3",
+      "rc10_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc11_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc10_mean_score": 0.0608,
+      "rc11_mean_score": 0.06,
+      "score_delta": -0.0008,
+      "rc10_failure_classes": [
+        "A",
+        "A",
+        "B"
+      ],
+      "rc11_failure_classes": [
+        "A",
+        "A",
+        "A"
+      ],
+      "rc10_passes_were_l0_only": false
+    },
+    {
+      "task_id": "XRAY-023",
+      "model": "opus-4-6",
+      "category": "STABLE_FAIL",
+      "rc10_passes": "0/3",
+      "rc11_passes": "0/3",
+      "rc10_detection_layers": [
+        0,
+        0,
+        2
+      ],
+      "rc11_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc10_mean_score": 0.2267,
+      "rc11_mean_score": 0.005,
+      "score_delta": -0.2217,
+      "rc10_failure_classes": [
+        "A",
+        "A",
+        "A"
+      ],
+      "rc11_failure_classes": [
+        "B",
+        "B",
+        "B"
+      ],
+      "rc10_passes_were_l0_only": false
+    },
+    {
+      "task_id": "XRAY-024",
+      "model": "opus-4-6",
+      "category": "DEGRADED",
+      "rc10_passes": "2/3",
+      "rc11_passes": "0/3",
+      "rc10_detection_layers": [
+        2,
+        0,
+        0
+      ],
+      "rc11_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc10_mean_score": 0.5883,
+      "rc11_mean_score": 0.0233,
+      "score_delta": -0.565,
+      "rc10_failure_classes": [
+        "A",
+        "D",
+        "D"
+      ],
+      "rc11_failure_classes": [
+        "A",
+        "B",
+        "A"
+      ],
+      "rc10_passes_were_l0_only": true
+    },
+    {
+      "task_id": "XRAY-025",
+      "model": "opus-4-6",
+      "category": "STABLE_FAIL",
+      "rc10_passes": "0/3",
+      "rc11_passes": "0/3",
+      "rc10_detection_layers": [
+        0,
+        0,
+        0
+      ],
+      "rc11_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc10_mean_score": 0.325,
+      "rc11_mean_score": 0.005,
+      "score_delta": -0.32,
+      "rc10_failure_classes": [
+        "A",
+        "A",
+        "A"
+      ],
+      "rc11_failure_classes": [
+        "B",
+        "B",
+        "B"
+      ],
+      "rc10_passes_were_l0_only": false
+    },
+    {
+      "task_id": "XRAY-027",
+      "model": "opus-4-6",
+      "category": "DEGRADED",
+      "rc10_passes": "3/3",
+      "rc11_passes": "0/3",
+      "rc10_detection_layers": [
+        0,
+        0,
+        0
+      ],
+      "rc11_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc10_mean_score": 0.925,
+      "rc11_mean_score": 0.355,
+      "score_delta": -0.57,
+      "rc10_failure_classes": [
+        null,
+        null,
+        null
+      ],
+      "rc11_failure_classes": [
+        "A",
+        "A",
+        "A"
+      ],
+      "rc10_passes_were_l0_only": true
+    },
+    {
+      "task_id": "XRAY-031",
+      "model": "opus-4-6",
+      "category": "STABLE_FAIL",
+      "rc10_passes": "0/3",
+      "rc11_passes": "0/3",
+      "rc10_detection_layers": [
+        0,
+        0,
+        0
+      ],
+      "rc11_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc10_mean_score": 0.175,
+      "rc11_mean_score": 0.0,
+      "score_delta": -0.175,
+      "rc10_failure_classes": [
+        "A",
+        "A",
+        "A"
+      ],
+      "rc11_failure_classes": [
+        "A",
+        "A",
+        "A"
+      ],
+      "rc10_passes_were_l0_only": false
+    },
+    {
+      "task_id": "XRAY-039",
+      "model": "opus-4-6",
+      "category": "STABLE_PASS",
+      "rc10_passes": "3/3",
+      "rc11_passes": "3/3",
+      "rc10_detection_layers": [
+        0,
+        0,
+        0
+      ],
+      "rc11_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc10_mean_score": 0.925,
+      "rc11_mean_score": 0.5833,
+      "score_delta": -0.3417,
+      "rc10_failure_classes": [
+        null,
+        null,
+        null
+      ],
+      "rc11_failure_classes": [
+        "D",
+        "D",
+        "C"
+      ],
+      "rc10_passes_were_l0_only": true
+    },
+    {
+      "task_id": "XRAY-045",
+      "model": "opus-4-6",
+      "category": "STABLE_FAIL",
+      "rc10_passes": "0/3",
+      "rc11_passes": "0/3",
+      "rc10_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc11_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc10_mean_score": 0.0392,
+      "rc11_mean_score": 0.0242,
+      "score_delta": -0.015,
+      "rc10_failure_classes": [
+        "B",
+        "A",
+        "B"
+      ],
+      "rc11_failure_classes": [
+        "B",
+        "B",
+        "B"
+      ],
+      "rc10_passes_were_l0_only": false
+    },
+    {
+      "task_id": "XRAY-052",
+      "model": "opus-4-6",
+      "category": "STABLE_FAIL",
+      "rc10_passes": "0/3",
+      "rc11_passes": "0/3",
+      "rc10_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc11_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc10_mean_score": 0.0025,
+      "rc11_mean_score": 0.0,
+      "score_delta": -0.0025,
+      "rc10_failure_classes": [
+        "B",
+        "A",
+        "B"
+      ],
+      "rc11_failure_classes": [
+        "B",
+        "B",
+        "B"
+      ],
+      "rc10_passes_were_l0_only": false
+    },
+    {
+      "task_id": "XRAY-055",
+      "model": "opus-4-6",
+      "category": "STABLE_FAIL",
+      "rc10_passes": "0/3",
+      "rc11_passes": "0/3",
+      "rc10_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc11_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc10_mean_score": 0.0125,
+      "rc11_mean_score": 0.01,
+      "score_delta": -0.0025,
+      "rc10_failure_classes": [
+        "B",
+        "B",
+        "B"
+      ],
+      "rc11_failure_classes": [
+        "B",
+        "B",
+        "B"
+      ],
+      "rc10_passes_were_l0_only": false
+    },
+    {
+      "task_id": "XRAY-067",
+      "model": "opus-4-6",
+      "category": "STABLE_FAIL",
+      "rc10_passes": "0/3",
+      "rc11_passes": "0/3",
+      "rc10_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc11_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc10_mean_score": 0.025,
+      "rc11_mean_score": 0.0167,
+      "score_delta": -0.0083,
+      "rc10_failure_classes": [
+        "A",
+        "A",
+        "A"
+      ],
+      "rc11_failure_classes": [
+        "A",
+        "A",
+        "A"
+      ],
+      "rc10_passes_were_l0_only": false
+    },
+    {
+      "task_id": "XRAY-068",
+      "model": "opus-4-6",
+      "category": "STABLE_FAIL",
+      "rc10_passes": "0/3",
+      "rc11_passes": "0/3",
+      "rc10_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc11_detection_layers": [
+        2,
+        2,
+        2
+      ],
+      "rc10_mean_score": 0.4078,
+      "rc11_mean_score": 0.4281,
+      "score_delta": 0.0203,
+      "rc10_failure_classes": [
+        "B",
+        "B",
+        "A"
+      ],
+      "rc11_failure_classes": [
+        "A",
+        "B",
+        "A"
+      ],
+      "rc10_passes_were_l0_only": false
+    }
+  ]
+}
