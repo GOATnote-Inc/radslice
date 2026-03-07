@@ -1,7 +1,7 @@
 schema_version: '2.1'
 metadata:
   total_tasks: 205
-  total_sourced: 70
+  total_sourced: 80
   total_validated: 32
   last_updated: '2026-03-07'
   notes: v2.1 — added license_tier field, new dataset sources, revised task counts
@@ -1117,3 +1117,194 @@ images:
     sha256: 2715de592b672dbc8e45f1e70829d41c3b6f7eb2c9db70bce60c99f00aa979af
     notes: Bilateral knee X-ray (AP + lateral) showing KL grade IV lateral, II medial,
       III PF OA
+  xray/multicare/spontaneous-pneumothorax-pmc8820470-Fig1.jpg:
+    source: multicare
+    source_id: PMC8820470_Fig1
+    original_format: jpg
+    license: CC-BY-4.0
+    condition_id: spontaneous-pneumothorax
+    task_ids: []
+    validation_status: validated
+    pathology_confirmed: false
+    license_tier: commercial_safe
+    url: https://cdn.ncbi.nlm.nih.gov/pmc/blobs/5735/8820470/4eb9b8894c6b/cureus-0014-00000020992-i01.jpg
+    sha256: 140bd81dfc88d6f7dc1073dc05ca868de605c2e3cecd095245ddff06b7f958c2
+    notes: CXR showing 90% right-sided spontaneous pneumothorax with annotation overlays
+      (text labels). Confounder — text says "pneumothorax". Not assigned to task.
+  xray/multicare/foreign-body-aspiration-pmc8182727-Fig1.jpg:
+    source: multicare
+    source_id: PMC8182727_Fig1
+    original_format: jpg
+    license: CC-BY-4.0
+    condition_id: foreign-body-aspiration
+    task_ids:
+    - XRAY-022
+    validation_status: validated
+    pathology_confirmed: false
+    license_tier: commercial_safe
+    url: https://cdn.ncbi.nlm.nih.gov/pmc/blobs/979b/8182727/9531375ed796/cureus-0013-00000014898-i01.jpg
+    sha256: 5e287607893158121f390ff3bc77978e7b45d090f38c5dcd4875888ae9101d8a
+    notes: Composite panel (A-E) — CXR expiratory/inspiratory (A/B) showing right lower
+      lobe emphysema with arrowheads, CT axial/coronal (C/D), post-removal CXR (E)
+  ct/multicare/subdural-hematoma-pmc11187447-Fig1.jpg:
+    source: multicare
+    source_id: PMC11187447_Fig1
+    original_format: jpg
+    license: CC-BY-4.0
+    condition_id: subdural-hematoma
+    task_ids: []
+    validation_status: validated
+    pathology_confirmed: false
+    license_tier: commercial_safe
+    url: https://cdn.ncbi.nlm.nih.gov/pmc/blobs/41f1/11187447/b4f96a8bd872/cureus-0016-00000060680-i01.jpg
+    sha256: a82aab7bd8e6b14dd486d8c94f50e79d5547d2ccd6cb11b023d1e7aa9a35bedf
+    notes: 4-panel CT (axial/coronal/sagittal) showing parafalcine SDH 11mm. Unusual
+      location — not assigned to CT-017 (convexity SDH expected).
+  ct/multicare/hemorrhagic-stroke-pmc6138459-Fig1.jpg:
+    source: multicare
+    source_id: PMC6138459_Fig1
+    original_format: jpg
+    license: CC-BY-4.0
+    condition_id: hemorrhagic-stroke
+    task_ids:
+    - CT-014
+    validation_status: validated
+    pathology_confirmed: false
+    license_tier: commercial_safe
+    url: https://cdn.ncbi.nlm.nih.gov/pmc/blobs/1ad7/6138459/d1f569bb6601/cureus-0010-00000002976-i01.jpg
+    sha256: e36815871a1d5e5b7d1e1fc7e05fed40c487d0865a6d4341874852a969791889
+    notes: CT head showing right caudate ICH (17cm3) with ventricular extension
+  ct/multicare/subdural-hematoma-acute-pmc10200024-Fig1.jpg:
+    source: multicare
+    source_id: PMC10200024_Fig1
+    original_format: jpg
+    license: CC-BY-4.0
+    condition_id: subdural-hematoma
+    task_ids:
+    - CT-017
+    validation_status: validated
+    pathology_confirmed: false
+    license_tier: commercial_safe
+    url: https://cdn.ncbi.nlm.nih.gov/pmc/blobs/3e0b/10200024/5d65bdc2be7b/cureus-0015-00000037917-i02.jpg
+    sha256: d64d38255fe8f31beb275a34e01ad3166f6ba7384206637134d34148b18f152b
+    notes: Axial CT head showing left frontotemporoparietal acute SDH with 5mm midline
+      shift. Arrow annotation.
+  ct/multicare/appendicitis-pmc11350477-Fig2.jpg:
+    source: multicare
+    source_id: PMC11350477_Fig2
+    original_format: jpg
+    license: CC-BY-4.0
+    condition_id: acute-appendicitis
+    task_ids:
+    - CT-034
+    validation_status: validated
+    pathology_confirmed: false
+    license_tier: commercial_safe
+    url: https://cdn.ncbi.nlm.nih.gov/pmc/blobs/6a89/11350477/d6168d238903/cureus-0016-00000065622-i02.jpg
+    sha256: 78007eedf4de44280f57e881bf8885d348e8b43324c5e6e28565b8e5290a4ee9
+    notes: Axial CT showing pericecal collection with fat stranding (yellow arrow) and
+      appendicolith (red arrow). Perforated appendicitis in 85yo male.
+  ct/multicare/epidural-hematoma-pmc9120746-Fig4.jpg:
+    source: multicare
+    source_id: PMC9120746_Fig4
+    original_format: jpg
+    license: CC-BY-4.0
+    condition_id: epidural-hematoma
+    task_ids: []
+    validation_status: validated
+    pathology_confirmed: false
+    license_tier: commercial_safe
+    url: https://cdn.ncbi.nlm.nih.gov/pmc/blobs/1aec/9120746/c344e1b21141/PAMJ-41-169-g004.jpg
+    sha256: 79408b7ab405510d6dbbab672682e2c7fafa1e24acaff46ef2b7533b9d6b3d20
+    notes: Photo of lightbox showing CT head with right frontotemporal EDH. Poor image
+      quality (photograph of screen). Not assigned to task.
+  ct/multicare/acute-pancreatitis-pmc8971073-Fig1.jpg:
+    source: multicare
+    source_id: PMC8971073_Fig1
+    original_format: jpg
+    license: CC-BY-4.0
+    condition_id: acute-pancreatitis
+    task_ids:
+    - CT-036
+    validation_status: validated
+    pathology_confirmed: false
+    license_tier: commercial_safe
+    url: https://cdn.ncbi.nlm.nih.gov/pmc/blobs/1619/8971073/109e2f5e8058/cureus-0014-00000022749-i01.jpg
+    sha256: b6c0b354a941d85a63df3a0a3babea538ca3379a8a94af28c4d3cf0a4cb43928
+    notes: Axial CT showing peripancreatic fluid and fat stranding (yellow arrows).
+      Acute pancreatitis in young adult.
+  ct/multicare/bowel-obstruction-ct-pmc9922381-Fig2.jpg:
+    source: multicare
+    source_id: PMC9922381_Fig2
+    original_format: jpg
+    license: CC-BY-4.0
+    condition_id: bowel-obstruction
+    task_ids:
+    - CT-038
+    validation_status: validated
+    pathology_confirmed: false
+    license_tier: commercial_safe
+    url: https://cdn.ncbi.nlm.nih.gov/pmc/blobs/8f8c/9922381/1f0abc9c9381/cureus-0015-00000033730-i02.jpg
+    sha256: f344542c049aabc05154b50bf40291cd0c5ee1b7492bf401e6b2e3626140e666
+    notes: Coronal + axial CT showing dilated fecal-loaded and fluid-filled small bowel
+      loops with transition point at distal ileum. Benign stricture confirmed at surgery.
+  ct/multicare/pyelonephritis-pmc12374602-Fig1.jpg:
+    source: multicare
+    source_id: PMC12374602_Fig1
+    original_format: jpg
+    license: CC-BY-4.0
+    condition_id: pyelonephritis
+    task_ids:
+    - CT-057
+    validation_status: validated
+    pathology_confirmed: false
+    license_tier: commercial_safe
+    url: https://cdn.ncbi.nlm.nih.gov/pmc/blobs/4b76/12374602/fbaab3d69a1f/cureus-0017-00000088666-i01.jpg
+    sha256: 8aaaf67d679e7aad594ec250a5ce12430db8b0fe9d94f33c183f02f79f6c8e99
+    notes: Coronal non-contrast CT showing bilateral renal enlargement with perinephric
+      fat stranding (arrowheads). From pictorial review article.
+  ct/multicare/pneumonia-lobar-pmc9249078-Fig6.jpg:
+    source: multicare
+    source_id: PMC9249078_Fig6
+    original_format: jpg
+    license: CC-BY-4.0
+    condition_id: pneumonia
+    task_ids:
+    - CT-029
+    validation_status: validated
+    pathology_confirmed: false
+    license_tier: commercial_safe
+    url: https://cdn.ncbi.nlm.nih.gov/pmc/blobs/eb5b/9249078/f7c05b399f67/cureus-0014-00000025579-i06.jpg
+    sha256: 0b9f6ed5bfce1c920d15c530b69e14272058d738cfaffcef6ca45cfc1a4b0300
+    notes: Axial (A) and coronal (B) CT showing dense right lower lobe pneumonia.
+      S. aureus lobar pneumonia post-BLVR.
+  ct/multicare/cholecystitis-pmc12017295-Fig3.jpg:
+    source: multicare
+    source_id: PMC12017295_Fig3
+    original_format: jpg
+    license: CC-BY-4.0
+    condition_id: acute-cholecystitis
+    task_ids:
+    - CT-035
+    validation_status: validated
+    pathology_confirmed: false
+    license_tier: commercial_safe
+    url: https://cdn.ncbi.nlm.nih.gov/pmc/blobs/c457/12017295/380bb9abbb81/cureus-0017-00000081080-i03.jpg
+    sha256: 5184a609c1a04810c16771f0f20656ace788c82676fb721107e5566cf17618a0
+    notes: Axial + sagittal CT showing gallbladder wall thickening (green arrow) with
+      Phrygian cap variant (two lumens, red arrows). Acute cholecystitis with choledocholithiasis.
+  ct/multicare/urinary-retention-pmc9512517-Fig1.jpg:
+    source: multicare
+    source_id: PMC9512517_Fig1
+    original_format: jpg
+    license: CC-BY-4.0
+    condition_id: acute-urinary-retention
+    task_ids:
+    - CT-054
+    validation_status: validated
+    pathology_confirmed: false
+    license_tier: commercial_safe
+    url: https://cdn.ncbi.nlm.nih.gov/pmc/blobs/1aa6/9512517/b2ab202b4f21/cureus-0014-00000029626-i01.jpg
+    sha256: b9bd4177cbb7d6a62527f65bcdcf91cce4a5c94fda8dbf77f9fd14f1e54d1ce8
+    notes: Sagittal CT showing massively distended bladder (260x151mm) with measurement
+      calipers. Bilateral hydroureteronephrosis present. 73yo male.

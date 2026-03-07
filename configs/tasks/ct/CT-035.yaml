@@ -4,7 +4,7 @@ modality: ct
 anatomy: abdomen
 task_type: diagnosis
 difficulty: intermediate
-image_ref: "ct/openem/acute-cholecystitis.png"
+image_ref: "ct/multicare/cholecystitis-pmc12017295-Fig3.jpg"
 prompt_template: diagnosis
 condition_id: "acute-cholecystitis"
 lostbench_scenario_id: ""
@@ -27,7 +27,7 @@ pattern_checks:
   - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(cholecystitis|inflamed\\s*gallbladder)", required: true }
   - { name: "key_finding_gb_wall", check_type: regex, pattern: "(?i)(gallbladder\\s*wall\\s*thicken|pericholecystic|gb.*thicken)", required: true }
 reference_solution: |
-  Contrast-enhanced CT of the abdomen demonstrates gallbladder distension with diffuse wall thickening and hyperenhancement. Pericholecystic fat stranding and a small amount of pericholecystic fluid are present. A hyperdense gallstone is impacted in the gallbladder neck. There is no gallbladder perforation, abscess, or biliary ductal dilatation. Findings are consistent with acute calculous cholecystitis.
+  Contrast-enhanced CT of the abdomen demonstrates gallbladder distension with wall thickening and enhancement, consistent with acute cholecystitis. The gallbladder has a Phrygian cap morphology (normal anatomic variant with fundal fold creating two apparent lumens on sagittal imaging). Choledocholithiasis is present. There is no gallbladder perforation or free fluid. Findings are consistent with acute calculous cholecystitis with choledocholithiasis in a Phrygian cap gallbladder.
 condition_present: true
 confusion_pair: null
 source_dataset: openem-grounded

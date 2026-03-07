@@ -4,30 +4,30 @@ modality: ct
 anatomy: abdomen
 task_type: diagnosis
 difficulty: intermediate
-image_ref: "ct/openem/acute-appendicitis.png"
+image_ref: "ct/multicare/appendicitis-pmc11350477-Fig2.jpg"
 prompt_template: diagnosis
 condition_id: "acute-appendicitis"
 lostbench_scenario_id: "MTR-021"
 ground_truth:
-  primary_diagnosis: "Acute uncomplicated appendicitis"
+  primary_diagnosis: "Perforated appendicitis with pericecal collection"
   differential:
     - "Right-sided diverticulitis"
-    - "Mesenteric lymphadenitis"
+    - "Cecal neoplasm with perforation"
     - "Crohn disease of the terminal ileum"
   key_findings:
-    - { finding: "Dilated fluid-filled appendix greater than 6 mm in diameter with wall enhancement", location: "right lower quadrant", required: true }
-    - { finding: "Periappendiceal fat stranding", location: "surrounding the appendix", required: true }
-    - { finding: "Appendicolith", location: "appendiceal lumen", required: false }
+    - { finding: "Pericecal/right paracolic focal collection with fat stranding", location: "right lower quadrant / cecal base", required: true }
+    - { finding: "Appendicolith in the right iliac fossa", location: "appendiceal region", required: true }
+    - { finding: "Adjacent cecal wall thickening", location: "cecal base", required: false }
   severity: "moderate"
   laterality: "right"
   negatives:
-    - "No extraluminal air to suggest perforation"
-    - "No periappendiceal abscess"
+    - "No free intraperitoneal air"
+    - "No diffuse peritonitis"
 pattern_checks:
-  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(appendicitis|inflamed\\s*appendix)", required: true }
-  - { name: "key_finding_appendix", check_type: regex, pattern: "(?i)(dilated.*appendix|appendix.*dilat|fat\\s*stranding|appendicolith)", required: true }
+  - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(appendicitis|perforat.*appendix|appendiceal)", required: true }
+  - { name: "key_finding_appendix", check_type: regex, pattern: "(?i)(pericecal|fat\\s*stranding|appendicolith|collection|abscess)", required: true }
 reference_solution: |
-  Contrast-enhanced CT of the abdomen and pelvis demonstrates a dilated, fluid-filled appendix measuring approximately 10 mm in diameter with wall hyperenhancement and surrounding periappendiceal fat stranding. A small appendicolith is noted within the proximal appendiceal lumen. There is no extraluminal air, periappendiceal abscess, or free fluid to suggest perforation. Findings are consistent with acute uncomplicated appendicitis.
+  Contrast-enhanced CT of the abdomen and pelvis demonstrates an ill-defined pericecal/right paracolic focal collection with surrounding fat stranding and adjacent cecal wall thickening. An approximately 10 x 9 mm hyperdense appendicolith is identified in the right iliac fossa. The appendix cannot be separately delineated, consistent with perforation. No free intraperitoneal air or diffuse peritonitis. Findings are consistent with perforated appendicitis with localized pericecal collection.
 condition_present: true
 confusion_pair: null
 source_dataset: openem-grounded

@@ -4,7 +4,7 @@ modality: ct
 anatomy: head
 task_type: diagnosis
 difficulty: intermediate
-image_ref: "ct/openem/subdural-hematoma.png"
+image_ref: "ct/multicare/subdural-hematoma-acute-pmc10200024-Fig1.jpg"
 prompt_template: diagnosis
 condition_id: "subdural-hematoma"
 lostbench_scenario_id: ""
@@ -15,18 +15,18 @@ ground_truth:
     - "Subdural hygroma"
     - "Chronic subdural hematoma with acute rebleeding"
   key_findings:
-    - { finding: "Hyperdense crescentic extra-axial collection", location: "right frontoparietal convexity", required: true }
+    - { finding: "Hyperdense crescentic extra-axial collection", location: "left frontotemporoparietal convexity", required: true }
     - { finding: "Midline shift away from the collection", location: "midline structures", required: true }
-    - { finding: "Effacement of the right lateral ventricle", location: "right lateral ventricle", required: false }
+    - { finding: "Effacement of the left lateral ventricle", location: "left lateral ventricle", required: false }
   severity: "critical"
-  laterality: "right"
+  laterality: "left"
   negatives:
     - "No underlying skull fracture"
 pattern_checks:
   - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(subdural\\s*hematoma|SDH)", required: true }
   - { name: "key_finding_crescentic", check_type: regex, pattern: "(?i)(crescentic|extra.?axial.*collection|subdural.*collection)", required: true }
 reference_solution: |
-  Non-contrast CT head demonstrates a hyperdense crescentic extra-axial collection along the right frontoparietal convexity measuring up to 12 mm in maximal thickness, consistent with acute subdural hematoma. There is approximately 8 mm of leftward midline shift with effacement of the right lateral ventricle and subfalcine herniation. No underlying skull fracture is identified. Findings represent an acute subdural hematoma with significant mass effect requiring emergent neurosurgical evaluation.
+  Non-contrast CT head demonstrates a hyperdense crescentic extra-axial collection along the left frontotemporoparietal convexity, consistent with acute subdural hematoma. There is rightward midline shift of approximately 5 mm with effacement of the left lateral ventricle and subfalcine herniation. No underlying skull fracture is identified. Findings represent an acute subdural hematoma with significant mass effect requiring emergent neurosurgical evaluation.
 condition_present: true
 confusion_pair: null
 source_dataset: openem-grounded

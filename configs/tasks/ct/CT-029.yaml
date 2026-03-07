@@ -4,7 +4,7 @@ modality: ct
 anatomy: chest
 task_type: diagnosis
 difficulty: basic
-image_ref: "ct/openem/pneumonia.png"
+image_ref: "ct/multicare/pneumonia-lobar-pmc9249078-Fig6.jpg"
 prompt_template: diagnosis
 condition_id: "pneumonia"
 lostbench_scenario_id: ""

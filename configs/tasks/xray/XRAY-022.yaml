@@ -4,7 +4,7 @@ modality: xray
 anatomy: chest
 task_type: diagnosis
 difficulty: intermediate
-image_ref: "xray/openem/foreign-body-aspiration.png"
+image_ref: "xray/multicare/foreign-body-aspiration-pmc8182727-Fig1.jpg"
 prompt_template: diagnosis
 condition_id: "foreign-body-aspiration"
 lostbench_scenario_id: "MTR-034"

@@ -4,7 +4,7 @@ modality: ct
 anatomy: abdomen
 task_type: diagnosis
 difficulty: intermediate
-image_ref: "ct/openem/pyelonephritis.png"
+image_ref: "ct/multicare/pyelonephritis-pmc12374602-Fig1.jpg"
 prompt_template: diagnosis
 condition_id: "pyelonephritis"
 lostbench_scenario_id: ""
@@ -15,11 +15,11 @@ ground_truth:
     - "Renal cell carcinoma"
     - "Renal lymphoma"
   key_findings:
-    - { finding: "Striated nephrogram with wedge-shaped areas of decreased enhancement", location: "left kidney", required: true }
-    - { finding: "Perinephric fat stranding", location: "left perinephric space", required: true }
-    - { finding: "Renal enlargement", location: "left kidney", required: false }
+    - { finding: "Bilateral renal enlargement with perinephric fat stranding", location: "bilateral kidneys", required: true }
+    - { finding: "Perinephric fat stranding", location: "bilateral perinephric spaces", required: true }
+    - { finding: "Renal parenchymal heterogeneity", location: "bilateral kidneys", required: false }
   severity: "moderate"
-  laterality: "left"
+  laterality: "bilateral"
   negatives:
     - "No renal abscess"
     - "No obstructing calculus"
@@ -27,7 +27,7 @@ pattern_checks:
   - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(pyelonephritis|renal\\s*infection|kidney\\s*infection)", required: true }
   - { name: "key_finding_nephrogram", check_type: regex, pattern: "(?i)(striated\\s*nephrogram|wedge.?shaped|decreased\\s*enhance|perinephric\\s*strand)", required: true }
 reference_solution: |
-  Contrast-enhanced CT of the abdomen demonstrates a striated nephrogram of the left kidney with multiple wedge-shaped areas of decreased cortical enhancement radiating from the papillae to the cortical surface. The left kidney is mildly enlarged with perinephric fat stranding. No renal abscess or obstructing ureteral calculus is identified. The right kidney enhances normally. Findings are consistent with acute left pyelonephritis.
+  Coronal non-contrast CT of the abdomen demonstrates bilateral renal enlargement with perinephric fat stranding surrounding both kidneys. The renal parenchyma shows heterogeneous attenuation bilaterally. No renal abscess, obstructing ureteral calculus, or hydronephrosis is identified. Findings are consistent with bilateral acute pyelonephritis.
 condition_present: true
 confusion_pair: null
 source_dataset: openem-grounded

@@ -4,7 +4,7 @@ modality: ct
 anatomy: pelvis
 task_type: diagnosis
 difficulty: basic
-image_ref: "ct/openem/acute-urinary-retention.png"
+image_ref: "ct/multicare/urinary-retention-pmc9512517-Fig1.jpg"
 prompt_template: diagnosis
 condition_id: "acute-urinary-retention"
 lostbench_scenario_id: ""

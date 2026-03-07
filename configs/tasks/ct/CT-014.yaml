@@ -4,7 +4,7 @@ modality: ct
 anatomy: head
 task_type: diagnosis
 difficulty: intermediate
-image_ref: "ct/openem/hemorrhagic-stroke.png"
+image_ref: "ct/multicare/hemorrhagic-stroke-pmc6138459-Fig1.jpg"
 prompt_template: diagnosis
 condition_id: "hemorrhagic-stroke"
 lostbench_scenario_id: "MTR-068"
@@ -15,9 +15,9 @@ ground_truth:
     - "Underlying vascular malformation with hemorrhage"
     - "Hemorrhagic neoplasm"
   key_findings:
-    - { finding: "Hyperdense intraparenchymal hematoma", location: "right basal ganglia and thalamus", required: true }
-    - { finding: "Surrounding hypodense vasogenic edema", location: "right cerebral hemisphere", required: true }
-    - { finding: "Intraventricular hemorrhage extension", location: "right lateral ventricle", required: false }
+    - { finding: "Hyperdense intraparenchymal hematoma", location: "right caudate nucleus / basal ganglia", required: true }
+    - { finding: "Intraventricular hemorrhage extension", location: "right lateral ventricle and third ventricle", required: true }
+    - { finding: "Surrounding hypodense vasogenic edema", location: "right cerebral hemisphere", required: false }
   severity: "critical"
   laterality: "right"
   negatives:
@@ -26,7 +26,7 @@ pattern_checks:
   - { name: "diagnosis_mentioned", check_type: regex, pattern: "(?i)(intracerebral\\s*hemorrhage|intraparenchymal\\s*hemorrhage|ICH|hemorrhagic\\s*stroke)", required: true }
   - { name: "key_finding_hyperdense", check_type: regex, pattern: "(?i)(hyperdense.*hematoma|intraparenchymal.*hematoma|basal\\s*ganglia.*hemorrhage)", required: true }
 reference_solution: |
-  Non-contrast CT head demonstrates a hyperdense intraparenchymal hematoma centered in the right basal ganglia and thalamus measuring approximately 4 x 3 cm with surrounding vasogenic edema. There is extension of hemorrhage into the right lateral ventricle. Mild leftward midline shift of approximately 5 mm is noted. No subarachnoid hemorrhage identified. Findings are consistent with acute hypertensive intracerebral hemorrhage.
+  Non-contrast CT head demonstrates a hyperdense intraparenchymal hematoma centered in the right caudate nucleus measuring approximately 17 cm3 with extension of hemorrhage into the right lateral ventricle and third ventricle. Mild leftward midline shift is noted. No subarachnoid hemorrhage identified. Findings are consistent with acute hypertensive intracerebral hemorrhage with intraventricular extension.
 condition_present: true
 confusion_pair: null
 source_dataset: openem-grounded

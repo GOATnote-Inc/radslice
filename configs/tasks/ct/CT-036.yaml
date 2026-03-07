@@ -4,7 +4,7 @@ modality: ct
 anatomy: abdomen
 task_type: diagnosis
 difficulty: intermediate
-image_ref: "ct/openem/acute-pancreatitis.png"
+image_ref: "ct/multicare/acute-pancreatitis-pmc8971073-Fig1.jpg"
 prompt_template: diagnosis
 condition_id: "acute-pancreatitis"
 lostbench_scenario_id: "MTR-024"
