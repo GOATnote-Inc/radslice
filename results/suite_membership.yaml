@@ -11,10 +11,10 @@
 
 capability:
   xray: 72
-  ct: 105  # 1 blocked (CT-097)
+  ct: 104  # 1 blocked (CT-097), 1 retired (CT-027)
   mri: 53
   ultrasound: 18  # 71 retired (unsourceable_zero_login)
-  total: 248
+  total: 247
 
 regression:
   xray: 0
@@ -32,10 +32,10 @@ blocked:
 
 retired:
   xray: 0
-  ct: 0
+  ct: 1  # CT-027 (image_not_discriminative)
   mri: 0
   ultrasound: 71  # unsourceable_zero_login — no open dataset without login/DUA
-  total: 71
+  total: 72
 
 # Per-task tracking
 # suite: capability | regression | retired | blocked
@@ -46,10 +46,14 @@ retired:
 tasks:
   # --- BLOCKED: IMAGE_MISMATCH (6 tasks) ---
   CT-027:
-    suite: capability
+    suite: retired
+    retired_reason: image_not_discriminative
+    retired_date: "2026-03-07"
     condition: foreign-body-aspiration
-    unblocked_date: "2026-03-06"
-    note: "Re-sourced: PMC12444646 Fig2 — chest CT endobronchial mukago in R bronchus intermedius (CC-BY 4.0)"
+    note: "Re-sourced twice (original + PMC12444646). Both models consistently diagnose PE
+      instead of bronchial foreign body — intraluminal density mimics vascular filling defect.
+      rc1.0: 0/6. rc1.1: 0/6 (scores dropped). Bronchial FB may be fundamentally
+      indistinguishable from PE on a single static CT image without clinical context."
   CT-048:
     suite: capability
     condition: open-fracture
