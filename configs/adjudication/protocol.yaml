@@ -1,0 +1,309 @@
+# RadSlice Physician Adjudication Protocol
+# =========================================
+#
+# Defines the human-in-the-loop review process for benchmark quality assurance.
+# Modeled on medical data annotation best practices (cf. SurgeHQ Medical Fellow
+# standards): physician reviewers encode clinical reasoning, not just labels.
+#
+# Core principle: every measurement chain (image → ground_truth → judge → score)
+# must be verifiable. Physician adjudication validates each link.
+
+schema_version: "1.0"
+
+# ---------------------------------------------------------------------------
+# Tier 1: Image-Pathology Confirmation
+# ---------------------------------------------------------------------------
+# Gates: image enters evaluation
+# Scope: every sourced image before first eval inclusion
+# Currently: validate_pathology.py does LLM proxy; this tier adds human gold standard
+tier1_image_pathology:
+  name: "Image-Pathology Confirmation"
+  description: >
+    Verify that the sourced image actually exhibits the target pathology.
+    This is the single highest-ROI adjudication step — CT-027 and MRI-035
+    failures in rc1.1 trace directly to skipping this gate.
+  reviewer_requirements:
+    minimum_credential: "MD/DO/NP/PA"
+    specialty_required: false  # Any physician with imaging literacy
+    n_reviewers: 1  # Single reviewer sufficient for binary pathology check
+  fields:
+    - name: pathology_visible
+      type: enum
+      values: [present, absent, equivocal]
+      description: "Is the target pathology clearly visible in this image?"
+    - name: image_quality
+      type: enum
+      values: [adequate, marginal, inadequate]
+      description: "Is image quality sufficient for diagnostic interpretation?"
+    - name: correct_modality
+      type: bool
+      description: "Does the image match the claimed modality (xray/ct/mri/us)?"
+    - name: correct_anatomy
+      type: bool
+      description: "Does the image show the claimed anatomic region?"
+    - name: confounders
+      type: list_of_string
+      description: "Annotation arrows, cropping, composite panels, artifacts, etc."
+    - name: verdict
+      type: enum
+      values: [CONFIRMED, REJECTED, NEEDS_RESOURCE]
+    - name: reviewer_notes
+      type: text
+      description: "Free-text clinical reasoning for the verdict"
+  output:
+    updates: "corpus/image_sources.yaml → pathology_confirmed: true/false"
+    record: "results/adjudication/tier1/{task_id}.yaml"
+  acceptance_criteria:
+    verdict_confirmed_required: true
+    image_quality_minimum: marginal  # adequate or marginal
+  priority_rules:
+    - "Tasks entering next eval campaign (highest)"
+    - "Re-sourced images (CT-027, MRI-035 precedent)"
+    - "Images with LLM validation confidence < 0.8"
+    - "All remaining sourced images"
+
+# ---------------------------------------------------------------------------
+# Tier 2: Ground Truth Validation
+# ---------------------------------------------------------------------------
+# Gates: task enters evaluation
+# Scope: every task before first eval inclusion
+# This is where medical reasoning gets encoded into the dataset.
+tier2_ground_truth:
+  name: "Ground Truth Validation"
+  description: >
+    Structured review of ground_truth fields against the actual sourced image.
+    The reviewer is not just checking correctness — they are encoding the
+    diagnostic reasoning chain that connects image findings to diagnosis.
+    This is the SurgeHQ "encode medical reasoning" equivalent.
+  reviewer_requirements:
+    minimum_credential: "MD/DO"
+    specialty_preferred: ["radiology", "emergency_medicine"]
+    n_reviewers: 2
+    adjudication: "Third reviewer for disagreements on verdict"
+    irr_target: "Cohen's kappa >= 0.80 on verdict"
+  fields:
+    # --- Finding-level review ---
+    - name: key_findings_review
+      type: list
+      per_item:
+        - name: finding
+          type: string
+          description: "The finding text from ground_truth"
+        - name: visible_in_image
+          type: enum
+          values: [clearly_visible, partially_visible, not_visible, not_assessable]
+        - name: location_correct
+          type: bool
+          description: "Is the stated anatomic location correct for what's shown?"
+        - name: clinical_significance
+          type: enum
+          values: [critical, significant, incidental, overcall]
+          description: "Reviewer's assessment of clinical importance"
+    # --- Diagnosis-level review ---
+    - name: primary_diagnosis_correct
+      type: enum
+      values: [correct, incorrect, incomplete, overcall]
+      description: "Given the image, is the primary diagnosis appropriate?"
+    - name: differential_reasonable
+      type: bool
+      description: "Is the differential list clinically appropriate?"
+    - name: differential_missing
+      type: list_of_string
+      description: "Important differentials not listed (reviewer adds)"
+    - name: severity_appropriate
+      type: enum
+      values: [appropriate, over_estimated, under_estimated]
+    - name: laterality_correct
+      type: enum
+      values: [correct, incorrect, not_applicable]
+    # --- Reasoning chain (new — encodes medical reasoning) ---
+    - name: reasoning_chain
+      type: list
+      description: >
+        The diagnostic reasoning path from findings to diagnosis.
+        This encodes HOW a physician reaches the diagnosis, not just WHAT it is.
+        Future judge prompts can use this to evaluate reasoning quality.
+      per_item:
+        - name: observation
+          type: string
+          description: "What the physician observes in the image"
+        - name: inference
+          type: string
+          description: "What this observation implies clinically"
+        - name: supports
+          type: string
+          description: "Which diagnosis/finding this supports or refutes"
+    # --- Reference solution review ---
+    - name: reference_solution_sound
+      type: bool
+      description: "Is the reference_solution medically accurate and complete?"
+    - name: reference_solution_issues
+      type: list_of_string
+      description: "Specific medical inaccuracies or omissions"
+    # --- Overall ---
+    - name: verdict
+      type: enum
+      values: [VALIDATED, NEEDS_REVISION, REJECTED]
+    - name: revision_notes
+      type: text
+      description: "What specifically needs to change (if NEEDS_REVISION)"
+  output:
+    record: "results/adjudication/tier2/{task_id}.yaml"
+  priority_rules:
+    - "Tasks with Class A failures in prior evals (clinical risk)"
+    - "Tasks with LLM solvability audit score < 0.65 (near-threshold)"
+    - "Newly sourced images (no prior eval data)"
+    - "Tasks with DEGRADED status in rc1.0→rc1.1 delta"
+
+# ---------------------------------------------------------------------------
+# Tier 3: Judge Calibration
+# ---------------------------------------------------------------------------
+# Gates: judge accuracy meets threshold
+# Scope: 20% sample of graded trials per eval campaign
+# This is the gold standard for measuring whether the LLM judge is trustworthy.
+tier3_judge_calibration:
+  name: "Judge Calibration (Human Gold Standard)"
+  description: >
+    Physician grades a sample of model responses using the same 5-dimension
+    rubric as the LLM judge. Enables computing judge sensitivity, specificity,
+    and kappa against human ground truth.
+  reviewer_requirements:
+    minimum_credential: "MD/DO"
+    specialty_preferred: ["radiology"]
+    n_reviewers: 1  # Single expert grader (kappa computed across sample)
+  fields:
+    - name: dimension_scores
+      type: map
+      keys: [diagnostic_accuracy, finding_detection, anatomic_precision,
+             clinical_relevance, false_positive_control]
+      values: "float 0.0-1.0"
+    - name: failure_class
+      type: enum
+      values: [A, B, C, D, E, null]
+    - name: passed
+      type: bool
+      description: "Physician's pass/fail determination"
+    - name: reasoning
+      type: text
+      description: "Why this grade (especially for disagreements with LLM judge)"
+  output:
+    record: "results/adjudication/tier3/{eval_id}/{task_id}_trial{n}.yaml"
+    aggregate: "results/adjudication/tier3/{eval_id}/calibration_summary.json"
+  metrics:
+    - name: judge_kappa
+      target: ">= 0.70"
+      description: "Cohen's kappa between LLM judge and physician on pass/fail"
+    - name: judge_sensitivity
+      description: "P(judge passes | physician passes)"
+    - name: judge_specificity
+      description: "P(judge fails | physician fails)"
+    - name: class_a_agreement
+      target: ">= 0.90"
+      description: "Agreement on Class A (missed critical dx) identification"
+  sampling:
+    method: stratified
+    strata: [modality, difficulty, pass_fail]
+    target_n: "20% of trials, minimum 30 per campaign"
+
+# ---------------------------------------------------------------------------
+# Tier 4: Clinical Harm Assessment
+# ---------------------------------------------------------------------------
+# Gates: risk_debt entries validated
+# Scope: every Class A failure
+# This is where triage logic and ethical frameworks get encoded.
+tier4_clinical_harm:
+  name: "Clinical Harm Assessment"
+  description: >
+    Validates clinical severity of Class A failures. Encodes triage logic
+    (time_to_harm, management_change) and ethical assessment (would this
+    miss cause real patient harm in an ED setting?).
+  reviewer_requirements:
+    minimum_credential: "MD/DO"
+    specialty_required: ["emergency_medicine"]
+    n_reviewers: 1
+    secondary_reviewer: "radiology (for imaging-specific disputes)"
+  fields:
+    - name: time_to_harm_validated
+      type: string
+      description: "Physician-validated time to clinical deterioration"
+    - name: time_to_harm_category
+      type: enum
+      values: ["<1h", "1-6h", "6-24h", ">24h"]
+    - name: management_change
+      type: text
+      description: "What clinical management changes with correct diagnosis?"
+    - name: disposition_impact
+      type: enum
+      values: [admit_icu, admit_floor, observe, discharge_changes, no_change]
+      description: "How would correct diagnosis change patient disposition?"
+    - name: mortality_risk
+      type: enum
+      values: [high, moderate, low, negligible]
+      description: "Mortality risk from delayed/missed diagnosis"
+    - name: harm_reversibility
+      type: enum
+      values: [irreversible, partially_reversible, fully_reversible]
+    - name: acuity_level
+      type: enum
+      values: [emergent, urgent, non_urgent, elective]
+      description: "ESI-equivalent triage level for this condition"
+    - name: verdict
+      type: enum
+      values: [CONFIRMED_HIGH_RISK, CONFIRMED_MODERATE, OVERCALLED, RECLASSIFY]
+    - name: clinical_narrative
+      type: text
+      description: >
+        Brief clinical scenario: "A 45yo presents with... if the AI misses X,
+        the patient could..." This narrative is the ethical framework encoding.
+  output:
+    updates: "results/risk_debt.yaml → physician-validated fields"
+    record: "results/adjudication/tier4/{task_id}.yaml"
+
+# ---------------------------------------------------------------------------
+# Execution Model
+# ---------------------------------------------------------------------------
+execution:
+  # Adjudication records are append-only (like eval results)
+  immutability: true
+
+  # Review sessions use structured forms, not free-text
+  tooling: "YAML forms (generated by scripts/generate_adjudication_queue.py)"
+
+  # Compensation model (if using external reviewers like SurgeHQ)
+  estimated_time_per_task:
+    tier1: "2-3 minutes"
+    tier2: "8-12 minutes"
+    tier3: "5-8 minutes per trial"
+    tier4: "10-15 minutes"
+
+  # Quality assurance
+  qa:
+    tier1_spot_check: "10% random re-review by second physician"
+    tier2_full_dual_review: true
+    tier3_calibration_set: "5 pre-graded trials for reviewer calibration"
+    disagreement_resolution: "Third reviewer adjudicates; majority rules"
+
+  # Batch sizes for practical scheduling
+  recommended_batch_size:
+    tier1: 20  # ~1 hour session
+    tier2: 8   # ~1.5 hour session
+    tier3: 15  # ~2 hour session
+    tier4: 10  # ~2.5 hour session
+
+# ---------------------------------------------------------------------------
+# Priority Matrix (what to adjudicate first)
+# ---------------------------------------------------------------------------
+priority_matrix:
+  critical:
+    - "Tier 1 for all images entering next eval campaign"
+    - "Tier 4 for all Class A failures with time_to_harm < 1h"
+  high:
+    - "Tier 2 for tasks with Class A failures"
+    - "Tier 2 for re-sourced images"
+    - "Tier 3 for campaigns where pass rate changed > 10pp"
+  medium:
+    - "Tier 2 for all remaining eval-eligible tasks"
+    - "Tier 1 for newly sourced images not yet in eval"
+  low:
+    - "Tier 3 for stable campaigns (pass rate change < 5pp)"
+    - "Tier 2 for retired/blocked tasks (future rehabilitation)"
