@@ -21,6 +21,7 @@
 | 0.2.0 | 2026-02-28 | GOATnote | Recursive self-improvement architecture: saturation detection, governance |
 | 0.3.0 | 2026-02-28 | GOATnote | DICOM-native image pipeline, corpus provenance mapping, smoke test config |
 | 1.0.0-rc | 2026-03-03 | GOATnote | First 4-modality evaluation: 51 tasks × 2 models × 3 trials; grading red-team audit |
+| 1.1.0-rc | 2026-03-07 | GOATnote | Full-judge evaluation: 44 tasks × 2 models × 3 trials; L0 inflation eliminated, 5 tasks re-sourced, 7 excluded; cross-modal blind spot analysis; physician adjudication framework |
 
 ---
 
@@ -110,13 +111,31 @@ Three-layer grading with documented determinism properties:
 
 **Metrics:** pass@k (probability at least 1 of k trials passes), pass^k (probability all k trials pass — deployment safety gate), Wilson confidence intervals on all proportions, 10,000-sample bootstrap CI for composite scores, two-proportion z-test for regression detection between runs.
 
-### 2.4 Initial Evaluation Results (rc1.0)
+### 2.4 Evaluation Results
 
-First 4-modality evaluation campaign: 51 image-backed tasks × 2 models (GPT-5.2, Opus 4.6) × 3 trials per task, with cross-vendor LLM judge (GPT-5.2 judges Opus; Opus 4.6 judges GPT). 306 total graded responses.
+#### rc1.1 (Current — Full-Judge Coverage, 2026-03-07)
 
-**Corrected pass rates** (45-task denominator, excluding 6 IMAGE_MISMATCH tasks per Section 2.5): GPT-5.2 **63.7%** (86/135), Opus 4.6 **35.6%** (48/135).
+44 image-backed tasks × 2 models (GPT-5.2, Opus 4.6) × 3 trials per task, with cross-vendor LLM judge on every trial (no Layer 0 short-circuit). 264 total graded responses. 5 tasks re-sourced from rc1.0 IMAGE_MISMATCH set; 7 tasks excluded (US retired + CT-097 blocked).
 
-Raw pass rates by modality (51-task denominator):
+| Modality | Tasks | GPT-5.2 | Opus 4.6 |
+|---|---|---|---|
+| **Overall** | **44** | **25.0%** | **17.4%** |
+
+Key findings:
+
+- **Pass rates substantially lower than rc1.0** — rc1.0's 56.2%/31.4% were inflated by Layer 0 pattern-only grading (Layer 0 vs Layer 2 kappa = 0.281; 59 false passes). rc1.1 enforces full judge coverage.
+- **4.5× Class A failure asymmetry** (GPT vs Opus) on critical diagnostic misses.
+- **11 cross-modal blind spots** identified via cross-repo correlation with LostBench — conditions where models fail both image interpretation and text-based clinical reasoning (e.g., fat embolism, hemorrhagic stroke).
+- **29 always-fail tasks** (both models, all trials) — 20% involve conditions with time-to-harm < 1 hour.
+- **100% solvability confirmed** — all 44 reference solutions pass the judge, validating the instrument.
+
+Full analysis: [`docs/CLINICAL_SAFETY_FINDINGS_RC11.md`](docs/CLINICAL_SAFETY_FINDINGS_RC11.md). AAR: [`docs/aars/AAR-RC11-FINDINGS.md`](docs/aars/AAR-RC11-FINDINGS.md).
+
+Configs: `configs/matrices/rc11_opus.yaml`, `configs/matrices/rc11_gpt.yaml`. Results: `results/eval-20260307-opus46-rc11/`, `results/eval-20260307-gpt52-rc11/`.
+
+#### rc1.0 (Superseded — L0 Pattern Inflation, 2026-03-03)
+
+51 tasks × 2 models × 3 trials. **Pass rates inflated by Layer 0 pattern-only grading** — 100% of DEGRADED tasks had L0-only passes, and 75% of L0 passes were judge-false-positives. Retained for historical reference.
 
 | Modality | Tasks | GPT-5.2 | Opus 4.6 |
 |---|---|---|---|
@@ -126,39 +145,32 @@ Raw pass rates by modality (51-task denominator):
 | MRI | 10 | 60.0% (18/30) | 40.0% (12/30) |
 | **Overall** | **51** | **56.2% (86/153)** | **31.4% (48/153)** |
 
-Key findings:
-
-- **GPT-5.2 outperforms Opus 4.6 across all four modalities** (+24.8 percentage points overall). The gap is largest on CT (+22.3pp) and smallest on MRI (+20.0pp).
-- **CT is the weakest modality for both models** (GPT 30.6%, Opus 8.3%). CT interpretation requires cross-sectional spatial reasoning that current VLMs handle less reliably than projection radiography.
-- **14 tasks unsolved by either model** across all 6 trials. 19 tasks passed by GPT only; 3 passed by Opus only. 15 tasks passed by both at least once.
-- **Cross-model divergence reveals style bias in grading** — 3 Opus-only tasks (CT-065, XRAY-007, XRAY-027) involve associated-finding patterns where GPT uses terminology that fails Layer 0 regex despite correct interpretation.
-
 Configs: `configs/matrices/rc10_opus.yaml`, `configs/matrices/rc10_gpt.yaml`. Results: `results/eval-20260303-opus46-rc10/`, `results/eval-20260303-gpt52-rc10/`. Summary: `results/eval-20260303-rc10-summary.json`.
 
 ### 2.5 Measurement Validity
 
-A red-team audit of the rc1.0 grading pipeline examined all 14 false-negative tasks (always-fail for both models) and 13 false-positive tasks (always-pass for at least one model) to characterize instrument error. Full audit data: `results/rc10-grading-audit.json`.
+#### rc1.0 Grading Audit
 
-**Finding 1: Layer 0 dominance.** 100% of GPT always-fail grades (42/42) were decided by Layer 0 regex alone — the LLM judge was never invoked. For Opus, 25/42 always-fail grades were Layer 0 only. Root cause: the confidence threshold for Layer 0 bypass (0.8) is below the default pattern-fail confidence (0.9), so any task that fails pattern matching is never escalated to the judge.
+A red-team audit of the rc1.0 grading pipeline identified critical Layer 0 inflation: 100% of GPT always-fail grades were decided by Layer 0 regex alone (the LLM judge was never invoked), 6 tasks had IMAGE_MISMATCH errors, and 2 tasks had RUBRIC_EASY false positives. Full audit data: `results/rc10-grading-audit.json`. AAR: [`docs/aars/AAR-RC10-GRADING-AUDIT.md`](docs/aars/AAR-RC10-GRADING-AUDIT.md).
 
-**Finding 2: Image-condition mismatch.** 6 of 14 always-fail tasks have sourced images that do not exhibit the target pathology — the image shows a different condition entirely. An additional 5 tasks have ambiguous images where the target pathology is present but not deterministically distinguishable.
+#### rc1.1 Corrective Actions (Executed)
 
-| Category | Count | Tasks | Action |
-|---|---|---|---|
-| IMAGE_MISMATCH | 6 | CT-027, CT-048, CT-097, MRI-007, MRI-031, MRI-035 | Excluded from corrected denominator; requires re-sourcing |
-| AMBIGUOUS | 5 | CT-026, CT-085, CT-106, US-034, XRAY-045 | Retained in denominator; flagged for clinical review |
-| GENUINE | 3 | US-010, US-073, US-082 | Retained — model errors on valid images |
-| VALID (always-pass) | 11 | MRI-023, MRI-040, US-024, US-036, US-046, US-066, US-069, XRAY-014, XRAY-039, CT-065, MRI-005 | Confirmed correct — pattern + image alignment verified |
-| RUBRIC_EASY | 2 | XRAY-007, XRAY-027 | Patterns match associated findings (e.g., "cardiomegaly" for pericarditis) — technically correct but lower diagnostic specificity |
+All four corrective actions from the rc1.0 audit were executed in rc1.1:
 
-**Finding 3: Pattern false positives.** 2 tasks (XRAY-007, XRAY-027) pass Layer 0 via patterns that match associated findings rather than the primary diagnosis. For example, XRAY-007 (pericarditis) passes when the model mentions "cardiomegaly" — a valid associated finding but not the target diagnosis. These represent rubric specificity gaps rather than grading errors.
+| Action | Status | Detail |
+|---|---|---|
+| Re-source IMAGE_MISMATCH tasks | **Done** (3/5 successful) | CT-027, CT-048, MRI-007, MRI-031, MRI-035 re-sourced; CT-097 excluded (no valid open-access image) |
+| Mandate full judge coverage | **Done** | Layer 0 short-circuit eliminated; all trials graded by Layer 2 LLM judge |
+| Tighten RUBRIC_EASY patterns | **Done** | Primary diagnosis required |
+| Clinical review of AMBIGUOUS tasks | **Done** | Physician adjudication framework established (4-tier: Tier 1 rubric decision, Tier 2 clinical nuance, Tier 3 re-source, Tier 4 exclusion). 4 Tier 1 reviews completed |
 
-**Corrective actions:**
+#### rc1.1 Validity Confirmation
 
-1. Re-source 6 IMAGE_MISMATCH tasks with pathology-confirmed images
-2. Lower `LAYER_0_CONFIDENCE_THRESHOLD` or mandate Layer 2 judge invocation for all Class A failure candidates
-3. Tighten 2 RUBRIC_EASY patterns to require primary diagnosis terminology
-4. Clinical review of 5 AMBIGUOUS tasks with radiologist adjudication
+- **100% solvability:** All 44 reference solutions pass the judge (instrument is valid)
+- **Pattern inflation confirmed:** 100% of DEGRADED tasks had L0-only passes in rc1.0. Layer 0 vs Layer 2 kappa = 0.281 (59 false passes). CT kappa = 0.000
+- **41 risk debt entries** created for unresolved findings
+
+Full analysis: [`docs/CLINICAL_SAFETY_FINDINGS_RC11.md`](docs/CLINICAL_SAFETY_FINDINGS_RC11.md). AAR: [`docs/aars/AAR-RC11-FINDINGS.md`](docs/aars/AAR-RC11-FINDINGS.md).
 
 ---
 

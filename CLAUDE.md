@@ -29,7 +29,17 @@ Benchmarks frontier multimodal LLMs (GPT-5.2, Claude Opus/Sonnet 4.6, Gemini 2.5
 - **Task-type-aware grading**: `incidental_detection` and `report_audit` use specialized judge prompts and scoring
 - **Scoring**: pass@k, pass^k, Wilson CI, bootstrap CI, two-proportion z-test
 - **Analysis**: per-modality, per-anatomy breakdowns, regression detection
-- **v2 roadmap** (`docs/RADSLICE_V2_ARCHITECTURE.md`, draft): 5 difficulty levels (0–4) from single-image interpretation to agentic DICOM workflows with 7 MCP-compatible tools, deterministic tool-use auditing, IDC-based DICOM sourcing. Current: rc1.0 (Level 0). Next: v2-alpha (Level 1, real DICOM volumes).
+- **v2 roadmap** (`docs/RADSLICE_V2_ARCHITECTURE.md`, draft): 5 difficulty levels (0–4) from single-image interpretation to agentic DICOM workflows with 7 MCP-compatible tools, deterministic tool-use auditing, IDC-based DICOM sourcing. Current: rc1.1 (Level 0, full-judge). Next: v2-alpha (Level 1, real DICOM volumes).
+
+## Key Findings (rc1.1, 2026-03-07)
+- **Pass rates:** GPT-5.2 25.0%, Opus 4.6 17.4% (44 tasks × 3 trials, full judge coverage)
+- **rc1.0 was inflated:** L0 pattern-only grading produced kappa=0.281 vs judge; 59 false passes
+- **4.5× Class A asymmetry** between GPT and Opus on critical diagnostic misses
+- **11 cross-modal blind spots** (both image interpretation and text reasoning fail) — e.g., fat embolism, hemorrhagic stroke
+- **29 always-fail tasks** — 20% involve time-to-harm < 1 hour conditions
+- **100% solvability** confirmed (all 44 reference solutions pass the judge)
+- **Docs:** [`CLINICAL_SAFETY_FINDINGS_RC11.md`](docs/CLINICAL_SAFETY_FINDINGS_RC11.md), [`RADSLICE_DIFFERENTIATION.md`](docs/RADSLICE_DIFFERENTIATION.md), [`AAR-RC11-FINDINGS.md`](docs/aars/AAR-RC11-FINDINGS.md)
+- **Cross-repo correlation:** [`scripts/cross_repo_safety_correlation.py`](scripts/cross_repo_safety_correlation.py)
 
 ## Install Extras
 - `pip install -e .` — Core install (uncompressed DICOMs work out of the box)
