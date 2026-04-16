@@ -5,7 +5,7 @@
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![Tasks: 330](https://img.shields.io/badge/tasks-330-green.svg)]()
-[![OpenEM Conditions: 133](https://img.shields.io/badge/OpenEM_conditions-133-blue.svg)]()
+[![OpenEM Conditions: 141](https://img.shields.io/badge/OpenEM_conditions-141-blue.svg)]()
 
 
 **Document Type:** Technical Specification
@@ -64,7 +64,7 @@ RadSlice is an **evaluation tool**. It is not a medical device, does not perform
 
 ### 2.1 Task Specification
 
-RadSlice defines 330 evaluation tasks spanning 133 unique clinical conditions from the OpenEM emergency medicine corpus. Each task specifies a clinical condition, imaging modality, ground truth diagnosis, expected radiological findings, and grading criteria. Tasks are organized by modality and type:
+RadSlice defines 330 evaluation tasks spanning 141 unique clinical conditions from the OpenEM emergency medicine corpus. Each task specifies a clinical condition, imaging modality, ground truth diagnosis, expected radiological findings, and grading criteria. Tasks are organized by modality and type:
 
 | Modality / Type | Tasks | Unique Conditions | Difficulty Distribution |
 |---|---|---|---|
@@ -74,7 +74,7 @@ RadSlice defines 330 evaluation tasks spanning 133 unique clinical conditions fr
 | Ultrasound | 89 | 89 | 9 basic / 31 intermediate / 30 advanced / 19 expert |
 | Incidental Detection | 5 | 5 | 0 basic / 2 intermediate / 3 advanced / 0 expert |
 | Report Audit | 5 | 5 | 0 basic / 0 intermediate / 5 advanced / 0 expert |
-| **Total** | **330** | **133 unique** | 21 basic / 85 intermediate / 185 advanced / 39 expert |
+| **Total** | **330** | **141 unique** | 21 basic / 85 intermediate / 185 advanced / 39 expert |
 
 65 tasks include cross-references to LostBench safety persistence scenarios (e.g., `MTR-016`), enabling cross-benchmark analysis of whether models that correctly identify emergency findings on imaging also maintain those recommendations under conversational pressure.
 
@@ -224,9 +224,9 @@ All corpus images are sourced from established, peer-reviewed, government-funded
 
 | Component | Status | Detail |
 |---|---|---|
-| Task specifications (YAML) | 330/330 authored | All 133 OpenEM imaging-relevant conditions covered |
-| Image-backed tasks (sourced) | 44/330 | MultiCaRe CC-BY-4.0 + IDC open-access; see `corpus/image_sources.yaml` |
-| Image-backed tasks (validated) | 27/44 | Pathology confirmed against ground truth |
+| Task specifications (YAML) | 330/330 authored | All 141 OpenEM imaging-relevant conditions covered |
+| Image-backed tasks (sourced) | 80/330 | MultiCaRe CC-BY-4.0 + IDC open-access; see `corpus/image_sources.yaml` |
+| Image-backed tasks (validated) | 36/80 | Pathology confirmed against ground truth |
 | rc1.0 evaluation set | 51 tasks | 14 X-ray, 12 CT, 15 US, 10 MRI — evaluated across 2 models × 3 trials |
 | Full corpus target | 330 images | One validated image per task, sourced per Sections 3.2-3.4 |
 
@@ -359,7 +359,7 @@ RadSlice is part of the GOATnote Evaluation Program, a suite of benchmarks evalu
 |---|---|---|
 | [LostBench](https://github.com/GOATnote-Inc/lostbench) | Multi-turn safety persistence benchmark | 65 RadSlice tasks cross-reference LostBench scenarios via `lostbench_scenario_id` |
 | [ScribeGoat2](https://github.com/GOATnote-Inc/scribegoat2) | Multi-agent clinical triage research framework | Shares clinical condition taxonomy and grading methodology |
-| [OpenEM](https://github.com/GOATnote-Inc/openem-corpus) | Emergency medicine knowledge base (370 conditions) | 133 of 370 conditions have RadSlice imaging tasks, linked via `condition_id` |
+| [OpenEM](https://github.com/GOATnote-Inc/openem-corpus) | Emergency medicine knowledge base (370 conditions) | 141 of 370 conditions have RadSlice imaging tasks, linked via `condition_id` |
 | [SafeShift](https://github.com/GOATnote-Inc/safeshift) | Inference optimization safety benchmark | Evaluates whether quantization/batching degrades RadSlice task performance |
 
 Architecture documentation: [CROSS_REPO_ARCHITECTURE.md](https://github.com/GOATnote-Inc/scribegoat2/blob/main/docs/CROSS_REPO_ARCHITECTURE.md)
@@ -455,7 +455,7 @@ corpus/
   image_sources.yaml                 Per-image provenance mapping
   download.py                        Per-source downloaders
 
-tests/                               1,365 tests (no API keys required)
+tests/                               1,444 tests (no API keys required)
 
 results/
   index.yaml                         Run history
@@ -466,7 +466,7 @@ results/
 
 ## 11.0 Test Suite
 
-1,365 automated tests covering framework plumbing, scoring mathematics, grading logic, task schema validation, DICOM loading, windowing, image pipeline routing, incidental detection scoring, and report audit grading. All tests run without API keys or network access using synthetic DICOM fixtures.
+1,444 automated tests covering framework plumbing, scoring mathematics, grading logic, task schema validation, DICOM loading, windowing, image pipeline routing, incidental detection scoring, and report audit grading. All tests run without API keys or network access using synthetic DICOM fixtures.
 
 ```bash
 make test        # Full suite
