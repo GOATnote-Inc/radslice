@@ -4,9 +4,9 @@
 Benchmarks frontier multimodal LLMs (GPT-5.2, Claude Opus/Sonnet 4.6, Gemini 2.5 Pro) on radiology image interpretation across X-ray, CT, MRI, and Ultrasound. Every task is grounded in a real clinical condition from the OpenEM emergency medicine corpus via `condition_id`.
 
 ## Corpus
-- **330 tasks** across 133 unique OpenEM conditions
+- **330 tasks** across 141 unique OpenEM conditions
 - 72 X-ray, 106 CT, 53 MRI, 89 Ultrasound, 5 incidental detection, 5 report audit
-- 65 tasks cross-referenced to LostBench scenarios (MTR/DEF IDs)
+- 162 tasks cross-referenced to 65 unique LostBench scenarios (MTR/DEF IDs)
 - Difficulty: 21 basic, 85 intermediate, 185 advanced, 39 expert
 - `condition_id` (required) links each task to an OpenEM condition
 - `lostbench_scenario_id` (optional) enables cross-repo safety analysis
@@ -114,7 +114,7 @@ Benchmarks frontier multimodal LLMs (GPT-5.2, Claude Opus/Sonnet 4.6, Gemini 2.5
 - `configs/rubrics/` — Grading rubric
 - `corpus/` — Manifest, download script, annotations
 - `scripts/generate_report_audit_tasks.py` — Generate report_audit tasks from diagnosis tasks (--dry-run, --n-tasks, --error-types)
-- `tests/` — 1,365 tests, no API keys required
+- `tests/` — 1,444 tests, no API keys required
 - `results/` — Gitignored, populated by runs
 
 ## Agent Teams
@@ -173,7 +173,7 @@ These paths require `[PROPOSED CHANGES]` pattern from analysis agents:
 
 ## Cross-Repo Context
 - **OpenEM** (`openem-corpus`): Tasks reference conditions by `condition_id` (reference only, no runtime import)
-- **LostBench** (`lostbench`): 65 tasks have `lostbench_scenario_id` for cross-cutting safety analysis
+- **LostBench** (`lostbench`): 162 tasks have `lostbench_scenario_id` (65 unique scenarios) for cross-cutting safety analysis
 - **Cross-repo correlation**: `radslice cross-repo` compares RadSlice and LostBench findings by condition
 - **Architecture doc**: `scribegoat2/docs/CROSS_REPO_ARCHITECTURE.md` covers all 5 GOATnote repos
 - No runtime imports from any other GOATnote repo — RadSlice is independently installable
