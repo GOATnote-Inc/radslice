@@ -171,7 +171,15 @@ def grade(results, judge_model, pattern_only, output):
     transcripts = load_transcript(transcript_path)
     click.echo(f"Loaded {len(transcripts)} transcripts")
 
-    grader = RubricGrader(pattern_only=True)  # Always pattern-only for offline re-grade
+    # Honor the flags. Layer-0 patterns are unreliable on their own (see
+    # docs/CLINICAL_SAFETY_FINDINGS_RC11.md); a re-grade without --pattern-only
+    # must go through the judge, exactly like `run`.
+    judge_provider = None if pattern_only else _get_judge_provider(judge_model, {})
+    grader = RubricGrader(
+        judge_provider=judge_provider,
+        judge_model=judge_model,
+        pattern_only=pattern_only,
+    )
 
     # Load tasks from config
     tasks_dir = results_path / "tasks_dir.txt"
@@ -185,6 +193,22 @@ def grade(results, judge_model, pattern_only, output):
     output_path = Path(output) if output else results_path / "grades_regraded.jsonl"
     asyncio.run(_regrade(grader, transcripts, task_dir_path, output_path))
     click.echo(f"Re-graded results written to {output_path}")
+
+    # Same coverage gate as `run`: a judge re-grade that silently fell back to
+    # patterns is not a result.
+    if not pattern_only:
+        with open(output_path) as f:
+            layers = [json.loads(line).get("detection_layer") for line in f if line.strip()]
+        judged = sum(1 for layer in layers if layer == 2)
+        if judged != len(layers):
+            click.echo(
+                f"\nJUDGE COVERAGE FAILURE: {judged}/{len(layers)} re-graded entries have "
+                f"judge results. {len(layers) - judged} fell back to pattern-only.\n"
+                "Results are unreliable without cross-vendor judge validation.\n"
+                "Use --pattern-only to explicitly opt into pattern-only grading.",
+                err=True,
+            )
+            raise SystemExit(2)
 
 
 async def _regrade(grader, transcripts, tasks_dir, output_path):

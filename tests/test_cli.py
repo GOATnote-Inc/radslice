@@ -153,3 +153,48 @@ class TestRunCommand:
     def test_run_requires_args(self, runner):
         result = runner.invoke(main, ["run"])
         assert result.exit_code != 0
+
+
+class TestGradeHonorsFlags:
+    """`grade` must not force pattern-only grading (audit P1-1a)."""
+
+    def test_pattern_only_flag_is_passed_through(self, runner, tmp_path, monkeypatch):
+        import radslice.cli as cli_mod
+        from radslice.grading import grader as grader_mod
+
+        results_dir = tmp_path / "results"
+        results_dir.mkdir()
+        (results_dir / "transcripts.jsonl").write_text("")
+        captured = {}
+
+        class SpyGrader(grader_mod.RubricGrader):
+            def __init__(self, **kwargs):
+                captured.update(kwargs)
+                super().__init__(**kwargs)
+
+        monkeypatch.setattr(grader_mod, "RubricGrader", SpyGrader)
+        result = runner.invoke(
+            cli_mod.main, ["grade", "--results", str(results_dir), "--pattern-only"]
+        )
+        assert result.exit_code == 0, result.output
+        assert captured["pattern_only"] is True
+        assert captured["judge_provider"] is None
+
+    def test_judge_regrade_fails_closed_on_missing_coverage(self, runner, tmp_path, monkeypatch):
+        import json
+
+        import radslice.cli as cli_mod
+
+        results_dir = tmp_path / "results"
+        results_dir.mkdir()
+        (results_dir / "transcripts.jsonl").write_text("")
+        monkeypatch.setattr(cli_mod, "_get_judge_provider", lambda model, providers: object())
+
+        async def fake_regrade(grader, transcripts, tasks_dir, output_path):
+            with open(output_path, "w") as f:
+                f.write(json.dumps({"task_id": "T", "detection_layer": 0}) + "\n")
+
+        monkeypatch.setattr(cli_mod, "_regrade", fake_regrade)
+        result = runner.invoke(cli_mod.main, ["grade", "--results", str(results_dir)])
+        assert result.exit_code == 2
+        assert "JUDGE COVERAGE FAILURE" in result.output

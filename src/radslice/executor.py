@@ -175,12 +175,25 @@ class MatrixExecutor:
         """Load completed task+model+trial combos from existing results."""
         grades_path = self._output_dir / "grades.jsonl"
         if grades_path.exists():
+            pattern_only = getattr(self._grader, "pattern_only", False)
+            skipped = 0
             with open(grades_path) as f:
                 for line in f:
                     data = json.loads(line.strip())
+                    # A grade that never reached the judge (detection_layer 0) is not
+                    # a completed cell unless the run is explicitly pattern-only;
+                    # otherwise --resume would silently keep Layer-0-only verdicts
+                    # that validate_judge_coverage never sees.
+                    if not pattern_only and data.get("detection_layer") != 2:
+                        skipped += 1
+                        continue
                     key = f"{data['task_id']}:{data['model']}:{data['trial']}"
                     self._completed.add(key)
-            logger.info("Resumed with %d completed entries", len(self._completed))
+            logger.info(
+                "Resumed with %d completed entries (%d Layer-0-only grades will be re-run)",
+                len(self._completed),
+                skipped,
+            )
 
     async def run(self, config: MatrixConfig) -> RunResult:
         """Execute the full matrix evaluation."""

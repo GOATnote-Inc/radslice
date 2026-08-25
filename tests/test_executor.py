@@ -243,3 +243,51 @@ class TestRunResult:
         assert len(lines) == 1
         data = json.loads(lines[0])
         assert data["task_id"] == "T"
+
+
+class TestResumeSkipsLayer0:
+    """--resume must not treat a Layer-0-only grade as a completed cell (audit P1-1b)."""
+
+    def _write_grades(self, output_dir, layers):
+        output_dir.mkdir(parents=True, exist_ok=True)
+        with open(output_dir / "grades.jsonl", "w") as f:
+            for i, layer in enumerate(layers):
+                f.write(
+                    json.dumps(
+                        {
+                            "task_id": f"XRAY-T00{i}",
+                            "model": "test",
+                            "trial": 0,
+                            "passed": True,
+                            "weighted_score": 0.8,
+                            "dimension_scores": {},
+                            "failure_class": None,
+                            "detection_layer": layer,
+                        }
+                    )
+                    + "\n"
+                )
+
+    def test_judge_run_reruns_layer0_cells(self, tmp_path):
+        output_dir = tmp_path / "results"
+        self._write_grades(output_dir, [0, 2])
+        executor = MatrixExecutor(
+            providers={"mock": MockExecProvider("x")},
+            grader=RubricGrader(pattern_only=False),
+            corpus_dir=tmp_path / "corpus",
+            output_dir=output_dir,
+            resume=True,
+        )
+        assert executor._completed == {"XRAY-T001:test:0"}
+
+    def test_pattern_only_run_keeps_layer0_cells(self, tmp_path):
+        output_dir = tmp_path / "results"
+        self._write_grades(output_dir, [0, 2])
+        executor = MatrixExecutor(
+            providers={"mock": MockExecProvider("x")},
+            grader=RubricGrader(pattern_only=True),
+            corpus_dir=tmp_path / "corpus",
+            output_dir=output_dir,
+            resume=True,
+        )
+        assert executor._completed == {"XRAY-T000:test:0", "XRAY-T001:test:0"}

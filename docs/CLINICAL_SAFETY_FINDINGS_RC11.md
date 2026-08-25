@@ -6,7 +6,7 @@
 
 ## 1. Executive Summary
 
-RadSlice rc1.1 evaluated two frontier multimodal LLMs — GPT-5.2 and Claude Opus 4.6 — on 44 emergency radiology image interpretation tasks spanning four imaging modalities (CT, MRI, X-ray, Ultrasound). Every task is grounded in a real clinical condition from the OpenEM emergency medicine corpus, with physician-adjudicated ground truth.
+RadSlice rc1.1 evaluated two frontier multimodal LLMs — GPT-5.2 and Claude Opus 4.6 — on 44 emergency radiology image interpretation tasks spanning four imaging modalities (CT, MRI, X-ray, Ultrasound). Every task is grounded in a real clinical condition from the OpenEM emergency medicine corpus, with reference solutions written by the maintainer (an emergency physician); independent physician adjudication covers 4 of the 44 tasks at Tier 1 (see results/adjudication/).
 
 ### Top Findings
 

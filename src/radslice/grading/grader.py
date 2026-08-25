@@ -75,6 +75,11 @@ class RubricGrader:
         self._judge_model = judge_model
         self._pattern_only = pattern_only
 
+    @property
+    def pattern_only(self) -> bool:
+        """True when this grader was explicitly configured to skip the LLM judge."""
+        return self._pattern_only
+
     async def grade(
         self,
         task: Task,
