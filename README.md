@@ -107,6 +107,8 @@ Full analysis: [`docs/CLINICAL_SAFETY_FINDINGS_RC11.md`](docs/CLINICAL_SAFETY_FI
 
 Configs: `configs/matrices/rc11_opus.yaml`, `configs/matrices/rc11_gpt.yaml`. Results: `results/eval-20260307-opus46-rc11/`, `results/eval-20260307-gpt52-rc11/`.
 
+> Raw run artifacts (`results/eval-*` transcripts and grades) are gitignored and are not in this repository; only derived summaries and governance YAMLs are committed. Until the rc1.0/rc1.1 artifacts are published as release assets with recorded checksums, the headline numbers above are not independently reproducible from a clone. The evaluation *pipeline* is fully runnable (`radslice run --matrix ...`).
+
 #### rc1.0 (Superseded — L0 Pattern Inflation, 2026-03-03)
 
 51 tasks × 2 models × 3 trials. **Pass rates inflated by Layer 0 pattern-only grading** — 100% of DEGRADED tasks had L0-only passes, and 75% of L0 passes were judge-false-positives. Retained for historical reference.
@@ -152,7 +154,7 @@ Full analysis: [`docs/CLINICAL_SAFETY_FINDINGS_RC11.md`](docs/CLINICAL_SAFETY_FI
 
 ### 3.1 Sourcing Principles
 
-All corpus images are sourced from established, peer-reviewed, government-funded or institutionally maintained medical imaging repositories. No images are scraped from the open web, generated synthetically, or sourced from non-standard channels. Every image source is documented with dataset identifier (DOI where available), license type, de-identification standard applied by the source, and access method.
+Corpus image provenance is recorded per image in [`corpus/image_sources.yaml`](corpus/image_sources.yaml). Current composition (93 image-backed entries): MultiCaRe open-access case-report images (81), OmniMedVQA open split (7), NCI Imaging Data Commons (5). Licenses are predominantly CC-BY variants; 7 entries carry non-commercial or ND terms and 7 lack a recorded license string — see the YAML for the per-image record (dataset identifier, license, de-identification standard applied by the source, access method). No images are scraped from the open web or generated synthetically. The sections below describe the sourcing map the corpus is designed to draw from as it grows; they are targets, not counts of what is committed today.
 
 ### 3.2 Primary Open-Access Sources (No Registration Required)
 
