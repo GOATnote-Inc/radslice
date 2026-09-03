@@ -10,6 +10,9 @@
 
 **Status:** research pilot. rc1.1 evaluated 44 image-backed tasks x 2 models x 3 trials (2026-03-07); the full task bank is 330 tasks. Maintained by GOATnote Inc. (an emergency physician who codes). Not a medical device; not for clinical use. Regulatory framing that this benchmark is intended to support in future is in [docs/REGULATORY_CONTEXT.md](docs/REGULATORY_CONTEXT.md).
 
+
+> **Maintenance status (2026-09):** passive. This repository is kept available as a reference implementation; CI runs on pushes and pull requests only, Dependabot security alerts remain enabled, and no scheduled jobs or hosted services consume ongoing resources. No active development is planned.
+
 ### Release history
 
 | Revision | Date | Author | Description |
